@@ -15,7 +15,7 @@ import environ
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
 
@@ -68,12 +68,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -85,7 +84,57 @@ TEMPLATES = [
     },
 ]
 
+# URL configuration
+ROOT_URLCONF = 'config.urls'
+
+# Custom user model
+AUTH_USER_MODEL = 'users.User'
+# Custom authentication backends
+AUTHENTICATION_BACKENDS = [
+    'apps.users.backends.DNIBackend',
+    'django.contrib.auth.backends.ModelBackend']
+
+
+# WSGI application para servir la aplicación en producción con Gunicorn o similar
 WSGI_APPLICATION = 'config.wsgi.application'
+
+
+
+
+# Email configuration para enviar correos de activación y notificaciones
+
+RESEND_API_KEY = env('RESEND_API_KEY', default='').strip()
+EMAIL_PROVIDER = env('EMAIL_PROVIDER', default='console').strip().lower()
+EMAIL_BACKEND = env(
+    'EMAIL_BACKEND',
+    default='django.core.mail.backends.console.EmailBackend'
+)
+EMAIL_TIMEOUT = env.int('EMAIL_TIMEOUT', default=15)
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', default='noreply@example.com')
+FRONTEND_URL = env('FRONTEND_URL', default='http://localhost:8000')
+
+
+
+# Caching configuration para limitar intentos de login y activación de cuenta
+
+DEFAULT_CACHE_TIMEOUT = env.int('CACHE_TIMEOUT', default=300)
+# Usamos cache en memoria para desarrollo, en producción se recomienda usar Redis o similar
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': env('LOCMEM_CACHE_LOCATION', default='lr-app-local'),
+        'TIMEOUT': DEFAULT_CACHE_TIMEOUT,
+    }
+}
+# Configuración de límites de intentos para login y activación de cuenta
+LOGIN_RATE_LIMIT_ATTEMPTS = env.int('LOGIN_RATE_LIMIT_ATTEMPTS', default=5)
+# Tiempo en segundos para bloquear después de alcanzar el límite de intentos
+LOGIN_RATE_LIMIT_WINDOW = env.int('LOGIN_RATE_LIMIT_WINDOW', default=900)
+# Configuración de límites de intentos para activación de cuenta
+ACTIVATION_RATE_LIMIT_ATTEMPTS = env.int('ACTIVATION_RATE_LIMIT_ATTEMPTS', default=5)
+# Tiempo en segundos para bloquear después de alcanzar el límite de intentos
+ACTIVATION_RATE_LIMIT_WINDOW = env.int('ACTIVATION_RATE_LIMIT_WINDOW', default=900)
+
 
 
 # Database
@@ -118,7 +167,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-AUTH_USER_MODEL = 'users.User'
 
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
@@ -136,3 +184,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+
+ROOT_URLCONF = 'config.urls'

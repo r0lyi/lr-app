@@ -1,9 +1,14 @@
 from .base import *
 
-DEBUG = env('DEBUG')
+# Local settings para desarrollo y pruebas
+DEBUG = env.bool('DEBUG', default=True)
 
-ALLOWED_HOSTS = ['*']
-
+# Allowed hosts para desarrollo y pruebas
+ALLOWED_HOSTS = env.list(
+    'ALLOWED_HOSTS',
+    default=['localhost', '127.0.0.1', '0.0.0.0']
+)
+# CORS configuration para permitir solicitudes desde el frontend en desarrollo
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -14,3 +19,9 @@ DATABASES = {
         'PORT': env('DB_PORT'),
     }
 }
+
+# CORS configuration para permitir solicitudes desde el frontend en desarrollo
+CSRF_TRUSTED_ORIGINS = env.list(
+    'CSRF_TRUSTED_ORIGINS',
+    default=['http://localhost:8000', 'http://127.0.0.1:8000']
+)
