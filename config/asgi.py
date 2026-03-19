@@ -8,9 +8,17 @@ https://docs.djangoproject.com/en/6.0/howto/deployment/asgi/
 """
 
 import os
+import environ
+
+# Cargar .env
+env = environ.Env()
+environ.Env.read_env()
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 
+os.environ.setdefault(
+        'DJANGO_SETTINGS_MODULE',
+        env('DJANGO_SETTINGS_MODULE', default='config.settings.local')
+    )
 application = get_asgi_application()
