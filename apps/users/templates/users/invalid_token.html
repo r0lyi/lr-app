@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block title %}Token invalido{% endblock %}
+
+{% block content %}
+<h1>Enlace invalido o expirado</h1>
+<p>Solicita un nuevo enlace para crear tu contraseña.</p>
+<p><a href="{% url 'auth:request-activation' %}">Pedir nuevo enlace</a></p>
+{% endblock %}
