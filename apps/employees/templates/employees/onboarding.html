@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Completa tu perfil{% endblock %}
+
+{% block content %}
+<div class="onboard-page">
+  <div class="onboard-shell">
+    <div class="onboard-header">
+      <div class="onboard-header-card">
+        <img src="{% static 'images/logo500x200.svg' %}" alt="Clean & Service" />
+        <div class="onboard-header-text">
+          <h1>Completa tu perfil</h1>
+          <p>Necesitamos confirmar tus datos para habilitar el acceso al sistema.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="onboard-card">
+      <form method="post" class="onboard-form">
+        {% csrf_token %}
+
+        <div class="onboard-grid">
+          <div class="onboard-fields">
+            {% include "components/inputs/text_input.html" with label="Nombre/s" name="first_name" placeholder="Introduce tu nombre" value=form.first_name.value|default:'' error=form.first_name.errors.0 %}
+            {% include "components/inputs/text_input.html" with label="Apellidos" name="last_name" placeholder="Introduce tus apellidos" value=form.last_name.value|default:'' error=form.last_name.errors.0 %}
+            {% include "components/inputs/text_input.html" with label="Correo electronico" name="email" type="email" placeholder="Introduce tu correo" value=form.email.value|default:'' error=form.email.errors.0 %}
+
+            <div class="ui-field">
+              <label class="ui-field__label" for="id_phone">Telefono</label>
+              <div class="onboard-phone">
+                <span class="onboard-phone-prefix">+34</span>
+                <input
+                  class="ui-input"
+                  id="id_phone"
+                  name="phone"
+                  type="tel"
+                  placeholder="Introduce tu telefono"
+                  value="{{ form.phone.value|default:'' }}"
+                />
+              </div>
+              {% if form.phone.errors.0 %}
+                <p class="ui-field__feedback ui-field__feedback--error">{{ form.phone.errors.0 }}</p>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="onboard-help">
+            <h3>No sabes tu fecha de ingreso?</h3>
+            <p>
+              Consulta la fecha de ingreso en tu informe de vida laboral.
+              En el documento, busca la empresa y veras:
+            </p>
+            <ul>
+              <li>El nombre de la empresa.</li>
+              <li>La fecha de alta (inicio del contrato).</li>
+              <li>La fecha de baja (si ya no trabajas alli).</li>
+            </ul>
+            <p>La fecha de alta es la que debes indicar en este formulario.</p>
+          </div>
+
+          <div class="onboard-fields">
+            {% include "components/inputs/date_input.html" with label="Fecha ingreso" name="hire_date" value=form.hire_date.value|default:'' error=form.hire_date.errors.0 %}
+          </div>
+        </div>
+
+        {% if form.non_field_errors %}
+          <p class="onboard-error">{{ form.non_field_errors.0 }}</p>
+        {% endif %}
+
+        {% include "components/button.html" with label="Enviar" type="submit" variant="primary" size="md" full_width=True class_name="onboard-submit" %}
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/employees/onboarding.css' %}">
+{% endblock %}
