@@ -1,12 +1,14 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>Dashboard</title>
-</head>
-<body>
-  <h1>Dashboard</h1>
-  <p>Has iniciado sesión correctamente.</p>
-  <p>Usuario: {{ user.email }}</p>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h1>Dashboard</h1>
+<p>Has iniciado sesion correctamente.</p>
+<p>Usuario: {{ user.email }}</p>
+
+<form method="post" action="{% url 'auth:logout' %}">
+  {% csrf_token %}
+  <button type="submit">Cerrar sesion</button>
+</form>
+{% endblock %}

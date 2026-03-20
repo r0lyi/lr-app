@@ -1,5 +1,5 @@
 from django.urls import path
-from views.prueba import home_view
+from apps.dashboard.views.prueba import home_view
 
 app_name = "dashboard"
 
