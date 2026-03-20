@@ -1,11 +1,16 @@
 import logging
+from email.message import MIMEPart
+from pathlib import Path
+
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives, get_connection
-from django.utils.translation import gettext as _
+from django.template.loader import render_to_string
 
 logger = logging.getLogger(__name__)
 
 SUPPORTED_EMAIL_PROVIDERS = {"console", "resend"}
+
+INLINE_LOGO_CID = "company-logo"
 
 # Servicios relacionados con envío de emails, construcción de mensajes y selección de proveedor
 def get_email_provider():
@@ -19,23 +24,35 @@ def get_email_provider():
         )
     return provider
 
+def _build_logo_attachment():
+    logo_path = Path(settings.BASE_DIR) / "static" / "images" / "logo500x200.png"
+    if not logo_path.exists():
+        return None
+
+    return {
+        "filename": logo_path.name,
+        "content": logo_path.read_bytes(),
+        "content_type": "image/png",
+        "content_id": INLINE_LOGO_CID,
+    }
+
+
 # Construye el asunto, cuerpo HTML y texto plano para el email de activación
 def build_activation_email_message(token):
-    activation_url = f"{settings.FRONTEND_URL}/auth/set-password/{token}/"
+    frontend_url = settings.FRONTEND_URL.rstrip("/")
+    activation_url = f"{frontend_url}/auth/set-password/{token}/"
+    logo_url = f"cid:{INLINE_LOGO_CID}"
+    context = {
+        "app_name": "Sistema de Gestion de Vacaciones",
+        "company_name": "LR Clean & Service",
+        "activation_url": activation_url,
+        "logo_url": logo_url,
+        "expires_in_hours": 24,
+    }
     return {
-        "subject": _("Create your access password"),
-        "html": (
-            f"<h2>{_('Welcome to the system')}</h2>"
-            f"<p>{_('Click the following link to create your password:')}</p>"
-            f'<a href="{activation_url}">{_("Create password")}</a>'
-            f"<p>{_('This link expires in 24 hours.')}</p>"
-        ),
-        "text": (
-            f"{_('Welcome to the system.')}\n"
-            f"{_('Click the following link to create your password:')}\n"
-            f"{activation_url}\n"
-            f"{_('This link expires in 24 hours.')}\n"
-        ),
+        "subject": "Cree su contraseña para entrar en el sistema",
+        "html": render_to_string("emails/activation_email.html", context),
+        "text": render_to_string("emails/activation_email.txt", context),
     }
 
 # Normaliza el formato de adjuntos para Resend, asegurando que el contenido sea una lista de bytes
@@ -50,6 +67,10 @@ def _normalize_resend_attachment(attachment):
     }
     if attachment.get("content_type"):
         normalized["content_type"] = attachment["content_type"]
+    if attachment.get("content_id"):
+        normalized["content_id"] = attachment["content_id"]
+    elif attachment.get("inline_content_id"):
+        normalized["content_id"] = attachment["inline_content_id"]
     return normalized
 
 # Envía el email usando el proveedor configurado, maneja adjuntos y loguea el resultado
@@ -72,11 +93,26 @@ def _send_via_django_backend(*, to, subject, html, text="", attachments=None):
     if html:
         message.attach_alternative(html, "text/html")
     for attachment in attachments:
-        message.attach(
-            attachment["filename"],
-            attachment["content"],
-            attachment.get("content_type"),
-        )
+        content_id = attachment.get("content_id") or attachment.get("inline_content_id")
+        if content_id:
+            content_type = attachment.get("content_type") or "image/png"
+            maintype, subtype = content_type.split("/", 1)
+            inline_part = MIMEPart()
+            inline_part.set_content(
+                attachment["content"],
+                maintype=maintype,
+                subtype=subtype,
+                disposition="inline",
+                cid=f"<{content_id}>",
+                filename=attachment["filename"],
+            )
+            message.attach(inline_part)
+        else:
+            message.attach(
+                attachment["filename"],
+                attachment["content"],
+                attachment.get("content_type"),
+            )
     return message.send()
 
 # Envía el email usando la API de Resend, maneja adjuntos y loguea el resultado
@@ -139,9 +175,14 @@ def send_email_message(*, to, subject, html, text="", attachments=None):
 # Función específica para enviar el email de activación, construye el mensaje y lo envía
 def send_activation_email(email: str, token: str) -> None:
     payload = build_activation_email_message(token)
+    attachments = []
+    logo_attachment = _build_logo_attachment()
+    if logo_attachment:
+        attachments.append(logo_attachment)
     send_email_message(
         to=[email],
         subject=payload["subject"],
         html=payload["html"],
         text=payload["text"],
+        attachments=attachments,
     )

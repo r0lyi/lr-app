@@ -1,0 +1,13 @@
+<button
+  type="{{ type|default:'button' }}"
+  class="ui-btn ui-btn--secondary ui-btn--{{ size|default:'md' }}{% if full_width %} ui-btn--full{% endif %}{% if class_name %} {{ class_name }}{% endif %}"
+  {% if id %}id="{{ id }}"{% endif %}
+  {% if name %}name="{{ name }}"{% endif %}
+  {% if value %}value="{{ value }}"{% endif %}
+  {% if disabled %}disabled{% endif %}
+>
+  {% if htmx_indicator %}
+    <span class="ui-spinner ui-spinner--dark htmx-indicator" aria-hidden="true"></span>
+  {% endif %}
+  <span>{{ label }}</span>
+</button>

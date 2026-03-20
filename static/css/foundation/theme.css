@@ -1,0 +1,63 @@
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;700;900&display=swap");
+
+:root {
+  --bg: #eef0f4;
+  --surface: #ffffff;
+  --border: #dde1e8;
+  --accent: #1a7fd4;
+  --accent-2: #125f9f;
+  --accent-h: #166cb3;
+  --text: #1a2233;
+  --muted: #8a93a6;
+  --success: #2ecc8a;
+  --error: #ff4f6a;
+  --radius: 10px;
+  --shadow: 0 16px 34px rgba(26, 34, 51, 0.14);
+  --fs-title: 33px;
+  --fs-section: 30px;
+  --fs-subtitle: 24px;
+  --fs-heading-sm: 20px;
+  --fs-emphasis: 18px;
+  --fs-body: 16px;
+  --fs-small: 15px;
+  --font-base-size: var(--fs-body);
+  --font-title-size: var(--fs-title);
+  --auth-card-max: 1140px;
+  --auth-side-pad-y: 54px;
+  --auth-side-pad-x: 56px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Rubik", sans-serif;
+  font-size: var(--fs-body);
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+input,
+button,
+select,
+textarea {
+  font: inherit;
+}
