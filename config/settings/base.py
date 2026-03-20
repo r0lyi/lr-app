@@ -77,6 +77,7 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.request',
+                'django.template.context_processors.i18n',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
@@ -91,7 +92,7 @@ ROOT_URLCONF = 'config.urls'
 AUTH_USER_MODEL = 'users.User'
 # Custom authentication backends
 AUTHENTICATION_BACKENDS = [
-    'apps.users.backends.DNIBackend',
+    'apps.users.services.backends.DNIBackend',
     'django.contrib.auth.backends.ModelBackend']
 
 
@@ -184,6 +185,3 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
-
-
-ROOT_URLCONF = 'config.urls'
