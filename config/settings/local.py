@@ -4,10 +4,7 @@ from .base import *
 DEBUG = env.bool('DEBUG', default=True)
 
 # Allowed hosts para desarrollo y pruebas
-ALLOWED_HOSTS = env.list(
-    'ALLOWED_HOSTS',
-    default=['localhost', '127.0.0.1', '0.0.0.0']
-)
+ALLOWED_HOSTS = ["*"]
 # CORS configuration para permitir solicitudes desde el frontend en desarrollo
 DATABASES = {
     'default': {
@@ -23,5 +20,5 @@ DATABASES = {
 # CORS configuration para permitir solicitudes desde el frontend en desarrollo
 CSRF_TRUSTED_ORIGINS = env.list(
     'CSRF_TRUSTED_ORIGINS',
-    default=['http://localhost:8000', 'http://127.0.0.1:8000']
+    default=['http://localhost:8000', 'http://127.0.0.1:8000',]
 )

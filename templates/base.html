@@ -1,18 +1,32 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>{% block title %}LR App{% endblock %}</title>
-</head>
-<body>
-  {% if messages %}
-    <ul>
-      {% for message in messages %}
-        <li>{{ message }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="{% static 'images/favicon.svg' %}">
+  
+  <title>{% block title %}Sistema de Vacaciones{% endblock %}</title>
 
+  <!-- HTMX -->
+  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+
+  <!-- TOASTS -->
+{% include "components/toasts.html" %}
+  <!-- CONTENIDO -->
   {% block content %}{% endblock %}
+
+  <!-- JS GLOBAL -->
+  <script src="{% static 'js/toast.js' %}"></script>
+
+  {% block extra_js %}{% endblock %}
 </body>
 </html>

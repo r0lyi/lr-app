@@ -1,0 +1,17 @@
+Hola,
+
+Para entrar en el sistema por primera vez, primero debe crear su contraseña.
+
+Que tiene que hacer ahora:
+1. Pulse el boton del enlace.
+2. Escriba su nueva contraseña.
+3. Guarde la contraseña y despues podra entrar con su DNI.
+
+Abra este enlace:
+{{ activation_url }}
+
+Este enlace caduca en {{ expires_in_hours }} horas.
+
+Si usted no ha solicitado este acceso, puede ignorar este mensaje.
+
+{{ company_name }}

@@ -1,0 +1,15 @@
+<div id="ui-toast-root" class="ui-toast-root" aria-live="polite" aria-atomic="true">
+  {% if messages %}
+    {% for message in messages %}
+      {% if "error" in message.tags %}
+        {% include "components/toast_card.html" with variant="error" title="Error" message=message duration=5000 %}
+      {% elif "success" in message.tags %}
+        {% include "components/toast_card.html" with variant="success" title="Operacion completada" message=message duration=4500 %}
+      {% elif "warning" in message.tags %}
+        {% include "components/toast_card.html" with variant="info" title="Aviso" message=message duration=5000 %}
+      {% else %}
+        {% include "components/toast_card.html" with variant="info" title="Notificacion" message=message duration=5000 %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+</div>
