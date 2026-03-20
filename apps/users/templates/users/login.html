@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<h1>Iniciar sesion</h1>
+
+<form method="post" action="{% url 'auth:login' %}">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Entrar</button>
+</form>
+
+<p><a href="{% url 'auth:request-activation' %}">Crear o recuperar contraseña</a></p>
+{% endblock %}
