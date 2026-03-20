@@ -2,7 +2,8 @@ import secrets
 from datetime import timedelta
 from django.utils import timezone
 from apps.users.models import User
-#from .email_service import send_activation_email
+from .email_service import send_activation_email
+
 
 
 # Servicios relacionados con autenticación, activación de cuenta y gestión de tokens
@@ -25,7 +26,7 @@ def request_activation(dni: str) -> tuple[bool, str]:
     user.token_expires_at = timezone.now() + timedelta(hours=24)
     user.save(update_fields=["activation_token", "token_expires_at"])
 
-    #send_activation_email(user.email, token)
+    send_activation_email(user.email, token)
 
     return True, "Si el DNI es correcto, recibirás un email."
 
