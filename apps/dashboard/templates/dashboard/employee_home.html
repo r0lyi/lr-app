@@ -6,10 +6,30 @@
   <section class="dash-card">
     <h1 class="dash-card-title">Panel de empleado</h1>
     <p>Bienvenido, {{ display_name }}.</p>
-    <p>Tu correo es: {{ request.user.email }}</p>
-    <p>Nombre: {{ employee_profile.first_name }}</p>
-    <p>Apellidos: {{ employee_profile.last_name }}</p>
-    <p>Telefono: {{ employee_profile.phone|default:"No indicado" }}</p>
-    <p>Fecha de ingreso: {{ employee_profile.hire_date|date:"d/m/Y" }}</p>
+    <p>Solicitudes pendientes: {{ pending_requests_count }}</p>
+    <p>Dias disponibles: {{ available_days_count }}</p>
+    <p>
+      Ultima resolucion:
+      {% if latest_resolution %}
+        {{ latest_resolution.resolution_date|date:"d/m/Y H:i" }}
+      {% else %}
+        Ninguna
+      {% endif %}
+    </p>
+
+    <h2>Solicitudes del empleado</h2>
+    {% if employee_requests %}
+      <ul>
+        {% for request_item in employee_requests %}
+          <li>
+            {{ request_item.start_date|date:"d/m/Y" }} - {{ request_item.end_date|date:"d/m/Y" }}
+            | Estado: {{ request_item.status.name }}
+            | Dias: {{ request_item.requested_days }}
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No hay solicitudes registradas.</p>
+    {% endif %}
   </section>
 {% endblock %}

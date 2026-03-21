@@ -1,4 +1,4 @@
-"""Helpers compartidos para construir el layout basico del dashboard."""
+"""Helpers neutros para construir el layout comun del dashboard."""
 
 from apps.employees.models import Employee
 
@@ -75,7 +75,13 @@ def get_dashboard_nav_items(role_name, *, active_section="home"):
     return items
 
 
-def build_dashboard_base_context(user, role_name, *, active_section="home", extra_context=None):
+def build_dashboard_base_context(
+    user,
+    role_name,
+    *,
+    active_section="home",
+    extra_context=None,
+):
     """Devuelve el contexto comun usado por las pantallas del dashboard."""
     context = {
         "display_name": get_dashboard_display_name(user),

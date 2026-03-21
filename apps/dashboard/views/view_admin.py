@@ -3,7 +3,7 @@
 from django.shortcuts import render
 
 from apps.core.utils.decorators import role_required
-from .helpers import build_dashboard_base_context
+from apps.dashboard.services.layout_context import build_dashboard_base_context
 
 
 @role_required("admin")
