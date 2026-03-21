@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Error 400{% endblock %}
+
+{% block content %}
+<h1>Error 400</h1>
+<p>La cuenta autenticada no tiene un rol valido asignado.</p>
+<p>Usuario: {{ request.user.email }}</p>
+
+<form method="post" action="{% url 'auth:logout' %}">
+  {% csrf_token %}
+  <button type="submit">Cerrar sesion</button>
+</form>
+{% endblock %}
