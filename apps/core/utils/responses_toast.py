@@ -1,8 +1,12 @@
+"""Respuestas HTTP reutilizables para toasts y rate limiting."""
+
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 
 
 def toast_response(request, variant, title, message, duration=5000):
+    """Renderiza el HTML de un toast para respuestas clasicas o HTMX."""
+
     return HttpResponse(
         render_to_string(
             "components/toast_card.html",
@@ -18,6 +22,8 @@ def toast_response(request, variant, title, message, duration=5000):
 
 
 def rate_limit_response(request, message):
+    """Devuelve un toast HTMX o un `429` plano segun el tipo de request."""
+
     if request.headers.get("HX-Request"):
         return toast_response(
             request,

@@ -1,4 +1,4 @@
-#uv run manage.py test apps.users.tests.test_auth_flow
+"""Tests del flujo feliz de activacion, login y primer acceso autenticado."""
 
 
 from django.core import mail
@@ -16,7 +16,10 @@ from apps.users.models import User
     FRONTEND_URL="http://testserver",
 )
 class AuthFlowTests(TestCase):
+    """Valida el acceso inicial de un empleado sin ficha interna creada."""
+
     def setUp(self):
+        """Crea un usuario precargado que aun no ha activado su acceso."""
         cache.clear()
         self.user = User.objects.create_user(
             email="empleado@example.com",
@@ -24,6 +27,7 @@ class AuthFlowTests(TestCase):
         )
 
     def test_complete_auth_flow(self):
+        """Comprueba que el login inicial continua hacia onboarding."""
         response = self.client.post(
             reverse("auth:request-activation"),
             {"dni": "12345678Z"},
@@ -54,5 +58,13 @@ class AuthFlowTests(TestCase):
                 "dni": "12345678Z",
                 "password": "PruebaSegura123!",
             },
+            follow=True,
         )
-        self.assertRedirects(response, reverse("dashboard:home"))
+        self.assertRedirects(response, reverse("employees:onboarding"))
+        self.assertEqual(
+            response.redirect_chain,
+            [
+                (reverse("dashboard:home"), 302),
+                (reverse("employees:onboarding"), 302),
+            ],
+        )

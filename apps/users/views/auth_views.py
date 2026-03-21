@@ -1,4 +1,4 @@
-from functools import wraps
+"""Vistas HTTP del flujo publico de login, activacion y logout."""
 
 from django.conf import settings
 from django.contrib import messages
@@ -19,11 +19,10 @@ from apps.users.forms import RequestActivationForm, SetPasswordForm, LoginForm
 from apps.users.services.auth_service import request_activation, validate_token, set_password
 
 
-
-
-
 @anonymous_required
 def request_activation_view(request):
+    """Gestiona la solicitud del email de activacion o recuperacion."""
+
     form = RequestActivationForm(request.POST or None)
 
     if request.method == "POST":
@@ -77,6 +76,8 @@ def request_activation_view(request):
 
 @anonymous_required
 def set_password_view(request, token):
+    """Valida el token y permite fijar la contraseña inicial o recuperada."""
+
     user = validate_token(token)
 
     if not user:
@@ -101,6 +102,8 @@ def set_password_view(request, token):
 
 @anonymous_required
 def login_view(request):
+    """Autentica al usuario por DNI y lo envia al dispatcher del dashboard."""
+
     form = LoginForm(request.POST or None)
 
     if request.method == "POST":
@@ -131,7 +134,7 @@ def login_view(request):
                 )
                 login(request, user)
                 if request.headers.get("HX-Request"):
-                    # ✅ Así HTMX hace navegación completa
+                    # HTMX necesita una redireccion explicita para navegar fuera del fragmento.
                     response = HttpResponse()
                     response["HX-Redirect"] = "/dashboard/"
                     return response
@@ -160,7 +163,10 @@ def login_view(request):
 
     return render(request, "users/login.html", {"form": form})
 
+
 def logout_view(request):
+    """Cierra la sesion actual y devuelve al login."""
+
     if request.method == "POST":
         logout(request)
     return redirect("auth:login")

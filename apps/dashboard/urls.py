@@ -1,3 +1,5 @@
+"""Rutas del dispatcher y paneles principales del dashboard."""
+
 from django.urls import path
 
 from .views import (

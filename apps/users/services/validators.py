@@ -1,3 +1,5 @@
+"""Validadores y normalizadores compartidos del DNI de acceso."""
+
 import re
 
 from django.core.exceptions import ValidationError
@@ -8,12 +10,16 @@ DNI_RE = re.compile(r"^\d{8}[A-Z]$")
 
 
 def normalize_dni(value: str) -> str:
+    """Elimina separadores y fuerza mayusculas para usar un formato unico."""
+
     if value is None:
         return value
     return re.sub(r"[\s-]+", "", value).upper()
 
 
 def validate_dni(value: str) -> None:
+    """Comprueba formato y letra de control del DNI espanol."""
+
     if not value:
         raise ValidationError("El DNI es obligatorio.")
 

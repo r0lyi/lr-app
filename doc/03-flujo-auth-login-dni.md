@@ -11,6 +11,7 @@ La idea es esta:
 3. El sistema genera un token temporal y lo envia por email.
 4. El usuario abre el enlace, define una contraseña nueva y su cuenta queda activa.
 5. Desde entonces puede iniciar sesion con su DNI y esa contraseña.
+6. Despues del login, el sistema todavia decide si va a onboarding o a una home concreta del dashboard.
 
 ## Explicado para una persona no tecnica
 
@@ -337,7 +338,7 @@ Si la autenticacion funciona:
 
 - se resetea el rate limit de login
 - se crea la sesion con `login(request, user)`
-- se redirige al dashboard
+- se redirige a `dashboard:home`, que despues decide el destino final
 
 Si falla:
 
@@ -358,20 +359,38 @@ Como el usuario hereda del sistema de autenticacion de Django y empieza con `is_
 
 Las vistas de auth usan el decorador `anonymous_required`:
 
-- si el usuario ya esta autenticado y entra en login, activacion o set-password, se le redirige al dashboard
+- si el usuario ya esta autenticado y entra en login, activacion o set-password, se le redirige a `dashboard:home`
 - eso evita mostrar pantallas de acceso a alguien que ya tiene sesion activa
 
 La pantalla principal del dashboard usa `login_required(login_url="/auth/login/")`:
 
 - si el usuario no esta autenticado, Django lo devuelve al login
-- si si lo esta, puede entrar al dashboard
+- si si lo esta, entra en el dispatcher `dashboard:home`
 
 Ademas, `config/urls.py` tiene una redireccion raiz:
 
-- `"/"` envia al dashboard si hay sesion
+- `"/"` envia a `dashboard:home` si hay sesion
 - `"/"` envia al login si no la hay
 
 En conjunto, estas reglas hacen que la navegacion basica del sistema sea coherente sin tener que repetir validaciones en cada vista.
+
+## 13.1. Lo que ocurre justo despues del login
+
+El login no decide por si solo si el usuario ve ya su panel final. Solo crea la sesion y envia al dispatcher principal:
+
+```python
+login(request, user)
+return redirect("dashboard:home")
+```
+
+Desde ahi, `dashboard:home` aplica la siguiente logica:
+
+- si el rol principal es `admin`, entra a `dashboard:admin-home`
+- si el rol principal es `rrhh`, entra a `dashboard:rrhh-home`
+- si el rol principal es `employee`, primero comprueba si existe `employee_profile`
+- si no existe esa ficha, envia a `employees:onboarding`
+
+Ese segundo tramo ya no pertenece al login puro. Forma parte del flujo de roles y post-login, que se explica con detalle en `doc/04-flujo-roles-y-post-login.md`.
 
 ## 14. Logout
 
@@ -416,7 +435,7 @@ response["HX-Redirect"] = "/dashboard/"
 return response
 ```
 
-Eso le dice a HTMX que haga una navegacion completa al dashboard.
+Eso le dice a HTMX que haga una navegacion completa hacia el dispatcher del dashboard, que despues resolvera el destino final segun rol y perfil.
 
 ### Como se muestran los toasts
 
@@ -449,6 +468,9 @@ Usuario entra en /auth/login/
     -> compara hash de contraseña
     -> crea sesion
     -> redirige a /dashboard/
+    -> dashboard resuelve el rol principal
+    -> si es employee sin ficha, entra en onboarding
+    -> si ya tiene ficha o pertenece a otro rol, entra en su panel
 ```
 
 ## 17. Secuencia de recuperacion de contraseña
@@ -493,7 +515,7 @@ El archivo `apps/users/tests/test_auth_flow.py` prueba el caso feliz completo:
 4. establece una contraseña
 5. confirma que el usuario queda activo
 6. hace login con DNI y contraseña
-7. verifica la redireccion al dashboard
+7. verifica que el flujo continue hacia onboarding cuando el empleado aun no tiene ficha interna
 
 Comando:
 
@@ -525,3 +547,4 @@ Este auth funciona como una combinacion de:
 - verificacion de propiedad por email
 - activacion o recuperacion mediante token temporal
 - acceso persistente mediante sesion de Django
+- y un segundo paso de resolucion de destino dentro del dashboard
