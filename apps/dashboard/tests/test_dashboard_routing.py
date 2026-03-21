@@ -38,6 +38,11 @@ class DashboardRoutingTests(DashboardRoleBaseTestCase):
         self.assertEqual(employee_home.status_code, 200)
         self.assertContains(employee_home, "Panel de empleado")
         self.assertContains(employee_home, "Ana")
+        self.assertContains(employee_home, "Solicitudes pendientes: 0")
+        self.assertContains(employee_home, "Dias disponibles: 30")
+        self.assertContains(employee_home, "Ultima resolucion:")
+        self.assertContains(employee_home, "Ninguna")
+        self.assertContains(employee_home, "No hay solicitudes registradas.")
 
     def test_rrhh_is_redirected_to_rrhh_home(self):
         user = self.create_active_user(
