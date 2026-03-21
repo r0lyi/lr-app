@@ -1,3 +1,5 @@
+"""Exportaciones publicas de vistas del dashboard."""
+
 from .view_admin import admin_home_view
 from .view_dashboard import home_view
 from .view_employee import employee_home_view

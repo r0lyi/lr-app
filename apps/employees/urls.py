@@ -1,3 +1,5 @@
+"""Rutas del flujo de onboarding de empleados."""
+
 from django.urls import path
 
 from apps.employees.views.onboarding import onboarding_view

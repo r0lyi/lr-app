@@ -1,3 +1,5 @@
+"""Formularios del onboarding interno de empleados."""
+
 from django import forms
 from django.core.exceptions import ValidationError
 
@@ -5,6 +7,8 @@ from apps.users.models import User
 
 
 class EmployeeOnboardingForm(forms.Form):
+    """Captura los datos minimos para crear o completar la ficha `Employee`."""
+
     first_name = forms.CharField(
         max_length=100,
         label="Nombre",
@@ -60,10 +64,14 @@ class EmployeeOnboardingForm(forms.Form):
     )
 
     def __init__(self, *args, user=None, **kwargs):
+        """Recibe el usuario actual para excluirlo de la validacion de email."""
+
         self.user = user
         super().__init__(*args, **kwargs)
 
     def clean_email(self):
+        """Impide reutilizar el email de otro usuario del sistema."""
+
         email = self.cleaned_data["email"].strip().lower()
         qs = User.objects.filter(email__iexact=email)
         if self.user:

@@ -1,3 +1,5 @@
+"""Construccion y envio de correos transaccionales del flujo de acceso."""
+
 import logging
 from email.message import MIMEPart
 from pathlib import Path
@@ -12,8 +14,10 @@ SUPPORTED_EMAIL_PROVIDERS = {"console", "resend"}
 
 INLINE_LOGO_CID = "company-logo"
 
-# Servicios relacionados con envío de emails, construcción de mensajes y selección de proveedor
+
 def get_email_provider():
+    """Resuelve el proveedor efectivo segun settings y credenciales disponibles."""
+
     provider = getattr(settings, "EMAIL_PROVIDER", "").strip().lower()
     if not provider:
         provider = "resend" if getattr(settings, "RESEND_API_KEY", "").strip() else "console"
@@ -24,7 +28,10 @@ def get_email_provider():
         )
     return provider
 
+
 def _build_logo_attachment():
+    """Carga el logo inline usado en los correos HTML si existe en disco."""
+
     logo_path = Path(settings.BASE_DIR) / "static" / "images" / "logo500x200.png"
     if not logo_path.exists():
         return None
@@ -37,8 +44,9 @@ def _build_logo_attachment():
     }
 
 
-# Construye el asunto, cuerpo HTML y texto plano para el email de activación
 def build_activation_email_message(token):
+    """Construye el payload HTML y texto plano del email de activacion."""
+
     frontend_url = settings.FRONTEND_URL.rstrip("/")
     activation_url = f"{frontend_url}/auth/set-password/{token}/"
     logo_url = f"cid:{INLINE_LOGO_CID}"
@@ -55,8 +63,10 @@ def build_activation_email_message(token):
         "text": render_to_string("emails/activation_email.txt", context),
     }
 
-# Normaliza el formato de adjuntos para Resend, asegurando que el contenido sea una lista de bytes
+
 def _normalize_resend_attachment(attachment):
+    """Adapta adjuntos al formato esperado por la API de Resend."""
+
     content = attachment["content"]
     if isinstance(content, bytes):
         content = list(content)
@@ -73,8 +83,10 @@ def _normalize_resend_attachment(attachment):
         normalized["content_id"] = attachment["inline_content_id"]
     return normalized
 
-# Envía el email usando el proveedor configurado, maneja adjuntos y loguea el resultado
+
 def _send_via_django_backend(*, to, subject, html, text="", attachments=None):
+    """Envia el correo a traves del backend de email configurado en Django."""
+
     attachments = attachments or []
     connection = get_connection(
         backend=getattr(
@@ -115,8 +127,10 @@ def _send_via_django_backend(*, to, subject, html, text="", attachments=None):
             )
     return message.send()
 
-# Envía el email usando la API de Resend, maneja adjuntos y loguea el resultado
+
 def _send_via_resend(*, to, subject, html, text="", attachments=None):
+    """Envia el correo a traves de Resend cuando ese proveedor esta activo."""
+
     try:
         import resend
     except ImportError as exc:
@@ -148,8 +162,9 @@ def _send_via_resend(*, to, subject, html, text="", attachments=None):
     return 1 if response and response.get("id") else 0
 
 
-# Función principal para enviar emails, selecciona el proveedor configurado y loguea el resultado
 def send_email_message(*, to, subject, html, text="", attachments=None):
+    """Envia el mensaje con el proveedor resuelto y registra el resultado."""
+
     attachments = attachments or []
     provider = get_email_provider()
     if provider == "resend":
@@ -172,8 +187,9 @@ def send_email_message(*, to, subject, html, text="", attachments=None):
     return sent
 
 
-# Función específica para enviar el email de activación, construye el mensaje y lo envía
 def send_activation_email(email: str, token: str) -> None:
+    """Construye y envia el correo de activacion o recuperacion."""
+
     payload = build_activation_email_message(token)
     attachments = []
     logo_attachment = _build_logo_attachment()
