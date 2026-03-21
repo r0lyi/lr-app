@@ -15,12 +15,19 @@
     </div>
 
     <nav class="dash-nav" aria-label="Menu principal">
-      {% block dashboard_nav %}{% endblock %}
+      {% if nav_items %}
+        {% for item in nav_items %}
+          {% include "components/ui/dashboard_nav_button.html" with url_name=item.url_name label=item.label icon=item.icon active=item.active %}
+        {% endfor %}
+      {% else %}
+        {% block dashboard_nav %}{% endblock %}
+      {% endif %}
     </nav>
 
     <div class="dash-sidebar-footer">
       <div class="dash-user">
-        <strong>{{ request.user.email }}</strong>
+        <strong>{{ display_name }}</strong>
+        <div>{{ request.user.email }}</div>
         {% if role_label %}
           <div>{{ role_label }}</div>
         {% endif %}

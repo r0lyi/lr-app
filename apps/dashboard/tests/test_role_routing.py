@@ -66,7 +66,7 @@ class DashboardRoleRoutingTests(TestCase):
             email="rrhh@example.com",
             dni="11111111H",
         )
-        user.roles.add(self.rrhh_role)
+        user.roles.set([self.rrhh_role])
 
         self.client.force_login(user)
 
@@ -83,7 +83,7 @@ class DashboardRoleRoutingTests(TestCase):
             email="admin@example.com",
             dni="22222222J",
         )
-        user.roles.add(self.admin_role)
+        user.roles.set([self.admin_role])
 
         self.client.force_login(user)
 
@@ -94,3 +94,75 @@ class DashboardRoleRoutingTests(TestCase):
         admin_home = self.client.get(reverse("dashboard:admin-home"))
         self.assertEqual(admin_home.status_code, 200)
         self.assertContains(admin_home, "Panel de administrador")
+
+    def test_employee_cannot_open_rrhh_panel(self):
+        user = self.create_active_user(
+            email="employee-panel@example.com",
+            dni="33333333P",
+        )
+        Employee.objects.create(
+            user=user,
+            first_name="Laura",
+            last_name="Martin",
+            phone="600123123",
+            hire_date=date(2023, 5, 10),
+        )
+
+        self.client.force_login(user)
+
+        response = self.client.get(reverse("dashboard:rrhh-home"))
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse("dashboard:home"))
+
+    def test_rrhh_cannot_open_admin_panel(self):
+        user = self.create_active_user(
+            email="rrhh-panel@example.com",
+            dni="44444444A",
+        )
+        user.roles.set([self.rrhh_role])
+
+        self.client.force_login(user)
+
+        response = self.client.get(reverse("dashboard:admin-home"))
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse("dashboard:home"))
+
+    def test_each_panel_renders_the_nav_for_its_role(self):
+        employee = self.create_active_user(
+            email="employee-nav@example.com",
+            dni="55555555K",
+        )
+        Employee.objects.create(
+            user=employee,
+            first_name="Ana",
+            last_name="Lopez",
+            phone="600123123",
+            hire_date=date(2024, 1, 15),
+        )
+        rrhh = self.create_active_user(
+            email="rrhh-nav@example.com",
+            dni="66666666Q",
+        )
+        rrhh.roles.set([self.rrhh_role])
+        admin = self.create_active_user(
+            email="admin-nav@example.com",
+            dni="77777777B",
+        )
+        admin.roles.set([self.admin_role])
+
+        self.client.force_login(employee)
+        employee_home = self.client.get(reverse("dashboard:employee-home"))
+        self.assertContains(employee_home, reverse("dashboard:employee-home"))
+        self.assertNotContains(employee_home, reverse("dashboard:admin-home"))
+
+        self.client.force_login(rrhh)
+        rrhh_home = self.client.get(reverse("dashboard:rrhh-home"))
+        self.assertContains(rrhh_home, reverse("dashboard:rrhh-home"))
+        self.assertNotContains(rrhh_home, reverse("dashboard:employee-home"))
+
+        self.client.force_login(admin)
+        admin_home = self.client.get(reverse("dashboard:admin-home"))
+        self.assertContains(admin_home, reverse("dashboard:admin-home"))
+        self.assertNotContains(admin_home, reverse("dashboard:rrhh-home"))

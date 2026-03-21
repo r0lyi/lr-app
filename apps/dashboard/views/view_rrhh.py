@@ -1,23 +1,16 @@
 """Vista minima del panel de recursos humanos."""
 
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 
-from apps.users.selectors import get_primary_role
-from .helpers import get_dashboard_display_name
+from apps.core.utils.decorators import role_required
+from .helpers import build_dashboard_base_context
 
 
-@login_required(login_url="/auth/login/")
+@role_required("rrhh")
 def rrhh_home_view(request):
-    """Muestra la vista basica de RRHH si el rol principal es rrhh."""
-    if get_primary_role(request.user) != "rrhh":
-        return redirect("dashboard:home")
-
+    """Muestra la vista basica de RRHH protegida por rol principal."""
     return render(
         request,
         "dashboard/rrhh_home.html",
-        {
-            "display_name": get_dashboard_display_name(request.user),
-            "role_label": "RRHH",
-        },
+        build_dashboard_base_context(request.user, "rrhh", active_section="home"),
     )
