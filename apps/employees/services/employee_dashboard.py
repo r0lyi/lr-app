@@ -27,7 +27,10 @@ from decimal import Decimal, ROUND_HALF_UP
 from django.utils import timezone
 
 from apps.vacations.services.policies import FULL_ANNUAL_VACATION_DAYS
-from apps.vacations.selectors import get_employee_vacation_requests
+from apps.vacations.selectors import (
+    get_employee_vacation_requests,
+    get_filtered_employee_vacation_requests,
+)
 
 
 def get_days_in_year(year):
@@ -69,7 +72,7 @@ def calculate_annual_vacation_days_for_year(hire_date, *, year):
     return proportional_days.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
 
 
-def build_employee_dashboard_summary(employee_profile):
+def build_employee_dashboard_summary(employee_profile, *, request_filters=None):
     """Compone el resumen simple mostrado en la home del empleado.
 
     Este resumen intenta responder a cuatro preguntas muy concretas:
@@ -83,6 +86,13 @@ def build_employee_dashboard_summary(employee_profile):
     latest_resolved_request = employee_requests.filter(
         resolution_date__isnull=False,
     ).order_by("-resolution_date").first()
+    request_filters = request_filters or {}
+    filtered_employee_requests = get_filtered_employee_vacation_requests(
+        employee_profile,
+        start_date=request_filters.get("start_date"),
+        end_date=request_filters.get("end_date"),
+        status_name=request_filters.get("status"),
+    )
 
     return {
         "employee_profile": employee_profile,
@@ -93,5 +103,5 @@ def build_employee_dashboard_summary(employee_profile):
         ),
         "annual_vacation_reference_year": current_year,
         "latest_resolution": latest_resolved_request,
-        "employee_requests": employee_requests,
+        "employee_requests": filtered_employee_requests,
     }
