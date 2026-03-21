@@ -10,7 +10,16 @@ from apps.employees.services.employee_dashboard import build_employee_dashboard_
 
 @role_required("employee")
 def employee_home_view(request):
-    """Renderiza la home del empleado usando la logica del dominio employees."""
+    """Renderiza la home del empleado usando la logica del dominio employees.
+
+    La vista del dashboard se mantiene deliberadamente fina:
+    - comprueba que el empleado ya tiene onboarding completado
+    - pide al dominio employees el resumen de negocio
+    - combina ese resumen con el contexto visual comun del dashboard
+
+    Asi evitamos que el dominio dashboard acabe absorbiendo calculos y reglas
+    que en realidad pertenecen a empleados o vacaciones.
+    """
     employee_profile = get_employee_profile_for_user(request.user)
     if employee_profile is None:
         return redirect("employees:onboarding")
