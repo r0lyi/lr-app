@@ -32,5 +32,6 @@ urlpatterns = [
     path('auth/', include('apps.users.urls', namespace='auth')),
     path('employees/', include('apps.employees.urls', namespace='employees')),
     path('dashboard/', include('apps.dashboard.urls', namespace='dashboard')),
+    path('vacations/', include('apps.vacations.urls', namespace='vacations')),
     path("<path:unknown_path>", page_not_found_view, name="not-found"),
 ]

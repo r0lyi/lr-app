@@ -1,0 +1,92 @@
+{% extends "layouts/dashboard_base.html" %}
+
+{% block title %}Solicitar vacaciones{% endblock %}
+
+{% block dashboard_content %}
+  <section class="dash-card">
+    <h1 class="dash-card-title">Solicitar vacaciones</h1>
+    <p>Empleado: {{ display_name }}</p>
+    <p>Derecho anual de vacaciones {{ annual_vacation_reference_year }}: {{ annual_vacation_days_count }}</p>
+    <p>Contador provisional de dias seleccionados: <strong id="selected-days-counter">0</strong></p>
+
+    <form method="post">
+      {% csrf_token %}
+
+      {% if form.non_field_errors %}
+        <div>
+          {% for error in form.non_field_errors %}
+            <p>{{ error }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <p>
+        {{ form.start_date.label_tag }}
+        {{ form.start_date }}
+        {% for error in form.start_date.errors %}
+          <span>{{ error }}</span>
+        {% endfor %}
+      </p>
+
+      <p>
+        {{ form.end_date.label_tag }}
+        {{ form.end_date }}
+        {% for error in form.end_date.errors %}
+          <span>{{ error }}</span>
+        {% endfor %}
+      </p>
+
+      <p>
+        {{ form.employee_comment.label_tag }}
+        {{ form.employee_comment }}
+        {% for error in form.employee_comment.errors %}
+          <span>{{ error }}</span>
+        {% endfor %}
+      </p>
+
+      <button type="submit">Enviar solicitud</button>
+    </form>
+  </section>
+{% endblock %}
+
+{% block extra_js %}
+  {{ block.super }}
+  <script>
+    (function () {
+      const startInput = document.getElementById("id_start_date");
+      const endInput = document.getElementById("id_end_date");
+      const counter = document.getElementById("selected-days-counter");
+
+      function updateSelectedDaysCounter() {
+        if (!startInput || !endInput || !counter) {
+          return;
+        }
+
+        if (!startInput.value || !endInput.value) {
+          counter.textContent = "0";
+          return;
+        }
+
+        const startDate = new Date(startInput.value + "T00:00:00");
+        const endDate = new Date(endInput.value + "T00:00:00");
+
+        if (Number.isNaN(startDate.getTime()) || Number.isNaN(endDate.getTime()) || endDate < startDate) {
+          counter.textContent = "0";
+          return;
+        }
+
+        const millisecondsPerDay = 1000 * 60 * 60 * 24;
+        const selectedDays = Math.floor((endDate - startDate) / millisecondsPerDay) + 1;
+        counter.textContent = String(selectedDays);
+      }
+
+      if (startInput) {
+        startInput.addEventListener("change", updateSelectedDaysCounter);
+      }
+      if (endInput) {
+        endInput.addEventListener("change", updateSelectedDaysCounter);
+      }
+      updateSelectedDaysCounter();
+    })();
+  </script>
+{% endblock %}

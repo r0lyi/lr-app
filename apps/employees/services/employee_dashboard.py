@@ -4,9 +4,10 @@ La idea clave de este modulo es no mezclar dos conceptos distintos:
 
 1. "Dias anuales de vacaciones":
    El derecho total que corresponde al trabajador dentro del ano natural.
-   En nuestro sistema tomamos como base 30 dias naturales al ano, que es el
-   minimo legal del articulo 38 del Estatuto de los Trabajadores y, ademas,
-   encaja con el criterio que estamos usando para este proyecto.
+   En nuestro sistema leemos ese valor desde la politica central de vacaciones.
+   Hoy esta fijado en 30 dias naturales al ano, que es el minimo legal del
+   articulo 38 del Estatuto de los Trabajadores y, ademas, encaja con el
+   criterio que estamos usando para este proyecto.
 
 2. "Saldo disponible actual":
    Lo que queda libre despues de descontar vacaciones ya disfrutadas o
@@ -25,11 +26,8 @@ from decimal import Decimal, ROUND_HALF_UP
 
 from django.utils import timezone
 
-from apps.employees.selectors.employee_dashboard import get_employee_requests
-
-# Derecho anual base que usamos para el sistema. Se expresa como Decimal para
-# poder prorratear sin perder precision cuando el alta se produce a mitad de ano.
-FULL_ANNUAL_VACATION_DAYS = Decimal("30.00")
+from apps.vacations.policies import FULL_ANNUAL_VACATION_DAYS
+from apps.vacations.selectors import get_employee_vacation_requests
 
 
 def get_days_in_year(year):
@@ -80,7 +78,7 @@ def build_employee_dashboard_summary(employee_profile):
     - cual fue la ultima resolucion registrada
     - que solicitudes tiene ya guardadas en el sistema
     """
-    employee_requests = get_employee_requests(employee_profile)
+    employee_requests = get_employee_vacation_requests(employee_profile)
     current_year = timezone.localdate().year
     latest_resolved_request = employee_requests.filter(
         resolution_date__isnull=False,

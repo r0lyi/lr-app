@@ -19,6 +19,12 @@ ROLE_NAV_CONFIG = {
             "label": "Inicio",
             "icon": "home",
         },
+        {
+            "section": "request",
+            "url_name": "vacations:create-request",
+            "label": "Solicitar",
+            "icon": "drop",
+        },
     ],
     "rrhh": [
         {
