@@ -28,5 +28,6 @@ urlpatterns = [
     path("", root_redirect, name="root"),
     path('admin/', admin.site.urls),
     path('auth/', include('apps.users.urls', namespace='auth')),
+    path('employees/', include('apps.employees.urls', namespace='employees')),
     path('dashboard/', include('apps.dashboard.urls', namespace='dashboard')),
 ]

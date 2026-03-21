@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
@@ -43,6 +44,7 @@ def onboarding_view(request):
                 user.email = data["email"]
                 user.save(update_fields=["email"])
 
+            messages.success(request, "Tu perfil de empleado se ha guardado correctamente.")
             return redirect("dashboard:home")
     else:
         form = EmployeeOnboardingForm(initial=initial, user=user)

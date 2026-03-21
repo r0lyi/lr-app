@@ -1,81 +1,113 @@
 {% extends "base.html" %}
-{% load static %}
 
 {% block title %}Completa tu perfil{% endblock %}
 
 {% block content %}
-<div class="onboard-page">
-  <div class="onboard-shell">
-    <div class="onboard-header">
-      <div class="onboard-header-card">
-        <img src="{% static 'images/logo500x200.svg' %}" alt="Clean & Service" />
-        <div class="onboard-header-text">
-          <h1>Completa tu perfil</h1>
-          <p>Necesitamos confirmar tus datos para habilitar el acceso al sistema.</p>
-        </div>
-      </div>
-    </div>
+<h1>Completa tu perfil de empleado</h1>
+<p>Antes de continuar, necesitamos guardar tus datos basicos de empleado.</p>
 
-    <div class="onboard-card">
-      <form method="post" class="onboard-form">
-        {% csrf_token %}
+{% if form.non_field_errors %}
+  <ul>
+    {% for error in form.non_field_errors %}
+      <li>{{ error }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
 
-        <div class="onboard-grid">
-          <div class="onboard-fields">
-            {% include "components/inputs/text_input.html" with label="Nombre/s" name="first_name" placeholder="Introduce tu nombre" value=form.first_name.value|default:'' error=form.first_name.errors.0 %}
-            {% include "components/inputs/text_input.html" with label="Apellidos" name="last_name" placeholder="Introduce tus apellidos" value=form.last_name.value|default:'' error=form.last_name.errors.0 %}
-            {% include "components/inputs/text_input.html" with label="Correo electronico" name="email" type="email" placeholder="Introduce tu correo" value=form.email.value|default:'' error=form.email.errors.0 %}
+<form method="post">
+  {% csrf_token %}
 
-            <div class="ui-field">
-              <label class="ui-field__label" for="id_phone">Telefono</label>
-              <div class="onboard-phone">
-                <span class="onboard-phone-prefix">+34</span>
-                <input
-                  class="ui-input"
-                  id="id_phone"
-                  name="phone"
-                  type="tel"
-                  placeholder="Introduce tu telefono"
-                  value="{{ form.phone.value|default:'' }}"
-                />
-              </div>
-              {% if form.phone.errors.0 %}
-                <p class="ui-field__feedback ui-field__feedback--error">{{ form.phone.errors.0 }}</p>
-              {% endif %}
-            </div>
-          </div>
+  <p>
+    <label for="id_first_name">Nombre</label><br>
+    <input
+      type="text"
+      id="id_first_name"
+      name="first_name"
+      value="{{ form.first_name.value|default:'' }}"
+      required
+    >
+  </p>
+  {% if form.first_name.errors %}
+    <ul>
+      {% for error in form.first_name.errors %}
+        <li>{{ error }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
 
-          <div class="onboard-help">
-            <h3>No sabes tu fecha de ingreso?</h3>
-            <p>
-              Consulta la fecha de ingreso en tu informe de vida laboral.
-              En el documento, busca la empresa y veras:
-            </p>
-            <ul>
-              <li>El nombre de la empresa.</li>
-              <li>La fecha de alta (inicio del contrato).</li>
-              <li>La fecha de baja (si ya no trabajas alli).</li>
-            </ul>
-            <p>La fecha de alta es la que debes indicar en este formulario.</p>
-          </div>
+  <p>
+    <label for="id_last_name">Apellidos</label><br>
+    <input
+      type="text"
+      id="id_last_name"
+      name="last_name"
+      value="{{ form.last_name.value|default:'' }}"
+      required
+    >
+  </p>
+  {% if form.last_name.errors %}
+    <ul>
+      {% for error in form.last_name.errors %}
+        <li>{{ error }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
 
-          <div class="onboard-fields">
-            {% include "components/inputs/date_input.html" with label="Fecha ingreso" name="hire_date" value=form.hire_date.value|default:'' error=form.hire_date.errors.0 %}
-          </div>
-        </div>
+  <p>
+    <label for="id_email">Correo electronico</label><br>
+    <input
+      type="email"
+      id="id_email"
+      name="email"
+      value="{{ form.email.value|default:'' }}"
+      required
+    >
+  </p>
+  {% if form.email.errors %}
+    <ul>
+      {% for error in form.email.errors %}
+        <li>{{ error }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
 
-        {% if form.non_field_errors %}
-          <p class="onboard-error">{{ form.non_field_errors.0 }}</p>
-        {% endif %}
+  <p>
+    <label for="id_phone">Telefono</label><br>
+    <input
+      type="text"
+      id="id_phone"
+      name="phone"
+      value="{{ form.phone.value|default:'' }}"
+    >
+  </p>
+  {% if form.phone.errors %}
+    <ul>
+      {% for error in form.phone.errors %}
+        <li>{{ error }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
 
-        {% include "components/button.html" with label="Enviar" type="submit" variant="primary" size="md" full_width=True class_name="onboard-submit" %}
-      </form>
-    </div>
-  </div>
-</div>
-{% endblock %}
+  <p>
+    <label for="id_hire_date">Fecha de ingreso</label><br>
+    <input
+      type="date"
+      id="id_hire_date"
+      name="hire_date"
+      value="{{ form.hire_date.value|default:'' }}"
+      required
+    >
+  </p>
+  {% if form.hire_date.errors %}
+    <ul>
+      {% for error in form.hire_date.errors %}
+        <li>{{ error }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
 
-{% block extra_css %}
-{{ block.super }}
-<link rel="stylesheet" href="{% static 'css/employees/onboarding.css' %}">
+  <p>
+    <button type="submit">Guardar perfil</button>
+  </p>
+</form>
 {% endblock %}

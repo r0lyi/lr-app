@@ -1,14 +1,63 @@
 from django import forms
 from django.core.exceptions import ValidationError
+
 from apps.users.models import User
 
 
 class EmployeeOnboardingForm(forms.Form):
-    first_name = forms.CharField(max_length=100)
-    last_name = forms.CharField(max_length=100)
-    email = forms.EmailField()
-    phone = forms.CharField(max_length=20, required=False)
-    hire_date = forms.DateField()
+    first_name = forms.CharField(
+        max_length=100,
+        label="Nombre",
+        widget=forms.TextInput(
+            attrs={
+                "class": "ui-input",
+                "placeholder": "Introduce tu nombre",
+                "autocomplete": "given-name",
+            }
+        ),
+    )
+    last_name = forms.CharField(
+        max_length=100,
+        label="Apellidos",
+        widget=forms.TextInput(
+            attrs={
+                "class": "ui-input",
+                "placeholder": "Introduce tus apellidos",
+                "autocomplete": "family-name",
+            }
+        ),
+    )
+    email = forms.EmailField(
+        label="Correo electronico",
+        widget=forms.EmailInput(
+            attrs={
+                "class": "ui-input",
+                "placeholder": "Introduce tu correo",
+                "autocomplete": "email",
+            }
+        ),
+    )
+    phone = forms.CharField(
+        max_length=20,
+        required=False,
+        label="Telefono",
+        widget=forms.TextInput(
+            attrs={
+                "class": "ui-input",
+                "placeholder": "Introduce tu telefono",
+                "autocomplete": "tel",
+            }
+        ),
+    )
+    hire_date = forms.DateField(
+        label="Fecha de ingreso",
+        widget=forms.DateInput(
+            attrs={
+                "class": "ui-input",
+                "type": "date",
+            }
+        ),
+    )
 
     def __init__(self, *args, user=None, **kwargs):
         self.user = user
