@@ -1,0 +1,30 @@
+<aside class="ui-info-panel{% if class_name %} {{ class_name }}{% endif %}">
+  {% if eyebrow %}
+    <p class="ui-info-panel__eyebrow">{{ eyebrow }}</p>
+  {% endif %}
+
+  {% if title %}
+    <h2 class="ui-info-panel__title">{{ title }}</h2>
+  {% endif %}
+
+  {% if text_html %}
+    <p class="ui-info-panel__text">{{ text_html|safe }}</p>
+  {% elif text %}
+    <p class="ui-info-panel__text">{{ text }}</p>
+  {% endif %}
+
+  {% if line_1 or line_2 or line_3 or line_4 %}
+    <ul class="ui-info-panel__list">
+      {% if line_1 %}<li>{{ line_1 }}</li>{% endif %}
+      {% if line_2 %}<li>{{ line_2 }}</li>{% endif %}
+      {% if line_3 %}<li>{{ line_3 }}</li>{% endif %}
+      {% if line_4 %}<li>{{ line_4 }}</li>{% endif %}
+    </ul>
+  {% endif %}
+
+  {% if note_html %}
+    <p class="ui-info-panel__note">{{ note_html|safe }}</p>
+  {% elif note %}
+    <p class="ui-info-panel__note">{{ note }}</p>
+  {% endif %}
+</aside>
