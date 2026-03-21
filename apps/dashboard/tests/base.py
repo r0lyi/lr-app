@@ -1,10 +1,12 @@
 """Base compartida para los tests del dashboard segun rol."""
 
 from datetime import date
+from decimal import Decimal
 
 from django.test import TestCase
 
 from apps.employees.models import Employee
+from apps.vacations.models import VacationRequest, VacationStatus
 from apps.users.models import Role, User
 
 
@@ -17,6 +19,9 @@ class DashboardRoleBaseTestCase(TestCase):
         cls.employee_role = Role.objects.get(name="employee")
         cls.rrhh_role = Role.objects.get(name="rrhh")
         cls.admin_role = Role.objects.get(name="admin")
+        cls.pending_status = VacationStatus.objects.get(name="pending")
+        cls.approved_status = VacationStatus.objects.get(name="approved")
+        cls.rejected_status = VacationStatus.objects.get(name="rejected")
 
     def create_active_user(self, *, email, dni):
         """Crea un usuario activo listo para iniciar sesion en tests."""
@@ -43,4 +48,24 @@ class DashboardRoleBaseTestCase(TestCase):
             last_name=last_name,
             phone=phone,
             hire_date=hire_date,
+        )
+
+    def create_vacation_request(
+        self,
+        employee,
+        *,
+        status,
+        start_date,
+        end_date,
+        requested_days,
+        employee_comment="",
+    ):
+        """Crea solicitudes de vacaciones de prueba para filtros y listados."""
+        return VacationRequest.objects.create(
+            employee=employee,
+            status=status,
+            start_date=start_date,
+            end_date=end_date,
+            requested_days=Decimal(requested_days),
+            employee_comment=employee_comment or None,
         )

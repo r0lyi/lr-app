@@ -18,6 +18,28 @@
     </p>
 
     <h2>Solicitudes del empleado</h2>
+    <form method="get">
+      {% if filter_form.non_field_errors %}
+        {% for error in filter_form.non_field_errors %}
+          <p>{{ error }}</p>
+        {% endfor %}
+      {% endif %}
+
+      <p>
+        {{ filter_form.start_date.label_tag }}
+        {{ filter_form.start_date }}
+      </p>
+      <p>
+        {{ filter_form.end_date.label_tag }}
+        {{ filter_form.end_date }}
+      </p>
+      <p>
+        {{ filter_form.status.label_tag }}
+        {{ filter_form.status }}
+      </p>
+      <button type="submit">Filtrar</button>
+    </form>
+
     {% if employee_requests %}
       <ul>
         {% for request_item in employee_requests %}

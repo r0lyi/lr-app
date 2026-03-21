@@ -6,6 +6,7 @@ from apps.core.utils.decorators import role_required
 from apps.dashboard.services.layout_context import build_dashboard_base_context
 from apps.employees.selectors.employee_dashboard import get_employee_profile_for_user
 from apps.employees.services.employee_dashboard import build_employee_dashboard_summary
+from apps.vacations.forms import EmployeeVacationRequestFilterForm
 
 
 @role_required("employee")
@@ -24,10 +25,19 @@ def employee_home_view(request):
     if employee_profile is None:
         return redirect("employees:onboarding")
 
+    filter_form = EmployeeVacationRequestFilterForm(request.GET or None)
+    request_filters = filter_form.cleaned_data if filter_form.is_valid() else {}
+
     context = build_dashboard_base_context(
         request.user,
         "employee",
         active_section="home",
-        extra_context=build_employee_dashboard_summary(employee_profile),
+        extra_context={
+            **build_employee_dashboard_summary(
+                employee_profile,
+                request_filters=request_filters,
+            ),
+            "filter_form": filter_form,
+        },
     )
     return render(request, "dashboard/employee_home.html", context)

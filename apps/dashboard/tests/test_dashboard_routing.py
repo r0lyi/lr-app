@@ -1,5 +1,7 @@
 """Tests de enrutado principal del dashboard segun el rol."""
 
+from datetime import date
+
 from django.urls import reverse
 
 from .base import DashboardRoleBaseTestCase
@@ -44,6 +46,47 @@ class DashboardRoutingTests(DashboardRoleBaseTestCase):
         self.assertContains(employee_home, "Ultima resolucion:")
         self.assertContains(employee_home, "Ninguna")
         self.assertContains(employee_home, "No hay solicitudes registradas.")
+        self.assertContains(employee_home, "Fecha inicio")
+        self.assertContains(employee_home, "Fecha final")
+        self.assertContains(employee_home, "Estado")
+        self.assertContains(employee_home, "Filtrar")
+
+    def test_employee_home_filters_requests_by_dates_and_status(self):
+        user = self.create_active_user(
+            email="employee-filter@example.com",
+            dni="13579135G",
+        )
+        employee = self.create_employee_profile(user)
+        self.create_vacation_request(
+            employee,
+            status=self.pending_status,
+            start_date=date(2026, 7, 1),
+            end_date=date(2026, 7, 5),
+            requested_days="5.00",
+        )
+        self.create_vacation_request(
+            employee,
+            status=self.approved_status,
+            start_date=date(2026, 8, 10),
+            end_date=date(2026, 8, 12),
+            requested_days="3.00",
+        )
+
+        self.client.force_login(user)
+
+        response = self.client.get(
+            reverse("dashboard:employee-home"),
+            {
+                "start_date": "2026-08-01",
+                "end_date": "2026-08-31",
+                "status": "approved",
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "10/08/2026 - 12/08/2026")
+        self.assertContains(response, "Estado: approved")
+        self.assertNotContains(response, "01/07/2026 - 05/07/2026")
 
     def test_rrhh_is_redirected_to_rrhh_home(self):
         user = self.create_active_user(
