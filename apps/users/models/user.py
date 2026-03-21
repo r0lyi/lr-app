@@ -1,8 +1,12 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
+
 from apps.core.models import TimeStampedModel
+
 from .role import Role
 from apps.users.services.validators import normalize_dni, validate_dni
+
+DEFAULT_ROLE_NAME = "employee"
 
 
 class UserManager(BaseUserManager):
@@ -70,11 +74,13 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
         super().save(*args, **kwargs)
 
         if is_new:
-            default_role, _ = Role.objects.get_or_create(
-                name="employee",
-                defaults={"description": "Empleado"},
-            )
-            self.roles.add(default_role)
+            try:
+                default_role = Role.objects.get(name=DEFAULT_ROLE_NAME)
+            except Role.DoesNotExist:
+                default_role = None
+
+            if default_role is not None:
+                self.roles.add(default_role)
 
 
 class UserRole(models.Model):
