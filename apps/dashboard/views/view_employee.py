@@ -5,6 +5,7 @@ from django.shortcuts import redirect, render
 
 from apps.employees.models import Employee
 from apps.users.selectors import get_primary_role
+from .helpers import get_dashboard_display_name
 
 
 @login_required(login_url="/auth/login/")
@@ -19,9 +20,11 @@ def employee_home_view(request):
     except Employee.DoesNotExist:
         return redirect("employees:onboarding")
 
-    full_name = f"{employee_profile.first_name} {employee_profile.last_name}".strip()
+    display_name = get_dashboard_display_name(request.user)
     context = {
+        "display_name": display_name,
         "employee_profile": employee_profile,
-        "user_display_name": full_name or request.user.email,
+        "user_display_name": display_name,
+        "role_label": "Empleado",
     }
     return render(request, "dashboard/employee_home.html", context)

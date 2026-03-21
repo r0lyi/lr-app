@@ -1,0 +1,14 @@
+<a
+  class="dash-nav-link{% if active %} active{% endif %}"
+  href="{% url url_name %}"
+>
+  <span class="dash-nav-icon{% if icon == 'home' or icon == 'drop' or not icon %} dash-nav-icon--drop{% endif %}" aria-hidden="true">
+    {% if icon != "home" and icon != "drop" and icon %}
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M4 10.5 12 4l8 6.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+        <path d="M6.5 9.5V20h11V9.5" stroke="currentColor" stroke-width="2" stroke-linejoin="round"></path>
+      </svg>
+    {% endif %}
+  </span>
+  <span>{{ label }}</span>
+</a>

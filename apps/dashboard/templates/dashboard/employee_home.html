@@ -1,18 +1,19 @@
-{% extends "base.html" %}
+{% extends "layouts/dashboard_base.html" %}
 
 {% block title %}Panel de empleado{% endblock %}
 
-{% block content %}
-<h1>Panel de empleado</h1>
-<p>Bienvenido, {{ user_display_name }}.</p>
-<p>Tu correo es: {{ request.user.email }}</p>
-<p>Nombre: {{ employee_profile.first_name }}</p>
-<p>Apellidos: {{ employee_profile.last_name }}</p>
-<p>Telefono: {{ employee_profile.phone|default:"No indicado" }}</p>
-<p>Fecha de ingreso: {{ employee_profile.hire_date|date:"d/m/Y" }}</p>
+{% block dashboard_nav %}
+  {% include "components/ui/dashboard_nav_button.html" with url_name="dashboard:employee-home" label="Inicio" icon="home" active=True %}
+{% endblock %}
 
-<form method="post" action="{% url 'auth:logout' %}">
-  {% csrf_token %}
-  <button type="submit">Cerrar sesion</button>
-</form>
+{% block dashboard_content %}
+  <section class="dash-card">
+    <h1 class="dash-card-title">Panel de empleado</h1>
+    <p>Bienvenido, {{ user_display_name }}.</p>
+    <p>Tu correo es: {{ request.user.email }}</p>
+    <p>Nombre: {{ employee_profile.first_name }}</p>
+    <p>Apellidos: {{ employee_profile.last_name }}</p>
+    <p>Telefono: {{ employee_profile.phone|default:"No indicado" }}</p>
+    <p>Fecha de ingreso: {{ employee_profile.hire_date|date:"d/m/Y" }}</p>
+  </section>
 {% endblock %}

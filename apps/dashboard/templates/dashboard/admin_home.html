@@ -1,14 +1,15 @@
-{% extends "base.html" %}
+{% extends "layouts/dashboard_base.html" %}
 
 {% block title %}Panel de administrador{% endblock %}
 
-{% block content %}
-<h1>Panel de administrador</h1>
-<p>Has entrado en la vista basica de administracion.</p>
-<p>Usuario: {{ request.user.email }}</p>
+{% block dashboard_nav %}
+  {% include "components/ui/dashboard_nav_button.html" with url_name="dashboard:admin-home" label="Inicio" icon="home" active=True %}
+{% endblock %}
 
-<form method="post" action="{% url 'auth:logout' %}">
-  {% csrf_token %}
-  <button type="submit">Cerrar sesion</button>
-</form>
+{% block dashboard_content %}
+  <section class="dash-card">
+    <h1 class="dash-card-title">Panel de administrador</h1>
+    <p>Has entrado en la vista basica de administracion.</p>
+    <p>Usuario: {{ request.user.email }}</p>
+  </section>
 {% endblock %}

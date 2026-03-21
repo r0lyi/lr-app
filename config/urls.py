@@ -19,6 +19,8 @@ from django.contrib import admin
 from django.shortcuts import redirect
 from django.urls import include, path
 
+from config.error_views import page_not_found_view
+
 def root_redirect(request):
     if request.user.is_authenticated:
         return redirect("dashboard:home")
@@ -30,4 +32,5 @@ urlpatterns = [
     path('auth/', include('apps.users.urls', namespace='auth')),
     path('employees/', include('apps.employees.urls', namespace='employees')),
     path('dashboard/', include('apps.dashboard.urls', namespace='dashboard')),
+    path("<path:unknown_path>", page_not_found_view, name="not-found"),
 ]
