@@ -1,23 +1,16 @@
 """Vista minima del panel de administracion."""
 
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 
-from apps.users.selectors import get_primary_role
-from .helpers import get_dashboard_display_name
+from apps.core.utils.decorators import role_required
+from .helpers import build_dashboard_base_context
 
 
-@login_required(login_url="/auth/login/")
+@role_required("admin")
 def admin_home_view(request):
-    """Muestra la vista basica de admin si el rol principal es admin."""
-    if get_primary_role(request.user) != "admin":
-        return redirect("dashboard:home")
-
+    """Muestra la vista basica de administracion protegida por rol."""
     return render(
         request,
         "dashboard/admin_home.html",
-        {
-            "display_name": get_dashboard_display_name(request.user),
-            "role_label": "Administrador",
-        },
+        build_dashboard_base_context(request.user, "admin", active_section="home"),
     )

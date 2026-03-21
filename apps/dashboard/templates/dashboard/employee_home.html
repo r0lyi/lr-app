@@ -2,14 +2,10 @@
 
 {% block title %}Panel de empleado{% endblock %}
 
-{% block dashboard_nav %}
-  {% include "components/ui/dashboard_nav_button.html" with url_name="dashboard:employee-home" label="Inicio" icon="home" active=True %}
-{% endblock %}
-
 {% block dashboard_content %}
   <section class="dash-card">
     <h1 class="dash-card-title">Panel de empleado</h1>
-    <p>Bienvenido, {{ user_display_name }}.</p>
+    <p>Bienvenido, {{ display_name }}.</p>
     <p>Tu correo es: {{ request.user.email }}</p>
     <p>Nombre: {{ employee_profile.first_name }}</p>
     <p>Apellidos: {{ employee_profile.last_name }}</p>
