@@ -11,7 +11,8 @@ Actualmente el proyecto ya incluye:
 - autenticacion con `DNI + contrasena`
 - activacion o recuperacion de acceso por email
 - usuario personalizado con roles
-- dashboard autenticado
+- dashboard autenticado con despacho por rol
+- onboarding obligatorio para empleados sin ficha interna
 - modulos base para empleados, vacaciones, notificaciones y auditoria
 - documentacion tecnica en `/doc/`
 
@@ -69,6 +70,7 @@ El acceso al sistema funciona asi:
 3. El sistema genera un token temporal de 24 horas y envia un email.
 4. El usuario accede a `/auth/set-password/<token>/` y define una nueva contrasena.
 5. La cuenta se activa y el usuario ya puede entrar desde `/auth/login/` con `DNI + contrasena`.
+6. Tras el login, `/dashboard/` actua como dispatcher: resuelve el rol principal y, en el caso de `employee`, obliga a completar onboarding antes de entrar al panel.
 
 Piezas tecnicas clave:
 
@@ -77,6 +79,8 @@ Piezas tecnicas clave:
 - servicio de activacion: `apps.users.services.auth_service`
 - email de activacion: `apps.users.services.email_service`
 - vistas de acceso: `apps.users.views.auth_views`
+- dispatcher post-login: `apps.dashboard.views.view_dashboard`
+- onboarding de empleado: `apps.employees.views.onboarding`
 
 ## Requisitos previos
 
@@ -146,7 +150,8 @@ http://127.0.0.1:8000/
 - `/auth/login/`: login con DNI y contrasena
 - `/auth/activate/`: solicitud de enlace para crear o recuperar contrasena
 - `/auth/set-password/<token>/`: definicion de contrasena mediante token
-- `/dashboard/`: pantalla autenticada principal
+- `/dashboard/`: dispatcher autenticado que decide a que pantalla va el usuario
+- `/employees/onboarding/`: alta interna del perfil del empleado
 - `/admin/`: panel de administracion Django
 
 ## Settings y entornos
@@ -182,6 +187,7 @@ Guias disponibles:
 - [`doc/01-estructura-del-proyecto.md`](./doc/01-estructura-del-proyecto.md): estructura de carpetas y organizacion por apps
 - [`doc/02-settings-y-configuracion-django.md`](./doc/02-settings-y-configuracion-django.md): settings, entornos y configuracion base de Django
 - [`doc/03-flujo-auth-login-dni.md`](./doc/03-flujo-auth-login-dni.md): flujo tecnico completo del login por DNI y activacion por email
+- [`doc/04-flujo-roles-y-post-login.md`](./doc/04-flujo-roles-y-post-login.md): resolucion de roles, onboarding y navegacion real despues del login
 
 ## Estado actual
 
@@ -202,4 +208,4 @@ uv run python manage.py test
 
 ## Resumen
 
-Este repositorio esta pensado como una base de aplicacion interna en Django, con separacion clara por dominios, autenticacion personalizada y una documentacion que permite a otro desarrollador entender rapido tanto la arquitectura general como el flujo de acceso.
+Este repositorio esta pensado como una base de aplicacion interna en Django, con separacion clara por dominios, autenticacion personalizada y una documentacion que permite a otro desarrollador entender rapido tanto la arquitectura general como el flujo de acceso, roles y post-login.

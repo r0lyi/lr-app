@@ -6,7 +6,8 @@ Esta carpeta contiene documentacion pensada para que otro desarrollador pueda en
 
 - [`01-estructura-del-proyecto.md`](./01-estructura-del-proyecto.md): explica la organizacion de carpetas, el papel de cada app y el patron que sigue el repositorio.
 - [`02-settings-y-configuracion-django.md`](./02-settings-y-configuracion-django.md): explica por que existe `config/settings/`, como se cargan los entornos y que configuraciones importantes de Django usa el proyecto.
-- [`03-flujo-auth-login-dni.md`](./03-flujo-auth-login-dni.md): explica el flujo completo de autenticacion con DNI, creacion o recuperacion de contraseña por email y el login final.
+- [`03-flujo-auth-login-dni.md`](./03-flujo-auth-login-dni.md): explica el flujo completo de autenticacion con DNI, creacion o recuperacion de contraseña por email y el primer salto al dashboard.
+- [`04-flujo-roles-y-post-login.md`](./04-flujo-roles-y-post-login.md): explica como se resuelve el rol principal, que pasa despues del login y por que algunos usuarios van a onboarding antes de ver su panel.
 
 ## Resumen rapido del stack
 
@@ -30,6 +31,7 @@ Esta carpeta contiene documentacion pensada para que otro desarrollador pueda en
 3. El sistema genera un token temporal y envia un email.
 4. El usuario abre el enlace, define su contraseña y activa su cuenta.
 5. A partir de ese momento entra con `DNI + contraseña`.
+6. El sistema decide si debe pasar por onboarding o entrar directamente a su panel segun rol y estado del perfil.
 
 ## Comandos utiles
 
@@ -46,3 +48,4 @@ Si eres nuevo en el proyecto, este orden suele funcionar bien:
 1. Lee la estructura general.
 2. Entiende como se cargan los `settings`.
 3. Revisa el flujo de autenticacion.
+4. Continua con el flujo de roles y post-login.

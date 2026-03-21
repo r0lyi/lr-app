@@ -1,9 +1,14 @@
+"""Formularios del flujo de activacion y login por DNI."""
+
 from django import forms
 from django.contrib.auth.password_validation import validate_password
+
 from apps.users.services.validators import normalize_dni, validate_dni
 
-# Formulario para solicitar activación de cuenta mediante DNI
+
 class RequestActivationForm(forms.Form):
+    """Solicita el enlace de activacion o recuperacion a partir del DNI."""
+
     dni = forms.CharField(
         max_length=20,
         validators=[validate_dni],
@@ -15,10 +20,14 @@ class RequestActivationForm(forms.Form):
     )
 
     def clean_dni(self):
+        """Normaliza el DNI antes de pasarlo al servicio de activacion."""
+
         return normalize_dni(self.cleaned_data["dni"])
 
-# Formulario para establecer nueva contraseña después de activar cuenta
+
 class SetPasswordForm(forms.Form):
+    """Permite definir la contraseña desde un token valido de activacion."""
+
     password1 = forms.CharField(
         label="Nueva contraseña",
         widget=forms.PasswordInput(attrs={"class": "input"}),
@@ -30,6 +39,8 @@ class SetPasswordForm(forms.Form):
     )
 
     def clean(self):
+        """Comprueba que ambas contraseñas coinciden antes de guardar."""
+
         cleaned_data = super().clean()
         p1 = cleaned_data.get("password1")
         p2 = cleaned_data.get("password2")
@@ -39,8 +50,10 @@ class SetPasswordForm(forms.Form):
 
         return cleaned_data
 
-# Formulario de login usando DNI y contraseña
+
 class LoginForm(forms.Form):
+    """Recoge las credenciales del login basado en DNI."""
+
     dni = forms.CharField(
         max_length=20,
         validators=[validate_dni],
@@ -51,4 +64,6 @@ class LoginForm(forms.Form):
     )
 
     def clean_dni(self):
+        """Aplica la misma normalizacion del DNI usada en el resto del flujo."""
+
         return normalize_dni(self.cleaned_data["dni"])

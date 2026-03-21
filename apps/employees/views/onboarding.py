@@ -1,3 +1,5 @@
+"""Vista del formulario que completa la ficha interna del empleado."""
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
@@ -8,6 +10,8 @@ from apps.employees.models import Employee
 
 @login_required(login_url="/auth/login/")
 def onboarding_view(request):
+    """Crea o actualiza la ficha `Employee` tras el primer acceso."""
+
     user = request.user
 
     try:
@@ -45,6 +49,7 @@ def onboarding_view(request):
                 user.save(update_fields=["email"])
 
             messages.success(request, "Tu perfil de empleado se ha guardado correctamente.")
+            # El dispatcher del dashboard decide el destino final una vez existe la ficha.
             return redirect("dashboard:home")
     else:
         form = EmployeeOnboardingForm(initial=initial, user=user)

@@ -1,3 +1,5 @@
+"""Exportaciones publicas del dominio de usuarios."""
+
 from .role import Role
 from .user import User, UserRole
 
