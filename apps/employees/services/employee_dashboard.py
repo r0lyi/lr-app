@@ -26,7 +26,7 @@ from decimal import Decimal, ROUND_HALF_UP
 
 from django.utils import timezone
 
-from apps.vacations.policies import FULL_ANNUAL_VACATION_DAYS
+from apps.vacations.services.policies import FULL_ANNUAL_VACATION_DAYS
 from apps.vacations.selectors import get_employee_vacation_requests
 
 

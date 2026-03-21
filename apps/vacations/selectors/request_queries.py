@@ -1,7 +1,7 @@
 """Consultas de lectura usadas por el dominio de vacaciones."""
 
 from apps.vacations.models import VacationRequest, VacationStatus
-from apps.vacations.policies import ACTIVE_REQUEST_STATUS_NAMES
+from apps.vacations.services.policies import ACTIVE_REQUEST_STATUS_NAMES
 
 
 def get_vacation_status_by_name(status_name):

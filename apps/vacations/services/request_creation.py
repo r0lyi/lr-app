@@ -5,7 +5,7 @@ from decimal import Decimal
 from django.core.exceptions import ValidationError
 
 from apps.vacations.models import VacationRequest
-from apps.vacations.policies import (
+from apps.vacations.services.policies import (
     DEFAULT_NEW_REQUEST_STATUS_NAME,
     VACATION_DAY_COUNT_MODE,
 )
