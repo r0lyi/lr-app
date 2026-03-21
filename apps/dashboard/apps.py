@@ -1,8 +1,7 @@
-from django.urls import path
-from apps.dashboard.views.prueba import home_view
+from django.apps import AppConfig
 
-app_name = "dashboard"
 
-urlpatterns = [
-    path("", home_view, name="home"),
-]
+class DashboardConfig(AppConfig):
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "apps.dashboard"
+    verbose_name = "Dashboard"

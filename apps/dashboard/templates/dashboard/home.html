@@ -1,14 +1,53 @@
 {% extends "base.html" %}
 
-{% block title %}Dashboard{% endblock %}
+{% block title %}Inicio{% endblock %}
 
 {% block content %}
-<h1>Dashboard</h1>
-<p>Has iniciado sesion correctamente.</p>
-<p>Usuario: {{ user.email }}</p>
+<div class="page-shell" style="padding-block: 28px 36px;">
+  <div class="page-grid" style="max-width: 960px; margin: 0 auto;">
+    <section class="page-card" style="padding: 24px;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap;">
+        <div>
+          <p style="margin:0 0 8px 0; color:#8a93a6; font-size:14px;">Home basico</p>
+          <h1 style="margin:0 0 8px 0;">Bienvenido, {{ user_display_name }}</h1>
+          <p style="margin:0; color:#5f6b7a;">
+            Tu perfil de empleado ya esta registrado y el acceso funciona correctamente.
+          </p>
+        </div>
 
-<form method="post" action="{% url 'auth:logout' %}">
-  {% csrf_token %}
-  <button type="submit">Cerrar sesion</button>
-</form>
+        <form method="post" action="{% url 'auth:logout' %}">
+          {% csrf_token %}
+          <button class="ui-btn ui-btn--secondary ui-btn--sm" type="submit">Cerrar sesion</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="page-card" style="padding: 24px;">
+      <h2 style="margin:0 0 16px 0;">Datos guardados</h2>
+
+      <div class="page-grid page-grid--2">
+        <div>
+          <p style="margin:0 0 6px 0; color:#8a93a6;">Nombre</p>
+          <strong>{{ employee_profile.first_name }}</strong>
+        </div>
+        <div>
+          <p style="margin:0 0 6px 0; color:#8a93a6;">Apellidos</p>
+          <strong>{{ employee_profile.last_name }}</strong>
+        </div>
+        <div>
+          <p style="margin:0 0 6px 0; color:#8a93a6;">Correo</p>
+          <strong>{{ request.user.email }}</strong>
+        </div>
+        <div>
+          <p style="margin:0 0 6px 0; color:#8a93a6;">Telefono</p>
+          <strong>{{ employee_profile.phone|default:"No indicado" }}</strong>
+        </div>
+        <div>
+          <p style="margin:0 0 6px 0; color:#8a93a6;">Fecha de ingreso</p>
+          <strong>{{ employee_profile.hire_date|date:"d/m/Y" }}</strong>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
 {% endblock %}
