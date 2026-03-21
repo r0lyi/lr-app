@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/layouts/dashboard_base.css' %}">
+  {% block dashboard_css %}{% endblock %}
+{% endblock %}
+
+{% block content %}
+<div class="dash">
+  <aside class="dash-sidebar">
+    <div class="dash-brand">
+      <img src="{% static 'images/logo_blanco500x280.svg' %}" alt="Clean & Service" />
+    </div>
+
+    <nav class="dash-nav" aria-label="Menu principal">
+      {% block dashboard_nav %}{% endblock %}
+    </nav>
+
+    <div class="dash-sidebar-footer">
+      <div class="dash-user">
+        <strong>{{ request.user.email }}</strong>
+        {% if role_label %}
+          <div>{{ role_label }}</div>
+        {% endif %}
+      </div>
+
+      <form method="post" action="{% url 'auth:logout' %}">
+        {% csrf_token %}
+        <button class="dash-logout-btn" type="submit">Cerrar sesion</button>
+      </form>
+    </div>
+  </aside>
+
+  <main class="dash-main">
+    <header class="dash-header">
+      <div class="dash-header-card">
+        <div class="dash-header-logo">
+          <img src="{% static 'images/logo500x200.svg' %}" alt="Clean & Service" />
+        </div>
+
+        <div class="dash-header-title">
+          Bienvenido/a {{ display_name }}
+        </div>
+
+        <div class="dash-header-actions">
+          {% block header_actions %}{% endblock %}
+        </div>
+      </div>
+    </header>
+
+    <section class="dash-content">
+      {% block dashboard_content %}{% endblock %}
+    </section>
+  </main>
+</div>
+{% endblock %}
