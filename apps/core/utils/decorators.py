@@ -19,16 +19,23 @@ def anonymous_required(view_func):
     return wrapper
 
 
-def role_required(role_name):
-    """Exige que la vista solo se abra con el rol principal indicado."""
+def role_required(role_name, *, allow_admin=False):
+    """Exige un rol principal concreto y opcionalmente permite admin."""
     normalized_role = (role_name or "").strip().lower()
 
     def decorator(view_func):
         @wraps(view_func)
         def wrapper(request, *args, **kwargs):
-            if get_primary_role(request.user) != normalized_role:
+            current_role = get_primary_role(request.user)
+
+            if current_role == normalized_role:
+                return view_func(request, *args, **kwargs)
+
+            if allow_admin and current_role == "admin":
+                return view_func(request, *args, **kwargs)
+
+            if current_role != normalized_role:
                 return redirect("dashboard:home")
-            return view_func(request, *args, **kwargs)
 
         return login_required(wrapper, login_url="/auth/login/")
 

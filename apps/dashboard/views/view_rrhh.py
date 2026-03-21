@@ -6,7 +6,7 @@ from apps.core.utils.decorators import role_required
 from .helpers import build_dashboard_base_context
 
 
-@role_required("rrhh")
+@role_required("rrhh", allow_admin=True)
 def rrhh_home_view(request):
     """Muestra la vista basica de RRHH protegida por rol principal."""
     return render(
