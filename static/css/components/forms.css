@@ -177,6 +177,28 @@
   flex-shrink: 0;
 }
 
+.ui-phone-field {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+}
+
+.ui-phone-field__prefix {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 0 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  background: #fff;
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
 .remember-row {
   display: flex;
   align-items: center;
