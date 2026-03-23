@@ -41,6 +41,11 @@
   </aside>
 
   <main class="dash-main">
+    {# Hamburguesa: DENTRO de dash-main para no añadir hijos al grid #}
+    <button class="dash-hamburger" id="dash-hamburger" type="button" aria-label="Abrir menú">
+      <span></span><span></span><span></span>
+    </button>
+
     <header class="dash-header">
       <div class="dash-header-card">
         <div class="dash-header-logo">
@@ -62,4 +67,23 @@
     </section>
   </main>
 </div>
+
+{# Overlay: FUERA de .dash para no romper el grid (0 hijos extra) #}
+<div class="dash-overlay" id="dash-overlay"></div>
+
+<script>
+(function(){
+  var btn = document.getElementById('dash-hamburger');
+  var sidebar = document.querySelector('.dash-sidebar');
+  var overlay = document.getElementById('dash-overlay');
+  function toggle(open){
+    sidebar.classList.toggle('dash-sidebar--open', open);
+    overlay.classList.toggle('dash-overlay--visible', open);
+    document.body.classList.toggle('no-scroll', open);
+  }
+  btn.addEventListener('click', function(){ toggle(!sidebar.classList.contains('dash-sidebar--open')); });
+  overlay.addEventListener('click', function(){ toggle(false); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') toggle(false); });
+})();
+</script>
 {% endblock %}
