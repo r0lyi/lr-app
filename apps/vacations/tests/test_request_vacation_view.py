@@ -22,7 +22,7 @@ class VacationRequestViewTests(VacationBaseTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Solicitar vacaciones")
-        self.assertContains(response, "Derecho anual de vacaciones")
+        self.assertContains(response, "Derecho anual")
         self.assertContains(response, "selected-days-counter")
 
     def test_employee_can_create_pending_vacation_request(self):

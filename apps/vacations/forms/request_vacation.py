@@ -6,10 +6,10 @@ from django import forms
 class VacationRequestForm(forms.Form):
     """Recoge las fechas y el comentario inicial de la solicitud.
 
-    En esta primera version pedimos solo lo esencial:
-    - fecha de inicio
-    - fecha de fin
-    - comentario opcional del empleado
+    En esta vista la interfaz usa dos calendarios visuales propios en el
+    frontend. Por eso las fechas se transportan al backend mediante inputs
+    ocultos en formato ISO (`YYYY-MM-DD`), aunque internamente Django las siga
+    tratando como `DateField`.
 
     La validacion del rango se hace aqui para que el usuario reciba un error
     claro antes de entrar en la capa de servicio.
@@ -17,14 +17,14 @@ class VacationRequestForm(forms.Form):
 
     start_date = forms.DateField(
         label="Fecha de inicio",
-        widget=forms.DateInput(attrs={"type": "date"}),
+        widget=forms.HiddenInput(),
     )
     end_date = forms.DateField(
         label="Fecha de fin",
-        widget=forms.DateInput(attrs={"type": "date"}),
+        widget=forms.HiddenInput(),
     )
     employee_comment = forms.CharField(
-        label="Comentario",
+        label="Informacion adicional",
         required=False,
         widget=forms.Textarea(attrs={"rows": 4}),
     )

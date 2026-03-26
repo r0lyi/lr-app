@@ -9,9 +9,20 @@
 
 {% block content %}
 <div class="dash">
-  <aside class="dash-sidebar">
-    <div class="dash-brand">
-      <img src="{% static 'images/logo_blanco500x280.svg' %}" alt="Clean & Service" />
+  <aside class="dash-sidebar" id="dash-sidebar">
+    <div class="dash-sidebar-top">
+      <div class="dash-brand">
+        <img src="{% static 'images/logo_blanco500x280.svg' %}" alt="Clean & Service" />
+      </div>
+
+      <button
+        class="dash-sidebar-close"
+        id="dash-sidebar-close"
+        type="button"
+        aria-label="Cerrar menú"
+      >
+        <span></span><span></span>
+      </button>
     </div>
 
     <nav class="dash-nav" aria-label="Menu principal">
@@ -41,8 +52,14 @@
   </aside>
 
   <main class="dash-main">
-    {# Hamburguesa: DENTRO de dash-main para no añadir hijos al grid #}
-    <button class="dash-hamburger" id="dash-hamburger" type="button" aria-label="Abrir menú">
+    <button
+      class="dash-hamburger"
+      id="dash-hamburger"
+      type="button"
+      aria-label="Abrir menú"
+      aria-controls="dash-sidebar"
+      aria-expanded="false"
+    >
       <span></span><span></span><span></span>
     </button>
 
@@ -74,16 +91,60 @@
 <script>
 (function(){
   var btn = document.getElementById('dash-hamburger');
+  var closeBtn = document.getElementById('dash-sidebar-close');
   var sidebar = document.querySelector('.dash-sidebar');
   var overlay = document.getElementById('dash-overlay');
-  function toggle(open){
+  var navLinks = document.querySelectorAll('.dash-nav-link');
+
+  if (!btn || !sidebar || !overlay) {
+    return;
+  }
+
+  function setOpenState(open){
     sidebar.classList.toggle('dash-sidebar--open', open);
     overlay.classList.toggle('dash-overlay--visible', open);
+    btn.classList.toggle('dash-hamburger--open', open);
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
     document.body.classList.toggle('no-scroll', open);
   }
-  btn.addEventListener('click', function(){ toggle(!sidebar.classList.contains('dash-sidebar--open')); });
-  overlay.addEventListener('click', function(){ toggle(false); });
-  document.addEventListener('keydown', function(e){ if(e.key==='Escape') toggle(false); });
+
+  function toggle(open){
+    setOpenState(open);
+  }
+
+  btn.addEventListener('click', function(){
+    toggle(!sidebar.classList.contains('dash-sidebar--open'));
+  });
+
+  if (closeBtn) {
+    closeBtn.addEventListener('click', function(){
+      toggle(false);
+    });
+  }
+
+  overlay.addEventListener('click', function(){
+    toggle(false);
+  });
+
+  navLinks.forEach(function(link){
+    link.addEventListener('click', function(){
+      if (window.innerWidth <= 820) {
+        toggle(false);
+      }
+    });
+  });
+
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') {
+      toggle(false);
+    }
+  });
+
+  window.addEventListener('resize', function(){
+    if (window.innerWidth > 820) {
+      setOpenState(false);
+    }
+  });
 })();
 </script>
 {% endblock %}

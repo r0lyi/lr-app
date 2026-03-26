@@ -8,6 +8,10 @@
     </span>
   </div>
   <div class="stat-card-value {% if value_color_class %}{{ value_color_class }}{% endif %}">
-    {{ value }}
+    {% if value_html %}
+      {{ value_html|safe }}
+    {% else %}
+      {{ value }}
+    {% endif %}
   </div>
 </div>
