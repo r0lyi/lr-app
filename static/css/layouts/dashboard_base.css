@@ -1,18 +1,33 @@
 .dash {
   min-height: 100vh;
   display: grid;
-  grid-template-columns: 240px minmax(0, 1fr);
+  grid-template-columns: 252px minmax(0, 1fr);
+  align-items: start;
   background: linear-gradient(180deg, #e6e8ee 0%, #dfe2e9 100%);
 }
 
 .dash-sidebar {
+  position: sticky;
+  top: 0;
+  align-self: start;
   display: flex;
   flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
   min-height: 100vh;
   padding: 24px 0 20px;
   background: linear-gradient(180deg, #0996d6 0%, #0879c7 100%);
   color: #ffffff;
   box-shadow: 6px 0 16px rgba(13, 42, 66, 0.12);
+  overflow: hidden;
+}
+
+.dash-sidebar-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-right: 18px;
 }
 
 .dash-brand {
@@ -20,12 +35,50 @@
   align-items: center;
   padding: 0 24px 18px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  flex: 1 1 auto;
 }
 
 .dash-brand img {
   display: block;
   width: 140px;
   height: auto;
+}
+
+.dash-sidebar-close {
+  display: none;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.dash-sidebar-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+.dash-sidebar-close span {
+  position: absolute;
+  width: 18px;
+  height: 2px;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.dash-sidebar-close span:first-child {
+  transform: rotate(45deg);
+}
+
+.dash-sidebar-close span:last-child {
+  transform: rotate(-45deg);
 }
 
 .dash-nav {
@@ -35,6 +88,26 @@
   flex: 1 1 auto;
   min-height: 0;
   padding: 20px 16px 12px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+.dash-nav::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dash-nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dash-nav::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
+}
+
+.dash-nav::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
 }
 
 .dash-nav-link {
@@ -124,7 +197,7 @@
 
 .dash-main {
   min-height: 100vh;
-  padding: 22px 26px 32px;
+  padding: 22px 28px 36px;
   display: flex;
   flex-direction: column;
   gap: 18px;
@@ -138,11 +211,11 @@
 .dash-header-card {
   width: min(1080px, 100%);
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: minmax(120px, 148px) minmax(0, 1fr) auto;
   align-items: center;
-  gap: 16px;
-  padding: 14px 24px;
-  border-radius: 16px;
+  gap: 18px;
+  padding: 14px 22px;
+  border-radius: 18px;
   background: #ffffff;
   box-shadow: 0 12px 24px rgba(27, 31, 35, 0.12);
 }
@@ -158,10 +231,13 @@
   color: #6b7280;
   font-size: var(--fs-subtitle);
   font-weight: 700;
+  line-height: 1.2;
 }
 
 .dash-header-actions {
   min-width: 120px;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .dash-content {
@@ -186,8 +262,10 @@
   font-size: var(--fs-heading-sm);
   font-weight: 700;
 }
-/* ── Escritorio: hamburguesa y overlay ocultos ── */
-.dash-hamburger { display: none; }
+
+.dash-hamburger {
+  display: none;
+}
 
 .dash-overlay {
   display: none;
@@ -207,79 +285,117 @@
 
 .no-scroll { overflow: hidden; }
 
-/* dash-main necesita position relative para posicionar el hamburger */
 .dash-main {
   position: relative;
 }
 
-/* ── Tablet ancho (≤ 1100px) ── */
+@media (max-width: 1240px) {
+  .dash {
+    grid-template-columns: 236px minmax(0, 1fr);
+  }
+
+  .dash-main {
+    padding: 20px 22px 32px;
+  }
+
+  .dash-header-card {
+    padding: 14px 18px;
+  }
+}
+
 @media (max-width: 1100px) {
   .dash {
     grid-template-columns: 220px minmax(0, 1fr);
   }
+
   .dash-main {
-    padding: 18px 18px 28px;
+    padding: 18px 18px 30px;
   }
+
   .dash-header-card {
     padding: 14px 18px;
   }
+
   .dash-header-title {
     font-size: 22px;
   }
 }
 
-/* ── Mobile / Tablet portrait (≤ 820px) ── */
-@media (max-width: 820px) {
+@media (max-width: 960px) {
+  .dash-header-card {
+    grid-template-columns: 124px minmax(0, 1fr);
+  }
 
-  /* REGLA 3: Grid pasa a 1 columna para que main ocupe todo */
+  .dash-header-actions {
+    grid-column: 1 / -1;
+    justify-content: center;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 820px) {
   .dash {
     grid-template-columns: 1fr;
   }
 
-  /* REGLA 1: Sidebar sale del flujo, fijo a la izquierda, oculto */
   .dash-sidebar {
     position: fixed;
     top: 0;
     left: 0;
     bottom: 0;
-    width: 270px;
+    width: min(300px, calc(100vw - 28px));
+    height: 100vh;
+    height: 100dvh;
     min-height: 100vh;
     z-index: 100;
     transform: translateX(-100%);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 6px 0 24px rgba(0, 0, 0, 0.2);
+    transition: transform 0.34s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 14px 0 32px rgba(12, 33, 52, 0.24);
+    border-top-right-radius: 22px;
+    border-bottom-right-radius: 22px;
+    overflow: hidden;
   }
 
-  /* Clase que JS añade/quita */
   .dash-sidebar--open {
     transform: translateX(0);
   }
 
-  /* Hamburguesa visible */
+  .dash-sidebar-top {
+    padding-right: 16px;
+  }
+
+  .dash-sidebar-close {
+    display: inline-flex;
+  }
+
   .dash-hamburger {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 5px;
-    position: absolute;
-    top: 18px;
-    left: 18px;
-    z-index: 50;
-    width: 46px;
-    height: 46px;
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    z-index: 90;
+    width: 48px;
+    height: 48px;
     border: none;
-    border-radius: 12px;
-    background: #ffffff;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 10px 24px rgba(12, 33, 52, 0.18);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     cursor: pointer;
-    transition: background 0.2s;
-  }
-  .dash-hamburger:hover {
-    background: #f0f6ff;
+    transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
   }
 
-  /* Las 3 barras del icono */
+  .dash-hamburger:hover {
+    background: #f0f6ff;
+    box-shadow: 0 12px 28px rgba(12, 33, 52, 0.22);
+    transform: translateY(-1px);
+  }
+
   .dash-hamburger span {
     display: block;
     width: 22px;
@@ -289,24 +405,21 @@
     transition: transform 0.25s ease, opacity 0.2s ease;
   }
 
-  /* Padding superior para dejar espacio a la hamburguesa */
+  .dash-hamburger--open span:first-child {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .dash-hamburger--open span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .dash-hamburger--open span:last-child {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+
   .dash-main {
     min-height: 100vh;
-    padding: 76px 18px 28px;
-  }
-}
-
-/* ── Móvil pequeño (≤ 576px) ── */
-@media (max-width: 576px) {
-  .dash-hamburger {
-    top: 12px;
-    left: 12px;
-    width: 42px;
-    height: 42px;
-  }
-
-  .dash-main {
-    padding: 68px 12px 20px;
+    padding: 78px 18px 28px;
   }
 
   .dash-header-card {
@@ -314,15 +427,68 @@
     justify-items: center;
     text-align: center;
     gap: 12px;
+    padding: 16px 18px;
+  }
+
+  .dash-header-logo img {
+    width: 132px;
+  }
+
+  .dash-header-title {
+    font-size: clamp(1.3rem, 2vw + 0.8rem, 1.75rem);
   }
 
   .dash-header-actions {
-    min-width: 0;
     width: 100%;
+  }
+
+  .dash-content {
+    gap: 16px;
+  }
+}
+
+@media (max-width: 576px) {
+  .dash-hamburger {
+    top: 12px;
+    left: 12px;
+    width: 44px;
+    height: 44px;
+  }
+
+  .dash-main {
+    padding: 68px 12px 20px;
+  }
+
+  .dash-sidebar {
+    width: min(286px, calc(100vw - 18px));
+    border-top-right-radius: 18px;
+    border-bottom-right-radius: 18px;
   }
 
   .dash-card {
     padding: 16px 14px;
     border-radius: 14px;
+  }
+}
+
+@media (max-width: 420px) {
+  .dash-brand {
+    padding: 0 18px 16px;
+  }
+
+  .dash-brand img {
+    width: 126px;
+  }
+
+  .dash-nav {
+    padding: 18px 12px 10px;
+  }
+
+  .dash-sidebar-footer {
+    padding: 14px 14px 0;
+  }
+
+  .dash-header-card {
+    border-radius: 16px;
   }
 }
