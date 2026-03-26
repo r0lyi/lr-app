@@ -31,14 +31,17 @@ class DashboardNavigationTests(DashboardRoleBaseTestCase):
         employee_home = self.client.get(reverse("dashboard:employee-home"))
         self.assertContains(employee_home, reverse("dashboard:employee-home"))
         self.assertContains(employee_home, reverse("vacations:create-request"))
+        self.assertContains(employee_home, reverse("employees:profile"))
         self.assertNotContains(employee_home, reverse("dashboard:admin-home"))
 
         self.client.force_login(rrhh)
         rrhh_home = self.client.get(reverse("dashboard:rrhh-home"))
         self.assertContains(rrhh_home, reverse("dashboard:rrhh-home"))
+        self.assertContains(rrhh_home, reverse("employees:profile"))
         self.assertNotContains(rrhh_home, reverse("dashboard:employee-home"))
 
         self.client.force_login(admin)
         admin_home = self.client.get(reverse("dashboard:admin-home"))
         self.assertContains(admin_home, reverse("dashboard:admin-home"))
+        self.assertContains(admin_home, reverse("employees:profile"))
         self.assertNotContains(admin_home, reverse("dashboard:rrhh-home"))

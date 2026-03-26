@@ -1,0 +1,26 @@
+{% extends "layouts/dashboard_base.html" %}
+
+{% block title %}Perfil{% endblock %}
+
+{% block dashboard_content %}
+  <section class="dash-card">
+    <h1 class="dash-card-title">Perfil</h1>
+
+    {% if employee_profile %}
+      <p><strong>Nombre:</strong> {{ employee_profile.first_name }}</p>
+      <p><strong>Apellidos:</strong> {{ employee_profile.last_name }}</p>
+      <p><strong>Correo electronico:</strong> {{ request.user.email }}</p>
+      <p><strong>Telefono:</strong> {{ employee_profile.phone|default:"Sin telefono" }}</p>
+      <p><strong>Fecha de ingreso:</strong> {{ employee_profile.hire_date|date:"d-m-Y" }}</p>
+      <p><strong>Departamento:</strong> {{ employee_profile.department.name|default:"Sin departamento" }}</p>
+      <p><strong>Dias anuales acumulados:</strong> {{ employee_profile.available_days }}</p>
+      <p><strong>Dias tomados:</strong> {{ employee_profile.taken_days }}</p>
+      <p><strong>Rol actual:</strong> {{ role_label }}</p>
+      <p><strong>Usuario asociado:</strong> {{ request.user.email }}</p>
+    {% else %}
+      <p>No existe una ficha de empleado asociada a este usuario.</p>
+      <p><strong>Correo electronico:</strong> {{ request.user.email }}</p>
+      <p><strong>Rol actual:</strong> {{ role_label }}</p>
+    {% endif %}
+  </section>
+{% endblock %}
