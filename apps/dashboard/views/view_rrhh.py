@@ -15,8 +15,26 @@ def rrhh_home_view(request):
     En esta primera iteracion RRHH no revisa ni filtra todavia: solo necesita
     una tabla sencilla para ver quien ha solicitado vacaciones y con que rango.
     """
-    filter_form = RrhhVacationRequestFilterForm(request.GET or None)
-    request_filters = filter_form.cleaned_data if filter_form.is_valid() else {}
+    default_status_name = "pending"
+
+    if request.GET:
+        filter_data = request.GET.copy()
+        # Si RRHH abre la pantalla sin tocar el selector de estado, dejamos
+        # aplicado `pending` por defecto. Si el usuario envia `status=""`,
+        # respetamos esa decision para mostrar todos.
+        if "status" not in filter_data:
+            filter_data["status"] = default_status_name
+        filter_form = RrhhVacationRequestFilterForm(filter_data)
+        request_filters = (
+            filter_form.cleaned_data
+            if filter_form.is_valid()
+            else {"status": default_status_name}
+        )
+    else:
+        filter_form = RrhhVacationRequestFilterForm(
+            initial={"status": default_status_name}
+        )
+        request_filters = {"status": default_status_name}
 
     return render(
         request,
