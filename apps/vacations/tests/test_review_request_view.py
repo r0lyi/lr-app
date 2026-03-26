@@ -5,6 +5,7 @@ from datetime import date
 from django.urls import reverse
 from django.utils import timezone
 
+from apps.notifications.models import Notification
 from apps.users.models import Role, User
 from apps.vacations.models import VacationRequest, VacationStatus
 
@@ -101,6 +102,52 @@ class VacationRequestReviewViewTests(VacationBaseTestCase):
         self.assertIsNotNone(vacation_request.resolution_date)
         self.assertLessEqual(vacation_request.resolution_date, timezone.now())
         self.assertEqual(vacation_request.resolved_by, rrhh_user)
+
+        notification = Notification.objects.get(user=employee.user)
+        self.assertEqual(
+            notification.notification_type,
+            Notification.Type.VACATION_REQUEST_STATUS,
+        )
+        self.assertEqual(notification.vacation_request, vacation_request)
+        self.assertEqual(notification.previous_status_name, "pending")
+        self.assertIn("pending -> approved", notification.message)
+
+    def test_rrhh_editing_dates_without_status_change_does_not_notify_employee(self):
+        rrhh_user = self.create_rrhh_user(
+            email="rrhh-review-edit-only@example.com",
+            dni="11111111H",
+        )
+        _employee_user, employee = self.create_employee_user(
+            email="employee-review-edit-only@example.com",
+            dni="13579135G",
+        )
+        vacation_request = VacationRequest.objects.create(
+            employee=employee,
+            status=self.pending_status,
+            start_date=date(2026, 7, 1),
+            end_date=date(2026, 7, 5),
+            requested_days="5.00",
+        )
+
+        self.client.force_login(rrhh_user)
+
+        response = self.client.post(
+            reverse("vacations:review-request", args=[vacation_request.pk]),
+            {
+                "status": str(self.pending_status.pk),
+                "start_date": "2026-07-02",
+                "end_date": "2026-07-06",
+                "hr_comment": "Solo se ajustan las fechas",
+            },
+            follow=True,
+        )
+
+        self.assertRedirects(response, reverse("dashboard:rrhh-home"))
+        vacation_request.refresh_from_db()
+        self.assertEqual(vacation_request.status, self.pending_status)
+        self.assertEqual(vacation_request.start_date, date(2026, 7, 2))
+        self.assertEqual(vacation_request.end_date, date(2026, 7, 6))
+        self.assertEqual(Notification.objects.count(), 0)
 
     def test_employee_cannot_open_rrhh_review_page(self):
         employee_user, employee = self.create_employee_user(
