@@ -18,19 +18,40 @@ class VacationRequestReviewForm(forms.Form):
         label="Estado",
         queryset=VacationStatus.objects.order_by("name"),
         empty_label=None,
+        widget=forms.Select(
+            attrs={
+                "class": "ui-select",
+            }
+        ),
     )
     start_date = forms.DateField(
         label="Fecha inicio",
-        widget=forms.DateInput(attrs={"type": "date"}),
+        widget=forms.DateInput(
+            attrs={
+                "class": "ui-input ui-input--date ui-input--has-right-icon",
+                "type": "date",
+            }
+        ),
     )
     end_date = forms.DateField(
         label="Fecha final",
-        widget=forms.DateInput(attrs={"type": "date"}),
+        widget=forms.DateInput(
+            attrs={
+                "class": "ui-input ui-input--date ui-input--has-right-icon",
+                "type": "date",
+            }
+        ),
     )
     hr_comment = forms.CharField(
         label="Comentario RRHH",
         required=False,
-        widget=forms.Textarea(attrs={"rows": 4}),
+        widget=forms.Textarea(
+            attrs={
+                "class": "ui-input ui-input--textarea",
+                "rows": 4,
+                "placeholder": "Escribe una observacion interna si necesitas dejar contexto sobre el cambio realizado.",
+            }
+        ),
     )
 
     def clean(self):

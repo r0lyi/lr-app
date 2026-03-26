@@ -18,20 +18,42 @@ class RrhhVacationRequestFilterForm(forms.Form):
     search = forms.CharField(
         label="Nombre o apellido",
         required=False,
+        widget=forms.TextInput(
+            attrs={
+                "class": "ui-input",
+                "placeholder": "Buscar empleado",
+                "autocomplete": "off",
+            }
+        ),
     )
     start_date = forms.DateField(
         label="Fecha inicio",
         required=False,
-        widget=forms.DateInput(attrs={"type": "date"}),
+        widget=forms.DateInput(
+            attrs={
+                "class": "ui-input ui-input--date ui-input--has-right-icon",
+                "type": "date",
+            }
+        ),
     )
     end_date = forms.DateField(
         label="Fecha final",
         required=False,
-        widget=forms.DateInput(attrs={"type": "date"}),
+        widget=forms.DateInput(
+            attrs={
+                "class": "ui-input ui-input--date ui-input--has-right-icon",
+                "type": "date",
+            }
+        ),
     )
     status = forms.ChoiceField(
         label="Estado",
         required=False,
+        widget=forms.Select(
+            attrs={
+                "class": "ui-select",
+            }
+        ),
     )
 
     def __init__(self, *args, **kwargs):
@@ -40,7 +62,7 @@ class RrhhVacationRequestFilterForm(forms.Form):
         super().__init__(*args, **kwargs)
         status_choices = [("", "Todos")]
         status_choices.extend(
-            (status.name, status.name)
+            (status.name, status.name.capitalize())
             for status in VacationStatus.objects.order_by("name")
         )
         self.fields["status"].choices = status_choices
