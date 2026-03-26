@@ -36,6 +36,13 @@ def rrhh_home_view(request):
         )
         request_filters = {"status": default_status_name}
 
+    vacation_requests = get_filtered_rrhh_vacation_requests(
+        search=request_filters.get("search"),
+        start_date=request_filters.get("start_date"),
+        end_date=request_filters.get("end_date"),
+        status_name=request_filters.get("status"),
+    )
+
     return render(
         request,
         "dashboard/rrhh_home.html",
@@ -45,12 +52,8 @@ def rrhh_home_view(request):
             active_section="home",
             extra_context={
                 "filter_form": filter_form,
-                "vacation_requests": get_filtered_rrhh_vacation_requests(
-                    search=request_filters.get("search"),
-                    start_date=request_filters.get("start_date"),
-                    end_date=request_filters.get("end_date"),
-                    status_name=request_filters.get("status"),
-                ),
+                "vacation_requests": vacation_requests,
+                "filtered_requests_count": vacation_requests.count(),
             },
         ),
     )
