@@ -1,6 +1,9 @@
 """Tests basicos de la vista de historial de exportaciones."""
 
+from datetime import timedelta
+
 from django.urls import reverse
+from django.utils import timezone
 
 from apps.audit.services import (
     EXPORT_TYPE_RRHH_VACATION_REQUESTS,
@@ -60,6 +63,58 @@ class ExportHistoryViewTests(DashboardRoleBaseTestCase):
             response,
             reverse("audit:download-export", args=[export_history.pk]),
         )
+
+    def test_rrhh_can_filter_export_history_by_date_range(self):
+        rrhh_user = self.create_rrhh_user(
+            email="rrhh-history-filter@example.com",
+            dni="44444444A",
+        )
+        recent_export = create_export_history(
+            user=rrhh_user,
+            export_type=EXPORT_TYPE_RRHH_VACATION_REQUESTS,
+            filters={"status": "pending"},
+        )
+        mark_export_success(
+            export_history=recent_export,
+            file_name="vacation_26-03-2026.xlsx",
+            file_bytes=b"recent-file",
+            total_records=3,
+        )
+
+        old_export = create_export_history(
+            user=rrhh_user,
+            export_type=EXPORT_TYPE_RRHH_VACATION_REQUESTS,
+            filters={"status": "approved"},
+        )
+        mark_export_success(
+            export_history=old_export,
+            file_name="vacation_15-02-2026.xlsx",
+            file_bytes=b"old-file",
+            total_records=1,
+        )
+
+        old_created_at = timezone.now() - timedelta(days=40)
+        recent_created_at = timezone.now() - timedelta(days=2)
+        type(old_export).objects.filter(pk=old_export.pk).update(
+            created_at=old_created_at
+        )
+        type(recent_export).objects.filter(pk=recent_export.pk).update(
+            created_at=recent_created_at
+        )
+
+        self.client.force_login(rrhh_user)
+
+        response = self.client.get(
+            reverse("audit:export-history"),
+            {
+                "start_date": (timezone.localdate() - timedelta(days=7)).isoformat(),
+                "end_date": timezone.localdate().isoformat(),
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "vacation_26-03-2026.xlsx")
+        self.assertNotContains(response, "vacation_15-02-2026.xlsx")
 
     def test_rrhh_can_download_a_previous_export(self):
         rrhh_user = self.create_rrhh_user(

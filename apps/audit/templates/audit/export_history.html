@@ -8,6 +8,28 @@
   <section class="dash-card">
     <h1 class="dash-card-title">Historial de exportaciones</h1>
 
+    {% if filter_form.non_field_errors %}
+      <div>
+        {% for error in filter_form.non_field_errors %}
+          <p class="ui-field__feedback ui-field__feedback--error">{{ error }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <form method="get" class="rrhh-filters-form">
+      <div class="rrhh-filters-form__group">
+        <label class="ui-field__label" for="{{ filter_form.start_date.id_for_label }}">Fecha inicio</label>
+        {{ filter_form.start_date }}
+      </div>
+      <div class="rrhh-filters-form__group">
+        <label class="ui-field__label" for="{{ filter_form.end_date.id_for_label }}">Fecha final</label>
+        {{ filter_form.end_date }}
+      </div>
+      <div class="rrhh-filters-form__actions">
+        {% include "components/ui/button_principal.html" with label="Filtrar" type="submit" size="md" class_name="rrhh-filters-form__submit" %}
+      </div>
+    </form>
+
     {% if export_histories %}
       <table class="data-table">
         <thead>
@@ -44,7 +66,7 @@
         </tbody>
       </table>
     {% else %}
-      <p>No se ha registrado ninguna exportacion todavia.</p>
+      <p>No se ha registrado ninguna exportacion con los filtros actuales.</p>
     {% endif %}
   </section>
 {% endblock %}

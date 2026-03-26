@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
+from apps.audit.forms import ExportHistoryFilterForm
 from apps.audit.services import EXPORT_TYPE_RRHH_VACATION_REQUESTS
 from apps.audit.selectors import get_export_histories
 from apps.audit.models import ExportHistory
@@ -17,8 +18,19 @@ from apps.dashboard.services.layout_context import build_dashboard_base_context
 def export_history_view(request):
     """Muestra el historial basico de exportaciones del panel de RRHH."""
 
+    if request.GET:
+        filter_form = ExportHistoryFilterForm(request.GET)
+        filters = (
+            filter_form.cleaned_data if filter_form.is_valid() else {}
+        )
+    else:
+        filter_form = ExportHistoryFilterForm()
+        filters = {}
+
     export_histories = get_export_histories(
-        export_type=EXPORT_TYPE_RRHH_VACATION_REQUESTS
+        export_type=EXPORT_TYPE_RRHH_VACATION_REQUESTS,
+        start_date=filters.get("start_date"),
+        end_date=filters.get("end_date"),
     )
 
     return render(
@@ -28,7 +40,10 @@ def export_history_view(request):
             request.user,
             "rrhh",
             active_section="history",
-            extra_context={"export_histories": export_histories},
+            extra_context={
+                "export_histories": export_histories,
+                "filter_form": filter_form,
+            },
         ),
     )
 
@@ -61,4 +76,3 @@ def download_export_history_file_view(request, export_history_id):
             "spreadsheetml.sheet"
         ),
     )
-
