@@ -1,8 +1,8 @@
 """Tests de la vista basica de perfil del dominio employees."""
 
+from django.contrib.auth import SESSION_KEY
 from django.test import TestCase
 from django.urls import reverse
-from django.contrib.auth import SESSION_KEY
 
 from apps.employees.models import Employee
 from apps.users.models import Role, User
@@ -49,11 +49,37 @@ class EmployeeProfileViewTests(TestCase):
         self.assertContains(response, "Lopez")
         self.assertContains(response, "employee-profile@example.com")
         self.assertContains(response, "600123123")
-        self.assertContains(response, "15-01-2024")
+        self.assertContains(response, "2024-01-15")
         self.assertContains(response, "30")
         self.assertContains(response, "5")
+        self.assertContains(response, "Editar datos del empleado")
+        self.assertContains(response, "Editar datos")
         self.assertContains(response, "Cambiar contrasena")
         self.assertContains(response, "Actualizar contrasena")
+        self.assertNotContains(response, 'name="hire_date"')
+        self.assertNotContains(response, 'name="email"')
+        self.assertNotContains(response, 'name="department"')
+        self.assertNotContains(response, 'name="available_days"')
+        self.assertNotContains(response, 'name="taken_days"')
+
+    def test_profile_view_edit_mode_shows_save_and_cancel_actions(self):
+        user, _profile = self.create_user_with_profile(
+            email="employee-profile-edit@example.com",
+            dni="12345678Z",
+        )
+
+        self.client.force_login(user)
+
+        response = self.client.get(reverse("employees:profile") + "?edit=1")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Guardar cambios")
+        self.assertContains(response, "Cancelar")
+        self.assertNotContains(
+            response,
+            'href="/employees/profile/?edit=1"',
+            html=False,
+        )
 
     def test_admin_without_employee_profile_sees_clear_message(self):
         user = User.objects.create_user(
@@ -102,6 +128,62 @@ class EmployeeProfileViewTests(TestCase):
             response,
             "Tu contrasena se ha actualizado correctamente.",
         )
+
+    def test_profile_view_can_update_employee_data(self):
+        user, profile = self.create_user_with_profile(
+            email="employee-update@example.com",
+            dni="87654321X",
+        )
+
+        self.client.force_login(user)
+
+        response = self.client.post(
+            reverse("employees:profile"),
+            {
+                "profile_action": "employee-update",
+                "first_name": "Beatriz",
+                "last_name": "Garcia",
+                "phone": "699888777",
+            },
+            follow=True,
+        )
+
+        self.assertRedirects(response, reverse("employees:profile"))
+        profile.refresh_from_db()
+        self.assertEqual(profile.first_name, "Beatriz")
+        self.assertEqual(profile.last_name, "Garcia")
+        self.assertEqual(profile.phone, "699888777")
+        self.assertIsNone(profile.department)
+        self.assertEqual(profile.available_days, 30)
+        self.assertEqual(profile.taken_days, 5)
+        self.assertEqual(str(profile.hire_date), "2024-01-15")
+        self.assertContains(
+            response,
+            "Tus datos de empleado se han actualizado correctamente.",
+        )
+
+    def test_profile_view_keeps_employee_form_when_update_is_invalid(self):
+        user, profile = self.create_user_with_profile(
+            email="employee-update-invalid@example.com",
+            dni="12345678Z",
+        )
+
+        self.client.force_login(user)
+
+        response = self.client.post(
+            reverse("employees:profile"),
+            {
+                "profile_action": "employee-update",
+                "first_name": "",
+                "last_name": "Lopez",
+                "phone": "600123123",
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        profile.refresh_from_db()
+        self.assertEqual(profile.first_name, "Ana")
+        self.assertIn("first_name", response.context["employee_form"].errors)
 
     def test_profile_view_keeps_form_when_password_change_is_invalid(self):
         user, _profile = self.create_user_with_profile(

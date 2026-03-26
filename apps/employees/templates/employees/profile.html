@@ -1,72 +1,158 @@
 {% extends "layouts/dashboard_base.html" %}
+{% load static %}
 
 {% block title %}Perfil{% endblock %}
 
+{% block dashboard_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/pages/profile.css' %}">
+{% endblock %}
+
+{% block dashboard_header_title %}Perfil{% endblock %}
+
+{% block header_actions %}
+  <span class="profile-role-chip">Role: {{ role_label }}</span>
+{% endblock %}
+
 {% block dashboard_content %}
-  <section class="dash-card">
-    <h1 class="dash-card-title">Perfil</h1>
+  {% if employee_profile and employee_form %}
+    <section class="dash-card profile-page-card">
+      <form class="profile-form" method="post" novalidate>
+        {% csrf_token %}
+        <input type="hidden" name="profile_action" value="employee-update">
 
-    {% if employee_profile %}
-      <p><strong>Nombre:</strong> {{ employee_profile.first_name }}</p>
-      <p><strong>Apellidos:</strong> {{ employee_profile.last_name }}</p>
-      <p><strong>Correo electronico:</strong> {{ request.user.email }}</p>
-      <p><strong>Telefono:</strong> {{ employee_profile.phone|default:"Sin telefono" }}</p>
-      <p><strong>Fecha de ingreso:</strong> {{ employee_profile.hire_date|date:"d-m-Y" }}</p>
-      <p><strong>Departamento:</strong> {{ employee_profile.department.name|default:"Sin departamento" }}</p>
-      <p><strong>Dias anuales acumulados:</strong> {{ employee_profile.available_days }}</p>
-      <p><strong>Dias tomados:</strong> {{ employee_profile.taken_days }}</p>
-      <p><strong>Rol actual:</strong> {{ role_label }}</p>
-      <p><strong>Usuario asociado:</strong> {{ request.user.email }}</p>
-    {% else %}
-      <p>No existe una ficha de empleado asociada a este usuario.</p>
-      <p><strong>Correo electronico:</strong> {{ request.user.email }}</p>
-      <p><strong>Rol actual:</strong> {{ role_label }}</p>
-    {% endif %}
-  </section>
+        <h1 class="dash-card-title">Editar datos del empleado</h1>
 
-  <section class="dash-card">
-    <h2 class="dash-card-title">Cambiar contrasena</h2>
+        <div class="profile-grid">
+          <div class="profile-fields">
+            {% if employee_form.non_field_errors %}
+              <div class="profile-field--full">
+                {% for error in employee_form.non_field_errors %}
+                  <p class="ui-field__feedback ui-field__feedback--error">{{ error }}</p>
+                {% endfor %}
+              </div>
+            {% endif %}
 
-    {% if password_form.non_field_errors %}
-      {% for error in password_form.non_field_errors %}
-        <p>{{ error }}</p>
-      {% endfor %}
-    {% endif %}
+            {% if profile_edit_mode %}
+              {% include "components/ui/text_input.html" with label="Nombre/s" name="first_name" id=employee_form.first_name.id_for_label value=employee_form.first_name.value|default_if_none:'' autocomplete="given-name" error=employee_form.first_name.errors.0 wrapper_class="profile-field" %}
+            {% else %}
+              {% include "components/ui/text_input.html" with label="Nombre/s" name="first_name" id=employee_form.first_name.id_for_label value=employee_form.first_name.value|default_if_none:'' autocomplete="given-name" wrapper_class="profile-field" disabled=True %}
+            {% endif %}
 
-    <form method="post">
-      {% csrf_token %}
+            {% if profile_edit_mode %}
+              {% include "components/ui/text_input.html" with label="Apellidos" name="last_name" id=employee_form.last_name.id_for_label value=employee_form.last_name.value|default_if_none:'' autocomplete="family-name" error=employee_form.last_name.errors.0 wrapper_class="profile-field" %}
+            {% else %}
+              {% include "components/ui/text_input.html" with label="Apellidos" name="last_name" id=employee_form.last_name.id_for_label value=employee_form.last_name.value|default_if_none:'' autocomplete="family-name" wrapper_class="profile-field" disabled=True %}
+            {% endif %}
 
-      <p>
-        <label for="{{ password_form.old_password.id_for_label }}">Contrasena actual</label><br>
-        {{ password_form.old_password }}
-      </p>
-      {% if password_form.old_password.errors %}
-        {% for error in password_form.old_password.errors %}
-          <p>{{ error }}</p>
-        {% endfor %}
-      {% endif %}
+            {% include "components/ui/text_input.html" with label="Correo Electronico" name="email_display" id="profile-email-display" type="email" value=request.user.email wrapper_class="profile-field" disabled=True %}
 
-      <p>
-        <label for="{{ password_form.new_password1.id_for_label }}">Nueva contrasena</label><br>
-        {{ password_form.new_password1 }}
-      </p>
-      {% if password_form.new_password1.errors %}
-        {% for error in password_form.new_password1.errors %}
-          <p>{{ error }}</p>
-        {% endfor %}
-      {% endif %}
+            {% if profile_edit_mode %}
+              {% include "components/ui/phone_input.html" with label="Telefono" name="phone" id=employee_form.phone.id_for_label value=employee_form.phone.value|default_if_none:'' autocomplete="tel" error=employee_form.phone.errors.0 wrapper_class="profile-field" %}
+            {% else %}
+              {% include "components/ui/phone_input.html" with label="Telefono" name="phone" id=employee_form.phone.id_for_label value=employee_form.phone.value|default_if_none:'' autocomplete="tel" wrapper_class="profile-field" disabled=True %}
+            {% endif %}
 
-      <p>
-        <label for="{{ password_form.new_password2.id_for_label }}">Confirmar nueva contrasena</label><br>
-        {{ password_form.new_password2 }}
-      </p>
-      {% if password_form.new_password2.errors %}
-        {% for error in password_form.new_password2.errors %}
-          <p>{{ error }}</p>
-        {% endfor %}
-      {% endif %}
+            {% include "components/ui/date_input.html" with label="Fecha Ingreso" name="hire_date_display" id="profile-hire-date-display" value=employee_profile.hire_date|date:"Y-m-d" wrapper_class="profile-field" disabled=True %}
+          </div>
 
-      <button type="submit">Actualizar contrasena</button>
-    </form>
-  </section>
+          <div class="profile-side">
+            {% if profile_edit_mode %}
+              <aside class="profile-warning-panel">
+                <h2 class="profile-warning-panel__title">Advertencia</h2>
+                <p class="profile-warning-panel__text">
+                  <strong>Revisa</strong> los datos antes de guardarlos. Esta
+                  informacion puede usarse en procesos administrativos.
+                </p>
+              </aside>
+            {% endif %}
+
+            {% include "components/ui/info_panel.html" with title="¿Necesitas actualizar tus datos?" text="Si alguno de tus datos es incorrecto o ha cambiado, puedes modificarlos aqui para mantener tu informacion actualizada." %}
+          </div>
+        </div>
+
+        <div class="profile-actions">
+          {% if profile_edit_mode %}
+            {% include "components/ui/button_principal.html" with label="Guardar cambios" type="submit" size="md" class_name="profile-submit-btn" %}
+            <a class="ui-btn ui-btn--cancel ui-btn--md profile-submit-btn" href="{% url 'employees:profile' %}">Cancelar</a>
+          {% else %}
+            {% include "components/ui/button_secondari.html" with label="Cambiar contrasena" type="button" size="md" class_name="profile-open-password" id="open-password-modal" %}
+            <a class="ui-btn ui-btn--primary ui-btn--md profile-submit-btn" href="{% url 'employees:profile' %}?edit=1">Editar datos</a>
+          {% endif %}
+        </div>
+      </form>
+    </section>
+
+    <section class="dash-card">
+      <div class="profile-summary-grid">
+        <article class="profile-summary-card">
+          <p class="profile-summary-card__label">Departamento</p>
+          <p class="profile-summary-card__value">{{ employee_profile.department.name|default:"Sin departamento" }}</p>
+        </article>
+        <article class="profile-summary-card">
+          <p class="profile-summary-card__label">Dias anuales acumulados</p>
+          <p class="profile-summary-card__value">{{ employee_profile.available_days }}</p>
+        </article>
+        <article class="profile-summary-card">
+          <p class="profile-summary-card__label">Dias tomados</p>
+          <p class="profile-summary-card__value">{{ employee_profile.taken_days }}</p>
+        </article>
+      </div>
+    </section>
+  {% else %}
+    <section class="dash-card profile-page-card">
+      <div class="profile-no-employee">
+        <h1 class="dash-card-title">Perfil</h1>
+        <p>No existe una ficha de empleado asociada a este usuario.</p>
+        <p><strong>Correo electronico:</strong> {{ request.user.email }}</p>
+        <p><strong>Rol actual:</strong> {{ role_label }}</p>
+      </div>
+    </section>
+  {% endif %}
+
+  <div
+    class="ui-modal{% if password_form.errors %} is-open{% endif %}"
+    id="password-modal"
+    aria-hidden="{% if password_form.errors %}false{% else %}true{% endif %}"
+  >
+    <div class="ui-modal__overlay"></div>
+    <div class="ui-modal__content" role="dialog" aria-modal="true" aria-labelledby="password-modal-title">
+      <div class="ui-modal__header">
+        <div>
+          <h2 class="ui-modal__title" id="password-modal-title">Cambiar contrasena</h2>
+          <p class="profile-modal__subtitle">Actualiza tu acceso desde un formulario seguro y sin salir del perfil.</p>
+        </div>
+        <button class="ui-modal__close" type="button" data-password-modal-close aria-label="Cerrar modal">×</button>
+      </div>
+
+      <div class="ui-modal__body">
+        <form class="profile-modal__form" method="post" novalidate>
+          {% csrf_token %}
+          <input type="hidden" name="profile_action" value="password-change">
+
+          {% if password_form.non_field_errors %}
+            <div class="profile-modal__errors">
+              {% for error in password_form.non_field_errors %}
+                <p>{{ error }}</p>
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          {% include "components/ui/text_input.html" with label="Contrasena actual" name="old_password" id=password_form.old_password.id_for_label type="password" autocomplete="current-password" error=password_form.old_password.errors.0 %}
+          {% include "components/ui/text_input.html" with label="Nueva contrasena" name="new_password1" id=password_form.new_password1.id_for_label type="password" autocomplete="new-password" error=password_form.new_password1.errors.0 %}
+          {% include "components/ui/text_input.html" with label="Confirmar nueva contrasena" name="new_password2" id=password_form.new_password2.id_for_label type="password" autocomplete="new-password" error=password_form.new_password2.errors.0 %}
+
+          <div class="profile-modal__footer">
+            {% include "components/ui/button_secondari.html" with label="Cancelar" type="button" size="md" class_name="profile-modal-cancel" %}
+            {% include "components/ui/button_principal.html" with label="Actualizar contrasena" type="submit" size="md" %}
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+  {{ block.super }}
+  <script src="{% static 'js/profile.js' %}"></script>
 {% endblock %}

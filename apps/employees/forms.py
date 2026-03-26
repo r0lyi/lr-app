@@ -3,6 +3,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 
+from apps.employees.models import Employee
 from apps.users.models import User
 
 
@@ -79,3 +80,46 @@ class EmployeeOnboardingForm(forms.Form):
         if qs.exists():
             raise ValidationError("Este correo ya esta en uso.")
         return email
+
+
+class EmployeeProfileUpdateForm(forms.ModelForm):
+    """Permite editar la ficha del empleado sin tocar correo ni fecha de ingreso.
+
+    La regla actual del perfil es deliberadamente conservadora: el usuario solo
+    puede corregir sus datos personales mas inmediatos. El resto de campos del
+    modelo `Employee` se muestran en modo lectura para evitar que datos de RRHH
+    o acumulados internos se alteren desde esta pantalla.
+    """
+
+    class Meta:
+        model = Employee
+        fields = (
+            "first_name",
+            "last_name",
+            "phone",
+        )
+        labels = {
+            "first_name": "Nombre",
+            "last_name": "Apellidos",
+            "phone": "Telefono",
+        }
+        widgets = {
+            "first_name": forms.TextInput(
+                attrs={
+                    "class": "ui-input",
+                    "autocomplete": "given-name",
+                }
+            ),
+            "last_name": forms.TextInput(
+                attrs={
+                    "class": "ui-input",
+                    "autocomplete": "family-name",
+                }
+            ),
+            "phone": forms.TextInput(
+                attrs={
+                    "class": "ui-input",
+                    "autocomplete": "tel",
+                }
+            ),
+        }
