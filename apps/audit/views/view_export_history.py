@@ -42,6 +42,7 @@ def export_history_view(request):
             active_section="history",
             extra_context={
                 "export_histories": export_histories,
+                "filtered_exports_count": export_histories.count(),
                 "filter_form": filter_form,
             },
         ),
