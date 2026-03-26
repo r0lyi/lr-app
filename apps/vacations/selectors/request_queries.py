@@ -45,15 +45,26 @@ def get_filtered_employee_vacation_requests(
     return requests_qs
 
 
-def get_overlapping_active_requests(employee_profile, *, start_date, end_date):
+def get_overlapping_active_requests(
+    employee_profile,
+    *,
+    start_date,
+    end_date,
+    exclude_request_id=None,
+):
     """Busca solapes con solicitudes que aun ocupan el mismo periodo.
 
     En esta fase tratamos como solicitudes activas las que estan pendientes o
     aprobadas, porque ambas bloquean el mismo rango de fechas.
     """
-    return VacationRequest.objects.filter(
+    requests_qs = VacationRequest.objects.filter(
         employee=employee_profile,
         status__name__in=ACTIVE_REQUEST_STATUS_NAMES,
         start_date__lte=end_date,
         end_date__gte=start_date,
     )
+
+    if exclude_request_id is not None:
+        requests_qs = requests_qs.exclude(pk=exclude_request_id)
+
+    return requests_qs
