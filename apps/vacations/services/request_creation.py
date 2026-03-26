@@ -4,6 +4,9 @@ from decimal import Decimal
 
 from django.core.exceptions import ValidationError
 
+from apps.notifications.services import (
+    create_vacation_submission_notifications,
+)
 from apps.vacations.models import VacationRequest
 from apps.vacations.services.policies import (
     DEFAULT_NEW_REQUEST_STATUS_NAME,
@@ -65,7 +68,7 @@ def create_employee_vacation_request(
 
     pending_status = get_vacation_status_by_name(DEFAULT_NEW_REQUEST_STATUS_NAME)
 
-    return VacationRequest.objects.create(
+    vacation_request = VacationRequest.objects.create(
         employee=employee_profile,
         status=pending_status,
         start_date=start_date,
@@ -73,3 +76,9 @@ def create_employee_vacation_request(
         requested_days=calculate_requested_natural_days(start_date, end_date),
         employee_comment=employee_comment.strip() or None,
     )
+
+    # Una vez creada la solicitud, avisamos al inbox interno de RRHH para que
+    # aparezca pendiente de revision en su flujo de trabajo.
+    create_vacation_submission_notifications(vacation_request)
+
+    return vacation_request

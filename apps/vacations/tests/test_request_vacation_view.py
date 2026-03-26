@@ -2,6 +2,8 @@
 
 from django.urls import reverse
 
+from apps.notifications.models import Notification
+from apps.users.models import Role, User
 from apps.vacations.models import VacationRequest
 
 from .base import VacationBaseTestCase
@@ -9,6 +11,22 @@ from .base import VacationBaseTestCase
 
 class VacationRequestViewTests(VacationBaseTestCase):
     """Comprueba el formulario minimo de solicitud del empleado."""
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.rrhh_role = Role.objects.get(name="rrhh")
+
+    def create_rrhh_user(self, *, email, dni):
+        """Crea un usuario RRHH activo para las pruebas de integracion."""
+
+        user = User.objects.create_user(
+            email=email,
+            dni=dni,
+            password="PruebaSegura123!",
+            is_active=True,
+        )
+        user.roles.set([self.rrhh_role])
+        return user
 
     def test_employee_can_open_request_page(self):
         user, _employee = self.create_employee_user(
@@ -35,6 +53,10 @@ class VacationRequestViewTests(VacationBaseTestCase):
             email="employee-vacations-create@example.com",
             dni="00000000T",
         )
+        rrhh_user = self.create_rrhh_user(
+            email="rrhh-vacations-create@example.com",
+            dni="77777777B",
+        )
 
         self.client.force_login(user)
 
@@ -53,6 +75,14 @@ class VacationRequestViewTests(VacationBaseTestCase):
         self.assertEqual(vacation_request.status.name, "pending")
         self.assertEqual(str(vacation_request.requested_days), "5.00")
         self.assertEqual(vacation_request.employee_comment, "Vacaciones de verano")
+
+        notification = Notification.objects.get(user=rrhh_user)
+        self.assertEqual(
+            notification.notification_type,
+            Notification.Type.VACATION_REQUEST_SUBMISSION,
+        )
+        self.assertEqual(notification.vacation_request, vacation_request)
+        self.assertIn("Ana Lopez", notification.message)
 
     def test_invalid_post_keeps_form_and_shows_error(self):
         user, employee = self.create_employee_user(
