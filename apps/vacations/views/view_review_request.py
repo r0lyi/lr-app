@@ -26,6 +26,7 @@ def review_vacation_request_view(request, request_id):
             try:
                 review_vacation_request(
                     vacation_request,
+                    acting_user=request.user,
                     status=form.cleaned_data["status"],
                     start_date=form.cleaned_data["start_date"],
                     end_date=form.cleaned_data["end_date"],
