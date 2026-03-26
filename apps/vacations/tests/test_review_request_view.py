@@ -100,6 +100,7 @@ class VacationRequestReviewViewTests(VacationBaseTestCase):
         self.assertEqual(vacation_request.hr_comment, "Aprobada con cambio de fechas")
         self.assertIsNotNone(vacation_request.resolution_date)
         self.assertLessEqual(vacation_request.resolution_date, timezone.now())
+        self.assertEqual(vacation_request.resolved_by, rrhh_user)
 
     def test_employee_cannot_open_rrhh_review_page(self):
         employee_user, employee = self.create_employee_user(

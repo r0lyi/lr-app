@@ -1,5 +1,6 @@
 """Modelo principal de solicitud de vacaciones realizada por un empleado."""
 
+from django.conf import settings
 from django.db import models
 
 from apps.core.models import TimeStampedModel
@@ -31,6 +32,13 @@ class VacationRequest(TimeStampedModel):
     requested_days = models.DecimalField(max_digits=6, decimal_places=2)
     request_date = models.DateTimeField(auto_now_add = True)
     resolution_date = models.DateTimeField(blank=True, null=True)
+    resolved_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="resolved_vacation_requests",
+    )
     employee_comment = models.TextField(blank=True, null=True)
     hr_comment = models.TextField(blank=True, null=True)
     reprogram_reason = models.CharField(

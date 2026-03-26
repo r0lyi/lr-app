@@ -11,6 +11,7 @@ from apps.vacations.selectors import get_overlapping_active_requests
 def review_vacation_request(
     vacation_request,
     *,
+    acting_user,
     status,
     start_date,
     end_date,
@@ -24,6 +25,7 @@ def review_vacation_request(
       otra solicitud activa del mismo empleado
     - requested_days se recalcula al cambiar el rango
     - resolution_date solo se fija cuando la solicitud deja de estar pendiente
+    - resolved_by guarda quien hizo la ultima resolucion desde RRHH
     """
 
     if end_date < start_date:
@@ -54,6 +56,7 @@ def review_vacation_request(
     vacation_request.resolution_date = (
         timezone.now() if status.name != "pending" else None
     )
+    vacation_request.resolved_by = acting_user if status.name != "pending" else None
     vacation_request.save(
         update_fields=[
             "status",
@@ -62,6 +65,7 @@ def review_vacation_request(
             "requested_days",
             "hr_comment",
             "resolution_date",
+            "resolved_by",
             "updated_at",
         ]
     )
