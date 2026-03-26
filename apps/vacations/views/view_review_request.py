@@ -53,6 +53,7 @@ def review_vacation_request_view(request, request_id):
     context = build_dashboard_base_context(
         request.user,
         "rrhh",
+        request=request,
         active_section="home",
         extra_context={
             "vacation_request": vacation_request,

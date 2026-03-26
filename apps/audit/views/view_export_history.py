@@ -39,6 +39,7 @@ def export_history_view(request):
         build_dashboard_base_context(
             request.user,
             "rrhh",
+            request=request,
             active_section="history",
             extra_context={
                 "export_histories": export_histories,

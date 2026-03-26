@@ -54,6 +54,7 @@ def create_vacation_request_view(request):
     context = build_dashboard_base_context(
         request.user,
         "employee",
+        request=request,
         active_section="request",
         extra_context={
             "form": form,
