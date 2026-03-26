@@ -23,4 +23,50 @@
       <p><strong>Rol actual:</strong> {{ role_label }}</p>
     {% endif %}
   </section>
+
+  <section class="dash-card">
+    <h2 class="dash-card-title">Cambiar contrasena</h2>
+
+    {% if password_form.non_field_errors %}
+      {% for error in password_form.non_field_errors %}
+        <p>{{ error }}</p>
+      {% endfor %}
+    {% endif %}
+
+    <form method="post">
+      {% csrf_token %}
+
+      <p>
+        <label for="{{ password_form.old_password.id_for_label }}">Contrasena actual</label><br>
+        {{ password_form.old_password }}
+      </p>
+      {% if password_form.old_password.errors %}
+        {% for error in password_form.old_password.errors %}
+          <p>{{ error }}</p>
+        {% endfor %}
+      {% endif %}
+
+      <p>
+        <label for="{{ password_form.new_password1.id_for_label }}">Nueva contrasena</label><br>
+        {{ password_form.new_password1 }}
+      </p>
+      {% if password_form.new_password1.errors %}
+        {% for error in password_form.new_password1.errors %}
+          <p>{{ error }}</p>
+        {% endfor %}
+      {% endif %}
+
+      <p>
+        <label for="{{ password_form.new_password2.id_for_label }}">Confirmar nueva contrasena</label><br>
+        {{ password_form.new_password2 }}
+      </p>
+      {% if password_form.new_password2.errors %}
+        {% for error in password_form.new_password2.errors %}
+          <p>{{ error }}</p>
+        {% endfor %}
+      {% endif %}
+
+      <button type="submit">Actualizar contrasena</button>
+    </form>
+  </section>
 {% endblock %}
