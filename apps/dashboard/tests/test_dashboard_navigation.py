@@ -2,6 +2,8 @@
 
 from django.urls import reverse
 
+from apps.notifications.models import Notification
+
 from .base import DashboardRoleBaseTestCase
 
 
@@ -46,3 +48,27 @@ class DashboardNavigationTests(DashboardRoleBaseTestCase):
         self.assertContains(admin_home, reverse("dashboard:admin-home"))
         self.assertContains(admin_home, reverse("employees:profile"))
         self.assertNotContains(admin_home, reverse("dashboard:rrhh-home"))
+
+    def test_dashboard_header_renders_notification_dropdown(self):
+        employee = self.create_active_user(
+            email="employee-notifications@example.com",
+            dni="12345678Z",
+        )
+        self.create_employee_profile(employee)
+        Notification.objects.create(
+            user=employee,
+            notification_type=Notification.Type.VACATION_INFO,
+            message="Tienes una nueva notificacion de prueba para el inbox.",
+            is_read=False,
+        )
+
+        self.client.force_login(employee)
+
+        response = self.client.get(reverse("dashboard:employee-home"))
+
+        self.assertContains(response, "dash-notifications__button")
+        self.assertContains(response, "Panel de notificaciones")
+        self.assertContains(
+            response,
+            "Tienes una nueva notificacion de prueba para el inbox.",
+        )

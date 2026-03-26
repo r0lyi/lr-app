@@ -1,6 +1,10 @@
 """Helpers neutros para construir el layout comun del dashboard."""
 
 from apps.employees.models import Employee
+from apps.notifications.selectors import (
+    get_unread_notifications_count,
+    get_user_inbox_notifications,
+)
 
 ROLE_LABELS = {
     "employee": "Empleado",
@@ -120,6 +124,10 @@ def build_dashboard_base_context(
             role_name,
             active_section=active_section,
         ),
+        "recent_notifications": list(
+            get_user_inbox_notifications(user, limit=6)
+        ),
+        "unread_notifications_count": get_unread_notifications_count(user),
     }
     if extra_context:
         context.update(extra_context)
