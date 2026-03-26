@@ -24,6 +24,11 @@ class VacationRequestViewTests(VacationBaseTestCase):
         self.assertContains(response, "Solicitar vacaciones")
         self.assertContains(response, "Derecho anual")
         self.assertContains(response, "selected-days-counter")
+        self.assertContains(response, "Solicitud de periodo vacacional")
+        self.assertContains(response, "Rango actual:")
+        self.assertContains(response, "Informacion adicional")
+        self.assertContains(response, "Confirmar")
+        self.assertContains(response, "selected-range-summary")
 
     def test_employee_can_create_pending_vacation_request(self):
         user, employee = self.create_employee_user(
@@ -48,3 +53,30 @@ class VacationRequestViewTests(VacationBaseTestCase):
         self.assertEqual(vacation_request.status.name, "pending")
         self.assertEqual(str(vacation_request.requested_days), "5.00")
         self.assertEqual(vacation_request.employee_comment, "Vacaciones de verano")
+
+    def test_invalid_post_keeps_form_and_shows_error(self):
+        user, employee = self.create_employee_user(
+            email="employee-vacations-invalid@example.com",
+            dni="11111111H",
+        )
+
+        self.client.force_login(user)
+
+        response = self.client.post(
+            reverse("vacations:create-request"),
+            {
+                "start_date": "2026-07-10",
+                "end_date": "2026-07-05",
+                "employee_comment": "Necesito revisar estas fechas",
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(
+            response,
+            "La fecha de fin no puede ser anterior a la fecha de inicio.",
+        )
+        self.assertContains(response, 'value="2026-07-10"', html=False)
+        self.assertContains(response, 'value="2026-07-05"', html=False)
+        self.assertContains(response, "Necesito revisar estas fechas")
+        self.assertEqual(VacationRequest.objects.filter(employee=employee).count(), 0)
