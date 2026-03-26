@@ -40,6 +40,12 @@ ROLE_NAV_CONFIG = {
             "icon": "home",
         },
         {
+            "section": "history",
+            "url_name": "audit:export-history",
+            "label": "Historial",
+            "icon": "home",
+        },
+        {
             "section": "profile",
             "url_name": "employees:profile",
             "label": "Perfil",
