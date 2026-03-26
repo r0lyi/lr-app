@@ -2,6 +2,7 @@
 
 from django.test import TestCase
 from django.urls import reverse
+from django.contrib.auth import SESSION_KEY
 
 from apps.employees.models import Employee
 from apps.users.models import Role, User
@@ -51,6 +52,8 @@ class EmployeeProfileViewTests(TestCase):
         self.assertContains(response, "15-01-2024")
         self.assertContains(response, "30")
         self.assertContains(response, "5")
+        self.assertContains(response, "Cambiar contrasena")
+        self.assertContains(response, "Actualizar contrasena")
 
     def test_admin_without_employee_profile_sees_clear_message(self):
         user = User.objects.create_user(
@@ -72,3 +75,52 @@ class EmployeeProfileViewTests(TestCase):
         )
         self.assertContains(response, "admin-profile@example.com")
         self.assertContains(response, "Administrador")
+
+    def test_profile_view_can_change_password(self):
+        user, _profile = self.create_user_with_profile(
+            email="employee-password@example.com",
+            dni="00000000T",
+        )
+
+        self.client.force_login(user)
+
+        response = self.client.post(
+            reverse("employees:profile"),
+            {
+                "old_password": "PruebaSegura123!",
+                "new_password1": "NuevaClaveSegura123!",
+                "new_password2": "NuevaClaveSegura123!",
+            },
+            follow=True,
+        )
+
+        self.assertRedirects(response, reverse("employees:profile"))
+        user.refresh_from_db()
+        self.assertTrue(user.check_password("NuevaClaveSegura123!"))
+        self.assertEqual(str(self.client.session.get(SESSION_KEY)), str(user.pk))
+        self.assertContains(
+            response,
+            "Tu contrasena se ha actualizado correctamente.",
+        )
+
+    def test_profile_view_keeps_form_when_password_change_is_invalid(self):
+        user, _profile = self.create_user_with_profile(
+            email="employee-password-invalid@example.com",
+            dni="13579135G",
+        )
+
+        self.client.force_login(user)
+
+        response = self.client.post(
+            reverse("employees:profile"),
+            {
+                "old_password": "ClaveIncorrecta123!",
+                "new_password1": "NuevaClaveSegura123!",
+                "new_password2": "NuevaClaveSegura123!",
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        user.refresh_from_db()
+        self.assertTrue(user.check_password("PruebaSegura123!"))
+        self.assertIn("old_password", response.context["password_form"].errors)
