@@ -99,6 +99,22 @@ class DashboardRoutingTests(DashboardRoleBaseTestCase):
             dni="11111111H",
         )
         user.roles.set([self.rrhh_role])
+        employee_user = self.create_active_user(
+            email="employee-for-rrhh@example.com",
+            dni="33333333P",
+        )
+        employee = self.create_employee_profile(
+            employee_user,
+            first_name="Lucia",
+            last_name="Martinez",
+        )
+        self.create_vacation_request(
+            employee,
+            status=self.pending_status,
+            start_date=date(2026, 6, 10),
+            end_date=date(2026, 6, 14),
+            requested_days="5.00",
+        )
 
         self.client.force_login(user)
 
@@ -109,6 +125,83 @@ class DashboardRoutingTests(DashboardRoleBaseTestCase):
         rrhh_home = self.client.get(reverse("dashboard:rrhh-home"))
         self.assertEqual(rrhh_home.status_code, 200)
         self.assertContains(rrhh_home, "Panel de RRHH")
+        self.assertContains(rrhh_home, "Filtrar")
+        self.assertContains(rrhh_home, "Nombre")
+        self.assertContains(rrhh_home, "Apellidos")
+        self.assertContains(rrhh_home, "Fecha inicio")
+        self.assertContains(rrhh_home, "Fecha final")
+        self.assertContains(rrhh_home, "Dias seleccionados")
+        self.assertContains(rrhh_home, "Estado")
+        self.assertContains(rrhh_home, "Lucia")
+        self.assertContains(rrhh_home, "Martinez")
+        self.assertContains(rrhh_home, "10-06-2026")
+        self.assertContains(rrhh_home, "14-06-2026")
+        self.assertContains(rrhh_home, "5.00")
+        self.assertContains(rrhh_home, "pending")
+
+    def test_rrhh_home_filters_requests_by_search_dates_and_status(self):
+        user = self.create_active_user(
+            email="rrhh-filter@example.com",
+            dni="44444444A",
+        )
+        user.roles.set([self.rrhh_role])
+
+        employee_one_user = self.create_active_user(
+            email="employee-rrhh-one@example.com",
+            dni="55555555K",
+        )
+        employee_one = self.create_employee_profile(
+            employee_one_user,
+            first_name="Lucia",
+            last_name="Martinez",
+        )
+        self.create_vacation_request(
+            employee_one,
+            status=self.pending_status,
+            start_date=date(2026, 6, 10),
+            end_date=date(2026, 6, 14),
+            requested_days="5.00",
+        )
+
+        employee_two_user = self.create_active_user(
+            email="employee-rrhh-two@example.com",
+            dni="66666666Q",
+        )
+        employee_two = self.create_employee_profile(
+            employee_two_user,
+            first_name="Carlos",
+            last_name="Sanchez",
+        )
+        self.create_vacation_request(
+            employee_two,
+            status=self.approved_status,
+            start_date=date(2026, 8, 1),
+            end_date=date(2026, 8, 3),
+            requested_days="3.00",
+        )
+
+        self.client.force_login(user)
+
+        response = self.client.get(
+            reverse("dashboard:rrhh-home"),
+            {
+                "search": "lucia",
+                "start_date": "2026-06-01",
+                "end_date": "2026-06-30",
+                "status": "pending",
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Lucia")
+        self.assertContains(response, "Martinez")
+        self.assertContains(response, "10-06-2026")
+        self.assertContains(response, "14-06-2026")
+        self.assertContains(response, "pending")
+        self.assertNotContains(response, "Carlos")
+        self.assertNotContains(response, "Sanchez")
+        self.assertNotContains(response, "01-08-2026")
+        self.assertNotContains(response, "03-08-2026")
 
     def test_admin_is_redirected_to_admin_home(self):
         user = self.create_active_user(
