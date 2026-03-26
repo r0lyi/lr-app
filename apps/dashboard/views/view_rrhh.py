@@ -54,6 +54,7 @@ def rrhh_home_view(request):
         build_dashboard_base_context(
             request.user,
             "rrhh",
+            request=request,
             active_section="home",
             extra_context={
                 "export_url": export_url,

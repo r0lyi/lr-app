@@ -72,3 +72,34 @@ class DashboardNavigationTests(DashboardRoleBaseTestCase):
             response,
             "Tienes una nueva notificacion de prueba para el inbox.",
         )
+        self.assertContains(response, "Marcar todas")
+
+    def test_dashboard_header_paginates_notifications_ten_by_ten(self):
+        employee = self.create_active_user(
+            email="employee-notifications-page@example.com",
+            dni="13579135G",
+        )
+        self.create_employee_profile(employee)
+
+        for index in range(11):
+            Notification.objects.create(
+                user=employee,
+                notification_type=Notification.Type.VACATION_INFO,
+                message=f"Notificacion {index}",
+                is_read=False,
+            )
+
+        self.client.force_login(employee)
+
+        first_page = self.client.get(reverse("dashboard:employee-home"))
+        second_page = self.client.get(
+            reverse("dashboard:employee-home"),
+            {"notifications_page": 2},
+        )
+
+        self.assertContains(first_page, "Pagina 1 de 2")
+        self.assertContains(first_page, "Notificacion 10")
+        self.assertContains(first_page, "Notificacion 1")
+        self.assertNotContains(first_page, "Notificacion 0")
+        self.assertContains(second_page, "Pagina 2 de 2")
+        self.assertContains(second_page, "Notificacion 0")

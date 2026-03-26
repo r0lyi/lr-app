@@ -12,5 +12,10 @@ def admin_home_view(request):
     return render(
         request,
         "dashboard/admin_home.html",
-        build_dashboard_base_context(request.user, "admin", active_section="home"),
+        build_dashboard_base_context(
+            request.user,
+            "admin",
+            request=request,
+            active_section="home",
+        ),
     )

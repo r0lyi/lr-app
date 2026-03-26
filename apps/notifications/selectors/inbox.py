@@ -5,6 +5,8 @@ construir consultas a mano. Dejamos la lectura centralizada aqui para poder
 añadir filtros o `select_related` sin tocar luego cada vista.
 """
 
+from django.core.paginator import EmptyPage, Paginator
+
 from apps.notifications.models import Notification
 
 
@@ -36,6 +38,28 @@ def get_user_inbox_notifications(user, *, is_read=None, limit=None):
         notifications = notifications[:limit]
 
     return notifications
+
+
+def get_user_inbox_notifications_page(
+    user,
+    *,
+    page_number=1,
+    page_size=10,
+    is_read=None,
+):
+    """Devuelve una pagina del inbox con tamano fijo.
+
+    Para el dropdown del header elegimos paginas de 10 notificaciones, que es
+    un tamano manejable para leer sin convertir el panel en una lista infinita.
+    """
+
+    notifications = get_user_inbox_notifications(user, is_read=is_read)
+    paginator = Paginator(notifications, page_size)
+
+    try:
+        return paginator.page(page_number)
+    except EmptyPage:
+        return paginator.page(paginator.num_pages or 1)
 
 
 def get_unread_notifications_count(user):

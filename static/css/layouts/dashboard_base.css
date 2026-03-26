@@ -323,6 +323,12 @@
   border-bottom: 1px solid rgba(148, 163, 184, 0.16);
 }
 
+.dash-notifications__header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .dash-notifications__title {
   margin: 0 0 4px;
   color: #334155;
@@ -347,6 +353,32 @@
   color: #64748b;
   cursor: pointer;
   flex-shrink: 0;
+}
+
+.dash-notifications__mark-all,
+.dash-notifications__mark-read,
+.dash-notifications__page-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 0 14px;
+  border: 1px solid rgba(20, 154, 223, 0.16);
+  border-radius: 12px;
+  background: #f8fbff;
+  color: #0f6ea9;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.18s ease, transform 0.18s ease;
+}
+
+.dash-notifications__mark-all:hover,
+.dash-notifications__mark-read:hover,
+.dash-notifications__page-link:hover {
+  background: #eef7ff;
+  transform: translateY(-1px);
 }
 
 .dash-notifications__close span {
@@ -429,6 +461,25 @@
   overflow-wrap: anywhere;
 }
 
+.dash-notifications__item-actions {
+  margin-top: 12px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.dash-notifications__read-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 30px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+}
+
 .dash-notifications__empty {
   padding: 18px 16px;
   color: #64748b;
@@ -439,6 +490,27 @@
   margin-bottom: 6px;
   color: #334155;
   font-size: 16px;
+}
+
+.dash-notifications__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 18px 18px;
+  border-top: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.dash-notifications__page-indicator {
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.dash-notifications__pagination {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .dash-content {
@@ -698,6 +770,20 @@
   .dash-notifications__item-top {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .dash-notifications__footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .dash-notifications__pagination {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .dash-notifications__page-link {
+    flex: 1 1 0;
   }
 }
 

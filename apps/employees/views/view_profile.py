@@ -78,6 +78,7 @@ def employee_profile_view(request):
     context = build_dashboard_base_context(
         request.user,
         current_role,
+        request=request,
         active_section="profile",
         extra_context={
             "employee_profile": employee_profile,
