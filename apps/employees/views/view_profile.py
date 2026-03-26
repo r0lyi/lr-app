@@ -31,6 +31,11 @@ def employee_profile_view(request):
     if employee_profile is None and current_role == "employee":
         return redirect("employees:onboarding")
 
+    # El perfil se abre en modo solo lectura por defecto. Solo entramos en modo
+    # edicion cuando el usuario lo solicita expresamente o cuando un envio del
+    # formulario devuelve errores y hay que corregirlos.
+    profile_edit_mode = request.GET.get("edit") == "1"
+
     employee_form = (
         EmployeeProfileUpdateForm(instance=employee_profile)
         if employee_profile is not None
@@ -49,6 +54,7 @@ def employee_profile_view(request):
                 request.POST,
                 instance=employee_profile,
             )
+            profile_edit_mode = True
             if employee_form.is_valid():
                 employee_form.save()
                 messages.success(
@@ -77,6 +83,7 @@ def employee_profile_view(request):
             "employee_profile": employee_profile,
             "employee_form": employee_form,
             "password_form": password_form,
+            "profile_edit_mode": profile_edit_mode,
         },
     )
     return render(request, "employees/profile.html", context)

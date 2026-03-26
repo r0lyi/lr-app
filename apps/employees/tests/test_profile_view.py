@@ -49,11 +49,11 @@ class EmployeeProfileViewTests(TestCase):
         self.assertContains(response, "Lopez")
         self.assertContains(response, "employee-profile@example.com")
         self.assertContains(response, "600123123")
-        self.assertContains(response, "15-01-2024")
+        self.assertContains(response, "2024-01-15")
         self.assertContains(response, "30")
         self.assertContains(response, "5")
         self.assertContains(response, "Editar datos del empleado")
-        self.assertContains(response, "Guardar cambios del empleado")
+        self.assertContains(response, "Editar datos")
         self.assertContains(response, "Cambiar contrasena")
         self.assertContains(response, "Actualizar contrasena")
         self.assertNotContains(response, 'name="hire_date"')
@@ -61,6 +61,25 @@ class EmployeeProfileViewTests(TestCase):
         self.assertNotContains(response, 'name="department"')
         self.assertNotContains(response, 'name="available_days"')
         self.assertNotContains(response, 'name="taken_days"')
+
+    def test_profile_view_edit_mode_shows_save_and_cancel_actions(self):
+        user, _profile = self.create_user_with_profile(
+            email="employee-profile-edit@example.com",
+            dni="12345678Z",
+        )
+
+        self.client.force_login(user)
+
+        response = self.client.get(reverse("employees:profile") + "?edit=1")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Guardar cambios")
+        self.assertContains(response, "Cancelar")
+        self.assertNotContains(
+            response,
+            'href="/employees/profile/?edit=1"',
+            html=False,
+        )
 
     def test_admin_without_employee_profile_sees_clear_message(self):
         user = User.objects.create_user(
