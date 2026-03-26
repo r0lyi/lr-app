@@ -43,6 +43,7 @@
             <th>Fecha final</th>
             <th>Dias seleccionados</th>
             <th>Estado</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -54,6 +55,11 @@
               <td>{{ vacation_request.end_date|date:"d-m-Y" }}</td>
               <td>{{ vacation_request.requested_days }}</td>
               <td>{{ vacation_request.status.name }}</td>
+              <td>
+                <a href="{% url 'vacations:review-request' vacation_request.pk %}">
+                  Gestionar
+                </a>
+              </td>
             </tr>
           {% endfor %}
         </tbody>

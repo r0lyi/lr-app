@@ -115,6 +115,22 @@ class DashboardRoutingTests(DashboardRoleBaseTestCase):
             end_date=date(2026, 6, 14),
             requested_days="5.00",
         )
+        approved_employee_user = self.create_active_user(
+            email="employee-approved-default@example.com",
+            dni="77777777B",
+        )
+        approved_employee = self.create_employee_profile(
+            approved_employee_user,
+            first_name="Carlos",
+            last_name="Sanchez",
+        )
+        self.create_vacation_request(
+            approved_employee,
+            status=self.approved_status,
+            start_date=date(2026, 8, 1),
+            end_date=date(2026, 8, 3),
+            requested_days="3.00",
+        )
 
         self.client.force_login(user)
 
@@ -138,6 +154,9 @@ class DashboardRoutingTests(DashboardRoleBaseTestCase):
         self.assertContains(rrhh_home, "14-06-2026")
         self.assertContains(rrhh_home, "5.00")
         self.assertContains(rrhh_home, "pending")
+        self.assertNotContains(rrhh_home, "Carlos")
+        self.assertNotContains(rrhh_home, "Sanchez")
+        self.assertNotContains(rrhh_home, "approved</td>", html=False)
 
     def test_rrhh_home_filters_requests_by_search_dates_and_status(self):
         user = self.create_active_user(
