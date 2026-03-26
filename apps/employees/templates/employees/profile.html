@@ -24,6 +24,37 @@
     {% endif %}
   </section>
 
+  {% if employee_profile and employee_form %}
+    <section class="dash-card">
+      <h2 class="dash-card-title">Editar datos del empleado</h2>
+
+      {% if employee_form.non_field_errors %}
+        {% for error in employee_form.non_field_errors %}
+          <p>{{ error }}</p>
+        {% endfor %}
+      {% endif %}
+
+      <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="profile_action" value="employee-update">
+
+        {% for field in employee_form %}
+          <p>
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label><br>
+            {{ field }}
+          </p>
+          {% if field.errors %}
+            {% for error in field.errors %}
+              <p>{{ error }}</p>
+            {% endfor %}
+          {% endif %}
+        {% endfor %}
+
+        <button type="submit">Guardar cambios del empleado</button>
+      </form>
+    </section>
+  {% endif %}
+
   <section class="dash-card">
     <h2 class="dash-card-title">Cambiar contrasena</h2>
 
@@ -35,6 +66,7 @@
 
     <form method="post">
       {% csrf_token %}
+      <input type="hidden" name="profile_action" value="password-change">
 
       <p>
         <label for="{{ password_form.old_password.id_for_label }}">Contrasena actual</label><br>

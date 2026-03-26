@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
 from apps.dashboard.services.layout_context import build_dashboard_base_context
+from apps.employees.forms import EmployeeProfileUpdateForm
 from apps.employees.selectors import get_employee_profile_for_user
 from apps.users.selectors import get_primary_role
 
@@ -30,15 +31,43 @@ def employee_profile_view(request):
     if employee_profile is None and current_role == "employee":
         return redirect("employees:onboarding")
 
+    employee_form = (
+        EmployeeProfileUpdateForm(instance=employee_profile)
+        if employee_profile is not None
+        else None
+    )
+    password_form = PasswordChangeForm(request.user)
+
     if request.method == "POST":
-        password_form = PasswordChangeForm(request.user, request.POST)
-        if password_form.is_valid():
-            user = password_form.save()
-            update_session_auth_hash(request, user)
-            messages.success(request, "Tu contrasena se ha actualizado correctamente.")
-            return redirect("employees:profile")
-    else:
-        password_form = PasswordChangeForm(request.user)
+        profile_action = request.POST.get("profile_action", "password-change")
+
+        if profile_action == "employee-update" and employee_profile is not None:
+            # Solo la ficha Employee puede editar estos datos. Dejamos el
+            # formulario de contrasena intacto para que no muestre errores
+            # ajenos cuando el usuario solo esta actualizando su perfil.
+            employee_form = EmployeeProfileUpdateForm(
+                request.POST,
+                instance=employee_profile,
+            )
+            if employee_form.is_valid():
+                employee_form.save()
+                messages.success(
+                    request,
+                    "Tus datos de empleado se han actualizado correctamente.",
+                )
+                return redirect("employees:profile")
+        else:
+            # El cambio de contrasena usa su propio formulario y mantiene la
+            # sesion abierta si el cambio se completa correctamente.
+            password_form = PasswordChangeForm(request.user, request.POST)
+            if password_form.is_valid():
+                user = password_form.save()
+                update_session_auth_hash(request, user)
+                messages.success(
+                    request,
+                    "Tu contrasena se ha actualizado correctamente.",
+                )
+                return redirect("employees:profile")
 
     context = build_dashboard_base_context(
         request.user,
@@ -46,6 +75,7 @@ def employee_profile_view(request):
         active_section="profile",
         extra_context={
             "employee_profile": employee_profile,
+            "employee_form": employee_form,
             "password_form": password_form,
         },
     )
