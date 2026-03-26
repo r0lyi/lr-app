@@ -5,7 +5,61 @@
 {% block dashboard_content %}
   <section class="dash-card">
     <h1 class="dash-card-title">Panel de RRHH</h1>
-    <p>Has entrado en la vista basica de recursos humanos.</p>
-    <p>Usuario: {{ request.user.email }}</p>
+    <p>Solicitudes de vacaciones registradas.</p>
+
+    {% if filter_form.non_field_errors %}
+      {% for error in filter_form.non_field_errors %}
+        <p>{{ error }}</p>
+      {% endfor %}
+    {% endif %}
+
+    <form method="get">
+      <p>
+        <label for="{{ filter_form.search.id_for_label }}">Nombre o apellido</label><br>
+        {{ filter_form.search }}
+      </p>
+      <p>
+        <label for="{{ filter_form.start_date.id_for_label }}">Fecha inicio</label><br>
+        {{ filter_form.start_date }}
+      </p>
+      <p>
+        <label for="{{ filter_form.end_date.id_for_label }}">Fecha final</label><br>
+        {{ filter_form.end_date }}
+      </p>
+      <p>
+        <label for="{{ filter_form.status.id_for_label }}">Estado</label><br>
+        {{ filter_form.status }}
+      </p>
+      <button type="submit">Filtrar</button>
+    </form>
+
+    {% if vacation_requests %}
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Apellidos</th>
+            <th>Fecha inicio</th>
+            <th>Fecha final</th>
+            <th>Dias seleccionados</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for vacation_request in vacation_requests %}
+            <tr>
+              <td>{{ vacation_request.employee.first_name }}</td>
+              <td>{{ vacation_request.employee.last_name }}</td>
+              <td>{{ vacation_request.start_date|date:"d-m-Y" }}</td>
+              <td>{{ vacation_request.end_date|date:"d-m-Y" }}</td>
+              <td>{{ vacation_request.requested_days }}</td>
+              <td>{{ vacation_request.status.name }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No hay solicitudes registradas.</p>
+    {% endif %}
   </section>
 {% endblock %}
