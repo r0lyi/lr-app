@@ -1,0 +1,50 @@
+{% extends "layouts/dashboard_base.html" %}
+
+{% block title %}Historial de exportaciones{% endblock %}
+
+{% block dashboard_header_title %}Historial de exportaciones{% endblock %}
+
+{% block dashboard_content %}
+  <section class="dash-card">
+    <h1 class="dash-card-title">Historial de exportaciones</h1>
+
+    {% if export_histories %}
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Usuario</th>
+            <th>Archivo</th>
+            <th>Cantidad de solicitudes</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for export_item in export_histories %}
+            <tr>
+              <td data-label="Fecha">{{ export_item.created_at|date:"d-m-Y H:i" }}</td>
+              <td data-label="Usuario">
+                {% if export_item.user %}
+                  {{ export_item.user.email }}
+                {% else %}
+                  Usuario eliminado
+                {% endif %}
+              </td>
+              <td data-label="Archivo">
+                {% if export_item.file_path %}
+                  <a href="{% url 'audit:download-export' export_item.pk %}">
+                    {{ export_item.file_name|default:"Descargar" }}
+                  </a>
+                {% else %}
+                  -
+                {% endif %}
+              </td>
+              <td data-label="Cantidad de solicitudes">{{ export_item.total_records|default:"-" }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No se ha registrado ninguna exportacion todavia.</p>
+    {% endif %}
+  </section>
+{% endblock %}

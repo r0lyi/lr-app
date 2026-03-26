@@ -1,5 +1,6 @@
 """Vista minima del panel de recursos humanos."""
 
+from django.urls import reverse
 from django.shortcuts import render
 
 from apps.core.utils.decorators import role_required
@@ -42,6 +43,10 @@ def rrhh_home_view(request):
         end_date=request_filters.get("end_date"),
         status_name=request_filters.get("status"),
     )
+    export_querystring = filter_form.data.urlencode() if filter_form.is_bound else ""
+    export_url = reverse("vacations:export-rrhh-requests-excel")
+    if export_querystring:
+        export_url = f"{export_url}?{export_querystring}"
 
     return render(
         request,
@@ -51,6 +56,7 @@ def rrhh_home_view(request):
             "rrhh",
             active_section="home",
             extra_context={
+                "export_url": export_url,
                 "filter_form": filter_form,
                 "vacation_requests": vacation_requests,
                 "filtered_requests_count": vacation_requests.count(),

@@ -1,0 +1,81 @@
+"""Vista para exportar a Excel las solicitudes filtradas de RRHH."""
+
+from django.contrib import messages
+from django.http import HttpResponse
+from django.shortcuts import redirect
+
+from apps.audit.services import (
+    EXPORT_TYPE_RRHH_VACATION_REQUESTS,
+    create_export_history,
+    mark_export_failed,
+    mark_export_success,
+)
+from apps.core.utils.decorators import role_required
+from apps.vacations.forms import RrhhVacationRequestFilterForm
+from apps.vacations.selectors import get_filtered_rrhh_vacation_requests
+from apps.vacations.services.export_requests_excel import (
+    build_rrhh_vacation_requests_excel,
+)
+
+
+@role_required("rrhh", allow_admin=True)
+def export_rrhh_requests_excel_view(request):
+    """Genera y descarga el Excel del listado actual de RRHH.
+
+    La vista reutiliza exactamente los mismos filtros que el panel de RRHH
+    para evitar que el usuario descargue un resultado distinto al que ve.
+    """
+
+    default_status_name = "pending"
+    filter_data = request.GET.copy()
+    if "status" not in filter_data:
+        filter_data["status"] = default_status_name
+
+    filter_form = RrhhVacationRequestFilterForm(filter_data)
+    if not filter_form.is_valid():
+        messages.error(
+            request,
+            "No se pudo exportar porque los filtros enviados no son validos.",
+        )
+        return redirect("dashboard:rrhh-home")
+
+    request_filters = filter_form.cleaned_data
+    vacation_requests = get_filtered_rrhh_vacation_requests(
+        search=request_filters.get("search"),
+        start_date=request_filters.get("start_date"),
+        end_date=request_filters.get("end_date"),
+        status_name=request_filters.get("status"),
+    )
+
+    export_history = create_export_history(
+        user=request.user,
+        export_type=EXPORT_TYPE_RRHH_VACATION_REQUESTS,
+        filters=request_filters,
+    )
+
+    try:
+        file_name, file_bytes = build_rrhh_vacation_requests_excel(vacation_requests)
+        mark_export_success(
+            export_history=export_history,
+            file_name=file_name,
+            file_bytes=file_bytes,
+            total_records=vacation_requests.count(),
+        )
+    except Exception:
+        mark_export_failed(export_history=export_history)
+        messages.error(
+            request,
+            "No se pudo generar el archivo Excel de las solicitudes.",
+        )
+        return redirect("dashboard:rrhh-home")
+
+    response = HttpResponse(
+        file_bytes,
+        content_type=(
+            "application/vnd.openxmlformats-officedocument."
+            "spreadsheetml.sheet"
+        ),
+    )
+    response["Content-Disposition"] = f'attachment; filename="{file_name}"'
+    return response
+
