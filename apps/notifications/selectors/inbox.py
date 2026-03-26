@@ -1,0 +1,58 @@
+"""Selectores de lectura para el inbox interno de notificaciones.
+
+La idea de este modulo es que las futuras vistas del inbox no tengan que
+construir consultas a mano. Dejamos la lectura centralizada aqui para poder
+añadir filtros o `select_related` sin tocar luego cada vista.
+"""
+
+from apps.notifications.models import Notification
+
+
+def get_user_inbox_notifications(user, *, is_read=None, limit=None):
+    """Devuelve las notificaciones visibles para un usuario concreto.
+
+    Parametros soportados:
+    - `is_read=True/False`: filtra por leidas o no leidas
+    - `limit`: recorta el numero de resultados utiles para widgets o previews
+
+    La consulta incluye la solicitud asociada para que el inbox futuro pueda
+    mostrar contexto sin disparar consultas adicionales por cada fila.
+    """
+
+    notifications = (
+        Notification.objects.filter(user=user)
+        .select_related(
+            "vacation_request",
+            "vacation_request__employee",
+            "vacation_request__status",
+        )
+        .order_by("-sent_at", "-id")
+    )
+
+    if is_read is not None:
+        notifications = notifications.filter(is_read=is_read)
+
+    if limit is not None:
+        notifications = notifications[:limit]
+
+    return notifications
+
+
+def get_unread_notifications_count(user):
+    """Cuenta cuantas notificaciones siguen sin leer para un usuario."""
+
+    return Notification.objects.filter(user=user, is_read=False).count()
+
+
+def get_user_inbox_notification_by_id(user, notification_id):
+    """Obtiene una notificacion concreta del usuario propietario.
+
+    Este helper evita accesos cruzados accidentales cuando mas adelante
+    creemos acciones como "marcar como leida" o "ver detalle".
+    """
+
+    return (
+        Notification.objects.filter(user=user)
+        .select_related("vacation_request")
+        .get(pk=notification_id)
+    )
