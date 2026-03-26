@@ -25,6 +25,12 @@ ROLE_NAV_CONFIG = {
             "label": "Solicitar",
             "icon": "drop",
         },
+        {
+            "section": "profile",
+            "url_name": "employees:profile",
+            "label": "Perfil",
+            "icon": "home",
+        },
     ],
     "rrhh": [
         {
@@ -33,12 +39,24 @@ ROLE_NAV_CONFIG = {
             "label": "Inicio",
             "icon": "home",
         },
+        {
+            "section": "profile",
+            "url_name": "employees:profile",
+            "label": "Perfil",
+            "icon": "home",
+        },
     ],
     "admin": [
         {
             "section": "home",
             "url_name": "dashboard:admin-home",
             "label": "Inicio",
+            "icon": "home",
+        },
+        {
+            "section": "profile",
+            "url_name": "employees:profile",
+            "label": "Perfil",
             "icon": "home",
         },
     ],
