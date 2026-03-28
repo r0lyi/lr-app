@@ -64,6 +64,12 @@ ROLE_NAV_CONFIG = {
             "icon": "home",
         },
         {
+            "section": "users",
+            "url_name": "dashboard:admin-users",
+            "label": "Usuarios",
+            "icon": "home",
+        },
+        {
             "section": "profile",
             "url_name": "employees:profile",
             "label": "Perfil",

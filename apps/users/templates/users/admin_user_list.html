@@ -1,0 +1,73 @@
+{% extends "layouts/dashboard_base.html" %}
+{% load static %}
+
+{% block title %}Usuarios del sistema{% endblock %}
+
+{% block dashboard_header_title %}Usuarios{% endblock %}
+
+{% block dashboard_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/pages/admin_users.css' %}">
+{% endblock %}
+
+{% block dashboard_content %}
+  <section class="admin-users-page">
+    <section class="dash-card admin-users-card">
+      <div class="admin-users-card__heading">
+        <div>
+          <h1 class="dash-card-title">Usuarios del sistema</h1>
+          <p class="admin-users-card__description">
+            Consulta el catalogo completo de usuarios con su correo, DNI, rol
+            principal y estado actual dentro de la aplicacion.
+          </p>
+        </div>
+        <div class="admin-users-card__count">
+          {{ managed_users_count }} usuario{{ managed_users_count|pluralize }}
+        </div>
+      </div>
+
+      <div class="admin-users-table">
+        {% if managed_users %}
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>DNI</th>
+                <th>Rol principal</th>
+                <th>Activo</th>
+                <th>Ficha empleado</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for user_row in managed_users %}
+                <tr>
+                  <td data-label="Nombre">{{ user_row.display_name }}</td>
+                  <td data-label="Correo">{{ user_row.user.email }}</td>
+                  <td data-label="DNI">{{ user_row.user.dni }}</td>
+                  <td data-label="Rol principal">
+                    <span class="admin-users-table__role">
+                      {{ user_row.primary_role_label }}
+                    </span>
+                  </td>
+                  <td data-label="Activo">
+                    <span class="admin-users-table__status{% if user_row.user.is_active %} admin-users-table__status--active{% endif %}">
+                      {{ user_row.user.is_active|yesno:"Activo,Inactivo" }}
+                    </span>
+                  </td>
+                  <td data-label="Ficha empleado">
+                    {{ user_row.has_employee_profile|yesno:"Si,No" }}
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% else %}
+          <p class="admin-users-table__empty">
+            No hay usuarios registrados en el sistema.
+          </p>
+        {% endif %}
+      </div>
+    </section>
+  </section>
+{% endblock %}

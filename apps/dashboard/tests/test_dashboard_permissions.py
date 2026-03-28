@@ -62,6 +62,34 @@ class DashboardPermissionTests(DashboardRoleBaseTestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse("dashboard:home"))
 
+    def test_employee_cannot_open_admin_users_panel(self):
+        user = self.create_active_user(
+            email="employee-admin-users-block@example.com",
+            dni="12121212M",
+        )
+        self.create_employee_profile(user)
+
+        self.client.force_login(user)
+
+        response = self.client.get(reverse("dashboard:admin-users"))
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse("dashboard:home"))
+
+    def test_rrhh_cannot_open_admin_users_panel(self):
+        user = self.create_active_user(
+            email="rrhh-admin-users-block@example.com",
+            dni="34343434H",
+        )
+        user.roles.set([self.rrhh_role])
+
+        self.client.force_login(user)
+
+        response = self.client.get(reverse("dashboard:admin-users"))
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse("dashboard:home"))
+
     def test_admin_can_open_admin_and_rrhh_panels(self):
         user = self.create_active_user(
             email="admin-protected@example.com",
@@ -72,9 +100,12 @@ class DashboardPermissionTests(DashboardRoleBaseTestCase):
         self.client.force_login(user)
 
         admin_response = self.client.get(reverse("dashboard:admin-home"))
+        admin_users_response = self.client.get(reverse("dashboard:admin-users"))
         rrhh_response = self.client.get(reverse("dashboard:rrhh-home"))
 
         self.assertEqual(admin_response.status_code, 200)
-        self.assertContains(admin_response, "Panel de administrador")
+        self.assertContains(admin_response, "Resumen general")
+        self.assertEqual(admin_users_response.status_code, 200)
+        self.assertContains(admin_users_response, "Usuarios del sistema")
         self.assertEqual(rrhh_response.status_code, 200)
         self.assertContains(rrhh_response, "Panel de RRHH")
