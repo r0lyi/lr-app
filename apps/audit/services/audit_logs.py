@@ -3,6 +3,8 @@
 from apps.audit.models import AuditLog
 
 AUDIT_ACTION_USER_PRIMARY_ROLE_CHANGED = "user_primary_role_changed"
+AUDIT_ACTION_USER_ACCESS_STATE_CHANGED = "user_access_state_changed"
+AUDIT_ACTION_USER_DEPARTMENT_CHANGED = "user_department_changed"
 AUDIT_RESOURCE_TYPE_USER = "user"
 
 ROLE_LABELS = {
@@ -77,6 +79,80 @@ def log_user_primary_role_changed(
     return create_audit_log(
         user=acting_user,
         action=AUDIT_ACTION_USER_PRIMARY_ROLE_CHANGED,
+        resource_type=AUDIT_RESOURCE_TYPE_USER,
+        resource_id=target_user.pk,
+        description=description,
+    )
+
+
+def build_user_access_state_change_description(
+    *,
+    acting_user,
+    target_user,
+    is_active,
+):
+    """Redacta un mensaje claro sobre activacion o desactivacion de acceso."""
+
+    actor_email = (acting_user.email or "").strip()
+    target_email = (target_user.email or "").strip()
+    action_text = "activó" if is_active else "desactivó"
+    return f"{actor_email} {action_text} el acceso al sistema de {target_email}."
+
+
+def log_user_access_state_changed(*, acting_user, target_user, is_active):
+    """Registra en auditoria la activacion o desactivacion de una cuenta."""
+
+    description = build_user_access_state_change_description(
+        acting_user=acting_user,
+        target_user=target_user,
+        is_active=is_active,
+    )
+    return create_audit_log(
+        user=acting_user,
+        action=AUDIT_ACTION_USER_ACCESS_STATE_CHANGED,
+        resource_type=AUDIT_RESOURCE_TYPE_USER,
+        resource_id=target_user.pk,
+        description=description,
+    )
+
+
+def build_user_department_change_description(
+    *,
+    acting_user,
+    target_user,
+    previous_department_name,
+    new_department_name,
+):
+    """Redacta un mensaje claro cuando cambia el departamento de un empleado."""
+
+    actor_email = (acting_user.email or "").strip()
+    target_email = (target_user.email or "").strip()
+    previous_department_label = previous_department_name or "Sin departamento"
+    new_department_label = new_department_name or "Sin departamento"
+    return (
+        f"{actor_email} cambió el departamento de {target_email} "
+        f"de {previous_department_label} a {new_department_label}."
+    )
+
+
+def log_user_department_changed(
+    *,
+    acting_user,
+    target_user,
+    previous_department_name,
+    new_department_name,
+):
+    """Registra en auditoria el cambio de departamento del empleado."""
+
+    description = build_user_department_change_description(
+        acting_user=acting_user,
+        target_user=target_user,
+        previous_department_name=previous_department_name,
+        new_department_name=new_department_name,
+    )
+    return create_audit_log(
+        user=acting_user,
+        action=AUDIT_ACTION_USER_DEPARTMENT_CHANGED,
         resource_type=AUDIT_RESOURCE_TYPE_USER,
         resource_id=target_user.pk,
         description=description,

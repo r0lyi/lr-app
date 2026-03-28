@@ -1,0 +1,248 @@
+{% extends "layouts/dashboard_base.html" %}
+{% load static %}
+
+{% block title %}Editar usuario{% endblock %}
+
+{% block dashboard_header_title %}Editar usuario{% endblock %}
+
+{% block dashboard_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/pages/admin_user_edit.css' %}">
+{% endblock %}
+
+{% block dashboard_content %}
+  <section class="admin-user-edit-page">
+    <div class="ui-modal is-open admin-user-edit-modal" aria-hidden="false">
+      <a
+        class="ui-modal__overlay admin-user-edit-modal__overlay"
+        href="{% url 'dashboard:admin-users' %}"
+        aria-label="Cerrar y volver al listado de usuarios"
+      ></a>
+
+      <div class="ui-modal__content" role="dialog" aria-modal="true" aria-labelledby="admin-user-edit-title">
+        <div class="ui-modal__header admin-user-edit-modal__header">
+          <div>
+            <p class="admin-user-edit-modal__eyebrow">Gestion administrativa</p>
+            <h1 class="ui-modal__title" id="admin-user-edit-title">Editar usuario</h1>
+            <p class="admin-user-edit-modal__subtitle">
+              Centraliza aqui los cambios mas habituales de la cuenta para que la gestion diaria sea clara y ordenada.
+            </p>
+          </div>
+          <a class="ui-modal__close" href="{% url 'dashboard:admin-users' %}" aria-label="Cerrar modal">×</a>
+        </div>
+
+        <div class="ui-modal__body admin-user-edit-modal__body">
+          <section class="admin-user-edit-summary">
+            <article class="admin-user-edit-summary__identity">
+              <p class="admin-user-edit-summary__name">{{ managed_user.display_name }}</p>
+              <div class="admin-user-edit-summary__meta">
+                <span>{{ managed_user.user.email }}</span>
+                <span>DNI: {{ managed_user.user.dni }}</span>
+              </div>
+            </article>
+
+            <article class="admin-user-edit-summary__card">
+              <p class="admin-user-edit-summary__label">Rol actual</p>
+              <p class="admin-user-edit-summary__value">{{ managed_user.primary_role_label }}</p>
+            </article>
+
+            <article class="admin-user-edit-summary__card">
+              <p class="admin-user-edit-summary__label">Departamento</p>
+              <p class="admin-user-edit-summary__value">{{ managed_user.current_department_name }}</p>
+            </article>
+
+            <article class="admin-user-edit-summary__card">
+              <p class="admin-user-edit-summary__label">Estado</p>
+              <p class="admin-user-edit-summary__value">{{ managed_user.access_status_label }}</p>
+            </article>
+          </section>
+
+          <section class="admin-user-edit-grid">
+            <article class="admin-user-edit-card">
+              <div class="admin-user-edit-card__heading">
+                <div>
+                  <h2 class="admin-user-edit-card__title">Rol principal</h2>
+                  <p class="admin-user-edit-card__description">
+                    Define el rol operativo con el que esta cuenta entra al sistema.
+                  </p>
+                </div>
+                <span class="admin-user-edit-card__badge">{{ managed_user.primary_role_label }}</span>
+              </div>
+
+              {% if managed_user.can_change_primary_role %}
+                <form
+                  method="post"
+                  action="{% url 'dashboard:admin-user-primary-role' managed_user.user.pk %}"
+                  class="admin-user-edit-form"
+                >
+                  {% csrf_token %}
+                  <input type="hidden" name="next" value="{{ request.path }}">
+                  <label class="admin-user-edit-form__label" for="primary-role-select">Rol disponible</label>
+                  <select
+                    id="primary-role-select"
+                    name="primary_role"
+                    class="ui-select admin-user-edit-form__select"
+                  >
+                    {% for role in available_roles %}
+                      <option
+                        value="{{ role.pk }}"
+                        {% if role.name == managed_user.primary_role_name %}selected{% endif %}
+                      >
+                        {{ role.description|default:role.name|capfirst }}
+                      </option>
+                    {% endfor %}
+                  </select>
+                  {% include "components/ui/button_principal.html" with label="Guardar rol" type="submit" size="md" class_name="admin-user-edit-form__submit" %}
+                </form>
+              {% else %}
+                <p class="admin-user-edit-card__note">
+                  Este usuario se gestiona desde Django admin.
+                </p>
+              {% endif %}
+            </article>
+
+            <article class="admin-user-edit-card">
+              <div class="admin-user-edit-card__heading">
+                <div>
+                  <h2 class="admin-user-edit-card__title">Departamento</h2>
+                  <p class="admin-user-edit-card__description">
+                    Asigna el area interna correspondiente para mantener la organizacion actualizada.
+                  </p>
+                </div>
+                <span class="admin-user-edit-card__badge admin-user-edit-card__badge--department">
+                  {{ managed_user.current_department_name }}
+                </span>
+              </div>
+
+              {% if managed_user.can_change_department %}
+                <form
+                  method="post"
+                  action="{% url 'dashboard:admin-user-department' managed_user.user.pk %}"
+                  class="admin-user-edit-form"
+                >
+                  {% csrf_token %}
+                  <input type="hidden" name="next" value="{{ request.path }}">
+                  <label class="admin-user-edit-form__label" for="department-select">Departamento</label>
+                  <select
+                    id="department-select"
+                    name="department"
+                    class="ui-select admin-user-edit-form__select"
+                  >
+                    <option value="">Sin departamento</option>
+                    {% for department in available_departments %}
+                      <option
+                        value="{{ department.pk }}"
+                        {% if department.pk == managed_user.current_department_id %}selected{% endif %}
+                      >
+                        {{ department.name }}
+                      </option>
+                    {% endfor %}
+                  </select>
+                  {% include "components/ui/button_principal.html" with label="Guardar departamento" type="submit" size="md" class_name="admin-user-edit-form__submit" %}
+                </form>
+              {% else %}
+                <p class="admin-user-edit-card__note">
+                  Este usuario aun no tiene ficha de empleado, por lo que no puede recibir departamento desde este panel.
+                </p>
+              {% endif %}
+            </article>
+
+            <article class="admin-user-edit-card admin-user-edit-card--wide">
+              <div class="admin-user-edit-card__heading">
+                <div>
+                  <h2 class="admin-user-edit-card__title">Acceso al sistema</h2>
+                  <p class="admin-user-edit-card__description">
+                    Revisa el estado de acceso y activa o desactiva la cuenta segun la situacion real del usuario.
+                  </p>
+                </div>
+                <span class="admin-user-edit-card__badge{% if managed_user.user.is_active %} admin-user-edit-card__badge--active{% endif %}">
+                  {{ managed_user.access_status_label }}
+                </span>
+              </div>
+
+              <div class="admin-user-edit-access">
+                <div class="admin-user-edit-access__details">
+                  <article class="admin-user-edit-access__detail">
+                    <span class="admin-user-edit-access__label">Ultimo acceso</span>
+                    <strong class="admin-user-edit-access__value">
+                      {% if managed_user.user.last_login %}
+                        {{ managed_user.user.last_login|date:"d-m-Y H:i" }}
+                      {% else %}
+                        Nunca
+                      {% endif %}
+                    </strong>
+                  </article>
+                  <article class="admin-user-edit-access__detail">
+                    <span class="admin-user-edit-access__label">Contrasena</span>
+                    <strong class="admin-user-edit-access__value">
+                      {{ managed_user.has_usable_password|yesno:"Configurada,Sin configurar" }}
+                    </strong>
+                  </article>
+                  <article class="admin-user-edit-access__detail">
+                    <span class="admin-user-edit-access__label">Registro</span>
+                    <strong class="admin-user-edit-access__value">
+                      {% if managed_user.user.registered_at %}
+                        {{ managed_user.user.registered_at|date:"d-m-Y H:i" }}
+                      {% else %}
+                        Sin completar
+                      {% endif %}
+                    </strong>
+                  </article>
+                  <article class="admin-user-edit-access__detail">
+                    <span class="admin-user-edit-access__label">Ficha de empleado</span>
+                    <strong class="admin-user-edit-access__value">
+                      {{ managed_user.has_employee_profile|yesno:"Si,No" }}
+                    </strong>
+                  </article>
+                </div>
+
+                <div class="admin-user-edit-access__actions">
+                  {% if managed_user.can_change_access_state %}
+                    <form
+                      method="post"
+                      action="{% url 'dashboard:admin-user-access-state' managed_user.user.pk %}"
+                      class="admin-user-edit-access__form"
+                    >
+                      {% csrf_token %}
+                      <input type="hidden" name="next" value="{{ request.path }}">
+                      <input type="hidden" name="is_active" value="{% if managed_user.user.is_active %}0{% else %}1{% endif %}">
+                      {% if managed_user.user.is_active %}
+                        <button class="ui-btn ui-btn--cancel ui-btn--md admin-user-edit-access__button" type="submit">
+                          Desactivar acceso
+                        </button>
+                      {% elif managed_user.has_usable_password %}
+                        <button class="ui-btn ui-btn--primary ui-btn--md admin-user-edit-access__button" type="submit">
+                          Activar acceso
+                        </button>
+                      {% else %}
+                        <p class="admin-user-edit-card__note">
+                          La cuenta aun necesita completar su acceso desde el enlace inicial antes de poder activarse manualmente.
+                        </p>
+                      {% endif %}
+                    </form>
+                  {% else %}
+                    <p class="admin-user-edit-card__note">
+                      Este usuario se gestiona desde Django admin.
+                    </p>
+                  {% endif %}
+                </div>
+              </div>
+            </article>
+          </section>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
+
+{% block extra_js %}
+  {{ block.super }}
+  <script>
+    (function () {
+      document.body.classList.add("modal-open");
+      window.addEventListener("pagehide", function () {
+        document.body.classList.remove("modal-open");
+      });
+    })();
+  </script>
+{% endblock %}

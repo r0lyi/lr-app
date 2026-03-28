@@ -2,7 +2,8 @@
 
 from django.shortcuts import render
 
-from apps.audit.selectors import get_audit_logs
+from apps.audit.forms import AuditLogFilterForm
+from apps.audit.selectors import get_audit_log_summary, get_audit_logs
 from apps.core.utils.decorators import role_required
 from apps.dashboard.services.layout_context import build_dashboard_base_context
 
@@ -16,7 +17,10 @@ def audit_log_view(request):
     comodo de revisar sin conocimientos tecnicos.
     """
 
-    audit_logs = get_audit_logs()
+    filter_form = AuditLogFilterForm(request.GET or None)
+    filter_data = filter_form.cleaned_data if filter_form.is_valid() else None
+    audit_logs = get_audit_logs(filters=filter_data)
+    summary = get_audit_log_summary(filters=filter_data)
     return render(
         request,
         "audit/audit_log.html",
@@ -28,6 +32,8 @@ def audit_log_view(request):
             extra_context={
                 "audit_logs": audit_logs,
                 "audit_logs_count": audit_logs.count(),
+                "audit_log_filter_form": filter_form,
+                **summary,
             },
         ),
     )
