@@ -1,20 +1,20 @@
-"""Vista minima del panel de recursos humanos."""
+"""Vistas del panel de gestion de solicitudes para RRHH y admin."""
 
 from django.urls import reverse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 
 from apps.core.utils.decorators import role_required
 from apps.dashboard.services.layout_context import build_dashboard_base_context
+from apps.users.selectors import get_primary_role
 from apps.vacations.forms import RrhhVacationRequestFilterForm
 from apps.vacations.selectors import get_filtered_rrhh_vacation_requests
 
 
-@role_required("rrhh", allow_admin=True)
-def rrhh_home_view(request):
-    """Muestra el listado basico de solicitudes visible para RRHH.
+def _render_requests_management_view(request, *, role_name, active_section):
+    """Renderiza el panel compartido de solicitudes para RRHH o admin.
 
-    En esta primera iteracion RRHH no revisa ni filtra todavia: solo necesita
-    una tabla sencilla para ver quien ha solicitado vacaciones y con que rango.
+    La logica de lectura y filtrado sigue viviendo en ``vacations``. Aqui solo
+    decidimos el contexto visual y la URL de exportacion que necesita el panel.
     """
     default_status_name = "pending"
 
@@ -48,19 +48,62 @@ def rrhh_home_view(request):
     if export_querystring:
         export_url = f"{export_url}?{export_querystring}"
 
+    panel_title = "Solicitudes"
+    if role_name == "admin":
+        panel_description = (
+            "Gestiona y revisa las solicitudes registradas desde el panel de "
+            "administracion sin salir de tu area de trabajo."
+        )
+    else:
+        panel_description = (
+            "Visualiza, filtra y revisa las solicitudes activas del equipo "
+            "desde un solo panel."
+        )
+
     return render(
         request,
         "dashboard/rrhh_home.html",
         build_dashboard_base_context(
             request.user,
-            "rrhh",
+            role_name,
             request=request,
-            active_section="home",
+            active_section=active_section,
             extra_context={
                 "export_url": export_url,
                 "filter_form": filter_form,
                 "vacation_requests": vacation_requests,
                 "filtered_requests_count": vacation_requests.count(),
+                "requests_page_title": panel_title,
+                "requests_page_description": panel_description,
             },
         ),
+    )
+
+
+@role_required("rrhh", allow_admin=True)
+def rrhh_home_view(request):
+    """Muestra el panel de solicitudes para RRHH.
+
+    Si entra un admin por esta ruta antigua, lo redirigimos a su entrada propia
+    para mantener una experiencia consistente y un menu lateral correcto.
+    """
+
+    if get_primary_role(request.user) == "admin":
+        return redirect("dashboard:admin-requests")
+
+    return _render_requests_management_view(
+        request,
+        role_name="rrhh",
+        active_section="home",
+    )
+
+
+@role_required("admin")
+def admin_requests_view(request):
+    """Muestra al admin la misma gestion de solicitudes que usa RRHH."""
+
+    return _render_requests_management_view(
+        request,
+        role_name="admin",
+        active_section="requests",
     )

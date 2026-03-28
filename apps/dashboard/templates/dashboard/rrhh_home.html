@@ -1,7 +1,9 @@
 {% extends "layouts/dashboard_base.html" %}
 {% load static %}
 
-{% block title %}Panel de RRHH{% endblock %}
+{% block title %}{{ requests_page_title|default:"Solicitudes" }}{% endblock %}
+
+{% block dashboard_header_title %}{{ requests_page_title|default:"Solicitudes" }}{% endblock %}
 
 {% block dashboard_css %}
   {{ block.super }}
@@ -15,7 +17,7 @@
         <div>
           <h1 class="dash-card-title">Solicitudes</h1>
           <p class="rrhh-home-card__description">
-            Visualiza, filtra y revisa las solicitudes activas del equipo desde un solo panel.
+            {{ requests_page_description|default:"Visualiza, filtra y revisa las solicitudes activas del equipo desde un solo panel." }}
           </p>
         </div>
         <div class="rrhh-home-card__count">

@@ -140,7 +140,7 @@ class DashboardRoutingTests(DashboardRoleBaseTestCase):
 
         rrhh_home = self.client.get(reverse("dashboard:rrhh-home"))
         self.assertEqual(rrhh_home.status_code, 200)
-        self.assertContains(rrhh_home, "Panel de RRHH")
+        self.assertContains(rrhh_home, "Solicitudes")
         self.assertContains(rrhh_home, "Filtrar")
         self.assertContains(rrhh_home, "Nombre")
         self.assertContains(rrhh_home, "Apellidos")
@@ -239,3 +239,39 @@ class DashboardRoutingTests(DashboardRoleBaseTestCase):
         admin_home = self.client.get(reverse("dashboard:admin-home"))
         self.assertEqual(admin_home.status_code, 200)
         self.assertContains(admin_home, "Panel de administrador")
+
+    def test_admin_can_open_requests_management_with_same_flow_as_rrhh(self):
+        user = self.create_active_user(
+            email="admin-requests@example.com",
+            dni="10101010P",
+        )
+        user.roles.set([self.admin_role])
+        employee_user = self.create_active_user(
+            email="employee-for-admin-requests@example.com",
+            dni="12121212M",
+        )
+        employee = self.create_employee_profile(
+            employee_user,
+            first_name="Lucia",
+            last_name="Martinez",
+        )
+        self.create_vacation_request(
+            employee,
+            status=self.pending_status,
+            start_date=date(2026, 6, 10),
+            end_date=date(2026, 6, 14),
+            requested_days="5.00",
+        )
+
+        self.client.force_login(user)
+
+        response = self.client.get(reverse("dashboard:admin-requests"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Solicitudes")
+        self.assertContains(response, "Gestiona y revisa las solicitudes")
+        self.assertContains(response, "Lucia")
+        self.assertContains(response, "Martinez")
+        self.assertContains(response, "10-06-2026")
+        self.assertContains(response, "14-06-2026")
+        self.assertContains(response, "Exportar Excel")

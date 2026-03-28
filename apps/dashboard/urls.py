@@ -4,6 +4,7 @@ from django.urls import path
 
 from .views import (
     admin_home_view,
+    admin_requests_view,
     admin_user_active_state_update_view,
     admin_user_department_update_view,
     admin_user_edit_view,
@@ -22,6 +23,7 @@ urlpatterns = [
     path("employee/", employee_home_view, name="employee-home"),
     path("rrhh/", rrhh_home_view, name="rrhh-home"),
     path("admin/", admin_home_view, name="admin-home"),
+    path("admin/requests/", admin_requests_view, name="admin-requests"),
     path("admin/users/", admin_user_list_view, name="admin-users"),
     path("admin/users/<int:user_id>/edit/", admin_user_edit_view, name="admin-user-edit"),
     path(
