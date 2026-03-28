@@ -64,6 +64,18 @@ ROLE_NAV_CONFIG = {
             "icon": "home",
         },
         {
+            "section": "request",
+            "url_name": "vacations:create-request",
+            "label": "Solicitar",
+            "icon": "drop",
+        },
+        {
+            "section": "requests",
+            "url_name": "dashboard:admin-requests",
+            "label": "Solicitudes",
+            "icon": "drop",
+        },
+        {
             "section": "users",
             "url_name": "dashboard:admin-users",
             "label": "Usuarios",

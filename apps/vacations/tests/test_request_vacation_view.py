@@ -15,6 +15,7 @@ class VacationRequestViewTests(VacationBaseTestCase):
     @classmethod
     def setUpTestData(cls):
         cls.rrhh_role = Role.objects.get(name="rrhh")
+        cls.admin_role = Role.objects.get(name="admin")
 
     def create_rrhh_user(self, *, email, dni):
         """Crea un usuario RRHH activo para las pruebas de integracion."""
@@ -27,6 +28,13 @@ class VacationRequestViewTests(VacationBaseTestCase):
         )
         user.roles.set([self.rrhh_role])
         return user
+
+    def create_admin_user_with_employee_profile(self, *, email, dni):
+        """Crea un admin con ficha Employee para probar el flujo real."""
+
+        user, employee = self.create_employee_user(email=email, dni=dni)
+        user.roles.set([self.admin_role])
+        return user, employee
 
     def test_employee_can_open_request_page(self):
         user, _employee = self.create_employee_user(
@@ -47,6 +55,21 @@ class VacationRequestViewTests(VacationBaseTestCase):
         self.assertContains(response, "Informacion adicional")
         self.assertContains(response, "Confirmar")
         self.assertContains(response, "selected-range-summary")
+
+    def test_admin_can_open_request_page_for_testing(self):
+        user, _employee = self.create_admin_user_with_employee_profile(
+            email="admin-vacations-open@example.com",
+            dni="22222222J",
+        )
+
+        self.client.force_login(user)
+
+        response = self.client.get(reverse("vacations:create-request"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Solicitar vacaciones")
+        self.assertContains(response, "Derecho anual")
+        self.assertContains(response, reverse("dashboard:admin-home"))
 
     def test_employee_can_create_pending_vacation_request(self):
         user, employee = self.create_employee_user(
@@ -83,6 +106,44 @@ class VacationRequestViewTests(VacationBaseTestCase):
         )
         self.assertEqual(notification.vacation_request, vacation_request)
         self.assertIn("Ana Lopez", notification.message)
+
+    def test_admin_can_create_pending_vacation_request_for_testing(self):
+        user, employee = self.create_admin_user_with_employee_profile(
+            email="admin-vacations-create@example.com",
+            dni="33333333P",
+        )
+        rrhh_user = self.create_rrhh_user(
+            email="rrhh-vacations-admin-create@example.com",
+            dni="44444444A",
+        )
+
+        self.client.force_login(user)
+
+        response = self.client.post(
+            reverse("vacations:create-request"),
+            {
+                "start_date": "2026-08-03",
+                "end_date": "2026-08-06",
+                "employee_comment": "Prueba interna del panel admin",
+            },
+        )
+
+        self.assertRedirects(response, reverse("vacations:create-request"))
+
+        vacation_request = VacationRequest.objects.get(employee=employee)
+        self.assertEqual(vacation_request.status.name, "pending")
+        self.assertEqual(str(vacation_request.requested_days), "4.00")
+        self.assertEqual(
+            vacation_request.employee_comment,
+            "Prueba interna del panel admin",
+        )
+
+        notification = Notification.objects.get(user=rrhh_user)
+        self.assertEqual(
+            notification.notification_type,
+            Notification.Type.VACATION_REQUEST_SUBMISSION,
+        )
+        self.assertEqual(notification.vacation_request, vacation_request)
 
     def test_invalid_post_keeps_form_and_shows_error(self):
         user, employee = self.create_employee_user(

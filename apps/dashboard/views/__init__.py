@@ -12,10 +12,11 @@ from apps.users.views import (
 from .view_admin import admin_home_view
 from .view_dashboard import home_view
 from .view_error_400 import error_400_view
-from .view_rrhh import rrhh_home_view
+from .view_rrhh import admin_requests_view, rrhh_home_view
 
 __all__ = [
     "admin_home_view",
+    "admin_requests_view",
     "admin_user_active_state_update_view",
     "admin_user_department_update_view",
     "admin_user_edit_view",
