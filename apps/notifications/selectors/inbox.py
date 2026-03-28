@@ -24,6 +24,7 @@ def get_user_inbox_notifications(user, *, is_read=None, limit=None):
     notifications = (
         Notification.objects.filter(user=user)
         .select_related(
+            "created_by",
             "vacation_request",
             "vacation_request__employee",
             "vacation_request__status",
@@ -77,6 +78,6 @@ def get_user_inbox_notification_by_id(user, notification_id):
 
     return (
         Notification.objects.filter(user=user)
-        .select_related("vacation_request")
+        .select_related("created_by", "vacation_request")
         .get(pk=notification_id)
     )
