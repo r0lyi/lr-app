@@ -45,6 +45,34 @@
         </div>
       </div>
 
+      <form method="get" class="admin-users-filters" novalidate>
+        <div class="admin-users-filters__grid">
+          <div class="admin-users-filters__field admin-users-filters__field--search">
+            <label class="admin-users-filters__label" for="{{ filter_form.search.id_for_label }}">Buscar usuario</label>
+            {{ filter_form.search }}
+          </div>
+          <div class="admin-users-filters__field">
+            <label class="admin-users-filters__label" for="{{ filter_form.primary_role.id_for_label }}">Rol</label>
+            {{ filter_form.primary_role }}
+          </div>
+          <div class="admin-users-filters__field">
+            <label class="admin-users-filters__label" for="{{ filter_form.access_state.id_for_label }}">Acceso</label>
+            {{ filter_form.access_state }}
+          </div>
+          <div class="admin-users-filters__field">
+            <label class="admin-users-filters__label" for="{{ filter_form.department.id_for_label }}">Departamento</label>
+            {{ filter_form.department }}
+          </div>
+        </div>
+
+        <div class="admin-users-filters__actions">
+          {% include "components/ui/button_principal.html" with label="Filtrar" type="submit" size="md" class_name="admin-users-filters__submit" %}
+          <a href="{% url 'dashboard:admin-users' %}" class="ui-btn ui-btn--secondary ui-btn--md admin-users-filters__reset">
+            Limpiar filtros
+          </a>
+        </div>
+      </form>
+
       <div class="admin-users-table">
         {% if managed_users %}
           <table class="data-table">
@@ -123,7 +151,7 @@
           </table>
         {% else %}
           <p class="admin-users-table__empty">
-            No hay usuarios registrados en el sistema.
+            No hay usuarios que coincidan con los filtros aplicados.
           </p>
         {% endif %}
       </div>

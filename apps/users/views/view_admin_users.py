@@ -9,6 +9,7 @@ from django.utils.http import url_has_allowed_host_and_scheme
 from apps.core.utils.decorators import role_required
 from apps.dashboard.services.layout_context import build_dashboard_base_context
 from apps.employees.models import Department
+from apps.users.forms import AdminUserFilterForm
 from apps.users.models import Role, User
 from apps.users.selectors import (
     get_admin_dashboard_summary,
@@ -49,7 +50,9 @@ def admin_user_list_view(request):
     donde se concentran consultas de otros dominios.
     """
 
-    managed_users = get_admin_user_list()
+    filter_form = AdminUserFilterForm(request.GET or None)
+    filter_data = filter_form.cleaned_data if filter_form.is_valid() else None
+    managed_users = get_admin_user_list(filters=filter_data)
     context = build_dashboard_base_context(
         request.user,
         "admin",
@@ -59,6 +62,7 @@ def admin_user_list_view(request):
             **get_admin_dashboard_summary(),
             "managed_users": managed_users,
             "managed_users_count": len(managed_users),
+            "filter_form": filter_form,
         },
     )
     return render(request, "users/admin_user_list.html", context)

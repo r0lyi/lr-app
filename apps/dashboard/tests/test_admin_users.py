@@ -128,6 +128,98 @@ class AdminUsersTests(DashboardRoleBaseTestCase):
         self.assertContains(response, "Editar usuario")
         self.assertEqual(response.context["managed_users_count"], User.objects.count())
 
+    def test_admin_users_page_filters_by_search_role_access_and_department(self):
+        admin = self.create_active_user(
+            email="admin-users-filters@example.com",
+            dni="15151515N",
+        )
+        admin.roles.set([self.admin_role])
+
+        operations = self.create_department(name="Operaciones")
+        finances = self.create_department(name="Finanzas")
+
+        employee_user = self.create_active_user(
+            email="laura.sanz@example.com",
+            dni="26262626F",
+        )
+        employee_profile = self.create_employee_profile(
+            employee_user,
+            first_name="Laura",
+            last_name="Sanz",
+        )
+        employee_profile.department = operations
+        employee_profile.save(update_fields=["department"])
+
+        rrhh_user = self.create_active_user(
+            email="manuel.rrhh@example.com",
+            dni="13131313S",
+        )
+        rrhh_user.roles.set([self.rrhh_role])
+        rrhh_profile = self.create_employee_profile(
+            rrhh_user,
+            first_name="Manuel",
+            last_name="Lopez",
+        )
+        rrhh_profile.department = finances
+        rrhh_profile.save(update_fields=["department"])
+
+        pending_user = self.create_active_user(
+            email="pendiente@example.com",
+            dni="24242424X",
+        )
+        pending_user.is_active = False
+        pending_user.set_unusable_password()
+        pending_user.save(update_fields=["is_active", "password"])
+
+        self.client.force_login(admin)
+
+        response = self.client.get(
+            reverse("dashboard:admin-users"),
+            {
+                "search": "Laura",
+                "primary_role": "employee",
+                "access_state": "active",
+                "department": operations.pk,
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Laura Sanz")
+        self.assertNotContains(response, "Manuel Lopez")
+        self.assertNotContains(response, "pendiente@example.com")
+        self.assertEqual(response.context["managed_users_count"], 1)
+
+    def test_admin_users_page_can_filter_pending_activation_accounts(self):
+        admin = self.create_active_user(
+            email="admin-users-pending@example.com",
+            dni="56565656P",
+        )
+        admin.roles.set([self.admin_role])
+
+        active_user = self.create_active_user(
+            email="active-users-filter@example.com",
+            dni="78787878K",
+        )
+
+        pending_user = self.create_active_user(
+            email="pending-users-filter@example.com",
+            dni="90909090A",
+        )
+        pending_user.is_active = False
+        pending_user.set_unusable_password()
+        pending_user.save(update_fields=["is_active", "password"])
+
+        self.client.force_login(admin)
+
+        response = self.client.get(
+            reverse("dashboard:admin-users"),
+            {"access_state": "pending_activation"},
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "pending-users-filter@example.com")
+        self.assertNotContains(response, "active-users-filter@example.com")
+
     def test_admin_can_open_edit_user_page(self):
         admin = self.create_active_user(
             email="admin-edit-user@example.com",

@@ -5,6 +5,9 @@ consumen y preparan pertenece a usuarios, roles y fichas de empleado. El
 dashboard solo usa estos datos para pintarlos en pantalla.
 """
 
+from django.contrib.auth.hashers import UNUSABLE_PASSWORD_PREFIX
+from django.db.models import Q
+
 from apps.employees.models import Employee
 from apps.users.models import User
 from apps.vacations.models import VacationRequest
@@ -95,7 +98,7 @@ def get_admin_dashboard_summary():
     }
 
 
-def get_admin_user_list(*, limit=None):
+def get_admin_user_list(*, limit=None, filters=None):
     """Devuelve filas ya preparadas para el listado administrativo.
 
     La vista no necesita conocer detalles de roles o de la ficha ``Employee``.
@@ -108,6 +111,7 @@ def get_admin_user_list(*, limit=None):
         .prefetch_related("roles")
         .order_by("email")
     )
+    users = _apply_admin_user_filters(users, filters=filters)
     if limit is not None:
         users = users[:limit]
 
@@ -157,3 +161,47 @@ def _build_admin_user_row(user):
         "access_status_label": _get_access_status_label(user),
         "has_usable_password": user.has_usable_password(),
     }
+
+
+def _apply_admin_user_filters(users, *, filters=None):
+    """Aplica los filtros del listado de usuarios de forma desacoplada.
+
+    Separamos esta lógica para que la vista solo entregue los datos limpios
+    del formulario y el selector se encargue del filtrado real.
+    """
+
+    if not filters:
+        return users
+
+    search = (filters.get("search") or "").strip()
+    primary_role = (filters.get("primary_role") or "").strip()
+    access_state = (filters.get("access_state") or "").strip()
+    department = filters.get("department")
+
+    if search:
+        users = users.filter(
+            Q(email__icontains=search)
+            | Q(dni__icontains=search)
+            | Q(employee_profile__first_name__icontains=search)
+            | Q(employee_profile__last_name__icontains=search)
+        )
+
+    if primary_role:
+        users = users.filter(roles__name=primary_role)
+
+    if access_state == "active":
+        users = users.filter(is_active=True)
+    elif access_state == "inactive":
+        users = users.filter(is_active=False).exclude(
+            password__startswith=UNUSABLE_PASSWORD_PREFIX
+        )
+    elif access_state == "pending_activation":
+        users = users.filter(
+            is_active=False,
+            password__startswith=UNUSABLE_PASSWORD_PREFIX,
+        )
+
+    if department is not None:
+        users = users.filter(employee_profile__department=department)
+
+    return users.distinct()
