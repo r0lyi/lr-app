@@ -61,6 +61,16 @@ def _get_user_display_name(user):
     return email or "Usuario"
 
 
+def _get_access_status_label(user):
+    """Devuelve un estado de acceso redactado de forma entendible."""
+
+    if user.is_active:
+        return "Acceso activo"
+    if not user.has_usable_password():
+        return "Pendiente de activar"
+    return "Acceso desactivado"
+
+
 def get_admin_dashboard_summary():
     """Construye el resumen general mostrado en la home de administracion.
 
@@ -73,6 +83,7 @@ def get_admin_dashboard_summary():
     return {
         "total_users": User.objects.count(),
         "active_users": User.objects.filter(is_active=True).count(),
+        "inactive_users": User.objects.filter(is_active=False).count(),
         "total_employee_profiles": Employee.objects.count(),
         "total_vacation_requests": VacationRequest.objects.count(),
         "total_rrhh_users": User.objects.filter(roles__name="rrhh")
@@ -93,27 +104,56 @@ def get_admin_user_list(*, limit=None):
     """
 
     users = (
-        User.objects.select_related("employee_profile")
+        User.objects.select_related("employee_profile__department")
         .prefetch_related("roles")
         .order_by("email")
     )
     if limit is not None:
         users = users[:limit]
 
-    user_rows = []
-    for user in users:
-        primary_role_name = _get_prefetched_primary_role_name(user)
-        user_rows.append(
-            {
-                "user": user,
-                "display_name": _get_user_display_name(user),
-                "primary_role_name": primary_role_name,
-                "primary_role_label": ROLE_LABELS.get(
-                    primary_role_name,
-                    "Sin rol",
-                ),
-                "has_employee_profile": hasattr(user, "employee_profile"),
-                "can_change_primary_role": not user.is_superuser,
-            }
-        )
-    return user_rows
+    return [_build_admin_user_row(user) for user in users]
+
+
+def get_admin_user_detail(*, user_id):
+    """Devuelve una sola ficha administrativa preparada para la vista de edición."""
+
+    user = (
+        User.objects.select_related("employee_profile__department")
+        .prefetch_related("roles")
+        .get(pk=user_id)
+    )
+    return _build_admin_user_row(user)
+
+
+def _build_admin_user_row(user):
+    """Normaliza los datos de un usuario para las pantallas administrativas."""
+
+    primary_role_name = _get_prefetched_primary_role_name(user)
+    try:
+        employee_profile = user.employee_profile
+    except Employee.DoesNotExist:
+        employee_profile = None
+
+    return {
+        "user": user,
+        "display_name": _get_user_display_name(user),
+        "primary_role_name": primary_role_name,
+        "primary_role_label": ROLE_LABELS.get(
+            primary_role_name,
+            "Sin rol",
+        ),
+        "has_employee_profile": employee_profile is not None,
+        "can_change_primary_role": not user.is_superuser,
+        "can_change_access_state": not user.is_superuser,
+        "can_change_department": employee_profile is not None,
+        "current_department_id": (
+            employee_profile.department_id if employee_profile else None
+        ),
+        "current_department_name": (
+            employee_profile.department.name
+            if employee_profile and employee_profile.department
+            else "Sin departamento"
+        ),
+        "access_status_label": _get_access_status_label(user),
+        "has_usable_password": user.has_usable_password(),
+    }
