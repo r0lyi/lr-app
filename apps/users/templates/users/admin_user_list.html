@@ -37,6 +37,7 @@
                 <th>Rol principal</th>
                 <th>Activo</th>
                 <th>Ficha empleado</th>
+                <th>Cambiar rol</th>
               </tr>
             </thead>
             <tbody>
@@ -57,6 +58,36 @@
                   </td>
                   <td data-label="Ficha empleado">
                     {{ user_row.has_employee_profile|yesno:"Si,No" }}
+                  </td>
+                  <td data-label="Cambiar rol">
+                    {% if user_row.can_change_primary_role %}
+                      <form
+                        method="post"
+                        action="{% url 'dashboard:admin-user-primary-role' user_row.user.pk %}"
+                        class="admin-users-table__role-form"
+                      >
+                        {% csrf_token %}
+                        <select
+                          name="primary_role"
+                          class="ui-select admin-users-table__role-select"
+                          aria-label="Cambiar rol principal de {{ user_row.user.email }}"
+                        >
+                          {% for role in available_roles %}
+                            <option
+                              value="{{ role.pk }}"
+                              {% if role.name == user_row.primary_role_name %}selected{% endif %}
+                            >
+                              {{ role.description|default:role.name|capfirst }}
+                            </option>
+                          {% endfor %}
+                        </select>
+                        {% include "components/ui/button_principal.html" with label="Guardar" type="submit" size="sm" class_name="admin-users-table__role-submit" %}
+                      </form>
+                    {% else %}
+                      <span class="admin-users-table__system-note">
+                        Gestionar desde Django admin
+                      </span>
+                    {% endif %}
                   </td>
                 </tr>
               {% endfor %}

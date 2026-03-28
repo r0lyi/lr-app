@@ -4,7 +4,7 @@ from django.shortcuts import render
 
 from apps.core.utils.decorators import role_required
 from apps.dashboard.services.layout_context import build_dashboard_base_context
-from apps.users.selectors import get_admin_dashboard_summary, get_admin_user_list
+from apps.users.selectors import get_admin_dashboard_summary
 
 
 @role_required("admin")
@@ -25,7 +25,6 @@ def admin_home_view(request):
             active_section="home",
             extra_context={
                 **get_admin_dashboard_summary(),
-                "recent_users": get_admin_user_list(limit=5),
             },
         ),
     )

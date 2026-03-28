@@ -109,3 +109,30 @@ class DashboardPermissionTests(DashboardRoleBaseTestCase):
         self.assertContains(admin_users_response, "Usuarios del sistema")
         self.assertEqual(rrhh_response.status_code, 200)
         self.assertContains(rrhh_response, "Panel de RRHH")
+
+    def test_employee_cannot_change_roles_from_admin_users_panel(self):
+        user = self.create_active_user(
+            email="employee-admin-role-change@example.com",
+            dni="37373737W",
+        )
+        self.create_employee_profile(user)
+
+        target_user = self.create_active_user(
+            email="target-admin-role-change@example.com",
+            dni="48484848C",
+        )
+
+        self.client.force_login(user)
+
+        response = self.client.post(
+            reverse("dashboard:admin-user-primary-role", args=[target_user.pk]),
+            {"primary_role": self.rrhh_role.pk},
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse("dashboard:home"))
+        target_user.refresh_from_db()
+        self.assertEqual(
+            list(target_user.roles.values_list("name", flat=True)),
+            ["employee"],
+        )

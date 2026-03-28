@@ -56,52 +56,5 @@
         </article>
       </div>
     </section>
-
-    <section class="dash-card admin-home-card">
-      <div class="admin-home-card__heading">
-        <div>
-          <h2 class="dash-card-title">Ultimos usuarios visibles</h2>
-          <p class="admin-home-card__description">
-            Vista rapida de los primeros usuarios cargados en el sistema para
-            revisar correo, rol principal y estado sin salir del inicio.
-          </p>
-        </div>
-      </div>
-
-      <div class="admin-home-users-table">
-        {% if recent_users %}
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Nombre</th>
-                <th>Correo</th>
-                <th>DNI</th>
-                <th>Rol principal</th>
-                <th>Activo</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for user_row in recent_users %}
-                <tr>
-                  <td data-label="Nombre">{{ user_row.display_name }}</td>
-                  <td data-label="Correo">{{ user_row.user.email }}</td>
-                  <td data-label="DNI">{{ user_row.user.dni }}</td>
-                  <td data-label="Rol principal">{{ user_row.primary_role_label }}</td>
-                  <td data-label="Activo">
-                    <span class="admin-home-users-table__status{% if user_row.user.is_active %} admin-home-users-table__status--active{% endif %}">
-                      {{ user_row.user.is_active|yesno:"Activo,Inactivo" }}
-                    </span>
-                  </td>
-                </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        {% else %}
-          <p class="admin-home-users-table__empty">
-            No hay usuarios registrados todavia.
-          </p>
-        {% endif %}
-      </div>
-    </section>
   </section>
 {% endblock %}

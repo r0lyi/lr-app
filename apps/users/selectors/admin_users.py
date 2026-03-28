@@ -113,6 +113,7 @@ def get_admin_user_list(*, limit=None):
                     "Sin rol",
                 ),
                 "has_employee_profile": hasattr(user, "employee_profile"),
+                "can_change_primary_role": not user.is_superuser,
             }
         )
     return user_rows

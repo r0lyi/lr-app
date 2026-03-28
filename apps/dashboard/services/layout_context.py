@@ -70,6 +70,12 @@ ROLE_NAV_CONFIG = {
             "icon": "home",
         },
         {
+            "section": "activity",
+            "url_name": "audit:activity-log",
+            "label": "Actividad",
+            "icon": "home",
+        },
+        {
             "section": "profile",
             "url_name": "employees:profile",
             "label": "Perfil",

@@ -119,4 +119,35 @@ class AdminUsersTests(DashboardRoleBaseTestCase):
         self.assertContains(response, "Inactivo")
         self.assertContains(response, "Si")
         self.assertContains(response, "No")
+        self.assertContains(
+            response,
+            reverse("dashboard:admin-user-primary-role", args=[employee_user.pk]),
+        )
         self.assertEqual(response.context["managed_users_count"], User.objects.count())
+
+    def test_admin_can_change_the_primary_role_from_users_list(self):
+        admin = self.create_active_user(
+            email="admin-change-role@example.com",
+            dni="15151515N",
+        )
+        admin.roles.set([self.admin_role])
+
+        target_user = self.create_active_user(
+            email="target-change-role@example.com",
+            dni="26262626F",
+        )
+        target_user.roles.set([self.rrhh_role])
+
+        self.client.force_login(admin)
+
+        response = self.client.post(
+            reverse("dashboard:admin-user-primary-role", args=[target_user.pk]),
+            {"primary_role": self.employee_role.pk},
+        )
+
+        self.assertRedirects(response, reverse("dashboard:admin-users"))
+        target_user.refresh_from_db()
+        self.assertEqual(
+            list(target_user.roles.values_list("name", flat=True)),
+            ["employee"],
+        )

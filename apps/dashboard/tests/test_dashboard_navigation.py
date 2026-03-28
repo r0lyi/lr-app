@@ -47,6 +47,7 @@ class DashboardNavigationTests(DashboardRoleBaseTestCase):
         admin_home = self.client.get(reverse("dashboard:admin-home"))
         self.assertContains(admin_home, reverse("dashboard:admin-home"))
         self.assertContains(admin_home, reverse("dashboard:admin-users"))
+        self.assertContains(admin_home, reverse("audit:activity-log"))
         self.assertContains(admin_home, reverse("employees:profile"))
         self.assertNotContains(admin_home, reverse("dashboard:rrhh-home"))
 
