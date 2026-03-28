@@ -69,7 +69,17 @@
                   {{ notification.sent_at|date:"d-m-Y H:i" }}
                 </time>
               </div>
-              <p class="dash-notifications__message">{{ notification.message }}</p>
+              <div class="dash-notifications__content">
+                {% if notification.title %}
+                  <p class="dash-notifications__message-title">{{ notification.title }}</p>
+                {% endif %}
+                <p class="dash-notifications__message">{{ notification.message }}</p>
+                {% if notification.created_by %}
+                  <p class="dash-notifications__sender">
+                    Enviado por {{ notification.created_by.email }}
+                  </p>
+                {% endif %}
+              </div>
               <div class="dash-notifications__item-actions">
                 {% if not notification.is_read %}
                   <form

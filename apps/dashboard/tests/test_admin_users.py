@@ -5,6 +5,7 @@ from datetime import date
 from django.urls import reverse
 
 from apps.employees.models import Employee
+from apps.notifications.models import Notification
 from apps.users.models import User
 from apps.vacations.models import VacationRequest
 
@@ -50,6 +51,7 @@ class AdminUsersTests(DashboardRoleBaseTestCase):
         self.assertContains(response, "Usuarios activos")
         self.assertContains(response, "Fichas de empleado")
         self.assertContains(response, "Solicitudes registradas")
+        self.assertContains(response, "Aviso general")
         self.assertContains(response, reverse("dashboard:admin-users"))
         self.assertEqual(response.context["total_users"], User.objects.count())
         self.assertEqual(
@@ -71,6 +73,52 @@ class AdminUsersTests(DashboardRoleBaseTestCase):
         self.assertEqual(
             response.context["total_admin_users"],
             User.objects.filter(roles__name="admin").distinct().count(),
+        )
+
+    def test_admin_home_can_send_general_notification_to_all_active_users(self):
+        admin = self.create_active_user(
+            email="admin-broadcast-home@example.com",
+            dni="31313131B",
+        )
+        admin.roles.set([self.admin_role])
+
+        employee_user = self.create_active_user(
+            email="employee-broadcast-home@example.com",
+            dni="45454545J",
+        )
+        rrhh_user = self.create_active_user(
+            email="rrhh-broadcast-home@example.com",
+            dni="67676767A",
+        )
+        rrhh_user.roles.set([self.rrhh_role])
+
+        self.client.force_login(admin)
+
+        response = self.client.post(
+            reverse("dashboard:admin-home"),
+            {
+                "title": "Aviso para toda la plantilla",
+                "message": "El sistema estará en mantenimiento esta noche.",
+            },
+        )
+
+        self.assertRedirects(response, reverse("dashboard:admin-home"))
+        notifications = Notification.objects.filter(
+            notification_type=Notification.Type.ADMIN_BROADCAST_MESSAGE
+        )
+        self.assertGreaterEqual(notifications.count(), 3)
+        self.assertGreaterEqual(
+            notifications.filter(created_by=admin).count(),
+            3,
+        )
+        self.assertIn(admin.email, notifications.values_list("user__email", flat=True))
+        self.assertIn(
+            employee_user.email,
+            notifications.values_list("user__email", flat=True),
+        )
+        self.assertIn(
+            rrhh_user.email,
+            notifications.values_list("user__email", flat=True),
         )
 
     def test_admin_users_page_lists_basic_user_data(self):

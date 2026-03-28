@@ -461,6 +461,27 @@
   overflow-wrap: anywhere;
 }
 
+.dash-notifications__content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dash-notifications__message-title {
+  margin: 0;
+  color: #1e293b;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.dash-notifications__sender {
+  margin: 0;
+  color: #94a3b8;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
 .dash-notifications__item-actions {
   margin-top: 12px;
   display: flex;

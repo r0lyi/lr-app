@@ -30,6 +30,10 @@
   flex-shrink: 0;
 }
 
+.admin-home-card--broadcast {
+  gap: 20px;
+}
+
 .admin-home-stats {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -60,6 +64,59 @@
   font-size: clamp(28px, 3vw, 38px);
   font-weight: 800;
   line-height: 1;
+}
+
+.admin-home-broadcast-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px 22px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 18px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+}
+
+.admin-home-broadcast-form__errors {
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: #fff1f2;
+  color: #be123c;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.admin-home-broadcast-form__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.admin-home-broadcast-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-home-broadcast-form__label {
+  color: #475569;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.admin-home-broadcast-form__feedback {
+  margin: 0;
+  color: #ef4444;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.admin-home-broadcast-form__footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.admin-home-broadcast-form__submit {
+  min-width: 220px;
 }
 
 .admin-home-users-table {
@@ -146,6 +203,19 @@
 
   .admin-home-card__cta {
     width: 100%;
+  }
+
+  .admin-home-broadcast-form {
+    padding: 16px;
+  }
+
+  .admin-home-broadcast-form__footer {
+    justify-content: stretch;
+  }
+
+  .admin-home-broadcast-form__submit {
+    width: 100%;
+    min-width: 0;
   }
 
   .admin-home-users-table {

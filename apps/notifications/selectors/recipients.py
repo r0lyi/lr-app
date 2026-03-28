@@ -17,3 +17,8 @@ def get_active_rrhh_notification_recipients():
         roles__name="rrhh",
     ).distinct()
 
+
+def get_admin_broadcast_notification_recipients():
+    """Devuelve los usuarios activos que recibirán un aviso general."""
+
+    return User.objects.filter(is_active=True).distinct()

@@ -289,6 +289,7 @@
   .admin-user-edit-access__details {
     grid-template-columns: 1fr;
   }
+
 }
 
 @media (max-width: 560px) {

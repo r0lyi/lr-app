@@ -56,5 +56,61 @@
         </article>
       </div>
     </section>
+
+    <section class="dash-card admin-home-card admin-home-card--broadcast">
+      <div class="admin-home-card__heading">
+        <div>
+          <h2 class="dash-card-title">Aviso general</h2>
+          <p class="admin-home-card__description">
+            Envía una notificación interna a todos los usuarios activos para comunicar un aviso importante del sistema.
+          </p>
+        </div>
+        <div class="admin-home-card__count">
+          {{ broadcast_recipients_count }} destinatario{{ broadcast_recipients_count|pluralize }}
+        </div>
+      </div>
+
+      <form method="post" class="admin-home-broadcast-form" novalidate>
+        {% csrf_token %}
+
+        {% if broadcast_notification_form.non_field_errors %}
+          <div class="admin-home-broadcast-form__errors">
+            {% for error in broadcast_notification_form.non_field_errors %}
+              <p>{{ error }}</p>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        <div class="admin-home-broadcast-form__grid">
+          <div class="admin-home-broadcast-form__field">
+            <label class="admin-home-broadcast-form__label" for="{{ broadcast_notification_form.title.id_for_label }}">
+              {{ broadcast_notification_form.title.label }}
+            </label>
+            {{ broadcast_notification_form.title }}
+            {% if broadcast_notification_form.title.errors %}
+              {% for error in broadcast_notification_form.title.errors %}
+                <p class="admin-home-broadcast-form__feedback">{{ error }}</p>
+              {% endfor %}
+            {% endif %}
+          </div>
+
+          <div class="admin-home-broadcast-form__field">
+            <label class="admin-home-broadcast-form__label" for="{{ broadcast_notification_form.message.id_for_label }}">
+              {{ broadcast_notification_form.message.label }}
+            </label>
+            {{ broadcast_notification_form.message }}
+            {% if broadcast_notification_form.message.errors %}
+              {% for error in broadcast_notification_form.message.errors %}
+                <p class="admin-home-broadcast-form__feedback">{{ error }}</p>
+              {% endfor %}
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="admin-home-broadcast-form__footer">
+          {% include "components/ui/button_principal.html" with label="Enviar aviso general" type="submit" size="md" class_name="admin-home-broadcast-form__submit" %}
+        </div>
+      </form>
+    </section>
   </section>
 {% endblock %}
