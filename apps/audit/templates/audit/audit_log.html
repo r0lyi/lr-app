@@ -1,0 +1,57 @@
+{% extends "layouts/dashboard_base.html" %}
+{% load static %}
+
+{% block title %}Actividad del sistema{% endblock %}
+
+{% block dashboard_header_title %}Actividad{% endblock %}
+
+{% block dashboard_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/pages/audit_log.css' %}">
+{% endblock %}
+
+{% block dashboard_content %}
+  <section class="audit-log-page">
+    <section class="dash-card audit-log-card">
+      <div class="audit-log-card__heading">
+        <div>
+          <h1 class="dash-card-title">Actividad reciente</h1>
+          <p class="audit-log-card__description">
+            Aqui puedes revisar los cambios importantes realizados en el sistema
+            con mensajes claros y faciles de entender.
+          </p>
+        </div>
+        <div class="audit-log-card__count">
+          {{ audit_logs_count }} evento{{ audit_logs_count|pluralize }}
+        </div>
+      </div>
+
+      <div class="audit-log-table">
+        {% if audit_logs %}
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Realizado por</th>
+                <th>Detalle</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for audit_item in audit_logs %}
+                <tr>
+                  <td data-label="Fecha">{{ audit_item.created_at|date:"d-m-Y H:i" }}</td>
+                  <td data-label="Realizado por">{{ audit_item.user.email }}</td>
+                  <td data-label="Detalle">{{ audit_item.description|default:"Sin detalle disponible." }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% else %}
+          <p class="audit-log-table__empty">
+            Aun no se ha registrado ninguna accion en el historial.
+          </p>
+        {% endif %}
+      </div>
+    </section>
+  </section>
+{% endblock %}

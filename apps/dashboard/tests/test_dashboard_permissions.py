@@ -62,6 +62,34 @@ class DashboardPermissionTests(DashboardRoleBaseTestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse("dashboard:home"))
 
+    def test_employee_cannot_open_admin_users_panel(self):
+        user = self.create_active_user(
+            email="employee-admin-users-block@example.com",
+            dni="12121212M",
+        )
+        self.create_employee_profile(user)
+
+        self.client.force_login(user)
+
+        response = self.client.get(reverse("dashboard:admin-users"))
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse("dashboard:home"))
+
+    def test_rrhh_cannot_open_admin_users_panel(self):
+        user = self.create_active_user(
+            email="rrhh-admin-users-block@example.com",
+            dni="34343434H",
+        )
+        user.roles.set([self.rrhh_role])
+
+        self.client.force_login(user)
+
+        response = self.client.get(reverse("dashboard:admin-users"))
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse("dashboard:home"))
+
     def test_admin_can_open_admin_and_rrhh_panels(self):
         user = self.create_active_user(
             email="admin-protected@example.com",
@@ -72,9 +100,39 @@ class DashboardPermissionTests(DashboardRoleBaseTestCase):
         self.client.force_login(user)
 
         admin_response = self.client.get(reverse("dashboard:admin-home"))
+        admin_users_response = self.client.get(reverse("dashboard:admin-users"))
         rrhh_response = self.client.get(reverse("dashboard:rrhh-home"))
 
         self.assertEqual(admin_response.status_code, 200)
-        self.assertContains(admin_response, "Panel de administrador")
+        self.assertContains(admin_response, "Resumen general")
+        self.assertEqual(admin_users_response.status_code, 200)
+        self.assertContains(admin_users_response, "Usuarios del sistema")
         self.assertEqual(rrhh_response.status_code, 200)
         self.assertContains(rrhh_response, "Panel de RRHH")
+
+    def test_employee_cannot_change_roles_from_admin_users_panel(self):
+        user = self.create_active_user(
+            email="employee-admin-role-change@example.com",
+            dni="37373737W",
+        )
+        self.create_employee_profile(user)
+
+        target_user = self.create_active_user(
+            email="target-admin-role-change@example.com",
+            dni="48484848C",
+        )
+
+        self.client.force_login(user)
+
+        response = self.client.post(
+            reverse("dashboard:admin-user-primary-role", args=[target_user.pk]),
+            {"primary_role": self.rrhh_role.pk},
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse("dashboard:home"))
+        target_user.refresh_from_db()
+        self.assertEqual(
+            list(target_user.roles.values_list("name", flat=True)),
+            ["employee"],
+        )

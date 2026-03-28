@@ -1,11 +1,60 @@
 {% extends "layouts/dashboard_base.html" %}
+{% load static %}
 
 {% block title %}Panel de administrador{% endblock %}
 
+{% block dashboard_header_title %}Administración{% endblock %}
+
+{% block dashboard_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/pages/admin_home.css' %}">
+{% endblock %}
+
 {% block dashboard_content %}
-  <section class="dash-card">
-    <h1 class="dash-card-title">Panel de administrador</h1>
-    <p>Has entrado en la vista basica de administracion.</p>
-    <p>Usuario: {{ request.user.email }}</p>
+  <section class="admin-home-page">
+    <section class="dash-card admin-home-card">
+      <div class="admin-home-card__heading">
+        <div>
+          <h1 class="dash-card-title">Resumen general</h1>
+          <p class="admin-home-card__description">
+            Consulta el estado general del sistema y accede rapidamente a la gestion
+            de usuarios desde este panel de administracion.
+          </p>
+        </div>
+        <a
+          class="ui-btn ui-btn--primary ui-btn--md admin-home-card__cta"
+          href="{% url 'dashboard:admin-users' %}"
+        >
+          <span>Ver usuarios</span>
+        </a>
+      </div>
+
+      <div class="admin-home-stats">
+        <article class="admin-home-stat">
+          <span class="admin-home-stat__label">Total usuarios</span>
+          <strong class="admin-home-stat__value">{{ total_users }}</strong>
+        </article>
+        <article class="admin-home-stat">
+          <span class="admin-home-stat__label">Usuarios activos</span>
+          <strong class="admin-home-stat__value">{{ active_users }}</strong>
+        </article>
+        <article class="admin-home-stat">
+          <span class="admin-home-stat__label">Fichas de empleado</span>
+          <strong class="admin-home-stat__value">{{ total_employee_profiles }}</strong>
+        </article>
+        <article class="admin-home-stat">
+          <span class="admin-home-stat__label">Solicitudes registradas</span>
+          <strong class="admin-home-stat__value">{{ total_vacation_requests }}</strong>
+        </article>
+        <article class="admin-home-stat">
+          <span class="admin-home-stat__label">Usuarios RRHH</span>
+          <strong class="admin-home-stat__value">{{ total_rrhh_users }}</strong>
+        </article>
+        <article class="admin-home-stat">
+          <span class="admin-home-stat__label">Administradores</span>
+          <strong class="admin-home-stat__value">{{ total_admin_users }}</strong>
+        </article>
+      </div>
+    </section>
   </section>
 {% endblock %}
