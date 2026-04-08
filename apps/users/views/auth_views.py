@@ -71,7 +71,7 @@ def request_activation_view(request):
                 )
             messages.error(request, validation_message)
 
-    return render(request, "users/request_activation.html", {"form": form})
+    return render(request, "users/pages/request_activation.html", {"form": form})
 
 
 @anonymous_required
@@ -81,7 +81,7 @@ def set_password_view(request, token):
     user = validate_token(token)
 
     if not user:
-        return render(request, "users/invalid_token.html")
+        return render(request, "users/pages/invalid_token.html")
 
     form = SetPasswordForm(request.POST or None)
 
@@ -97,7 +97,11 @@ def set_password_view(request, token):
         else:
             messages.error(request, "Completa los campos obligatorios del formulario.")
 
-    return render(request, "users/set_password.html", {"form": form, "token": token})
+    return render(
+        request,
+        "users/pages/set_password.html",
+        {"form": form, "token": token},
+    )
 
 
 @anonymous_required
@@ -161,7 +165,7 @@ def login_view(request):
             )
         messages.error(request, error_message)
 
-    return render(request, "users/login.html", {"form": form})
+    return render(request, "users/pages/login.html", {"form": form})
 
 
 def logout_view(request):

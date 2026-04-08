@@ -1,0 +1,35 @@
+{% if filter_form.non_field_errors %}
+  <div class="rrhh-home-filter-errors">
+    {% for error in filter_form.non_field_errors %}
+      <p class="ui-field__feedback ui-field__feedback--error">{{ error }}</p>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<form method="get" class="rrhh-filters-form">
+  <div class="rrhh-filters-form__group">
+    <label class="ui-field__label" for="{{ filter_form.search.id_for_label }}">Buscar empleado</label>
+    {{ filter_form.search }}
+  </div>
+  <div class="rrhh-filters-form__group">
+    <label class="ui-field__label" for="{{ filter_form.start_date.id_for_label }}">Fecha inicio</label>
+    {{ filter_form.start_date }}
+  </div>
+  <div class="rrhh-filters-form__group">
+    <label class="ui-field__label" for="{{ filter_form.end_date.id_for_label }}">Fecha final</label>
+    {{ filter_form.end_date }}
+  </div>
+  <div class="rrhh-filters-form__group">
+    <label class="ui-field__label" for="{{ filter_form.status.id_for_label }}">Estado</label>
+    {{ filter_form.status }}
+  </div>
+  <div class="rrhh-filters-form__actions">
+    {% include "components/ui/button_principal.html" with label="Filtrar" type="submit" size="md" class_name="rrhh-filters-form__submit" %}
+    <a
+      class="ui-btn ui-btn--secondary ui-btn--md rrhh-filters-form__submit"
+      href="{{ export_url }}"
+    >
+      <span>Exportar Excel</span>
+    </a>
+  </div>
+</form>

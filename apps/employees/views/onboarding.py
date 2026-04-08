@@ -54,4 +54,4 @@ def onboarding_view(request):
     else:
         form = EmployeeOnboardingForm(initial=initial, user=user)
 
-    return render(request, "employees/onboarding.html", {"form": form})
+    return render(request, "employees/pages/onboarding.html", {"form": form})

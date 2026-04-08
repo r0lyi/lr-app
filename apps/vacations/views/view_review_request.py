@@ -3,6 +3,7 @@
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 
 from apps.core.utils.decorators import role_required
 from apps.dashboard.services.layout_context import build_dashboard_base_context
@@ -64,6 +65,7 @@ def review_vacation_request_view(request, request_id):
         extra_context={
             "vacation_request": vacation_request,
             "form": form,
+            "requests_return_url": reverse(return_url_name),
         },
     )
-    return render(request, "vacations/review_request.html", context)
+    return render(request, "dashboard/pages/review_request.html", context)

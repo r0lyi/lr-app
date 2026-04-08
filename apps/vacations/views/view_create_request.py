@@ -71,4 +71,4 @@ def create_vacation_request_view(request):
             ),
         },
     )
-    return render(request, "vacations/create_request.html", context)
+    return render(request, "dashboard/pages/create_request.html", context)

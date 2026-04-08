@@ -9,7 +9,7 @@ def toast_response(request, variant, title, message, duration=5000):
 
     return HttpResponse(
         render_to_string(
-            "components/toast_card.html",
+            "components/feedback/toast_card.html",
             {
                 "variant": variant,
                 "title": title,

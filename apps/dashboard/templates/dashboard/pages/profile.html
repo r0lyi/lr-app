@@ -1,0 +1,24 @@
+{% extends "layouts/dashboard_base.html" %}
+{% load static %}
+
+{% block title %}Perfil{% endblock %}
+
+{% block dashboard_header_title %}Perfil{% endblock %}
+
+{% block dashboard_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'employees/css/pages/profile.css' %}">
+{% endblock %}
+
+{% block header_actions %}
+  <span class="profile-role-chip">Role: {{ role_label }}</span>
+{% endblock %}
+
+{% block dashboard_content %}
+  {% include "employees/partials/profile/content.html" %}
+{% endblock %}
+
+{% block extra_js %}
+  {{ block.super }}
+  <script src="{% static 'employees/js/pages/profile.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,48 @@
+<div class="rrhh-home-table">
+  {% if vacation_requests %}
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Apellidos</th>
+          <th>Nombre</th>
+          <th>Fecha inicio</th>
+          <th>Fecha final</th>
+          <th>Dias</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for vacation_request in vacation_requests %}
+          <tr>
+            <td data-label="Apellidos">{{ vacation_request.employee.last_name }}</td>
+            <td data-label="Nombre">{{ vacation_request.employee.first_name }}</td>
+            <td data-label="Fecha inicio">{{ vacation_request.start_date|date:"d-m-Y" }}</td>
+            <td data-label="Fecha final">{{ vacation_request.end_date|date:"d-m-Y" }}</td>
+            <td data-label="Dias">{{ vacation_request.requested_days }}</td>
+            <td data-label="Estado">
+              <span class="rrhh-home-table__status{% if vacation_request.status.name == 'approved' %} rrhh-home-table__status--approved{% elif vacation_request.status.name == 'rejected' %} rrhh-home-table__status--rejected{% endif %}">
+                {{ vacation_request.status.name|capfirst }}
+              </span>
+            </td>
+            <td data-label="Acciones">
+              <a
+                class="rrhh-home-table__action"
+                href="{% url 'vacations:review-request' vacation_request.pk %}"
+                aria-label="Gestionar solicitud de {{ vacation_request.employee.first_name }} {{ vacation_request.employee.last_name }}"
+                title="Gestionar solicitud"
+              >
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M4 20h4l10-10-4-4L4 16v4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                  <path d="m12 6 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+              </a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p class="rrhh-home-table__empty">No hay solicitudes registradas con los filtros actuales.</p>
+  {% endif %}
+</div>

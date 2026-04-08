@@ -39,7 +39,7 @@ def admin_home_view(request):
 
     return render(
         request,
-        "dashboard/admin_home.html",
+        "dashboard/pages/admin_home.html",
         build_dashboard_base_context(
             request.user,
             "admin",

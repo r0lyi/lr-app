@@ -65,7 +65,7 @@ def admin_user_list_view(request):
             "filter_form": filter_form,
         },
     )
-    return render(request, "users/admin_user_list.html", context)
+    return render(request, "dashboard/pages/admin_user_list.html", context)
 
 
 @role_required("admin")
@@ -92,7 +92,7 @@ def admin_user_edit_view(request, user_id):
             "available_departments": Department.objects.order_by("name"),
         },
     )
-    return render(request, "users/admin_user_edit.html", context)
+    return render(request, "dashboard/pages/admin_user_edit.html", context)
 
 
 @role_required("admin")

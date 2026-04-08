@@ -1,0 +1,81 @@
+<article class="admin-user-edit-card admin-user-edit-card--wide">
+  <div class="admin-user-edit-card__heading">
+    <div>
+      <h2 class="admin-user-edit-card__title">Acceso al sistema</h2>
+      <p class="admin-user-edit-card__description">
+        Revisa el estado de acceso y activa o desactiva la cuenta segun la situacion real del usuario.
+      </p>
+    </div>
+    <span class="admin-user-edit-card__badge{% if managed_user.user.is_active %} admin-user-edit-card__badge--active{% endif %}">
+      {{ managed_user.access_status_label }}
+    </span>
+  </div>
+
+  <div class="admin-user-edit-access">
+    <div class="admin-user-edit-access__details">
+      <article class="admin-user-edit-access__detail">
+        <span class="admin-user-edit-access__label">Ultimo acceso</span>
+        <strong class="admin-user-edit-access__value">
+          {% if managed_user.user.last_login %}
+            {{ managed_user.user.last_login|date:"d-m-Y H:i" }}
+          {% else %}
+            Nunca
+          {% endif %}
+        </strong>
+      </article>
+      <article class="admin-user-edit-access__detail">
+        <span class="admin-user-edit-access__label">Contrasena</span>
+        <strong class="admin-user-edit-access__value">
+          {{ managed_user.has_usable_password|yesno:"Configurada,Sin configurar" }}
+        </strong>
+      </article>
+      <article class="admin-user-edit-access__detail">
+        <span class="admin-user-edit-access__label">Registro</span>
+        <strong class="admin-user-edit-access__value">
+          {% if managed_user.user.registered_at %}
+            {{ managed_user.user.registered_at|date:"d-m-Y H:i" }}
+          {% else %}
+            Sin completar
+          {% endif %}
+        </strong>
+      </article>
+      <article class="admin-user-edit-access__detail">
+        <span class="admin-user-edit-access__label">Ficha de empleado</span>
+        <strong class="admin-user-edit-access__value">
+          {{ managed_user.has_employee_profile|yesno:"Si,No" }}
+        </strong>
+      </article>
+    </div>
+
+    <div class="admin-user-edit-access__actions">
+      {% if managed_user.can_change_access_state %}
+        <form
+          method="post"
+          action="{% url 'dashboard:admin-user-access-state' managed_user.user.pk %}"
+          class="admin-user-edit-access__form"
+        >
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.path }}">
+          <input type="hidden" name="is_active" value="{% if managed_user.user.is_active %}0{% else %}1{% endif %}">
+          {% if managed_user.user.is_active %}
+            <button class="ui-btn ui-btn--cancel ui-btn--md admin-user-edit-access__button" type="submit">
+              Desactivar acceso
+            </button>
+          {% elif managed_user.has_usable_password %}
+            <button class="ui-btn ui-btn--primary ui-btn--md admin-user-edit-access__button" type="submit">
+              Activar acceso
+            </button>
+          {% else %}
+            <p class="admin-user-edit-card__note">
+              La cuenta aun necesita completar su acceso desde el enlace inicial antes de poder activarse manualmente.
+            </p>
+          {% endif %}
+        </form>
+      {% else %}
+        <p class="admin-user-edit-card__note">
+          Este usuario se gestiona desde Django admin.
+        </p>
+      {% endif %}
+    </div>
+  </div>
+</article>

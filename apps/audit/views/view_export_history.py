@@ -12,11 +12,13 @@ from apps.audit.selectors import get_export_histories
 from apps.audit.models import ExportHistory
 from apps.core.utils.decorators import role_required
 from apps.dashboard.services.layout_context import build_dashboard_base_context
+from apps.users.selectors import get_primary_role
 
 
 @role_required("rrhh", allow_admin=True)
 def export_history_view(request):
     """Muestra el historial basico de exportaciones del panel de RRHH."""
+    current_role = get_primary_role(request.user) or "rrhh"
 
     if request.GET:
         filter_form = ExportHistoryFilterForm(request.GET)
@@ -35,12 +37,12 @@ def export_history_view(request):
 
     return render(
         request,
-        "audit/export_history.html",
+        "dashboard/pages/export_history.html",
         build_dashboard_base_context(
             request.user,
-            "rrhh",
+            current_role,
             request=request,
-            active_section="history",
+            active_section="requests" if current_role == "admin" else "history",
             extra_context={
                 "export_histories": export_histories,
                 "filtered_exports_count": export_histories.count(),
