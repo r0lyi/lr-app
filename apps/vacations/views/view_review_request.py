@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from apps.core.utils.decorators import role_required
 from apps.dashboard.services.layout_context import build_dashboard_base_context
+from apps.users.selectors import has_role
 from apps.vacations.forms import VacationRequestReviewForm
 from apps.vacations.models import VacationRequest
 from apps.vacations.services import review_vacation_request
@@ -19,6 +20,15 @@ def review_vacation_request_view(request, request_id):
         VacationRequest.objects.select_related("employee", "status"),
         pk=request_id,
     )
+    if (
+        vacation_request.employee.user_id == request.user.id
+        and has_role(request.user, "rrhh")
+    ):
+        messages.error(
+            request,
+            "No puedes revisar tu propia solicitud de vacaciones. Debe gestionarla otro usuario de RRHH.",
+        )
+        return redirect("dashboard:rrhh-home")
 
     if request.method == "POST":
         form = VacationRequestReviewForm(request.POST)

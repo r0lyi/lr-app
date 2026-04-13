@@ -32,6 +32,13 @@ class VacationRequestReviewViewTests(VacationBaseTestCase):
         user.roles.set([self.rrhh_role])
         return user
 
+    def create_rrhh_user_with_employee_profile(self, *, email, dni):
+        """Crea un usuario RRHH que tambien tiene ficha Employee propia."""
+
+        user, employee = self.create_employee_user(email=email, dni=dni)
+        user.roles.set([self.rrhh_role])
+        return user, employee
+
     def test_rrhh_can_open_review_page(self):
         rrhh_user = self.create_rrhh_user(
             email="rrhh-review-open@example.com",
@@ -101,6 +108,101 @@ class VacationRequestReviewViewTests(VacationBaseTestCase):
         self.assertIsNotNone(vacation_request.resolution_date)
         self.assertLessEqual(vacation_request.resolution_date, timezone.now())
         self.assertEqual(vacation_request.resolved_by, rrhh_user)
+
+    def test_rrhh_cannot_open_review_page_for_own_request(self):
+        rrhh_user, employee = self.create_rrhh_user_with_employee_profile(
+            email="rrhh-own-review-open@example.com",
+            dni="13579135G",
+        )
+        vacation_request = VacationRequest.objects.create(
+            employee=employee,
+            status=self.pending_status,
+            start_date=date(2026, 7, 1),
+            end_date=date(2026, 7, 5),
+            requested_days="5.00",
+        )
+
+        self.client.force_login(rrhh_user)
+
+        response = self.client.get(
+            reverse("vacations:review-request", args=[vacation_request.pk]),
+            follow=True,
+        )
+
+        self.assertRedirects(response, reverse("dashboard:rrhh-home"))
+        self.assertContains(
+            response,
+            "No puedes revisar tu propia solicitud de vacaciones. Debe gestionarla otro usuario de RRHH.",
+        )
+
+    def test_rrhh_cannot_update_own_request(self):
+        rrhh_user, employee = self.create_rrhh_user_with_employee_profile(
+            email="rrhh-own-review-update@example.com",
+            dni="56565656P",
+        )
+        vacation_request = VacationRequest.objects.create(
+            employee=employee,
+            status=self.pending_status,
+            start_date=date(2026, 7, 1),
+            end_date=date(2026, 7, 5),
+            requested_days="5.00",
+        )
+
+        self.client.force_login(rrhh_user)
+
+        response = self.client.post(
+            reverse("vacations:review-request", args=[vacation_request.pk]),
+            {
+                "status": str(self.approved_status.pk),
+                "start_date": "2026-07-10",
+                "end_date": "2026-07-12",
+                "hr_comment": "Intento de autoaprobacion",
+            },
+            follow=True,
+        )
+
+        self.assertRedirects(response, reverse("dashboard:rrhh-home"))
+        vacation_request.refresh_from_db()
+        self.assertEqual(vacation_request.status, self.pending_status)
+        self.assertEqual(vacation_request.start_date, date(2026, 7, 1))
+        self.assertEqual(vacation_request.end_date, date(2026, 7, 5))
+        self.assertIsNone(vacation_request.resolved_by)
+
+    def test_another_rrhh_user_can_review_request_created_by_rrhh(self):
+        owner_rrhh_user, employee = self.create_rrhh_user_with_employee_profile(
+            email="rrhh-owner-review@example.com",
+            dni="66666666Q",
+        )
+        reviewer_rrhh_user = self.create_rrhh_user(
+            email="rrhh-reviewer@example.com",
+            dni="77777777B",
+        )
+        vacation_request = VacationRequest.objects.create(
+            employee=employee,
+            status=self.pending_status,
+            start_date=date(2026, 7, 1),
+            end_date=date(2026, 7, 5),
+            requested_days="5.00",
+        )
+
+        self.client.force_login(reviewer_rrhh_user)
+
+        response = self.client.post(
+            reverse("vacations:review-request", args=[vacation_request.pk]),
+            {
+                "status": str(self.approved_status.pk),
+                "start_date": "2026-07-08",
+                "end_date": "2026-07-10",
+                "hr_comment": "Aprobada por otro usuario RRHH",
+            },
+            follow=True,
+        )
+
+        self.assertRedirects(response, reverse("dashboard:rrhh-home"))
+        vacation_request.refresh_from_db()
+        self.assertEqual(vacation_request.status, self.approved_status)
+        self.assertEqual(vacation_request.resolved_by, reviewer_rrhh_user)
+        self.assertNotEqual(reviewer_rrhh_user, owner_rrhh_user)
 
     def test_employee_cannot_open_rrhh_review_page(self):
         employee_user, employee = self.create_employee_user(

@@ -11,13 +11,14 @@ from apps.employees.selectors import get_employee_profile_for_user
 from apps.employees.services.employee_dashboard import (
     calculate_annual_vacation_days_for_year,
 )
+from apps.users.selectors import get_primary_role
 from apps.vacations.forms import VacationRequestForm
 from apps.vacations.services import create_employee_vacation_request
 
 
-@role_required("employee")
+@role_required("employee", allow_rrhh=True)
 def create_vacation_request_view(request):
-    """Renderiza y procesa el formulario minimo de solicitud del empleado.
+    """Renderiza y procesa el formulario minimo de solicitud del usuario.
 
     Esta vista solo orquesta:
     - comprueba que exista el perfil Employee
@@ -51,9 +52,10 @@ def create_vacation_request_view(request):
         form = VacationRequestForm()
 
     current_year = timezone.localdate().year
+    current_role = get_primary_role(request.user) or "employee"
     context = build_dashboard_base_context(
         request.user,
-        "employee",
+        current_role,
         active_section="request",
         extra_context={
             "form": form,

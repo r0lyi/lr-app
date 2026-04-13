@@ -40,6 +40,12 @@ ROLE_NAV_CONFIG = {
             "icon": "home",
         },
         {
+            "section": "request",
+            "url_name": "vacations:create-request",
+            "label": "Solicitar",
+            "icon": "drop",
+        },
+        {
             "section": "history",
             "url_name": "audit:export-history",
             "label": "Historial",
