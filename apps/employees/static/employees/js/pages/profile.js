@@ -11,7 +11,9 @@
     "[data-password-modal-close], .profile-modal-cancel"
   );
   var overlay = modal.querySelector(".ui-modal__overlay");
-  var firstInput = modal.querySelector("input");
+  var initialFocus =
+    modal.querySelector('.profile-modal__form input:not([type="hidden"])') ||
+    modal.querySelector(".ui-modal__close");
 
   function syncBodyLock() {
     document.body.classList.toggle("modal-open", modal.classList.contains("is-open"));
@@ -24,9 +26,9 @@
   function openModal() {
     modal.classList.add("is-open");
     syncBodyLock();
-    if (firstInput) {
+    if (initialFocus) {
       window.setTimeout(function () {
-        firstInput.focus();
+        initialFocus.focus();
       }, 20);
     }
   }

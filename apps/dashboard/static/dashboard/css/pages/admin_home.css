@@ -210,7 +210,7 @@
   }
 
   .admin-home-broadcast-form__footer {
-    justify-content: stretch;
+    justify-content: flex-start;
   }
 
   .admin-home-broadcast-form__submit {

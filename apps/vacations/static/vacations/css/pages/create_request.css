@@ -1,5 +1,3 @@
-@import url("../components/stat_cards.css");
-
 .vac-request-page {
   display: flex;
   flex-direction: column;
@@ -329,7 +327,7 @@
   }
 
   .vac-request-actions {
-    justify-content: stretch;
+    justify-content: flex-start;
   }
 
   .vac-request-actions .ui-btn {

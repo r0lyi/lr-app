@@ -133,7 +133,7 @@
   }
 
   .employee-filters-form__actions {
-    justify-content: stretch;
+    justify-content: flex-start;
   }
 
   .employee-filters-form__submit {

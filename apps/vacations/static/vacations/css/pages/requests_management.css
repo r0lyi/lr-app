@@ -322,7 +322,7 @@
   }
 
   .rrhh-filters-form__actions {
-    justify-content: stretch;
+    justify-content: flex-start;
   }
 
   .rrhh-filters-form__submit {

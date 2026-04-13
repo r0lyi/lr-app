@@ -224,7 +224,7 @@
   }
 
   .audit-log-filters__actions {
-    justify-content: stretch;
+    justify-content: flex-start;
   }
 
   .audit-log-filters__submit,

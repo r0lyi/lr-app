@@ -198,7 +198,7 @@
   }
 
   .export-history-filters-form__actions {
-    justify-content: stretch;
+    justify-content: flex-start;
   }
 
   .export-history-filters-form__submit {
