@@ -3,7 +3,7 @@
 from datetime import date
 
 from apps.vacations.models import VacationRequest, VacationStatus
-from apps.vacations.services.export_review import build_rrhh_export_review
+from apps.vacations.services.export.review import build_rrhh_export_review
 
 from .base import VacationBaseTestCase
 

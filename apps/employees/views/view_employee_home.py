@@ -2,8 +2,8 @@
 
 from django.shortcuts import redirect, render
 
+from apps.core.presentation.dashboard import build_dashboard_base_context
 from apps.core.utils.decorators import role_required
-from apps.dashboard.services.layout_context import build_dashboard_base_context
 from apps.employees.selectors.employee_dashboard import get_employee_profile_for_user
 from apps.employees.services.employee_dashboard import build_employee_dashboard_summary
 from apps.vacations.forms import EmployeeVacationRequestFilterForm

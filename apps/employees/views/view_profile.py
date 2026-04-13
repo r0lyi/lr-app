@@ -6,7 +6,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
-from apps.dashboard.services.layout_context import build_dashboard_base_context
+from apps.core.presentation.dashboard import build_dashboard_base_context
 from apps.employees.forms import EmployeeProfileUpdateForm
 from apps.employees.selectors import get_employee_profile_for_user
 from apps.users.selectors import get_primary_role
@@ -87,4 +87,4 @@ def employee_profile_view(request):
             "profile_edit_mode": profile_edit_mode,
         },
     )
-    return render(request, "dashboard/pages/profile.html", context)
+    return render(request, "employees/pages/profile.html", context)

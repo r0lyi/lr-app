@@ -1,0 +1,18 @@
+{% load static %}
+
+<header class="dash-header">
+  <div class="dash-header-card">
+    <div class="dash-header-logo">
+      <img src="{% static 'images/brand/logo500x200.svg' %}" alt="Clean & Service" />
+    </div>
+
+    <div class="dash-header-title">
+      {% block dashboard_header_title %}Bienvenido/a {{ display_name }}{% endblock %}
+    </div>
+
+    <div class="dash-header-actions">
+      {% include "components/ui/notification_dropdown.html" %}
+      {% block header_actions %}{% endblock %}
+    </div>
+  </div>
+</header>

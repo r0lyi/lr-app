@@ -3,8 +3,8 @@
 from django.contrib import messages
 from django.shortcuts import redirect, render
 
+from apps.core.presentation.dashboard import build_dashboard_base_context
 from apps.core.utils.decorators import role_required
-from apps.dashboard.services.layout_context import build_dashboard_base_context
 from apps.notifications.forms import AdminBroadcastNotificationForm
 from apps.notifications.selectors import get_admin_broadcast_notification_recipients
 from apps.notifications.services import create_admin_broadcast_notifications

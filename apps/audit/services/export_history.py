@@ -55,7 +55,7 @@ def create_export_history(*, user, export_type, filters):
 def get_exports_root():
     """Devuelve la carpeta raiz donde se guardan los archivos exportados."""
 
-    exports_root = Path(settings.BASE_DIR) / "generated_exports"
+    exports_root = Path(settings.EXPORTS_ROOT)
     exports_root.mkdir(parents=True, exist_ok=True)
     return exports_root
 
@@ -90,4 +90,3 @@ def mark_export_failed(*, export_history):
 
     export_history.status = EXPORT_STATUS_FAILED
     export_history.save(update_fields=["status"])
-

@@ -1,6 +1,7 @@
-"""Plantilla minima para futuros overrides de produccion."""
+"""Overrides minimos de produccion sobre la configuracion comun."""
 
-# from .base import *
-#
-# DEBUG = False
-# ALLOWED_HOSTS = ["tu-dominio.com"]
+from .base import *  # noqa: F403
+
+
+DEBUG = False
+ALLOWED_HOSTS = ["tu-dominio.com"]

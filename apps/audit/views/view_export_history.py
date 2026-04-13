@@ -10,8 +10,8 @@ from apps.audit.forms import ExportHistoryFilterForm
 from apps.audit.services import EXPORT_TYPE_RRHH_VACATION_REQUESTS
 from apps.audit.selectors import get_export_histories
 from apps.audit.models import ExportHistory
+from apps.core.presentation.dashboard import build_dashboard_base_context
 from apps.core.utils.decorators import role_required
-from apps.dashboard.services.layout_context import build_dashboard_base_context
 from apps.users.selectors import get_primary_role
 
 
@@ -37,7 +37,7 @@ def export_history_view(request):
 
     return render(
         request,
-        "dashboard/pages/export_history.html",
+        "audit/pages/export_history.html",
         build_dashboard_base_context(
             request.user,
             current_role,
