@@ -1,0 +1,3 @@
+/* Compatibilidad para imports antiguos de vacaciones.
+   La hoja real vive en `static/css/components/stat_cards.css`. */
+@import url("../../../css/components/stat_cards.css");
