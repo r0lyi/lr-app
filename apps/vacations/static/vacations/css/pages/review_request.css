@@ -173,7 +173,7 @@
   }
 
   .review-request-form__footer {
-    justify-content: stretch;
+    justify-content: flex-start;
   }
 
   .review-request-form__footer .ui-btn {

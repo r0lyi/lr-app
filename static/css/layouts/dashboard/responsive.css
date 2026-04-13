@@ -215,7 +215,7 @@
 
   .dash-notifications__pagination {
     width: 100%;
-    justify-content: stretch;
+    justify-content: flex-start;
   }
 
   .dash-notifications__page-link {

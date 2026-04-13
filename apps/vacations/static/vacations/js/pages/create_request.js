@@ -55,6 +55,10 @@
     return `${day}/${month}/${year}`;
   }
 
+  function getUtcDayTimestamp(date) {
+    return Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+  }
+
   function getMondayFirstIndex(date) {
     return (date.getDay() + 6) % 7;
   }
@@ -267,7 +271,11 @@
     }
 
     const millisecondsPerDay = 1000 * 60 * 60 * 24;
-    const totalSelectedDays = Math.floor((endDate - startDate) / millisecondsPerDay) + 1;
+    const totalSelectedDays =
+      Math.round(
+        (getUtcDayTimestamp(endDate) - getUtcDayTimestamp(startDate)) /
+          millisecondsPerDay
+      ) + 1;
 
     selectedDaysCounter.textContent = String(totalSelectedDays);
     selectedRangeSummary.textContent = `${formatDisplayDate(startDate)} - ${formatDisplayDate(endDate)}`;

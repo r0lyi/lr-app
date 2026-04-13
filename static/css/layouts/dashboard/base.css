@@ -1,5 +1,5 @@
-@import url("./dashboard/shell.css");
-@import url("./dashboard/sidebar.css");
-@import url("./dashboard/header.css");
-@import url("./dashboard/notifications.css");
-@import url("./dashboard/responsive.css");
+@import url("./shell.css");
+@import url("./sidebar.css");
+@import url("./header.css");
+@import url("./notifications.css");
+@import url("./responsive.css");

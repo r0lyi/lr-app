@@ -295,7 +295,7 @@
   }
 
   .admin-users-filters__actions {
-    justify-content: stretch;
+    justify-content: flex-start;
   }
 
   .admin-users-filters__submit,
@@ -367,7 +367,7 @@
 
   .admin-users-table__actions {
     width: 100%;
-    justify-content: stretch;
+    justify-content: flex-start;
   }
 
   .admin-users-table__edit-link {
