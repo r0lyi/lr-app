@@ -1,0 +1,55 @@
+<section class="rrhh-export-review" aria-labelledby="rrhh-export-review-title">
+  <div class="rrhh-export-review__intro">
+    <div>
+      <p class="rrhh-export-review__eyebrow">Revision previa</p>
+      <h2 class="rrhh-export-review__title" id="rrhh-export-review-title">Resumen previo a exportacion</h2>
+      <p class="rrhh-export-review__text">
+        Revisa estas senales antes de descargar el Excel para detectar solapes internos,
+        periodos sensibles y solicitudes especialmente largas.
+      </p>
+    </div>
+    <p class="rrhh-export-review__order-note">
+      El listado ya esta ordenado por antiguedad. Primero aparecen los empleados con la fecha de alta mas antigua.
+    </p>
+  </div>
+
+  <div class="rrhh-export-review__grid">
+    <article class="rrhh-export-review__card">
+      <span class="rrhh-export-review__label">Coincidencias</span>
+      <strong class="rrhh-export-review__value">
+        {{ export_review_summary.department_overlap_requests_count }}
+      </strong>
+      <p class="rrhh-export-review__description">
+        solicitudes coinciden con otros empleados del mismo departamento
+      </p>
+    </article>
+
+    <article class="rrhh-export-review__card">
+      <span class="rrhh-export-review__label">Alta carga</span>
+      <strong class="rrhh-export-review__value">
+        {{ export_review_summary.high_load_requests_count }}
+      </strong>
+      <p class="rrhh-export-review__description">
+        solicitudes entran en verano o navidad
+      </p>
+    </article>
+
+    <article class="rrhh-export-review__card">
+      <span class="rrhh-export-review__label">Antiguedad</span>
+      <strong class="rrhh-export-review__value">Activo</strong>
+      <p class="rrhh-export-review__description">
+        el orden actual prioriza a los empleados mas antiguos
+      </p>
+    </article>
+
+    <article class="rrhh-export-review__card">
+      <span class="rrhh-export-review__label">Larga duracion</span>
+      <strong class="rrhh-export-review__value">
+        {{ export_review_summary.long_duration_requests_count }}
+      </strong>
+      <p class="rrhh-export-review__description">
+        solicitudes duran exactamente 30 dias
+      </p>
+    </article>
+  </div>
+</section>

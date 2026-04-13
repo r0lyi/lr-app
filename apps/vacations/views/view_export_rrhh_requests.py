@@ -14,6 +14,7 @@ from apps.core.utils.decorators import role_required
 from apps.users.selectors import get_primary_role
 from apps.vacations.forms import RrhhVacationRequestFilterForm
 from apps.vacations.selectors import get_filtered_rrhh_vacation_requests
+from apps.vacations.services import build_rrhh_export_review
 from apps.vacations.services.export_requests_excel import (
     build_rrhh_vacation_requests_excel,
 )
@@ -51,6 +52,8 @@ def export_rrhh_requests_excel_view(request):
         end_date=request_filters.get("end_date"),
         status_name=request_filters.get("status"),
     )
+    export_review = build_rrhh_export_review(vacation_requests)
+    reviewed_requests = export_review["vacation_requests"]
 
     export_history = create_export_history(
         user=request.user,
@@ -59,12 +62,12 @@ def export_rrhh_requests_excel_view(request):
     )
 
     try:
-        file_name, file_bytes = build_rrhh_vacation_requests_excel(vacation_requests)
+        file_name, file_bytes = build_rrhh_vacation_requests_excel(reviewed_requests)
         mark_export_success(
             export_history=export_history,
             file_name=file_name,
             file_bytes=file_bytes,
-            total_records=vacation_requests.count(),
+            total_records=len(reviewed_requests),
         )
     except Exception:
         mark_export_failed(export_history=export_history)

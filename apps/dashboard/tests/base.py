@@ -36,6 +36,7 @@ class DashboardRoleBaseTestCase(TestCase):
         self,
         user,
         *,
+        department=None,
         first_name="Ana",
         last_name="Lopez",
         phone="600123123",
@@ -44,6 +45,7 @@ class DashboardRoleBaseTestCase(TestCase):
         """Crea la ficha Employee necesaria para el panel de empleado."""
         return Employee.objects.create(
             user=user,
+            department=department,
             first_name=first_name,
             last_name=last_name,
             phone=phone,
