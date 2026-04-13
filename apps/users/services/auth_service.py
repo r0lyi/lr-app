@@ -7,7 +7,7 @@ from django.utils import timezone
 
 from apps.users.models import User
 
-from .email_service import send_activation_email
+from .email import send_activation_email
 
 
 def request_activation(dni: str) -> tuple[bool, str]:

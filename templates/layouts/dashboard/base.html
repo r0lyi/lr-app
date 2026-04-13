@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/layouts/dashboard/base.css' %}">
+  {% block dashboard_css %}{% endblock %}
+{% endblock %}
+
+{% block content %}
+<div class="dash">
+  {% include "layouts/dashboard/partials/sidebar.html" %}
+
+  <main class="dash-main">
+    <button
+      class="dash-hamburger"
+      id="dash-hamburger"
+      type="button"
+      aria-label="Abrir menú"
+      aria-controls="dash-sidebar"
+      aria-expanded="false"
+    >
+      <span></span><span></span><span></span>
+    </button>
+
+    {% include "layouts/dashboard/partials/header.html" %}
+
+    <section class="dash-content">
+      {% block dashboard_content %}{% endblock %}
+    </section>
+  </main>
+</div>
+
+{% include "layouts/dashboard/partials/overlay.html" %}
+{% endblock %}
+
+{% block extra_js %}
+  {{ block.super }}
+  <script src="{% static 'js/layouts/dashboard/shell.js' %}"></script>
+{% endblock %}

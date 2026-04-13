@@ -1,7 +1,7 @@
 """Consultas de lectura usadas por el dominio de vacaciones."""
 
 from apps.vacations.models import VacationRequest, VacationStatus
-from apps.vacations.services.policies import (
+from apps.vacations.services.requests.policies import (
     ACTIVE_REQUEST_STATUS_NAMES,
     OPEN_REQUEST_STATUS_NAMES,
 )

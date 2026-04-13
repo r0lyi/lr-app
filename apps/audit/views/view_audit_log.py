@@ -4,8 +4,8 @@ from django.shortcuts import render
 
 from apps.audit.forms import AuditLogFilterForm
 from apps.audit.selectors import get_audit_log_summary, get_audit_logs
+from apps.core.presentation.dashboard import build_dashboard_base_context
 from apps.core.utils.decorators import role_required
-from apps.dashboard.services.layout_context import build_dashboard_base_context
 
 
 @role_required("admin")
@@ -23,7 +23,7 @@ def audit_log_view(request):
     summary = get_audit_log_summary(filters=filter_data)
     return render(
         request,
-        "dashboard/pages/audit_log.html",
+        "audit/pages/audit_log.html",
         build_dashboard_base_context(
             request.user,
             "admin",

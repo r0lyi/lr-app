@@ -32,7 +32,9 @@ def get_email_provider():
 def _build_logo_attachment():
     """Carga el logo inline usado en los correos HTML si existe en disco."""
 
-    logo_path = Path(settings.BASE_DIR) / "static" / "images" / "logo500x200.png"
+    logo_path = (
+        Path(settings.BASE_DIR) / "static" / "images" / "brand" / "logo500x200.png"
+    )
     if not logo_path.exists():
         return None
 
