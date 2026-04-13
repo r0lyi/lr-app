@@ -8,6 +8,7 @@ from django.urls import reverse
 from apps.core.utils.decorators import role_required
 from apps.dashboard.services.layout_context import build_dashboard_base_context
 from apps.users.selectors import has_role
+from apps.users.selectors import get_primary_role
 from apps.vacations.forms import VacationRequestReviewForm
 from apps.vacations.models import VacationRequest
 from apps.vacations.services import review_vacation_request
@@ -34,7 +35,7 @@ def review_vacation_request_view(request, request_id):
             request,
             "No puedes revisar tu propia solicitud de vacaciones. Debe gestionarla otro usuario de RRHH.",
         )
-        return redirect("dashboard:rrhh-home")
+        return redirect(return_url_name)
 
     if request.method == "POST":
         form = VacationRequestReviewForm(request.POST)

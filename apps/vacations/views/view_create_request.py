@@ -16,7 +16,7 @@ from apps.vacations.forms import VacationRequestForm
 from apps.vacations.services import create_employee_vacation_request
 
 
-@role_required("employee", allow_rrhh=True)
+@role_required("employee", allow_admin=True, allow_rrhh=True)
 def create_vacation_request_view(request):
     """Renderiza y procesa el formulario minimo de solicitud del usuario.
 
@@ -27,8 +27,9 @@ def create_vacation_request_view(request):
     - recompone el contexto visual usando el layout del dashboard
 
     Aunque el flujo principal pertenece al rol ``employee``, tambien dejamos
-    entrar a ``admin`` para poder probar solicitudes reales desde la propia
-    aplicacion sin depender de cambios manuales en base de datos.
+    entrar a ``admin`` y ``rrhh`` para poder registrar solicitudes reales
+    desde la propia aplicacion sin depender de cambios manuales en base de
+    datos.
     """
     employee_profile = get_employee_profile_for_user(request.user)
     if employee_profile is None:
@@ -61,6 +62,7 @@ def create_vacation_request_view(request):
     context = build_dashboard_base_context(
         request.user,
         current_role,
+        request=request,
         active_section="request",
         extra_context={
             "form": form,

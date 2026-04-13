@@ -5,8 +5,6 @@ from datetime import date, timedelta
 from django.urls import reverse
 from django.utils import timezone
 
-from apps.users.models import Role
-from apps.vacations.models import VacationRequest
 from apps.notifications.models import Notification
 from apps.users.models import Role, User
 from apps.vacations.models import VacationRequest, VacationStatus
@@ -20,12 +18,6 @@ class VacationRequestViewTests(VacationBaseTestCase):
     @classmethod
     def setUpTestData(cls):
         cls.rrhh_role = Role.objects.get(name="rrhh")
-
-    def create_rrhh_user_with_employee_profile(self, *, email, dni):
-        """Crea un usuario RRHH con ficha Employee para solicitar vacaciones."""
-
-        user, employee = self.create_employee_user(email=email, dni=dni)
-        user.roles.set([self.rrhh_role])
         cls.admin_role = Role.objects.get(name="admin")
         cls.pending_status = VacationStatus.objects.get(name="pending")
         cls.approved_status = VacationStatus.objects.get(name="approved")
@@ -67,6 +59,13 @@ class VacationRequestViewTests(VacationBaseTestCase):
         user.roles.set([self.rrhh_role])
         return user
 
+    def create_rrhh_user_with_employee_profile(self, *, email, dni):
+        """Crea un usuario RRHH con ficha Employee para solicitar vacaciones."""
+
+        user, employee = self.create_employee_user(email=email, dni=dni)
+        user.roles.set([self.rrhh_role])
+        return user, employee
+
     def create_admin_user_with_employee_profile(self, *, email, dni):
         """Crea un admin con ficha Employee para probar el flujo real."""
 
@@ -94,9 +93,6 @@ class VacationRequestViewTests(VacationBaseTestCase):
         self.assertContains(response, "Confirmar")
         self.assertContains(response, "selected-range-summary")
 
-    def test_rrhh_with_employee_profile_can_open_request_page(self):
-        user, _employee = self.create_rrhh_user_with_employee_profile(
-            email="rrhh-vacations@example.com",
     def test_admin_can_open_request_page_for_testing(self):
         user, _employee = self.create_admin_user_with_employee_profile(
             email="admin-vacations-open@example.com",
@@ -109,10 +105,24 @@ class VacationRequestViewTests(VacationBaseTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Solicitar vacaciones")
-        self.assertContains(response, reverse("dashboard:rrhh-home"))
-        self.assertContains(response, reverse("vacations:create-request"))
         self.assertContains(response, "Derecho anual")
         self.assertContains(response, reverse("dashboard:admin-home"))
+
+    def test_rrhh_with_employee_profile_can_open_request_page(self):
+        user, _employee = self.create_rrhh_user_with_employee_profile(
+            email="rrhh-vacations@example.com",
+            dni="13579135G",
+        )
+
+        self.client.force_login(user)
+
+        response = self.client.get(reverse("vacations:create-request"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Solicitar vacaciones")
+        self.assertContains(response, "Derecho anual")
+        self.assertContains(response, reverse("dashboard:rrhh-home"))
+        self.assertContains(response, reverse("vacations:create-request"))
 
     def test_employee_can_create_pending_vacation_request(self):
         user, employee = self.create_employee_user(
@@ -142,9 +152,6 @@ class VacationRequestViewTests(VacationBaseTestCase):
         self.assertEqual(str(vacation_request.requested_days), "5.00")
         self.assertEqual(vacation_request.employee_comment, "Vacaciones de verano")
 
-    def test_rrhh_with_employee_profile_can_create_pending_vacation_request(self):
-        user, employee = self.create_rrhh_user_with_employee_profile(
-            email="rrhh-vacations-create@example.com",
         notification = Notification.objects.get(user=rrhh_user)
         self.assertEqual(
             notification.notification_type,
@@ -164,15 +171,6 @@ class VacationRequestViewTests(VacationBaseTestCase):
         )
 
         self.client.force_login(user)
-
-        response = self.client.post(
-            reverse("vacations:create-request"),
-            {
-                "start_date": "2026-07-01",
-                "end_date": "2026-07-05",
-                "employee_comment": "Vacaciones RRHH",
-            },
-
         start_date, end_date = self.get_request_range(offset_days=45, duration_days=4)
 
         response = self.post_vacation_request(
@@ -185,8 +183,6 @@ class VacationRequestViewTests(VacationBaseTestCase):
 
         vacation_request = VacationRequest.objects.get(employee=employee)
         self.assertEqual(vacation_request.status.name, "pending")
-        self.assertEqual(str(vacation_request.requested_days), "5.00")
-        self.assertEqual(vacation_request.employee_comment, "Vacaciones RRHH")
         self.assertEqual(str(vacation_request.requested_days), "4.00")
         self.assertEqual(
             vacation_request.employee_comment,
@@ -194,6 +190,41 @@ class VacationRequestViewTests(VacationBaseTestCase):
         )
 
         notification = Notification.objects.get(user=rrhh_user)
+        self.assertEqual(
+            notification.notification_type,
+            Notification.Type.VACATION_REQUEST_SUBMISSION,
+        )
+        self.assertEqual(notification.vacation_request, vacation_request)
+
+    def test_rrhh_with_employee_profile_can_create_pending_vacation_request(self):
+        user, employee = self.create_rrhh_user_with_employee_profile(
+            email="rrhh-vacations-create@example.com",
+            dni="44444444A",
+        )
+        reviewer_rrhh_user = self.create_rrhh_user(
+            email="rrhh-vacations-reviewer@example.com",
+            dni="13579135G",
+        )
+
+        self.client.force_login(user)
+        start_date, end_date = self.get_request_range(offset_days=50, duration_days=5)
+
+        response = self.post_vacation_request(
+            start_date=start_date,
+            end_date=end_date,
+            employee_comment="Vacaciones RRHH",
+        )
+
+        self.assertRedirects(response, reverse("vacations:create-request"))
+
+        vacation_request = VacationRequest.objects.get(employee=employee)
+        self.assertEqual(vacation_request.status.name, "pending")
+        self.assertEqual(vacation_request.start_date, start_date)
+        self.assertEqual(vacation_request.end_date, end_date)
+        self.assertEqual(str(vacation_request.requested_days), "5.00")
+        self.assertEqual(vacation_request.employee_comment, "Vacaciones RRHH")
+
+        notification = Notification.objects.get(user=reviewer_rrhh_user)
         self.assertEqual(
             notification.notification_type,
             Notification.Type.VACATION_REQUEST_SUBMISSION,
