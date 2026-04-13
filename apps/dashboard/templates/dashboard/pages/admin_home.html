@@ -1,0 +1,15 @@
+{% extends "layouts/dashboard_base.html" %}
+{% load static %}
+
+{% block title %}Panel de administrador{% endblock %}
+
+{% block dashboard_header_title %}Administración{% endblock %}
+
+{% block dashboard_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'dashboard/css/pages/admin_home.css' %}">
+{% endblock %}
+
+{% block dashboard_content %}
+  {% include "dashboard/partials/admin/home_content.html" %}
+{% endblock %}

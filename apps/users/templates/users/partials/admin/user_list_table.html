@@ -1,0 +1,82 @@
+<div class="admin-users-table">
+  {% if managed_users %}
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Usuario</th>
+          <th>Rol principal</th>
+          <th>Departamento</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user_row in managed_users %}
+          <tr>
+            <td data-label="Usuario">
+              <div class="admin-users-table__identity">
+                <strong class="admin-users-table__name">{{ user_row.display_name }}</strong>
+                <span class="admin-users-table__meta">{{ user_row.user.email }}</span>
+                <span class="admin-users-table__meta">DNI: {{ user_row.user.dni }}</span>
+                <span class="admin-users-table__meta">
+                  Ficha de empleado: {{ user_row.has_employee_profile|yesno:"Si,No" }}
+                </span>
+              </div>
+            </td>
+            <td data-label="Rol principal">
+              <span class="admin-users-table__role">
+                {{ user_row.primary_role_label }}
+              </span>
+            </td>
+            <td data-label="Departamento">
+              <span class="admin-users-table__department-badge{% if not user_row.can_change_department %} admin-users-table__department-badge--muted{% endif %}">
+                {{ user_row.current_department_name }}
+              </span>
+            </td>
+            <td data-label="Estado">
+              <div class="admin-users-table__access">
+                <span class="admin-users-table__status{% if user_row.user.is_active %} admin-users-table__status--active{% endif %}">
+                  {{ user_row.access_status_label }}
+                </span>
+                <span class="admin-users-table__meta">
+                  Ultimo acceso:
+                  {% if user_row.user.last_login %}
+                    {{ user_row.user.last_login|date:"d-m-Y H:i" }}
+                  {% else %}
+                    Nunca
+                  {% endif %}
+                </span>
+                <span class="admin-users-table__meta">
+                  Contrasena:
+                  {{ user_row.has_usable_password|yesno:"Configurada,Sin configurar" }}
+                </span>
+                <span class="admin-users-table__meta">
+                  Registro:
+                  {% if user_row.user.registered_at %}
+                    {{ user_row.user.registered_at|date:"d-m-Y H:i" }}
+                  {% else %}
+                    Sin completar
+                  {% endif %}
+                </span>
+              </div>
+            </td>
+            <td data-label="Acciones">
+              <div class="admin-users-table__actions">
+                <a
+                  href="{% url 'dashboard:admin-user-edit' user_row.user.pk %}"
+                  class="ui-btn ui-btn--primary ui-btn--sm admin-users-table__edit-link"
+                >
+                  Editar usuario
+                </a>
+              </div>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p class="admin-users-table__empty">
+      No hay usuarios que coincidan con los filtros aplicados.
+    </p>
+  {% endif %}
+</div>

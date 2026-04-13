@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Completa tu perfil{% endblock %}
+
+{% block content %}
+  {% include "employees/partials/onboarding/content.html" %}
+{% endblock %}
+
+{% block extra_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'employees/css/pages/onboarding.css' %}">
+{% endblock %}

@@ -1,0 +1,19 @@
+<section class="export-history-page">
+  <section class="dash-card export-history-card">
+    <div class="export-history-card__heading">
+      <div>
+        <h1 class="dash-card-title">Historial de exportaciones</h1>
+        <p class="export-history-card__description">
+          Consulta las descargas realizadas por RRHH, revisa la fecha de generacion
+          y vuelve a descargar cada archivo cuando lo necesites.
+        </p>
+      </div>
+      <div class="export-history-card__count">
+        {{ filtered_exports_count }} exportacion{{ filtered_exports_count|pluralize:"es" }}
+      </div>
+    </div>
+
+    {% include "audit/partials/export_history/filters.html" %}
+    {% include "audit/partials/export_history/table.html" %}
+  </section>
+</section>

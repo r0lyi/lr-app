@@ -21,17 +21,33 @@ class Notification(CreatedAtModel):
             "vacation_request_submission",
             "Nueva solicitud enviada",
         )
+        ADMIN_PERSONAL_MESSAGE = (
+            "admin_personal_message",
+            "Mensaje personal del administrador",
+        )
+        ADMIN_BROADCAST_MESSAGE = (
+            "admin_broadcast_message",
+            "Aviso general del administrador",
+        )
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="notifications",
     )
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        related_name="created_notifications",
+        blank=True,
+        null=True,
+    )
     notification_type = models.CharField(
         max_length=40,
         choices=Type.choices,
         default=Type.VACATION_INFO,
     )
+    title = models.CharField(max_length=140, blank=True, null=True)
     vacation_request = models.ForeignKey(
         "vacations.VacationRequest",
         on_delete=models.SET_NULL,

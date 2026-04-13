@@ -1,0 +1,21 @@
+{% if filter_form.non_field_errors %}
+  <div class="export-history-filter-errors">
+    {% for error in filter_form.non_field_errors %}
+      <p class="ui-field__feedback ui-field__feedback--error">{{ error }}</p>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<form method="get" class="export-history-filters-form">
+  <div class="export-history-filters-form__group">
+    <label class="ui-field__label" for="{{ filter_form.start_date.id_for_label }}">Fecha inicio</label>
+    {{ filter_form.start_date }}
+  </div>
+  <div class="export-history-filters-form__group">
+    <label class="ui-field__label" for="{{ filter_form.end_date.id_for_label }}">Fecha final</label>
+    {{ filter_form.end_date }}
+  </div>
+  <div class="export-history-filters-form__actions">
+    {% include "components/ui/button_principal.html" with label="Filtrar" type="submit" size="md" class_name="export-history-filters-form__submit" %}
+  </div>
+</form>

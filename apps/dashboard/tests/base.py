@@ -5,7 +5,7 @@ from decimal import Decimal
 
 from django.test import TestCase
 
-from apps.employees.models import Employee
+from apps.employees.models import Department, Employee
 from apps.vacations.models import VacationRequest, VacationStatus
 from apps.users.models import Role, User
 
@@ -36,6 +36,7 @@ class DashboardRoleBaseTestCase(TestCase):
         self,
         user,
         *,
+        department=None,
         first_name="Ana",
         last_name="Lopez",
         phone="600123123",
@@ -44,10 +45,19 @@ class DashboardRoleBaseTestCase(TestCase):
         """Crea la ficha Employee necesaria para el panel de empleado."""
         return Employee.objects.create(
             user=user,
+            department=department,
             first_name=first_name,
             last_name=last_name,
             phone=phone,
             hire_date=hire_date,
+        )
+
+    def create_department(self, *, name="Limpieza", max_concurrent_absences=1):
+        """Crea un departamento reutilizable para pruebas administrativas."""
+
+        return Department.objects.create(
+            name=name,
+            max_concurrent_absences=max_concurrent_absences,
         )
 
     def create_vacation_request(

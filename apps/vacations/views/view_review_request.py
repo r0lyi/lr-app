@@ -3,6 +3,7 @@
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 
 from apps.core.utils.decorators import role_required
 from apps.dashboard.services.layout_context import build_dashboard_base_context
@@ -15,6 +16,11 @@ from apps.vacations.services import review_vacation_request
 @role_required("rrhh", allow_admin=True)
 def review_vacation_request_view(request, request_id):
     """Permite a RRHH cambiar estado y fechas de una solicitud concreta."""
+
+    current_role = get_primary_role(request.user) or "rrhh"
+    return_url_name = (
+        "dashboard:admin-requests" if current_role == "admin" else "dashboard:rrhh-home"
+    )
 
     vacation_request = get_object_or_404(
         VacationRequest.objects.select_related("employee", "status"),
@@ -49,7 +55,7 @@ def review_vacation_request_view(request, request_id):
                     request,
                     "La solicitud se ha actualizado correctamente desde RRHH.",
                 )
-                return redirect("dashboard:rrhh-home")
+                return redirect(return_url_name)
     else:
         form = VacationRequestReviewForm(
             initial={
@@ -62,11 +68,13 @@ def review_vacation_request_view(request, request_id):
 
     context = build_dashboard_base_context(
         request.user,
-        "rrhh",
-        active_section="home",
+        current_role,
+        request=request,
+        active_section="requests" if current_role == "admin" else "home",
         extra_context={
             "vacation_request": vacation_request,
             "form": form,
+            "requests_return_url": reverse(return_url_name),
         },
     )
-    return render(request, "vacations/review_request.html", context)
+    return render(request, "dashboard/pages/review_request.html", context)

@@ -1,7 +1,10 @@
 """Consultas de lectura usadas por el dominio de vacaciones."""
 
 from apps.vacations.models import VacationRequest, VacationStatus
-from apps.vacations.services.policies import ACTIVE_REQUEST_STATUS_NAMES
+from apps.vacations.services.policies import (
+    ACTIVE_REQUEST_STATUS_NAMES,
+    OPEN_REQUEST_STATUS_NAMES,
+)
 
 
 def get_vacation_status_by_name(status_name):
@@ -62,6 +65,20 @@ def get_overlapping_active_requests(
         status__name__in=ACTIVE_REQUEST_STATUS_NAMES,
         start_date__lte=end_date,
         end_date__gte=start_date,
+    )
+
+    if exclude_request_id is not None:
+        requests_qs = requests_qs.exclude(pk=exclude_request_id)
+
+    return requests_qs
+
+
+def get_open_requests_for_employee(employee_profile, *, exclude_request_id=None):
+    """Devuelve solicitudes aun abiertas para evitar duplicados pendientes."""
+
+    requests_qs = VacationRequest.objects.filter(
+        employee=employee_profile,
+        status__name__in=OPEN_REQUEST_STATUS_NAMES,
     )
 
     if exclude_request_id is not None:

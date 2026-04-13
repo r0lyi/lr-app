@@ -1,0 +1,23 @@
+<form method="get" class="filters-row employee-filters-form">
+  <div class="filter-group">
+    <label class="filter-label" for="{{ filter_form.start_date.id_for_label }}">Fecha Inicio</label>
+    <div class="filter-input-wrap">
+      {{ filter_form.start_date }}
+    </div>
+  </div>
+  <div class="filter-group">
+    <label class="filter-label" for="{{ filter_form.end_date.id_for_label }}">Fecha Fin</label>
+    <div class="filter-input-wrap">
+      {{ filter_form.end_date }}
+    </div>
+  </div>
+  <div class="filter-group">
+    <label class="filter-label" for="{{ filter_form.status.id_for_label }}">Estado</label>
+    <div class="filter-input-wrap">
+      {{ filter_form.status }}
+    </div>
+  </div>
+  <div class="employee-filters-form__actions">
+    <button type="submit" class="btn-primary employee-filters-form__submit">Filtrar</button>
+  </div>
+</form>

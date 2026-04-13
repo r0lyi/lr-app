@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Error 400{% endblock %}
+
+{% block extra_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'core/css/pages/error_state.css' %}">
+{% endblock %}
+
+{% block content %}
+  {% include "dashboard/partials/errors/error_400_content.html" %}
+{% endblock %}

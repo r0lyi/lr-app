@@ -9,47 +9,7 @@
 
 {% block content %}
 <div class="dash">
-  <aside class="dash-sidebar" id="dash-sidebar">
-    <div class="dash-sidebar-top">
-      <div class="dash-brand">
-        <img src="{% static 'images/logo_blanco500x280.svg' %}" alt="Clean & Service" />
-      </div>
-
-      <button
-        class="dash-sidebar-close"
-        id="dash-sidebar-close"
-        type="button"
-        aria-label="Cerrar menú"
-      >
-        <span></span><span></span>
-      </button>
-    </div>
-
-    <nav class="dash-nav" aria-label="Menu principal">
-      {% if nav_items %}
-        {% for item in nav_items %}
-          {% include "components/ui/dashboard_nav_button.html" with url_name=item.url_name label=item.label icon=item.icon active=item.active %}
-        {% endfor %}
-      {% else %}
-        {% block dashboard_nav %}{% endblock %}
-      {% endif %}
-    </nav>
-
-    <div class="dash-sidebar-footer">
-      <div class="dash-user">
-        <strong>{{ display_name }}</strong>
-        <div>{{ request.user.email }}</div>
-        {% if role_label %}
-          <div>{{ role_label }}</div>
-        {% endif %}
-      </div>
-
-      <form method="post" action="{% url 'auth:logout' %}">
-        {% csrf_token %}
-        <button class="dash-logout-btn" type="submit">Cerrar sesion</button>
-      </form>
-    </div>
-  </aside>
+  {% include "dashboard/partials/layout/sidebar.html" %}
 
   <main class="dash-main">
     <button
@@ -63,21 +23,7 @@
       <span></span><span></span><span></span>
     </button>
 
-    <header class="dash-header">
-      <div class="dash-header-card">
-        <div class="dash-header-logo">
-          <img src="{% static 'images/logo500x200.svg' %}" alt="Clean & Service" />
-        </div>
-
-        <div class="dash-header-title">
-          {% block dashboard_header_title %}Bienvenido/a {{ display_name }}{% endblock %}
-        </div>
-
-        <div class="dash-header-actions">
-          {% block header_actions %}{% endblock %}
-        </div>
-      </div>
-    </header>
+    {% include "dashboard/partials/layout/header.html" %}
 
     <section class="dash-content">
       {% block dashboard_content %}{% endblock %}
@@ -85,66 +31,10 @@
   </main>
 </div>
 
-{# Overlay: FUERA de .dash para no romper el grid (0 hijos extra) #}
-<div class="dash-overlay" id="dash-overlay"></div>
+{% include "dashboard/partials/layout/overlay.html" %}
+{% endblock %}
 
-<script>
-(function(){
-  var btn = document.getElementById('dash-hamburger');
-  var closeBtn = document.getElementById('dash-sidebar-close');
-  var sidebar = document.querySelector('.dash-sidebar');
-  var overlay = document.getElementById('dash-overlay');
-  var navLinks = document.querySelectorAll('.dash-nav-link');
-
-  if (!btn || !sidebar || !overlay) {
-    return;
-  }
-
-  function setOpenState(open){
-    sidebar.classList.toggle('dash-sidebar--open', open);
-    overlay.classList.toggle('dash-overlay--visible', open);
-    btn.classList.toggle('dash-hamburger--open', open);
-    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-    document.body.classList.toggle('no-scroll', open);
-  }
-
-  function toggle(open){
-    setOpenState(open);
-  }
-
-  btn.addEventListener('click', function(){
-    toggle(!sidebar.classList.contains('dash-sidebar--open'));
-  });
-
-  if (closeBtn) {
-    closeBtn.addEventListener('click', function(){
-      toggle(false);
-    });
-  }
-
-  overlay.addEventListener('click', function(){
-    toggle(false);
-  });
-
-  navLinks.forEach(function(link){
-    link.addEventListener('click', function(){
-      if (window.innerWidth <= 820) {
-        toggle(false);
-      }
-    });
-  });
-
-  document.addEventListener('keydown', function(e){
-    if (e.key === 'Escape') {
-      toggle(false);
-    }
-  });
-
-  window.addEventListener('resize', function(){
-    if (window.innerWidth > 820) {
-      setOpenState(false);
-    }
-  });
-})();
-</script>
+{% block extra_js %}
+  {{ block.super }}
+  <script src="{% static 'js/layouts/dashboard_base.js' %}"></script>
 {% endblock %}

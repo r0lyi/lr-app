@@ -9,6 +9,12 @@ from apps.core.models import CreatedAtModel
 class AuditLog(CreatedAtModel):
     """Registra una accion concreta sobre un recurso de negocio."""
 
+    ACTION_LABELS = {
+        "user_primary_role_changed": "Cambio de rol",
+        "user_access_state_changed": "Cambio de acceso",
+        "user_department_changed": "Cambio de departamento",
+    }
+
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.PROTECT,
@@ -35,3 +41,9 @@ class AuditLog(CreatedAtModel):
         """Resume el evento para listados de admin y debugging."""
 
         return f"{self.action} | {self.resource_type}:{self.resource_id}"
+
+    @property
+    def action_label(self):
+        """Devuelve una etiqueta legible para la accion registrada."""
+
+        return self.ACTION_LABELS.get(self.action, "Actividad del sistema")

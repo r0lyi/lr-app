@@ -21,6 +21,7 @@ class ExportRrhhRequestsExcelViewTests(VacationBaseTestCase):
     @classmethod
     def setUpTestData(cls):
         cls.rrhh_role = Role.objects.get(name="rrhh")
+        cls.admin_role = Role.objects.get(name="admin")
         cls.pending_status = VacationStatus.objects.get(name="pending")
         cls.approved_status = VacationStatus.objects.get(name="approved")
 
@@ -34,6 +35,18 @@ class ExportRrhhRequestsExcelViewTests(VacationBaseTestCase):
             is_active=True,
         )
         user.roles.set([self.rrhh_role])
+        return user
+
+    def create_admin_user(self, *, email, dni):
+        """Crea un admin activo para exportar desde su panel."""
+
+        user = User.objects.create_user(
+            email=email,
+            dni=dni,
+            password="PruebaSegura123!",
+            is_active=True,
+        )
+        user.roles.set([self.admin_role])
         return user
 
     def test_rrhh_can_export_filtered_requests_to_excel_and_log_history(self):
@@ -98,3 +111,102 @@ class ExportRrhhRequestsExcelViewTests(VacationBaseTestCase):
         self.assertIn("Ana", sheet_xml)
         self.assertIn("pending", sheet_xml)
         self.assertNotIn("approved", sheet_xml)
+        self.assertNotIn("Fecha alta", sheet_xml)
+        self.assertNotIn("Observaciones", sheet_xml)
+
+    def test_admin_can_export_filtered_requests_to_excel_and_log_history(self):
+        admin_user = self.create_admin_user(
+            email="admin-export@example.com",
+            dni="90909090A",
+        )
+        _employee_one_user, employee_one = self.create_employee_user(
+            email="employee-admin-export-one@example.com",
+            dni="23232323T",
+        )
+        _employee_two_user, employee_two = self.create_employee_user(
+            email="employee-admin-export-two@example.com",
+            dni="34343434H",
+        )
+
+        VacationRequest.objects.create(
+            employee=employee_one,
+            status=self.pending_status,
+            start_date=date(2026, 9, 1),
+            end_date=date(2026, 9, 4),
+            requested_days="4.00",
+        )
+        VacationRequest.objects.create(
+            employee=employee_two,
+            status=self.approved_status,
+            start_date=date(2026, 10, 1),
+            end_date=date(2026, 10, 2),
+            requested_days="2.00",
+        )
+
+        self.client.force_login(admin_user)
+
+        response = self.client.get(
+            reverse("vacations:export-rrhh-requests-excel"),
+            {"status": "pending"},
+        )
+
+        self.assertEqual(response.status_code, 200)
+        export_history = ExportHistory.objects.get()
+        self.assertEqual(export_history.user, admin_user)
+        self.assertEqual(export_history.total_records, 1)
+
+    def test_excel_keeps_current_columns_but_respects_seniority_order(self):
+        rrhh_user = self.create_rrhh_user(
+            email="rrhh-export-order@example.com",
+            dni="11111111H",
+        )
+        _older_user, older_employee = self.create_employee_user(
+            email="employee-export-older@example.com",
+            dni="12121212M",
+            first_name="Sonia",
+            last_name="Veterana",
+            hire_date=date(2020, 1, 1),
+        )
+        _younger_user, younger_employee = self.create_employee_user(
+            email="employee-export-younger@example.com",
+            dni="23232323T",
+            first_name="Mario",
+            last_name="Reciente",
+            hire_date=date(2024, 1, 1),
+        )
+
+        VacationRequest.objects.create(
+            employee=younger_employee,
+            status=self.pending_status,
+            start_date=date(2026, 7, 10),
+            end_date=date(2026, 7, 14),
+            requested_days="5.00",
+        )
+        VacationRequest.objects.create(
+            employee=older_employee,
+            status=self.pending_status,
+            start_date=date(2026, 7, 1),
+            end_date=date(2026, 7, 5),
+            requested_days="5.00",
+        )
+
+        self.client.force_login(rrhh_user)
+
+        response = self.client.get(
+            reverse("vacations:export-rrhh-requests-excel"),
+            {"status": "pending"},
+        )
+
+        self.assertEqual(response.status_code, 200)
+
+        workbook = ZipFile(BytesIO(response.content))
+        sheet_xml = workbook.read("xl/worksheets/sheet1.xml").decode("utf-8")
+        self.assertIn("Apellidos", sheet_xml)
+        self.assertIn("Nombre", sheet_xml)
+        self.assertIn("Fecha inicio", sheet_xml)
+        self.assertIn("Fecha final", sheet_xml)
+        self.assertIn("Dias seleccionados", sheet_xml)
+        self.assertIn("Estado", sheet_xml)
+        self.assertNotIn("Fecha alta", sheet_xml)
+        self.assertNotIn("Observaciones", sheet_xml)
+        self.assertLess(sheet_xml.index("Veterana"), sheet_xml.index("Reciente"))

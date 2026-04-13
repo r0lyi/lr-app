@@ -1,0 +1,64 @@
+.dash {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 252px minmax(0, 1fr);
+  align-items: start;
+  background: linear-gradient(180deg, #e6e8ee 0%, #dfe2e9 100%);
+}
+
+.dash-main {
+  min-height: 100vh;
+  padding: 22px 28px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  position: relative;
+}
+
+.dash-content {
+  width: min(1080px, 100%);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.dash-card {
+  padding: 20px 24px;
+  border-radius: 18px;
+  background: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  box-shadow: 0 16px 28px rgba(20, 24, 31, 0.12);
+}
+
+.dash-card-title {
+  margin-bottom: 14px;
+  color: #6b7280;
+  font-size: var(--fs-heading-sm);
+  font-weight: 700;
+}
+
+.dash-hamburger {
+  display: none;
+}
+
+.dash-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.dash-overlay--visible {
+  display: block;
+  opacity: 1;
+}
+
+.no-scroll {
+  overflow: hidden;
+}

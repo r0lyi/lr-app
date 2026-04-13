@@ -1,0 +1,12 @@
+{% load static %}
+{% static "images/logo500x200.svg" as company_logo %}
+
+<div class="onboarding-page">
+  <div class="onboarding-shell">
+    {% include "components/ui/header_title.html" with class_name="onboarding-header" logo_src=company_logo logo_alt="Clean & Service" title="Completa tu perfil" description="Necesitamos confirmar tus datos para calcular correctamente tus vacaciones y accesos." %}
+
+    <section class="onboarding-card">
+      {% include "employees/partials/onboarding/form.html" %}
+    </section>
+  </div>
+</div>

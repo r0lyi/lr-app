@@ -1,1 +1,1 @@
-"""Servicios relacionados con autenticacion, email y validaciones."""
+"""Servicios relacionados con usuarios, autenticacion y validaciones."""

@@ -1,0 +1,15 @@
+{% extends "layouts/dashboard_base.html" %}
+{% load static %}
+
+{% block title %}Panel de empleado{% endblock %}
+
+{% block dashboard_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/components/stat_cards.css' %}">
+  <link rel="stylesheet" href="{% static 'css/components/data_table.css' %}">
+  <link rel="stylesheet" href="{% static 'employees/css/pages/employee_home.css' %}">
+{% endblock %}
+
+{% block dashboard_content %}
+  {% include "employees/partials/dashboard/home/content.html" %}
+{% endblock %}

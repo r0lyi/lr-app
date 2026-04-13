@@ -1,0 +1,58 @@
+<form method="post" class="review-request-form" novalidate>
+  {% csrf_token %}
+
+  {% if form.non_field_errors %}
+    <div class="review-request-form__errors">
+      {% for error in form.non_field_errors %}
+        <p>{{ error }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <div class="review-request-form__grid">
+    <div class="review-request-form__field">
+      <label class="review-request-form__label" for="{{ form.status.id_for_label }}">Estado</label>
+      {{ form.status }}
+      {% if form.status.errors %}
+        {% for error in form.status.errors %}
+          <p class="review-request-form__feedback">{{ error }}</p>
+        {% endfor %}
+      {% endif %}
+    </div>
+
+    <div class="review-request-form__field">
+      <label class="review-request-form__label" for="{{ form.start_date.id_for_label }}">Fecha inicio</label>
+      {{ form.start_date }}
+      {% if form.start_date.errors %}
+        {% for error in form.start_date.errors %}
+          <p class="review-request-form__feedback">{{ error }}</p>
+        {% endfor %}
+      {% endif %}
+    </div>
+
+    <div class="review-request-form__field">
+      <label class="review-request-form__label" for="{{ form.end_date.id_for_label }}">Fecha final</label>
+      {{ form.end_date }}
+      {% if form.end_date.errors %}
+        {% for error in form.end_date.errors %}
+          <p class="review-request-form__feedback">{{ error }}</p>
+        {% endfor %}
+      {% endif %}
+    </div>
+
+    <div class="review-request-form__field review-request-form__field--full">
+      <label class="review-request-form__label" for="{{ form.hr_comment.id_for_label }}">Comentario RRHH</label>
+      {{ form.hr_comment }}
+      {% if form.hr_comment.errors %}
+        {% for error in form.hr_comment.errors %}
+          <p class="review-request-form__feedback">{{ error }}</p>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="review-request-form__footer">
+    <a class="ui-btn ui-btn--secondary ui-btn--md review-request-form__cancel" href="{{ requests_return_url }}">Cancelar</a>
+    {% include "components/ui/button_principal.html" with label="Guardar revision" type="submit" size="md" %}
+  </div>
+</form>

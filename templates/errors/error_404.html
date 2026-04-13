@@ -5,51 +5,9 @@
 
 {% block extra_css %}
   {{ block.super }}
-  <link rel="stylesheet" href="{% static 'css/pages/error_state.css' %}">
+  <link rel="stylesheet" href="{% static 'core/css/pages/error_state.css' %}">
 {% endblock %}
 
 {% block content %}
-{% static "images/logo500x200.svg" as company_logo %}
-
-<div class="error-page error-page--400">
-  <div class="error-shell error-shell--400">
-    <div class="error-visual">
-      <span class="error-float error-float--gear" aria-hidden="true"></span>
-      <span class="error-float error-float--cloud" aria-hidden="true"></span>
-      <span class="error-float error-float--code" aria-hidden="true"></span>
-      <span class="error-float error-float--network" aria-hidden="true"></span>
-      <span class="error-float error-float--server" aria-hidden="true"></span>
-      <span class="error-float error-float--spark" aria-hidden="true"></span>
-
-      <div class="error-visual__digits" aria-hidden="true">
-        <span class="error-visual__digit error-visual__digit--4">4</span>
-        <span class="error-visual__digit error-visual__digit--0">0</span>
-        <span class="error-visual__digit error-visual__digit--4">4</span>
-      </div>
-
-      <div class="error-visual__copy">
-        <h1 class="error-visual__title">Pagina no encontrada</h1>
-        <p class="error-visual__description">
-          La direccion que has escrito no existe dentro del sistema o no esta
-          bien formada. Revisa la URL e intentalo de nuevo desde el inicio.
-        </p>
-      </div>
-
-      <div class="error-visual__brand">
-        <img src="{{ company_logo }}" alt="Clean & Service" class="error-visual__logo" />
-        <p class="error-visual__brand-text">Logistica de Recursos del Agua</p>
-      </div>
-
-      <div class="error-visual__actions">
-        <a class="error-link-btn error-link-btn--ghost" href="{% url 'root' %}">Volver al inicio</a>
-        {% if request.user.is_authenticated %}
-          <form method="post" action="{% url 'auth:logout' %}">
-            {% csrf_token %}
-            {% include "components/ui/button_secondari.html" with label="Cerrar sesion" type="submit" size="md" class_name="error-action-btn" %}
-          </form>
-        {% endif %}
-      </div>
-    </div>
-  </div>
-</div>
+  {% include "core/partials/errors/error_404_content.html" %}
 {% endblock %}

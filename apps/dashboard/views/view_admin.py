@@ -1,16 +1,54 @@
-"""Vista minima del panel de administracion."""
+"""Vista principal del panel de administracion."""
 
-from django.shortcuts import render
+from django.contrib import messages
+from django.shortcuts import redirect, render
 
 from apps.core.utils.decorators import role_required
 from apps.dashboard.services.layout_context import build_dashboard_base_context
+from apps.notifications.forms import AdminBroadcastNotificationForm
+from apps.notifications.selectors import get_admin_broadcast_notification_recipients
+from apps.notifications.services import create_admin_broadcast_notifications
+from apps.users.selectors import get_admin_dashboard_summary
 
 
 @role_required("admin")
 def admin_home_view(request):
-    """Muestra la vista basica de administracion protegida por rol."""
+    """Muestra un resumen general del sistema para el rol admin.
+
+    Esta home no pretende sustituir a las pantallas de gestion detallada. Su
+    objetivo es ofrecer una fotografia general del sistema y un acceso rapido a
+    la lista de usuarios, que es la primera herramienta util para un admin.
+    """
+    broadcast_form = AdminBroadcastNotificationForm()
+
+    if request.method == "POST":
+        broadcast_form = AdminBroadcastNotificationForm(request.POST)
+        if broadcast_form.is_valid():
+            notifications = create_admin_broadcast_notifications(
+                sender=request.user,
+                title=broadcast_form.cleaned_data["title"],
+                message=broadcast_form.cleaned_data["message"],
+            )
+            messages.success(
+                request,
+                f"Se ha enviado un aviso general a {len(notifications)} usuario(s).",
+            )
+            return redirect("dashboard:admin-home")
+
+    recipients_count = get_admin_broadcast_notification_recipients().count()
+
     return render(
         request,
-        "dashboard/admin_home.html",
-        build_dashboard_base_context(request.user, "admin", active_section="home"),
+        "dashboard/pages/admin_home.html",
+        build_dashboard_base_context(
+            request.user,
+            "admin",
+            request=request,
+            active_section="home",
+            extra_context={
+                **get_admin_dashboard_summary(),
+                "broadcast_notification_form": broadcast_form,
+                "broadcast_recipients_count": recipients_count,
+            },
+        ),
     )

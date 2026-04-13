@@ -1,0 +1,130 @@
+<div class="dash-notifications" data-notifications>
+  <button
+    class="dash-notifications__button"
+    type="button"
+    aria-label="Abrir notificaciones"
+    aria-expanded="false"
+    aria-controls="dash-notifications-panel"
+    data-notifications-toggle
+  >
+    <span class="dash-notifications__icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+        <path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+    </span>
+    {% if unread_notifications_count %}
+      <span class="dash-notifications__count">{{ unread_notifications_count }}</span>
+    {% endif %}
+  </button>
+
+  <section
+    class="dash-notifications__panel"
+    id="dash-notifications-panel"
+    aria-label="Panel de notificaciones"
+    hidden
+  >
+    <header class="dash-notifications__header">
+      <div>
+        <h2 class="dash-notifications__title">Notificaciones</h2>
+        <p class="dash-notifications__subtitle">
+          {% if unread_notifications_count %}
+            {{ unread_notifications_count }} sin leer
+          {% else %}
+            Todo al dia
+          {% endif %}
+        </p>
+      </div>
+      <div class="dash-notifications__header-actions">
+        {% if unread_notifications_count %}
+          <form method="post" action="{% url 'notifications:mark-all-read' %}">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ notifications_return_path }}">
+            <button class="dash-notifications__mark-all" type="submit">
+              Marcar todas
+            </button>
+          </form>
+        {% endif %}
+        <button
+          class="dash-notifications__close"
+          type="button"
+          aria-label="Cerrar notificaciones"
+          data-notifications-close
+        >
+          <span></span><span></span>
+        </button>
+      </div>
+    </header>
+
+    <div class="dash-notifications__body">
+      {% if recent_notifications %}
+        <ul class="dash-notifications__list">
+          {% for notification in recent_notifications %}
+            <li class="dash-notifications__item{% if not notification.is_read %} dash-notifications__item--unread{% endif %}">
+              <div class="dash-notifications__item-top">
+                <span class="dash-notifications__badge">
+                  {{ notification.get_notification_type_display }}
+                </span>
+                <time class="dash-notifications__time" datetime="{{ notification.sent_at|date:'c' }}">
+                  {{ notification.sent_at|date:"d-m-Y H:i" }}
+                </time>
+              </div>
+              <div class="dash-notifications__content">
+                {% if notification.title %}
+                  <p class="dash-notifications__message-title">{{ notification.title }}</p>
+                {% endif %}
+                <p class="dash-notifications__message">{{ notification.message }}</p>
+                {% if notification.created_by %}
+                  <p class="dash-notifications__sender">
+                    Enviado por {{ notification.created_by.email }}
+                  </p>
+                {% endif %}
+              </div>
+              <div class="dash-notifications__item-actions">
+                {% if not notification.is_read %}
+                  <form
+                    method="post"
+                    action="{% url 'notifications:mark-read' notification.pk %}"
+                  >
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ notifications_return_path }}">
+                    <button class="dash-notifications__mark-read" type="submit">
+                      Marcar como leida
+                    </button>
+                  </form>
+                {% else %}
+                  <span class="dash-notifications__read-label">Leida</span>
+                {% endif %}
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <div class="dash-notifications__empty">
+          <strong>No tienes notificaciones</strong>
+          <p>Cuando haya cambios importantes en solicitudes o revisiones, apareceran aqui.</p>
+        </div>
+      {% endif %}
+    </div>
+
+    {% if notifications_page_obj and notifications_page_obj.paginator.num_pages > 1 %}
+      <footer class="dash-notifications__footer">
+        <span class="dash-notifications__page-indicator">
+          Pagina {{ notifications_page_obj.number }} de {{ notifications_page_obj.paginator.num_pages }}
+        </span>
+        <div class="dash-notifications__pagination">
+          {% if notifications_previous_page_url %}
+            <a class="dash-notifications__page-link" href="{{ notifications_previous_page_url }}">
+              Anterior
+            </a>
+          {% endif %}
+          {% if notifications_next_page_url %}
+            <a class="dash-notifications__page-link" href="{{ notifications_next_page_url }}">
+              Siguiente
+            </a>
+          {% endif %}
+        </div>
+      </footer>
+    {% endif %}
+  </section>
+</div>
