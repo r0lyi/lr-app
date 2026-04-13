@@ -1,0 +1,18 @@
+<div class="employee-home-page">
+  {% include "employees/partials/dashboard/home/stat_cards.html" %}
+
+  <section class="dash-card employee-history-card">
+    <div class="employee-history-card__heading">
+      <div>
+        <h1 class="dash-card-title">Historial de Solicitudes</h1>
+        <p class="employee-history-card__description">
+          Revisa tus solicitudes registradas y utiliza los filtros para acotar por
+          fechas o por estado.
+        </p>
+      </div>
+    </div>
+
+    {% include "employees/partials/dashboard/home/filters.html" %}
+    {% include "employees/partials/dashboard/home/table.html" %}
+  </section>
+</div>

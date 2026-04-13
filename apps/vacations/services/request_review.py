@@ -4,6 +4,9 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 
 from apps.users.selectors import has_role
+from apps.notifications.services import (
+    create_vacation_status_changed_notification,
+)
 from apps.vacations.services.policies import ACTIVE_REQUEST_STATUS_NAMES
 from apps.vacations.services.request_creation import calculate_requested_natural_days
 from apps.vacations.selectors import get_overlapping_active_requests
@@ -28,7 +31,10 @@ def review_vacation_request(
     - resolution_date solo se fija cuando la solicitud deja de estar pendiente
     - resolved_by guarda quien hizo la ultima resolucion desde RRHH
     - un usuario RRHH no puede revisar una solicitud propia
+    - solo notificamos al empleado cuando el estado cambia realmente
     """
+    previous_status_name = vacation_request.status.name
+
     if (
         vacation_request.employee.user_id == acting_user.id
         and has_role(acting_user, "rrhh")
@@ -78,4 +84,11 @@ def review_vacation_request(
             "updated_at",
         ]
     )
+
+    create_vacation_status_changed_notification(
+        vacation_request,
+        previous_status_name=previous_status_name,
+        new_status_name=status.name,
+    )
+
     return vacation_request

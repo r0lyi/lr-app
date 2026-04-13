@@ -11,8 +11,10 @@ from apps.audit.services import (
     mark_export_success,
 )
 from apps.core.utils.decorators import role_required
+from apps.users.selectors import get_primary_role
 from apps.vacations.forms import RrhhVacationRequestFilterForm
 from apps.vacations.selectors import get_filtered_rrhh_vacation_requests
+from apps.vacations.services import build_rrhh_export_review
 from apps.vacations.services.export_requests_excel import (
     build_rrhh_vacation_requests_excel,
 )
@@ -27,6 +29,10 @@ def export_rrhh_requests_excel_view(request):
     """
 
     default_status_name = "pending"
+    current_role = get_primary_role(request.user) or "rrhh"
+    return_url_name = (
+        "dashboard:admin-requests" if current_role == "admin" else "dashboard:rrhh-home"
+    )
     filter_data = request.GET.copy()
     if "status" not in filter_data:
         filter_data["status"] = default_status_name
@@ -37,7 +43,7 @@ def export_rrhh_requests_excel_view(request):
             request,
             "No se pudo exportar porque los filtros enviados no son validos.",
         )
-        return redirect("dashboard:rrhh-home")
+        return redirect(return_url_name)
 
     request_filters = filter_form.cleaned_data
     vacation_requests = get_filtered_rrhh_vacation_requests(
@@ -46,6 +52,8 @@ def export_rrhh_requests_excel_view(request):
         end_date=request_filters.get("end_date"),
         status_name=request_filters.get("status"),
     )
+    export_review = build_rrhh_export_review(vacation_requests)
+    reviewed_requests = export_review["vacation_requests"]
 
     export_history = create_export_history(
         user=request.user,
@@ -54,12 +62,12 @@ def export_rrhh_requests_excel_view(request):
     )
 
     try:
-        file_name, file_bytes = build_rrhh_vacation_requests_excel(vacation_requests)
+        file_name, file_bytes = build_rrhh_vacation_requests_excel(reviewed_requests)
         mark_export_success(
             export_history=export_history,
             file_name=file_name,
             file_bytes=file_bytes,
-            total_records=vacation_requests.count(),
+            total_records=len(reviewed_requests),
         )
     except Exception:
         mark_export_failed(export_history=export_history)
@@ -67,7 +75,7 @@ def export_rrhh_requests_excel_view(request):
             request,
             "No se pudo generar el archivo Excel de las solicitudes.",
         )
-        return redirect("dashboard:rrhh-home")
+        return redirect(return_url_name)
 
     response = HttpResponse(
         file_bytes,
@@ -78,4 +86,3 @@ def export_rrhh_requests_excel_view(request):
     )
     response["Content-Disposition"] = f'attachment; filename="{file_name}"'
     return response
-

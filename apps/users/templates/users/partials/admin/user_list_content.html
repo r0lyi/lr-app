@@ -1,0 +1,21 @@
+<section class="admin-users-page">
+  {% include "users/partials/admin/user_list_summary.html" %}
+
+  <section class="dash-card admin-users-card">
+    <div class="admin-users-card__heading">
+      <div>
+        <h1 class="dash-card-title">Usuarios del sistema</h1>
+        <p class="admin-users-card__description">
+          Consulta el estado general de cada cuenta y entra a una pantalla
+          individual cuando necesites modificarla con mas detalle.
+        </p>
+      </div>
+      <div class="admin-users-card__count">
+        {{ managed_users_count }} usuario{{ managed_users_count|pluralize }}
+      </div>
+    </div>
+
+    {% include "users/partials/admin/user_list_filters.html" %}
+    {% include "users/partials/admin/user_list_table.html" %}
+  </section>
+</section>

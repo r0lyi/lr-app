@@ -1,6 +1,10 @@
 """Helpers neutros para construir el layout comun del dashboard."""
 
 from apps.employees.models import Employee
+from apps.notifications.selectors import (
+    get_unread_notifications_count,
+    get_user_inbox_notifications_page,
+)
 
 ROLE_LABELS = {
     "employee": "Empleado",
@@ -66,6 +70,30 @@ ROLE_NAV_CONFIG = {
             "icon": "home",
         },
         {
+            "section": "request",
+            "url_name": "vacations:create-request",
+            "label": "Solicitar",
+            "icon": "drop",
+        },
+        {
+            "section": "requests",
+            "url_name": "dashboard:admin-requests",
+            "label": "Solicitudes",
+            "icon": "drop",
+        },
+        {
+            "section": "users",
+            "url_name": "dashboard:admin-users",
+            "label": "Usuarios",
+            "icon": "home",
+        },
+        {
+            "section": "activity",
+            "url_name": "audit:activity-log",
+            "label": "Actividad",
+            "icon": "home",
+        },
+        {
             "section": "profile",
             "url_name": "employees:profile",
             "label": "Perfil",
@@ -111,14 +139,37 @@ def get_dashboard_nav_items(role_name, *, active_section="home"):
     return items
 
 
+def build_notifications_page_url(request, page_number):
+    """Construye una URL que conserva los filtros actuales y cambia de pagina."""
+
+    if request is None:
+        return ""
+
+    query_params = request.GET.copy()
+    query_params["notifications_page"] = page_number
+    encoded_query = query_params.urlencode()
+    return f"{request.path}?{encoded_query}" if encoded_query else request.path
+
+
 def build_dashboard_base_context(
     user,
     role_name,
     *,
+    request=None,
     active_section="home",
     extra_context=None,
 ):
     """Devuelve el contexto comun usado por las pantallas del dashboard."""
+    notifications_page_number = 1
+    if request is not None:
+        notifications_page_number = request.GET.get("notifications_page", 1)
+
+    notifications_page = get_user_inbox_notifications_page(
+        user,
+        page_number=notifications_page_number,
+        page_size=10,
+    )
+
     context = {
         "display_name": get_dashboard_display_name(user),
         "role_label": get_role_label(role_name),
@@ -126,6 +177,28 @@ def build_dashboard_base_context(
             role_name,
             active_section=active_section,
         ),
+        "notifications_page_obj": notifications_page,
+        "recent_notifications": list(notifications_page.object_list),
+        "notifications_next_page_url": (
+            build_notifications_page_url(
+                request,
+                notifications_page.next_page_number(),
+            )
+            if notifications_page.has_next()
+            else ""
+        ),
+        "notifications_previous_page_url": (
+            build_notifications_page_url(
+                request,
+                notifications_page.previous_page_number(),
+            )
+            if notifications_page.has_previous()
+            else ""
+        ),
+        "notifications_return_path": (
+            request.get_full_path() if request is not None else ""
+        ),
+        "unread_notifications_count": get_unread_notifications_count(user),
     }
     if extra_context:
         context.update(extra_context)

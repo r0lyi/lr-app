@@ -1,0 +1,35 @@
+<form method="get" class="audit-log-filters" novalidate>
+  {% if audit_log_filter_form.non_field_errors %}
+    <div class="audit-log-filters__errors">
+      {% for error in audit_log_filter_form.non_field_errors %}
+        <p>{{ error }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <div class="audit-log-filters__grid">
+    <div class="audit-log-filters__field audit-log-filters__field--search">
+      <label class="audit-log-filters__label" for="{{ audit_log_filter_form.search.id_for_label }}">Buscar actividad</label>
+      {{ audit_log_filter_form.search }}
+    </div>
+    <div class="audit-log-filters__field">
+      <label class="audit-log-filters__label" for="{{ audit_log_filter_form.action.id_for_label }}">Tipo de cambio</label>
+      {{ audit_log_filter_form.action }}
+    </div>
+    <div class="audit-log-filters__field">
+      <label class="audit-log-filters__label" for="{{ audit_log_filter_form.start_date.id_for_label }}">Fecha inicio</label>
+      {{ audit_log_filter_form.start_date }}
+    </div>
+    <div class="audit-log-filters__field">
+      <label class="audit-log-filters__label" for="{{ audit_log_filter_form.end_date.id_for_label }}">Fecha final</label>
+      {{ audit_log_filter_form.end_date }}
+    </div>
+  </div>
+
+  <div class="audit-log-filters__actions">
+    {% include "components/ui/button_principal.html" with label="Filtrar" type="submit" size="md" class_name="audit-log-filters__submit" %}
+    <a href="{% url 'audit:activity-log' %}" class="ui-btn ui-btn--secondary ui-btn--md audit-log-filters__reset">
+      Limpiar filtros
+    </a>
+  </div>
+</form>

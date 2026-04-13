@@ -16,5 +16,14 @@ from decimal import Decimal
 
 FULL_ANNUAL_VACATION_DAYS = Decimal("30.00")
 ACTIVE_REQUEST_STATUS_NAMES = ("pending", "approved")
+OPEN_REQUEST_STATUS_NAMES = ("pending",)
 DEFAULT_NEW_REQUEST_STATUS_NAME = "pending"
 VACATION_DAY_COUNT_MODE = "natural"
+MIN_REQUESTED_VACATION_DAYS = Decimal("3.00")
+MAX_REQUESTED_VACATION_DAYS = Decimal("30.00")
+MIN_ADVANCE_NOTICE_DAYS = 30
+LONG_DURATION_VACATION_DAYS = Decimal("30.00")
+HIGH_LOAD_PERIODS = (
+    ("Verano", (6, 15), (9, 15)),
+    ("Navidad", (12, 15), (1, 7)),
+)

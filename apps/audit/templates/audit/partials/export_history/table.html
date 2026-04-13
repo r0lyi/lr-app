@@ -1,0 +1,54 @@
+<div class="export-history-table">
+  {% if export_histories %}
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Usuario</th>
+          <th>Archivo</th>
+          <th>Cantidad de solicitudes</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for export_item in export_histories %}
+          <tr>
+            <td data-label="Fecha">{{ export_item.created_at|date:"d-m-Y H:i" }}</td>
+            <td data-label="Usuario">
+              {% if export_item.user %}
+                {{ export_item.user.email }}
+              {% else %}
+                Usuario eliminado
+              {% endif %}
+            </td>
+            <td data-label="Archivo">
+              {% if export_item.file_path %}
+                <a class="export-history-table__file-link" href="{% url 'audit:download-export' export_item.pk %}">
+                  <span class="export-history-table__file-name">
+                    {{ export_item.file_name|default:"Descargar" }}
+                  </span>
+                  <span class="export-history-table__file-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none">
+                      <path d="M12 4v10m0 0 4-4m-4 4-4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+                      <path d="M5 18h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+                    </svg>
+                  </span>
+                </a>
+              {% else %}
+                -
+              {% endif %}
+            </td>
+            <td data-label="Cantidad de solicitudes">
+              <span class="export-history-table__requests-count">
+                {{ export_item.total_records|default:"-" }}
+              </span>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p class="export-history-table__empty">
+      No se ha registrado ninguna exportacion con los filtros actuales.
+    </p>
+  {% endif %}
+</div>

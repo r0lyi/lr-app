@@ -31,6 +31,7 @@ def employee_home_view(request):
     context = build_dashboard_base_context(
         request.user,
         "employee",
+        request=request,
         active_section="home",
         extra_context={
             **build_employee_dashboard_summary(
@@ -40,4 +41,4 @@ def employee_home_view(request):
             "filter_form": filter_form,
         },
     )
-    return render(request, "dashboard/employee_home.html", context)
+    return render(request, "dashboard/pages/employee_home.html", context)

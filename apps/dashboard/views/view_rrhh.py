@@ -1,20 +1,21 @@
-"""Vista minima del panel de recursos humanos."""
+"""Vistas del panel de gestion de solicitudes para RRHH y admin."""
 
 from django.urls import reverse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 
 from apps.core.utils.decorators import role_required
 from apps.dashboard.services.layout_context import build_dashboard_base_context
+from apps.users.selectors import get_primary_role
 from apps.vacations.forms import RrhhVacationRequestFilterForm
 from apps.vacations.selectors import get_filtered_rrhh_vacation_requests
+from apps.vacations.services import build_rrhh_export_review
 
 
-@role_required("rrhh", allow_admin=True)
-def rrhh_home_view(request):
-    """Muestra el listado basico de solicitudes visible para RRHH.
+def _render_requests_management_view(request, *, role_name, active_section):
+    """Renderiza el panel compartido de solicitudes para RRHH o admin.
 
-    En esta primera iteracion RRHH no revisa ni filtra todavia: solo necesita
-    una tabla sencilla para ver quien ha solicitado vacaciones y con que rango.
+    La logica de lectura y filtrado sigue viviendo en ``vacations``. Aqui solo
+    decidimos el contexto visual y la URL de exportacion que necesita el panel.
     """
     default_status_name = "pending"
 
@@ -43,23 +44,69 @@ def rrhh_home_view(request):
         end_date=request_filters.get("end_date"),
         status_name=request_filters.get("status"),
     )
+    export_review = build_rrhh_export_review(vacation_requests)
     export_querystring = filter_form.data.urlencode() if filter_form.is_bound else ""
     export_url = reverse("vacations:export-rrhh-requests-excel")
     if export_querystring:
         export_url = f"{export_url}?{export_querystring}"
 
+    panel_title = "Solicitudes"
+    if role_name == "admin":
+        panel_description = (
+            "Gestiona y revisa las solicitudes registradas desde el panel de "
+            "administracion sin salir de tu area de trabajo."
+        )
+    else:
+        panel_description = (
+            "Visualiza, filtra y revisa las solicitudes activas del equipo "
+            "desde un solo panel."
+        )
+
     return render(
         request,
-        "dashboard/rrhh_home.html",
+        "dashboard/pages/requests_management.html",
         build_dashboard_base_context(
             request.user,
-            "rrhh",
-            active_section="home",
+            role_name,
+            request=request,
+            active_section=active_section,
             extra_context={
                 "export_url": export_url,
+                "export_review_summary": export_review["summary"],
                 "filter_form": filter_form,
-                "vacation_requests": vacation_requests,
-                "filtered_requests_count": vacation_requests.count(),
+                "vacation_requests": export_review["vacation_requests"],
+                "filtered_requests_count": len(export_review["vacation_requests"]),
+                "requests_page_title": panel_title,
+                "requests_page_description": panel_description,
             },
         ),
+    )
+
+
+@role_required("rrhh", allow_admin=True)
+def rrhh_home_view(request):
+    """Muestra el panel de solicitudes para RRHH.
+
+    Si entra un admin por esta ruta antigua, lo redirigimos a su entrada propia
+    para mantener una experiencia consistente y un menu lateral correcto.
+    """
+
+    if get_primary_role(request.user) == "admin":
+        return redirect("dashboard:admin-requests")
+
+    return _render_requests_management_view(
+        request,
+        role_name="rrhh",
+        active_section="home",
+    )
+
+
+@role_required("admin")
+def admin_requests_view(request):
+    """Muestra al admin la misma gestion de solicitudes que usa RRHH."""
+
+    return _render_requests_management_view(
+        request,
+        role_name="admin",
+        active_section="requests",
     )

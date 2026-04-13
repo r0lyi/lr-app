@@ -1,0 +1,38 @@
+.dash-header {
+  display: flex;
+  justify-content: center;
+}
+
+.dash-header-card {
+  width: min(1080px, 100%);
+  display: grid;
+  grid-template-columns: minmax(120px, 148px) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 18px;
+  padding: 14px 22px;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 12px 24px rgba(27, 31, 35, 0.12);
+}
+
+.dash-header-logo img {
+  display: block;
+  width: 140px;
+  height: auto;
+}
+
+.dash-header-title {
+  text-align: center;
+  color: #6b7280;
+  font-size: var(--fs-subtitle);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.dash-header-actions {
+  min-width: 120px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+}

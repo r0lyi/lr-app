@@ -11,4 +11,4 @@ def error_400_view(request):
     """Devuelve un 400 real cuando el usuario no tiene un rol valido."""
     if get_primary_role(request.user):
         return redirect("dashboard:home")
-    return render(request, "dashboard/error_400.html", status=400)
+    return render(request, "dashboard/pages/error_400.html", status=400)

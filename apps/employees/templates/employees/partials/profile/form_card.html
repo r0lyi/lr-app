@@ -1,0 +1,66 @@
+<section class="dash-card profile-page-card">
+  <form class="profile-form" method="post" novalidate>
+    {% csrf_token %}
+    <input type="hidden" name="profile_action" value="employee-update">
+
+    <h1 class="dash-card-title">Editar datos del empleado</h1>
+
+    <div class="profile-grid">
+      <div class="profile-fields">
+        {% if employee_form.non_field_errors %}
+          <div class="profile-field--full">
+            {% for error in employee_form.non_field_errors %}
+              <p class="ui-field__feedback ui-field__feedback--error">{{ error }}</p>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        {% if profile_edit_mode %}
+          {% include "components/ui/text_input.html" with label="Nombre/s" name="first_name" id=employee_form.first_name.id_for_label value=employee_form.first_name.value|default_if_none:'' autocomplete="given-name" error=employee_form.first_name.errors.0 wrapper_class="profile-field" %}
+        {% else %}
+          {% include "components/ui/text_input.html" with label="Nombre/s" name="first_name" id=employee_form.first_name.id_for_label value=employee_form.first_name.value|default_if_none:'' autocomplete="given-name" wrapper_class="profile-field" disabled=True %}
+        {% endif %}
+
+        {% if profile_edit_mode %}
+          {% include "components/ui/text_input.html" with label="Apellidos" name="last_name" id=employee_form.last_name.id_for_label value=employee_form.last_name.value|default_if_none:'' autocomplete="family-name" error=employee_form.last_name.errors.0 wrapper_class="profile-field" %}
+        {% else %}
+          {% include "components/ui/text_input.html" with label="Apellidos" name="last_name" id=employee_form.last_name.id_for_label value=employee_form.last_name.value|default_if_none:'' autocomplete="family-name" wrapper_class="profile-field" disabled=True %}
+        {% endif %}
+
+        {% include "components/ui/text_input.html" with label="Correo Electronico" name="email_display" id="profile-email-display" type="email" value=request.user.email wrapper_class="profile-field" disabled=True %}
+
+        {% if profile_edit_mode %}
+          {% include "components/ui/phone_input.html" with label="Telefono" name="phone" id=employee_form.phone.id_for_label value=employee_form.phone.value|default_if_none:'' autocomplete="tel" error=employee_form.phone.errors.0 wrapper_class="profile-field" %}
+        {% else %}
+          {% include "components/ui/phone_input.html" with label="Telefono" name="phone" id=employee_form.phone.id_for_label value=employee_form.phone.value|default_if_none:'' autocomplete="tel" wrapper_class="profile-field" disabled=True %}
+        {% endif %}
+
+        {% include "components/ui/date_input.html" with label="Fecha Ingreso" name="hire_date_display" id="profile-hire-date-display" value=employee_profile.hire_date|date:"Y-m-d" wrapper_class="profile-field" disabled=True %}
+      </div>
+
+      <div class="profile-side">
+        {% if profile_edit_mode %}
+          <aside class="profile-warning-panel">
+            <h2 class="profile-warning-panel__title">Advertencia</h2>
+            <p class="profile-warning-panel__text">
+              <strong>Revisa</strong> los datos antes de guardarlos. Esta
+              informacion puede usarse en procesos administrativos.
+            </p>
+          </aside>
+        {% endif %}
+
+        {% include "components/ui/info_panel.html" with title="¿Necesitas actualizar tus datos?" text="Si alguno de tus datos es incorrecto o ha cambiado, puedes modificarlos aqui para mantener tu informacion actualizada." %}
+      </div>
+    </div>
+
+    <div class="profile-actions">
+      {% if profile_edit_mode %}
+        {% include "components/ui/button_principal.html" with label="Guardar cambios" type="submit" size="md" class_name="profile-submit-btn" %}
+        <a class="ui-btn ui-btn--cancel ui-btn--md profile-submit-btn" href="{% url 'employees:profile' %}">Cancelar</a>
+      {% else %}
+        {% include "components/ui/button_secondari.html" with label="Cambiar contrasena" type="button" size="md" class_name="profile-open-password" id="open-password-modal" %}
+        <a class="ui-btn ui-btn--primary ui-btn--md profile-submit-btn" href="{% url 'employees:profile' %}?edit=1">Editar datos</a>
+      {% endif %}
+    </div>
+  </form>
+</section>
