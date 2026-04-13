@@ -1,0 +1,11 @@
+<div class="rrhh-home-card__heading">
+  <div>
+    <h1 class="dash-card-title">{{ requests_page_title|default:"Solicitudes" }}</h1>
+    <p class="rrhh-home-card__description">
+      {{ requests_page_description|default:"Visualiza, filtra y revisa las solicitudes activas del equipo desde un solo panel." }}
+    </p>
+  </div>
+  <div class="rrhh-home-card__count">
+    {{ filtered_requests_count }} resultado{{ filtered_requests_count|pluralize }}
+  </div>
+</div>

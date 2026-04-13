@@ -1,0 +1,32 @@
+<div class="audit-log-table">
+  {% if audit_logs %}
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Tipo de cambio</th>
+          <th>Realizado por</th>
+          <th>Qué sucedió</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for audit_item in audit_logs %}
+          <tr>
+            <td data-label="Fecha">{{ audit_item.created_at|date:"d-m-Y H:i" }}</td>
+            <td data-label="Tipo de cambio">
+              <span class="audit-log-table__badge{% if audit_item.action == 'user_access_state_changed' %} audit-log-table__badge--access{% elif audit_item.action == 'user_department_changed' %} audit-log-table__badge--department{% endif %}">
+                {{ audit_item.action_label }}
+              </span>
+            </td>
+            <td data-label="Realizado por">{{ audit_item.user.email }}</td>
+            <td data-label="Qué sucedió">{{ audit_item.description|default:"Sin detalle disponible." }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p class="audit-log-table__empty">
+      No hay actividad que coincida con los filtros aplicados.
+    </p>
+  {% endif %}
+</div>

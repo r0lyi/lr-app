@@ -45,7 +45,8 @@ def create_vacation_request_view(request):
                     employee_comment=form.cleaned_data["employee_comment"],
                 )
             except ValidationError as exc:
-                form.add_error(None, exc.message)
+                for error_message in exc.messages:
+                    form.add_error(None, error_message)
             else:
                 messages.success(
                     request,
@@ -71,4 +72,4 @@ def create_vacation_request_view(request):
             ),
         },
     )
-    return render(request, "vacations/create_request.html", context)
+    return render(request, "dashboard/pages/create_request.html", context)

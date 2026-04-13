@@ -23,7 +23,7 @@ def audit_log_view(request):
     summary = get_audit_log_summary(filters=filter_data)
     return render(
         request,
-        "audit/audit_log.html",
+        "dashboard/pages/audit_log.html",
         build_dashboard_base_context(
             request.user,
             "admin",

@@ -1,0 +1,7 @@
+<div class="vac-request-top">
+  <div class="vac-request-metrics">
+    {% include "components/ui/stat_card.html" with title="Derecho anual" extra_title=annual_vacation_reference_year value=annual_vacation_days_count value_color_class="vac-request-summary-value" %}
+  </div>
+
+  {% include "components/ui/info_panel.html" with class_name="vac-request-info" title="Solicitud de periodo vacacional" text="Selecciona la fecha de inicio y la fecha final usando los calendarios. Puedes cambiar de mes y de ano con rapidez y anadir una nota opcional antes de confirmar." line_1="Cada calendario marca una sola fecha: inicio o final." line_2="El conteo se calcula en dias naturales, incluyendo ambas fechas." line_3="La solicitud se registrara para revision de RRHH." %}
+</div>

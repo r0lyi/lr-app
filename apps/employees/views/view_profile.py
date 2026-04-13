@@ -87,4 +87,4 @@ def employee_profile_view(request):
             "profile_edit_mode": profile_edit_mode,
         },
     )
-    return render(request, "employees/profile.html", context)
+    return render(request, "dashboard/pages/profile.html", context)

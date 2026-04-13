@@ -62,7 +62,7 @@ def _render_requests_management_view(request, *, role_name, active_section):
 
     return render(
         request,
-        "dashboard/rrhh_home.html",
+        "dashboard/pages/requests_management.html",
         build_dashboard_base_context(
             request.user,
             role_name,

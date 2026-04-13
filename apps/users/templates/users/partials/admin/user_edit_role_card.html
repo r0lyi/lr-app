@@ -1,0 +1,42 @@
+<article class="admin-user-edit-card">
+  <div class="admin-user-edit-card__heading">
+    <div>
+      <h2 class="admin-user-edit-card__title">Rol principal</h2>
+      <p class="admin-user-edit-card__description">
+        Define el rol operativo con el que esta cuenta entra al sistema.
+      </p>
+    </div>
+    <span class="admin-user-edit-card__badge">{{ managed_user.primary_role_label }}</span>
+  </div>
+
+  {% if managed_user.can_change_primary_role %}
+    <form
+      method="post"
+      action="{% url 'dashboard:admin-user-primary-role' managed_user.user.pk %}"
+      class="admin-user-edit-form"
+    >
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ request.path }}">
+      <label class="admin-user-edit-form__label" for="primary-role-select">Rol disponible</label>
+      <select
+        id="primary-role-select"
+        name="primary_role"
+        class="ui-select admin-user-edit-form__select"
+      >
+        {% for role in available_roles %}
+          <option
+            value="{{ role.pk }}"
+            {% if role.name == managed_user.primary_role_name %}selected{% endif %}
+          >
+            {{ role.description|default:role.name|capfirst }}
+          </option>
+        {% endfor %}
+      </select>
+      {% include "components/ui/button_principal.html" with label="Guardar rol" type="submit" size="md" class_name="admin-user-edit-form__submit" %}
+    </form>
+  {% else %}
+    <p class="admin-user-edit-card__note">
+      Este usuario se gestiona desde Django admin.
+    </p>
+  {% endif %}
+</article>
