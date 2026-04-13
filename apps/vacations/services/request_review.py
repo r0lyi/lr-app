@@ -3,6 +3,7 @@
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 
+from apps.users.selectors import has_role
 from apps.notifications.services import (
     create_vacation_status_changed_notification,
 )
@@ -29,6 +30,15 @@ def review_vacation_request(
     - requested_days se recalcula al cambiar el rango
     - resolution_date solo se fija cuando la solicitud deja de estar pendiente
     - resolved_by guarda quien hizo la ultima resolucion desde RRHH
+    - un usuario RRHH no puede revisar una solicitud propia
+    """
+    if (
+        vacation_request.employee.user_id == acting_user.id
+        and has_role(acting_user, "rrhh")
+    ):
+        raise ValidationError(
+            "No puedes revisar tu propia solicitud de vacaciones. Debe gestionarla otro usuario de RRHH."
+        )
     - solo notificamos al empleado cuando el estado cambia realmente
     """
     previous_status_name = vacation_request.status.name

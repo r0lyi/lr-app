@@ -16,9 +16,9 @@ from apps.vacations.forms import VacationRequestForm
 from apps.vacations.services import create_employee_vacation_request
 
 
-@role_required("employee", allow_admin=True)
+@role_required("employee", allow_rrhh=True)
 def create_vacation_request_view(request):
-    """Renderiza y procesa el formulario minimo de solicitud del empleado.
+    """Renderiza y procesa el formulario minimo de solicitud del usuario.
 
     Esta vista solo orquesta:
     - comprueba que exista el perfil Employee
@@ -61,7 +61,6 @@ def create_vacation_request_view(request):
     context = build_dashboard_base_context(
         request.user,
         current_role,
-        request=request,
         active_section="request",
         extra_context={
             "form": form,

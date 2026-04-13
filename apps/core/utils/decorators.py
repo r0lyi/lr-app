@@ -19,8 +19,8 @@ def anonymous_required(view_func):
     return wrapper
 
 
-def role_required(role_name, *, allow_admin=False):
-    """Exige un rol principal concreto y opcionalmente permite admin."""
+def role_required(role_name, *, allow_admin=False, allow_rrhh=False):
+    """Exige un rol principal concreto y opcionalmente permite otros accesos."""
     normalized_role = (role_name or "").strip().lower()
 
     def decorator(view_func):
@@ -32,6 +32,9 @@ def role_required(role_name, *, allow_admin=False):
                 return view_func(request, *args, **kwargs)
 
             if allow_admin and current_role == "admin":
+                return view_func(request, *args, **kwargs)
+
+            if allow_rrhh and current_role == "rrhh":
                 return view_func(request, *args, **kwargs)
 
             if current_role != normalized_role:
