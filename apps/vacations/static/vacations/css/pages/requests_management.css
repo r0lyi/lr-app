@@ -11,6 +11,88 @@
   padding: 24px 26px;
 }
 
+.rrhh-export-review {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 18px 20px;
+  border-radius: 18px;
+  background:
+    linear-gradient(135deg, rgba(20, 154, 223, 0.1), rgba(255, 255, 255, 0.92)),
+    #ffffff;
+  border: 1px solid rgba(20, 154, 223, 0.16);
+}
+
+.rrhh-export-review__intro {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.rrhh-export-review__eyebrow {
+  margin: 0 0 6px;
+  color: #0f87c7;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.rrhh-export-review__title {
+  margin: 0 0 8px;
+  color: #0f172a;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.rrhh-export-review__text,
+.rrhh-export-review__order-note,
+.rrhh-export-review__description {
+  margin: 0;
+  color: #475569;
+  line-height: 1.6;
+}
+
+.rrhh-export-review__order-note {
+  max-width: 340px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  font-weight: 600;
+}
+
+.rrhh-export-review__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.rrhh-export-review__card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+}
+
+.rrhh-export-review__label {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.rrhh-export-review__value {
+  color: #0f172a;
+  font-size: 28px;
+  font-weight: 800;
+}
+
 .rrhh-home-card__heading {
   display: flex;
   align-items: flex-start;
@@ -82,7 +164,7 @@
 
 .rrhh-home-table .data-table {
   width: 100%;
-  min-width: 880px;
+  min-width: 1080px;
   border-collapse: collapse;
 }
 
@@ -155,6 +237,30 @@
   height: 18px;
 }
 
+.rrhh-home-table__observations {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.rrhh-home-table__observation {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: #e0f2fe;
+  color: #0f5f88;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.rrhh-home-table__observation--muted {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
 .rrhh-home-table__empty {
   padding: 28px 18px;
   color: #64748b;
@@ -163,6 +269,10 @@
 }
 
 @media (max-width: 1100px) {
+  .rrhh-export-review__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .rrhh-filters-form {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -178,6 +288,14 @@
     padding: 20px 18px;
   }
 
+  .rrhh-export-review__intro {
+    flex-direction: column;
+  }
+
+  .rrhh-export-review__order-note {
+    max-width: none;
+  }
+
   .rrhh-home-card__heading {
     flex-direction: column;
     align-items: flex-start;
@@ -186,6 +304,18 @@
 }
 
 @media (max-width: 640px) {
+  .rrhh-export-review {
+    padding: 16px;
+  }
+
+  .rrhh-export-review__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .rrhh-export-review__value {
+    font-size: 24px;
+  }
+
   .rrhh-filters-form {
     grid-template-columns: 1fr;
     gap: 12px;
@@ -264,8 +394,16 @@
     align-items: flex-start;
   }
 
+  .rrhh-home-table .data-table td[data-label="Observaciones"] {
+    align-items: flex-start;
+  }
+
   .rrhh-home-table .data-table td[data-label="Acciones"] {
     justify-content: flex-start;
+  }
+
+  .rrhh-home-table__observations {
+    justify-content: flex-end;
   }
 
   .rrhh-home-table__empty {

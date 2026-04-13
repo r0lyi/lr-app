@@ -8,6 +8,7 @@ from apps.dashboard.services.layout_context import build_dashboard_base_context
 from apps.users.selectors import get_primary_role
 from apps.vacations.forms import RrhhVacationRequestFilterForm
 from apps.vacations.selectors import get_filtered_rrhh_vacation_requests
+from apps.vacations.services import build_rrhh_export_review
 
 
 def _render_requests_management_view(request, *, role_name, active_section):
@@ -43,6 +44,7 @@ def _render_requests_management_view(request, *, role_name, active_section):
         end_date=request_filters.get("end_date"),
         status_name=request_filters.get("status"),
     )
+    export_review = build_rrhh_export_review(vacation_requests)
     export_querystring = filter_form.data.urlencode() if filter_form.is_bound else ""
     export_url = reverse("vacations:export-rrhh-requests-excel")
     if export_querystring:
@@ -70,9 +72,10 @@ def _render_requests_management_view(request, *, role_name, active_section):
             active_section=active_section,
             extra_context={
                 "export_url": export_url,
+                "export_review_summary": export_review["summary"],
                 "filter_form": filter_form,
-                "vacation_requests": vacation_requests,
-                "filtered_requests_count": vacation_requests.count(),
+                "vacation_requests": export_review["vacation_requests"],
+                "filtered_requests_count": len(export_review["vacation_requests"]),
                 "requests_page_title": panel_title,
                 "requests_page_description": panel_description,
             },
