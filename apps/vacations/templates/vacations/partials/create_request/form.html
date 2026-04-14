@@ -2,6 +2,10 @@
   <div class="vac-request-card-heading">
     <div>
       <h1 class="dash-card-title">Solicitar vacaciones</h1>
+      <p class="vac-request-card__description">
+        Selecciona un periodo continuo, revisa el total y confirma solo cuando
+        el rango este correcto.
+      </p>
     </div>
   </div>
 
@@ -29,26 +33,49 @@
       </div>
     {% endif %}
 
-    <p class="vac-request-selection-summary">
-      Has seleccionado
-      <strong id="selected-days-counter" aria-live="polite">0</strong>
-      dias naturales.
-      <span class="vac-request-selection-summary__range">
-        Rango actual:
+    <aside class="vac-request-selection-summary" aria-labelledby="vac-request-selection-summary-title">
+      <div class="vac-request-selection-summary__header">
+        <div>
+          <p class="vac-request-selection-summary__eyebrow">Resumen de la solicitud</p>
+          <h2 class="vac-request-selection-summary__title" id="vac-request-selection-summary-title">
+            Revisa el rango antes de enviar
+          </h2>
+        </div>
+
+        <div class="vac-request-selection-summary__count" aria-live="polite">
+          <strong id="selected-days-counter">0</strong>
+          <span>dias naturales</span>
+        </div>
+      </div>
+
+      <p class="vac-request-selection-summary__range">
+        <span class="vac-request-selection-summary__label">Rango actual:</span>
         <span id="selected-range-summary" aria-live="polite">
-          Aun no has seleccionado ambas fechas
+          Selecciona la fecha de inicio y la fecha final para continuar.
         </span>
-      </span>
-    </p>
+      </p>
+    </aside>
 
     <div class="vac-request-calendars">
-      <section class="vac-calendar" data-calendar data-input-id="{{ form.start_date.id_for_label }}">
+      <section
+        class="vac-calendar vac-calendar--start"
+        data-calendar
+        data-calendar-role="start"
+        data-input-id="{{ form.start_date.id_for_label }}"
+        data-min-date="{{ min_request_start_date|date:'Y-m-d' }}"
+      >
         <div class="vac-calendar__header">
-          <h2>Fecha inicio</h2>
-          <p data-calendar-selection>
-            {% if form.start_date.value %}{{ form.start_date.value }}{% else %}Sin seleccionar{% endif %}
-          </p>
+          <div class="vac-calendar__header-copy">
+            <p class="vac-calendar__eyebrow">Paso 1</p>
+            <h2 class="vac-calendar__title">Inicio</h2>
+            <p class="vac-calendar__subtitle">Elige el primer dia disponible.</p>
+          </div>
+          <span class="vac-calendar__selected" data-calendar-selection aria-live="polite">Sin seleccionar</span>
         </div>
+
+        <p class="vac-calendar__note">
+          Disponible desde {{ min_request_start_date|date:"d/m/Y" }}.
+        </p>
 
         <div class="vac-calendar__toolbar">
           <button class="vac-calendar__arrow" type="button" data-calendar-prev aria-label="Mes anterior">
@@ -82,13 +109,25 @@
         {% endif %}
       </section>
 
-      <section class="vac-calendar" data-calendar data-input-id="{{ form.end_date.id_for_label }}">
+      <section
+        class="vac-calendar vac-calendar--end"
+        data-calendar
+        data-calendar-role="end"
+        data-input-id="{{ form.end_date.id_for_label }}"
+        data-min-date="{{ min_request_start_date|date:'Y-m-d' }}"
+      >
         <div class="vac-calendar__header">
-          <h2>Fecha final</h2>
-          <p data-calendar-selection>
-            {% if form.end_date.value %}{{ form.end_date.value }}{% else %}Sin seleccionar{% endif %}
-          </p>
+          <div class="vac-calendar__header-copy">
+            <p class="vac-calendar__eyebrow">Paso 2</p>
+            <h2 class="vac-calendar__title">Fin</h2>
+            <p class="vac-calendar__subtitle">Completa el ultimo dia del periodo.</p>
+          </div>
+          <span class="vac-calendar__selected" data-calendar-selection aria-live="polite">Sin seleccionar</span>
         </div>
+
+        <p class="vac-calendar__note">
+          El calendario de fin nunca permitira una fecha anterior al inicio.
+        </p>
 
         <div class="vac-calendar__toolbar">
           <button class="vac-calendar__arrow" type="button" data-calendar-prev aria-label="Mes anterior">

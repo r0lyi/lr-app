@@ -1,5 +1,7 @@
 """Vista basica para que el empleado cree una solicitud de vacaciones."""
 
+from datetime import timedelta
+
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.shortcuts import redirect, render
@@ -13,6 +15,7 @@ from apps.employees.services.employee_dashboard import (
 )
 from apps.users.selectors import get_primary_role
 from apps.vacations.forms import VacationRequestForm
+from apps.vacations.services.requests.policies import MIN_ADVANCE_NOTICE_DAYS
 from apps.vacations.services import (
     create_employee_vacation_request,
     get_request_annual_balance,
@@ -60,7 +63,9 @@ def create_vacation_request_view(request):
     else:
         form = VacationRequestForm()
 
-    current_year = timezone.localdate().year
+    today = timezone.localdate()
+    current_year = today.year
+    min_request_start_date = today + timedelta(days=MIN_ADVANCE_NOTICE_DAYS)
     current_role = get_primary_role(request.user) or "employee"
     context = build_dashboard_base_context(
         request.user,
@@ -78,6 +83,7 @@ def create_vacation_request_view(request):
                 employee_profile,
                 year=current_year,
             ),
+            "min_request_start_date": min_request_start_date,
         },
     )
     return render(request, "vacations/pages/create_request.html", context)

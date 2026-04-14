@@ -7,5 +7,5 @@
     {% include "components/ui/stat_card.html" with title="Derecho anual disponible" extra_title=annual_vacation_reference_year value=annual_vacation_remaining_days_count|floatformat:2 value_color_class="vac-request-summary-value" value_id="annual-vacation-remaining-days" value_live="polite" %}
   </div>
 
-  {% include "components/ui/info_panel.html" with class_name="vac-request-info" title="Solicitud de periodo vacacional" text="Selecciona la fecha de inicio y la fecha final usando los calendarios. Puedes cambiar de mes y de ano con rapidez y anadir una nota opcional antes de confirmar." line_1="Cada calendario marca una sola fecha: inicio o final." line_2="El conteo se calcula en dias naturales, incluyendo ambas fechas." line_3="La solicitud se registrara para revision de RRHH." %}
+  {% include "components/ui/info_panel.html" with class_name="vac-request-info" title="Solicitud de periodo vacacional" text="Selecciona un rango continuo, revisa el resumen y envia la solicitud solo cuando todo este correcto." line_1="La fecha de inicio respeta el aviso minimo de 30 dias." line_2="La fecha final no puede ser anterior al inicio." line_3="El resumen se actualiza en tiempo real." note="Puedes dejar una nota opcional para RRHH." %}
 </div>

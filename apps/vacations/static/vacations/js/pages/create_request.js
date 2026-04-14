@@ -14,6 +14,21 @@
     "Diciembre",
   ];
 
+  const SHORT_MONTHS = [
+    "ene",
+    "feb",
+    "mar",
+    "abr",
+    "may",
+    "jun",
+    "jul",
+    "ago",
+    "sep",
+    "oct",
+    "nov",
+    "dic",
+  ];
+
   function parseIsoDate(value) {
     if (!value) {
       return null;
@@ -53,6 +68,13 @@
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
+  }
+
+  function formatBadgeDate(date) {
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = SHORT_MONTHS[date.getMonth()];
+    const year = date.getFullYear();
+    return `${day} ${month} ${year}`;
   }
 
   function getUtcDayTimestamp(date) {
@@ -95,6 +117,44 @@
     }
   }
 
+  const startInput = document.getElementById("id_start_date");
+  const endInput = document.getElementById("id_end_date");
+  const annualCounterRoot = document.querySelector("[data-vacation-annual-counter]");
+  const annualCounterValue = document.getElementById("annual-vacation-remaining-days");
+  const annualDaysTotalRaw = annualCounterRoot
+    ? annualCounterRoot.dataset.annualDaysTotal || ""
+    : "";
+  const annualDaysTotal = annualDaysTotalRaw
+    ? Number(annualDaysTotalRaw.replace(",", "."))
+    : Number.NaN;
+  const selectedDaysCounter = document.getElementById("selected-days-counter");
+  const selectedRangeSummary = document.getElementById("selected-range-summary");
+  const submitButton = document.getElementById("submit-request-button");
+
+  function getCalendarBounds(state) {
+    const globalMinimum = state.minDate;
+    const startDate = parseIsoDate(startInput ? startInput.value : "");
+    const endDate = parseIsoDate(endInput ? endInput.value : "");
+
+    let lowerBound = globalMinimum;
+    let upperBound = null;
+
+    if (state.role === "start") {
+      if (endDate) {
+        upperBound = endDate;
+      }
+    } else if (state.role === "end") {
+      if (startDate && (!lowerBound || startDate > lowerBound)) {
+        lowerBound = startDate;
+      }
+    }
+
+    return {
+      lowerBound,
+      upperBound,
+    };
+  }
+
   function initializeCalendar(root) {
     const inputId = root.dataset.inputId;
     const inputEl = document.getElementById(inputId);
@@ -117,9 +177,13 @@
       monthSelect.appendChild(option);
     });
 
+    const role = root.dataset.calendarRole || "start";
+    const minDate = parseIsoDate(root.dataset.minDate || "");
     const selectedDate = parseIsoDate(inputEl.value);
-    const baseDate = selectedDate || new Date();
+    const baseDate = selectedDate || minDate || new Date();
     const state = {
+      role: role,
+      minDate: minDate,
       inputEl: inputEl,
       monthSelect: monthSelect,
       yearSelect: yearSelect,
@@ -129,6 +193,7 @@
       selectionText: selectionText,
       selectedDate: selectedDate,
       viewDate: new Date(baseDate.getFullYear(), baseDate.getMonth(), 1),
+      render: null,
     };
 
     function renderDays() {
@@ -138,6 +203,7 @@
       const leadingEmpty = getMondayFirstIndex(firstDay);
       const totalDays = getTotalDaysInMonth(year, monthIndex);
       const totalCells = Math.ceil((leadingEmpty + totalDays) / 7) * 7;
+      const bounds = getCalendarBounds(state);
 
       state.daysContainer.innerHTML = "";
 
@@ -156,6 +222,9 @@
           formatIsoDate(cellDate) === formatIsoDate(new Date());
         const isSelected =
           state.selectedDate && formatIsoDate(state.selectedDate) === formatIsoDate(cellDate);
+        const isDisabled =
+          (bounds.lowerBound && cellDate < bounds.lowerBound) ||
+          (bounds.upperBound && cellDate > bounds.upperBound);
 
         button.type = "button";
         button.className = "vac-calendar__day";
@@ -164,10 +233,16 @@
         }
         if (isSelected) {
           button.classList.add("vac-calendar__day--selected");
-          button.setAttribute("aria-pressed", "true");
-        } else {
-          button.setAttribute("aria-pressed", "false");
         }
+        if (isDisabled) {
+          button.classList.add("vac-calendar__day--disabled");
+          button.disabled = true;
+          button.setAttribute("aria-disabled", "true");
+        } else {
+          button.setAttribute("aria-disabled", "false");
+        }
+        button.setAttribute("aria-pressed", isSelected ? "true" : "false");
+        button.title = formatDisplayDate(cellDate);
 
         button.textContent = String(dayNumber);
         button.addEventListener("click", function () {
@@ -182,18 +257,29 @@
     }
 
     function render() {
+      state.selectedDate = parseIsoDate(state.inputEl.value);
       buildYearOptions(state.yearSelect, state.viewDate.getFullYear());
       state.monthSelect.value = String(state.viewDate.getMonth());
       state.yearSelect.value = String(state.viewDate.getFullYear());
 
       if (state.selectionText) {
         state.selectionText.textContent = state.selectedDate
-          ? formatDisplayDate(state.selectedDate)
+          ? formatBadgeDate(state.selectedDate)
           : "Sin seleccionar";
       }
 
       renderDays();
     }
+
+    state.render = render;
+    state.setViewDate = function (nextViewDate) {
+      state.viewDate = new Date(
+        nextViewDate.getFullYear(),
+        nextViewDate.getMonth(),
+        1
+      );
+      render();
+    };
 
     state.prevButton.addEventListener("click", function () {
       state.viewDate = new Date(state.viewDate.getFullYear(), state.viewDate.getMonth() - 1, 1);
@@ -225,26 +311,34 @@
     return;
   }
 
-  const annualCounterRoot = document.querySelector("[data-vacation-annual-counter]");
-  const annualCounterValue = document.getElementById("annual-vacation-remaining-days");
-  const annualDaysTotalRaw = annualCounterRoot
-    ? annualCounterRoot.dataset.annualDaysTotal || ""
-    : "";
-  const annualDaysTotal = annualDaysTotalRaw
-    ? Number(annualDaysTotalRaw.replace(",", "."))
-    : Number.NaN;
-  const startInput = document.getElementById("id_start_date");
-  const endInput = document.getElementById("id_end_date");
-  const selectedDaysCounter = document.getElementById("selected-days-counter");
-  const selectedRangeSummary = document.getElementById("selected-range-summary");
-  const submitButton = document.getElementById("submit-request-button");
-
   function formatDayCount(value) {
     if (!Number.isFinite(value)) {
       return "0.00";
     }
 
     return value.toFixed(2);
+  }
+
+  function rerenderCalendarsAndSummary() {
+    const startCalendar = calendars.find(function (calendar) {
+      return calendar.role === "start";
+    });
+    const endCalendar = calendars.find(function (calendar) {
+      return calendar.role === "end";
+    });
+
+    if (startCalendar && startCalendar.selectedDate && endCalendar && !endCalendar.selectedDate) {
+      endCalendar.setViewDate(startCalendar.selectedDate);
+    }
+
+    if (endCalendar && endCalendar.selectedDate && startCalendar && !startCalendar.selectedDate) {
+      startCalendar.setViewDate(endCalendar.selectedDate);
+    }
+
+    calendars.forEach(function (calendar) {
+      calendar.render();
+    });
+    updateSummary();
   }
 
   function updateAnnualDaysCounter(selectedDays) {
@@ -272,7 +366,7 @@
 
     if (!startDate && !endDate) {
       selectedDaysCounter.textContent = "0";
-      selectedRangeSummary.textContent = "Aun no has seleccionado ambas fechas";
+      selectedRangeSummary.textContent = "Selecciona la fecha de inicio y la fecha final para continuar.";
       submitButton.disabled = true;
       updateAnnualDaysCounter(0);
       return;
@@ -280,7 +374,7 @@
 
     if (startDate && !endDate) {
       selectedDaysCounter.textContent = "0";
-      selectedRangeSummary.textContent = `Inicio: ${formatDisplayDate(startDate)}. Falta la fecha final`;
+      selectedRangeSummary.textContent = `Inicio: ${formatDisplayDate(startDate)}. Falta elegir la fecha final.`;
       submitButton.disabled = true;
       updateAnnualDaysCounter(0);
       return;
@@ -288,7 +382,7 @@
 
     if (!startDate && endDate) {
       selectedDaysCounter.textContent = "0";
-      selectedRangeSummary.textContent = `Final: ${formatDisplayDate(endDate)}. Falta la fecha inicial`;
+      selectedRangeSummary.textContent = `Final: ${formatDisplayDate(endDate)}. Falta elegir la fecha de inicio.`;
       submitButton.disabled = true;
       updateAnnualDaysCounter(0);
       return;
@@ -325,6 +419,6 @@
     submitButton.disabled = false;
   }
 
-  document.addEventListener("vacation-request:dates-changed", updateSummary);
-  updateSummary();
+  document.addEventListener("vacation-request:dates-changed", rerenderCalendarsAndSummary);
+  rerenderCalendarsAndSummary();
 })();
