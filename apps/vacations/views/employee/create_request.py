@@ -13,7 +13,10 @@ from apps.employees.services.employee_dashboard import (
 )
 from apps.users.selectors import get_primary_role
 from apps.vacations.forms import VacationRequestForm
-from apps.vacations.services import create_employee_vacation_request
+from apps.vacations.services import (
+    create_employee_vacation_request,
+    get_request_annual_balance,
+)
 
 
 @role_required("employee", allow_admin=True, allow_rrhh=True)
@@ -69,6 +72,10 @@ def create_vacation_request_view(request):
             "annual_vacation_reference_year": current_year,
             "annual_vacation_days_count": calculate_annual_vacation_days_for_year(
                 employee_profile.hire_date,
+                year=current_year,
+            ),
+            "annual_vacation_remaining_days_count": get_request_annual_balance(
+                employee_profile,
                 year=current_year,
             ),
         },

@@ -1,55 +1,32 @@
 <section class="rrhh-export-review" aria-labelledby="rrhh-export-review-title">
-  <div class="rrhh-export-review__intro">
+  <div class="rrhh-export-review__header">
     <div>
-      <p class="rrhh-export-review__eyebrow">Revision previa</p>
-      <h2 class="rrhh-export-review__title" id="rrhh-export-review-title">Resumen previo a exportacion</h2>
-      <p class="rrhh-export-review__text">
-        Revisa estas senales antes de descargar el Excel para detectar solapes internos,
-        periodos sensibles y solicitudes especialmente largas.
-      </p>
+      <p class="rrhh-export-review__eyebrow">Avisos previos</p>
+      <h2 class="rrhh-export-review__title" id="rrhh-export-review-title">Resumen antes de exportar</h2>
     </div>
     <p class="rrhh-export-review__order-note">
-      El listado ya esta ordenado por antiguedad. Primero aparecen los empleados con la fecha de alta mas antigua.
+      Ordenado por antiguedad.
     </p>
   </div>
 
-  <div class="rrhh-export-review__grid">
-    <article class="rrhh-export-review__card">
-      <span class="rrhh-export-review__label">Coincidencias</span>
-      <strong class="rrhh-export-review__value">
-        {{ export_review_summary.department_overlap_requests_count }}
-      </strong>
-      <p class="rrhh-export-review__description">
-        solicitudes coinciden con otros empleados del mismo departamento
-      </p>
-    </article>
-
-    <article class="rrhh-export-review__card">
-      <span class="rrhh-export-review__label">Alta carga</span>
-      <strong class="rrhh-export-review__value">
-        {{ export_review_summary.high_load_requests_count }}
-      </strong>
-      <p class="rrhh-export-review__description">
-        solicitudes entran en verano o navidad
-      </p>
-    </article>
-
-    <article class="rrhh-export-review__card">
-      <span class="rrhh-export-review__label">Antiguedad</span>
-      <strong class="rrhh-export-review__value">Activo</strong>
-      <p class="rrhh-export-review__description">
-        el orden actual prioriza a los empleados mas antiguos
-      </p>
-    </article>
-
-    <article class="rrhh-export-review__card">
-      <span class="rrhh-export-review__label">Larga duracion</span>
-      <strong class="rrhh-export-review__value">
-        {{ export_review_summary.long_duration_requests_count }}
-      </strong>
-      <p class="rrhh-export-review__description">
-        solicitudes duran exactamente 30 dias
-      </p>
-    </article>
-  </div>
+  {% with overlap=export_review_summary.department_overlap_requests_count high_load=export_review_summary.high_load_requests_count long_duration=export_review_summary.long_duration_requests_count %}
+    <p class="rrhh-export-review__text">
+      {% if overlap or high_load or long_duration %}
+        <strong>Avisos detectados:</strong>
+        {% if overlap %}
+          {{ overlap }} coincidencia{{ overlap|pluralize }} de departamento
+        {% endif %}
+        {% if high_load %}
+          {% if overlap %}; {% endif %}
+          {{ high_load }} solicitud{{ high_load|pluralize:"es" }} en periodo{{ high_load|pluralize }} de alta carga
+        {% endif %}
+        {% if long_duration %}
+          {% if overlap or high_load %}; {% endif %}
+          {{ long_duration }} solicitud{{ long_duration|pluralize:"es" }} de larga duracion
+        {% endif %}
+      {% else %}
+        No hay avisos relevantes para la seleccion actual.
+      {% endif %}
+    </p>
+  {% endwith %}
 </section>

@@ -1,5 +1,9 @@
 """Consultas de lectura usadas por el dominio de vacaciones."""
 
+from decimal import Decimal, ROUND_HALF_UP
+
+from django.db.models import Sum
+
 from apps.vacations.models import VacationRequest, VacationStatus
 from apps.vacations.services.requests.policies import (
     ACTIVE_REQUEST_STATUS_NAMES,
@@ -85,3 +89,21 @@ def get_open_requests_for_employee(employee_profile, *, exclude_request_id=None)
         requests_qs = requests_qs.exclude(pk=exclude_request_id)
 
     return requests_qs
+
+
+def get_reserved_annual_vacation_days_for_year(employee_profile, *, year):
+    """Suma los dias activos ya reservados para el ano indicado."""
+
+    reserved_days = (
+        VacationRequest.objects.filter(
+            employee=employee_profile,
+            status__name__in=ACTIVE_REQUEST_STATUS_NAMES,
+            start_date__year=year,
+        ).aggregate(total=Sum("requested_days"))["total"]
+        or Decimal("0.00")
+    )
+
+    return Decimal(reserved_days).quantize(
+        Decimal("0.01"),
+        rounding=ROUND_HALF_UP,
+    )

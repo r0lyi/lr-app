@@ -33,6 +33,10 @@
   color: #1ba4e3;
 }
 
+.vac-request-summary-value--warning {
+  color: #ef4444;
+}
+
 .vac-request-card {
   display: flex;
   flex-direction: column;

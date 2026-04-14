@@ -86,6 +86,9 @@ class VacationRequestViewTests(VacationBaseTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Solicitar vacaciones")
         self.assertContains(response, "Derecho anual")
+        self.assertContains(response, "data-vacation-annual-counter")
+        self.assertContains(response, 'id="annual-vacation-remaining-days"')
+        self.assertContains(response, "data-annual-days-total=")
         self.assertContains(response, "selected-days-counter")
         self.assertContains(response, "Solicitud de periodo vacacional")
         self.assertContains(response, "Rango actual:")
@@ -123,6 +126,42 @@ class VacationRequestViewTests(VacationBaseTestCase):
         self.assertContains(response, "Derecho anual")
         self.assertContains(response, reverse("dashboard:rrhh-home"))
         self.assertContains(response, reverse("vacations:create-request"))
+
+    def test_request_page_shows_remaining_balance_after_active_requests(self):
+        user, employee = self.create_employee_user(
+            email="employee-vacations-balance@example.com",
+            dni="12345678Z",
+        )
+        pending_start, pending_end = self.get_request_range(
+            offset_days=40,
+            duration_days=5,
+        )
+        VacationRequest.objects.create(
+            employee=employee,
+            status=self.pending_status,
+            start_date=pending_start,
+            end_date=pending_end,
+            requested_days="5.00",
+        )
+        approved_start, approved_end = self.get_request_range(
+            offset_days=50,
+            duration_days=7,
+        )
+        VacationRequest.objects.create(
+            employee=employee,
+            status=self.approved_status,
+            start_date=approved_start,
+            end_date=approved_end,
+            requested_days="7.00",
+        )
+
+        self.client.force_login(user)
+
+        response = self.client.get(reverse("vacations:create-request"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'data-annual-days-total="18.00"', html=False)
+        self.assertContains(response, 'id="annual-vacation-remaining-days"')
 
     def test_employee_can_create_pending_vacation_request(self):
         user, employee = self.create_employee_user(
@@ -322,6 +361,39 @@ class VacationRequestViewTests(VacationBaseTestCase):
         )
         self.assertEqual(VacationRequest.objects.filter(employee=employee).count(), 0)
 
+    def test_request_rejects_days_above_remaining_annual_balance(self):
+        user, employee = self.create_employee_user(
+            email="employee-vacations-remaining@example.com",
+            dni="11111111H",
+        )
+        existing_start, existing_end = self.get_request_range(
+            offset_days=40,
+            duration_days=28,
+        )
+        VacationRequest.objects.create(
+            employee=employee,
+            status=self.approved_status,
+            start_date=existing_start,
+            end_date=existing_end,
+            requested_days="28.00",
+        )
+
+        self.client.force_login(user)
+        start_date, end_date = self.get_request_range(offset_days=80, duration_days=5)
+
+        response = self.post_vacation_request(
+            start_date=start_date,
+            end_date=end_date,
+            employee_comment="Supera el saldo restante",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(
+            response,
+            f"Los dias solicitados superan el derecho anual disponible para {start_date.year}.",
+        )
+        self.assertEqual(VacationRequest.objects.filter(employee=employee).count(), 1)
+
     def test_request_rejects_start_date_in_the_past(self):
         user, employee = self.create_employee_user(
             email="employee-vacations-past@example.com",
@@ -366,7 +438,7 @@ class VacationRequestViewTests(VacationBaseTestCase):
         )
         self.assertEqual(VacationRequest.objects.filter(employee=employee).count(), 0)
 
-    def test_request_rejects_when_another_pending_request_is_open(self):
+    def test_request_allows_another_non_overlapping_request_when_pending_exists(self):
         user, employee = self.create_employee_user(
             email="employee-vacations-open-request@example.com",
             dni="91919191J",
@@ -389,15 +461,11 @@ class VacationRequestViewTests(VacationBaseTestCase):
         response = self.post_vacation_request(
             start_date=start_date,
             end_date=end_date,
-            employee_comment="Segunda solicitud pendiente",
+            employee_comment="Segunda solicitud no solapada",
         )
 
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(
-            response,
-            "Ya existe una solicitud pendiente. Debe resolverse antes de registrar una nueva.",
-        )
-        self.assertEqual(VacationRequest.objects.filter(employee=employee).count(), 1)
+        self.assertRedirects(response, reverse("vacations:create-request"))
+        self.assertEqual(VacationRequest.objects.filter(employee=employee).count(), 2)
 
     def test_request_rejects_when_dates_overlap_existing_approved_request(self):
         user, employee = self.create_employee_user(

@@ -16,4 +16,9 @@ class VacationStatus(models.Model):
     def __str__(self):
         """Devuelve la etiqueta legible del estado."""
 
-        return self.name
+        labels = {
+            "pending": "Pendiente",
+            "approved": "Aprobada",
+            "rejected": "Rechazada",
+        }
+        return labels.get(self.name, self.name.capitalize())

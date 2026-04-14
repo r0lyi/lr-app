@@ -225,11 +225,40 @@
     return;
   }
 
+  const annualCounterRoot = document.querySelector("[data-vacation-annual-counter]");
+  const annualCounterValue = document.getElementById("annual-vacation-remaining-days");
+  const annualDaysTotalRaw = annualCounterRoot
+    ? annualCounterRoot.dataset.annualDaysTotal || ""
+    : "";
+  const annualDaysTotal = annualDaysTotalRaw
+    ? Number(annualDaysTotalRaw.replace(",", "."))
+    : Number.NaN;
   const startInput = document.getElementById("id_start_date");
   const endInput = document.getElementById("id_end_date");
   const selectedDaysCounter = document.getElementById("selected-days-counter");
   const selectedRangeSummary = document.getElementById("selected-range-summary");
   const submitButton = document.getElementById("submit-request-button");
+
+  function formatDayCount(value) {
+    if (!Number.isFinite(value)) {
+      return "0.00";
+    }
+
+    return value.toFixed(2);
+  }
+
+  function updateAnnualDaysCounter(selectedDays) {
+    if (!annualCounterValue || !Number.isFinite(annualDaysTotal)) {
+      return;
+    }
+
+    const remainingDays = annualDaysTotal - selectedDays;
+    annualCounterValue.textContent = formatDayCount(Math.max(0, remainingDays));
+    annualCounterValue.classList.toggle(
+      "vac-request-summary-value--warning",
+      remainingDays < 0
+    );
+  }
 
   function updateSummary() {
     const startDate = parseIsoDate(startInput ? startInput.value : "");
@@ -245,6 +274,7 @@
       selectedDaysCounter.textContent = "0";
       selectedRangeSummary.textContent = "Aun no has seleccionado ambas fechas";
       submitButton.disabled = true;
+      updateAnnualDaysCounter(0);
       return;
     }
 
@@ -252,6 +282,7 @@
       selectedDaysCounter.textContent = "0";
       selectedRangeSummary.textContent = `Inicio: ${formatDisplayDate(startDate)}. Falta la fecha final`;
       submitButton.disabled = true;
+      updateAnnualDaysCounter(0);
       return;
     }
 
@@ -259,6 +290,7 @@
       selectedDaysCounter.textContent = "0";
       selectedRangeSummary.textContent = `Final: ${formatDisplayDate(endDate)}. Falta la fecha inicial`;
       submitButton.disabled = true;
+      updateAnnualDaysCounter(0);
       return;
     }
 
@@ -267,6 +299,7 @@
       selectedRangeSummary.textContent = "La fecha final debe ser igual o posterior a la inicial";
       selectedRangeSummary.classList.add("is-invalid");
       submitButton.disabled = true;
+      updateAnnualDaysCounter(0);
       return;
     }
 
@@ -278,6 +311,16 @@
       ) + 1;
 
     selectedDaysCounter.textContent = String(totalSelectedDays);
+    updateAnnualDaysCounter(totalSelectedDays);
+
+    const remainingDays = annualDaysTotal - totalSelectedDays;
+    if (Number.isFinite(annualDaysTotal) && remainingDays < 0) {
+      selectedRangeSummary.textContent = `La seleccion supera tu derecho anual disponible en ${formatDayCount(Math.abs(remainingDays))} dias.`;
+      selectedRangeSummary.classList.add("is-invalid");
+      submitButton.disabled = true;
+      return;
+    }
+
     selectedRangeSummary.textContent = `${formatDisplayDate(startDate)} - ${formatDisplayDate(endDate)}`;
     submitButton.disabled = false;
   }

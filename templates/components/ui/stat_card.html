@@ -7,7 +7,11 @@
       </svg>
     </span>
   </div>
-  <div class="stat-card-value {% if value_color_class %}{{ value_color_class }}{% endif %}">
+  <div
+    class="stat-card-value{% if value_color_class %} {{ value_color_class }}{% endif %}"
+    {% if value_id %}id="{{ value_id }}"{% endif %}
+    {% if value_live %}aria-live="{{ value_live }}" aria-atomic="true"{% endif %}
+  >
     {% if value_html %}
       {{ value_html|safe }}
     {% else %}

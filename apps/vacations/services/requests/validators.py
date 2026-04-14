@@ -1,13 +1,13 @@
 """Validaciones compartidas del flujo de solicitudes de vacaciones."""
 
-from decimal import Decimal
+from decimal import Decimal, ROUND_HALF_UP
 
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 
 from apps.vacations.selectors.request_queries import (
-    get_open_requests_for_employee,
     get_overlapping_active_requests,
+    get_reserved_annual_vacation_days_for_year,
 )
 
 from .policies import (
@@ -34,6 +34,24 @@ def get_request_annual_entitlement(employee_profile, *, year):
     return calculate_annual_vacation_days_for_year(
         employee_profile.hire_date,
         year=year,
+    )
+
+
+def get_request_annual_balance(employee_profile, *, year):
+    """Calcula el saldo anual disponible tras descontar solicitudes activas."""
+
+    annual_entitlement = get_request_annual_entitlement(
+        employee_profile,
+        year=year,
+    )
+    reserved_days = get_reserved_annual_vacation_days_for_year(
+        employee_profile,
+        year=year,
+    )
+    remaining_days = annual_entitlement - reserved_days
+    return max(remaining_days, Decimal("0.00")).quantize(
+        Decimal("0.01"),
+        rounding=ROUND_HALF_UP,
     )
 
 
@@ -77,18 +95,13 @@ def validate_employee_vacation_request(
             "La solicitud debe incluir entre 3 y 30 dias naturales."
         )
 
-    annual_entitlement = get_request_annual_entitlement(
+    annual_balance = get_request_annual_balance(
         employee_profile,
         year=start_date.year,
     )
-    if requested_days > annual_entitlement:
+    if requested_days > annual_balance:
         validation_errors.append(
             f"Los dias solicitados superan el derecho anual disponible para {start_date.year}."
-        )
-
-    if get_open_requests_for_employee(employee_profile).exists():
-        validation_errors.append(
-            "Ya existe una solicitud pendiente. Debe resolverse antes de registrar una nueva."
         )
 
     overlapping_requests = get_overlapping_active_requests(
