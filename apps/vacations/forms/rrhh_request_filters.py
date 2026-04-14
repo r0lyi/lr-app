@@ -62,7 +62,7 @@ class RrhhVacationRequestFilterForm(forms.Form):
         super().__init__(*args, **kwargs)
         status_choices = [("", "Todos")]
         status_choices.extend(
-            (status.name, status.name.capitalize())
+            (status.name, str(status))
             for status in VacationStatus.objects.order_by("name")
         )
         self.fields["status"].choices = status_choices

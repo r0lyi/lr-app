@@ -24,27 +24,71 @@
   box-shadow: 0 12px 26px rgba(18, 32, 51, 0.1);
 }
 
-.vac-request-info {
+.vac-request-info.ui-info-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   min-height: 100%;
+  padding: 28px 30px 26px;
+  border-color: rgba(125, 187, 229, 0.5);
   border-radius: 18px;
+  background: linear-gradient(180deg, #f4faff 0%, #e9f5ff 100%);
+  box-shadow: 0 12px 28px rgba(22, 108, 179, 0.08);
+}
+
+.vac-request-info .ui-info-panel__eyebrow {
+  margin-bottom: 0;
+}
+
+.vac-request-info .ui-info-panel__title {
+  margin-bottom: 2px;
+  color: #12385d;
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.vac-request-info .ui-info-panel__text,
+.vac-request-info .ui-info-panel__note,
+.vac-request-info .ui-info-panel__list {
+  color: #35597b;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.vac-request-info .ui-info-panel__text + .ui-info-panel__list,
+.vac-request-info .ui-info-panel__list + .ui-info-panel__note,
+.vac-request-info .ui-info-panel__text + .ui-info-panel__note {
+  margin-top: 12px;
+}
+
+.vac-request-info .ui-info-panel__list {
+  padding-left: 18px;
+}
+
+.vac-request-info .ui-info-panel__list li + li {
+  margin-top: 6px;
 }
 
 .vac-request-summary-value {
   color: #1ba4e3;
 }
 
+.vac-request-summary-value--warning {
+  color: #ef4444;
+}
+
 .vac-request-card {
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  padding: 26px 30px 28px;
+  gap: 22px;
+  padding: 28px 30px 30px;
 }
 
 .vac-request-card-heading {
   display: flex;
   justify-content: flex-start;
   gap: 16px;
-  align-items: center;
+  align-items: flex-end;
   padding-bottom: 14px;
   border-bottom: 1px solid rgba(148, 163, 184, 0.18);
 }
@@ -53,10 +97,18 @@
   margin-bottom: 0;
 }
 
+.vac-request-card__description {
+  max-width: 760px;
+  margin-top: 8px;
+  color: #64748b;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
 .vac-request-form {
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 20px;
 }
 
 .vac-request-errors {
@@ -72,23 +124,79 @@
 }
 
 .vac-request-selection-summary {
-  padding: 15px 18px;
-  border-radius: 16px;
-  border: 1px solid rgba(14, 165, 233, 0.12);
-  background: linear-gradient(180deg, rgba(240, 249, 255, 0.96) 0%, rgba(234, 246, 255, 0.94) 100%);
-  color: #496176;
-  font-size: 15px;
-  line-height: 1.75;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px 22px;
+  border: 1px solid rgba(14, 165, 233, 0.14);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(251, 254, 255, 0.98) 0%, rgba(242, 248, 253, 0.96) 100%);
+  box-shadow: 0 10px 24px rgba(15, 118, 168, 0.08);
 }
 
-.vac-request-selection-summary strong {
-  color: #0f6b98;
+.vac-request-selection-summary__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.vac-request-selection-summary__eyebrow {
+  margin-bottom: 4px;
+  color: #0f87c7;
+  font-size: 12px;
   font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.vac-request-selection-summary__title {
+  color: #0f2f44;
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.vac-request-selection-summary__count {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 148px;
+  padding: 11px 13px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(14, 165, 233, 0.14);
+  color: #0f5f88;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  white-space: nowrap;
+}
+
+.vac-request-selection-summary__count strong {
+  font-size: 28px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.vac-request-selection-summary__count span {
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.2;
 }
 
 .vac-request-selection-summary__range {
-  display: inline-block;
-  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: #476173;
+  line-height: 1.6;
+}
+
+.vac-request-selection-summary__label {
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 #selected-range-summary {
@@ -102,42 +210,99 @@
 
 .vac-request-calendars {
   display: grid;
-  grid-template-columns: repeat(2, minmax(320px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
   justify-content: stretch;
 }
 
 .vac-calendar {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
+  max-width: none;
+  padding: 20px 20px 18px;
+  border-radius: 22px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 16px 32px rgba(15, 23, 42, 0.08);
+}
+
+.vac-calendar--start {
+  background: linear-gradient(180deg, #8edaf3 0%, #62c7ec 100%);
+}
+
+.vac-calendar--end {
+  background: linear-gradient(180deg, #8be1d0 0%, #59c6b8 100%);
 }
 
 .vac-calendar__header {
   display: flex;
-  justify-content: space-between;
-  gap: 12px;
   align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
 }
 
-.vac-calendar__header h2 {
-  color: #6b7280;
-  font-size: 16px;
-  font-weight: 700;
+.vac-calendar__header-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-.vac-calendar__header p {
-  color: #1f6b95;
+.vac-calendar__eyebrow {
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.vac-calendar__title {
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.vac-calendar__subtitle {
+  max-width: 320px;
+  color: rgba(255, 255, 255, 0.94);
   font-size: 14px;
-  font-weight: 700;
-  text-align: right;
+  line-height: 1.45;
+}
+
+.vac-calendar__selected {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 138px;
+  min-height: 38px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.82);
+  color: #0f5f88;
+  font-size: 13px;
+  font-weight: 800;
+  text-align: center;
+  box-shadow: 0 8px 16px rgba(15, 95, 136, 0.12);
+  white-space: nowrap;
+}
+
+.vac-calendar__note {
+  margin: 0;
+  padding: 11px 13px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.94);
+  font-size: 13px;
+  line-height: 1.5;
 }
 
 .vac-calendar__toolbar,
 .vac-calendar__weekdays,
 .vac-calendar__days {
-  padding-left: 16px;
-  padding-right: 16px;
+  padding-left: 14px;
+  padding-right: 14px;
 }
 
 .vac-calendar__toolbar {
@@ -145,7 +310,11 @@
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 12px;
-  padding-top: 12px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
 }
 
 .vac-calendar__selectors {
@@ -156,26 +325,27 @@
 
 .vac-calendar__select {
   min-height: 42px;
-  border: 1px solid rgba(255, 255, 255, 0.36);
+  border: 1px solid rgba(255, 255, 255, 0.32);
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
+  background: rgba(255, 255, 255, 0.88);
+  color: #0f3e57;
   font-family: "Rubik", sans-serif;
   font-size: 14px;
   font-weight: 700;
   text-align: center;
   outline: none;
   cursor: pointer;
+  box-shadow: 0 4px 12px rgba(15, 62, 87, 0.08);
 }
 
 .vac-calendar__select:focus {
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.28);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.26);
 }
 
 .vac-calendar__arrow {
   width: 40px;
   height: 40px;
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.28);
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.18);
   color: #ffffff;
@@ -183,18 +353,13 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: transform 0.15s ease, background-color 0.2s ease;
+  transition: transform 0.15s ease, background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .vac-calendar__arrow:hover {
   background: rgba(255, 255, 255, 0.28);
+  box-shadow: 0 8px 16px rgba(15, 62, 87, 0.12);
   transform: translateY(-1px);
-}
-
-.vac-calendar__days-wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
 }
 
 .vac-calendar__weekdays {
@@ -202,10 +367,12 @@
   grid-template-columns: repeat(7, 1fr);
   gap: 8px;
   padding-top: 8px;
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 12px;
-  font-weight: 700;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 11px;
+  font-weight: 800;
   text-align: center;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .vac-calendar__days {
@@ -213,47 +380,68 @@
   grid-template-columns: repeat(7, 1fr);
   gap: 8px;
   padding-top: 4px;
-  padding-bottom: 18px;
-}
-
-.vac-calendar {
-  max-width: none;
-  padding: 18px 0 14px;
-  border-radius: 18px;
-  background: linear-gradient(180deg, #8edaf3 0%, #70cdec 100%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.42), 0 14px 28px rgba(27, 164, 227, 0.18);
+  padding-bottom: 4px;
 }
 
 .vac-calendar__day,
 .vac-calendar__day--empty {
-  min-height: 38px;
+  min-height: 40px;
 }
 
 .vac-calendar__day {
-  border: none;
-  border-radius: 11px;
-  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
   color: #0f3e57;
   font-family: "Rubik", sans-serif;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: transform 0.15s ease, background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  transition:
+    transform 0.15s ease,
+    background-color 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.15s ease,
+    opacity 0.15s ease;
 }
 
-.vac-calendar__day:hover {
-  background: rgba(255, 255, 255, 0.35);
+.vac-calendar__day:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.34);
   transform: translateY(-1px);
 }
 
 .vac-calendar__day--today {
-  box-shadow: inset 0 0 0 1.5px rgba(15, 62, 87, 0.32);
+  box-shadow:
+    inset 0 0 0 1.5px rgba(15, 62, 87, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
-.vac-calendar__day--selected {
+.vac-calendar--start .vac-calendar__day--selected {
   background: #ffffff;
-  color: #0d5f87;
-  box-shadow: 0 6px 14px rgba(20, 106, 150, 0.18);
+  color: #0f5f88;
+  box-shadow: 0 8px 18px rgba(15, 95, 136, 0.18);
+}
+
+.vac-calendar--end .vac-calendar__day--selected {
+  background: #ffffff;
+  color: #0d7a6d;
+  box-shadow: 0 8px 18px rgba(13, 122, 109, 0.18);
+}
+
+.vac-calendar__day--disabled {
+  opacity: 0.32;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.vac-calendar__day--selected.vac-calendar__day--disabled {
+  opacity: 1;
+}
+
+.vac-calendar__day--disabled:not(.vac-calendar__day--selected) {
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .vac-calendar__day--empty {
@@ -261,8 +449,8 @@
 }
 
 .vac-calendar__error {
-  padding: 0 16px;
-  color: #9f1239;
+  padding: 8px 12px 0;
+  color: #fff1f2;
   font-size: 13px;
   font-weight: 600;
 }
@@ -316,10 +504,18 @@
     padding: 20px 18px;
   }
 
-  .vac-request-selection-summary__range {
-    display: block;
-    margin-top: 4px;
-    margin-left: 0;
+  .vac-request-info.ui-info-panel {
+    padding: 22px 20px;
+  }
+
+  .vac-request-selection-summary__header {
+    flex-direction: column;
+  }
+
+  .vac-request-selection-summary__count {
+    width: 100%;
+    min-width: 0;
+    justify-content: flex-start;
   }
 
   .vac-request-additional {
@@ -332,6 +528,15 @@
 
   .vac-request-actions .ui-btn {
     width: 100%;
+  }
+
+  .vac-calendar__header {
+    flex-direction: column;
+  }
+
+  .vac-calendar__selected {
+    min-width: 0;
+    width: fit-content;
   }
 }
 
@@ -349,8 +554,25 @@
     gap: 20px;
   }
 
+  .vac-request-info.ui-info-panel {
+    padding: 18px 16px;
+  }
+
+  .vac-request-selection-summary {
+    padding: 16px;
+  }
+
+  .vac-request-selection-summary__title {
+    font-size: 17px;
+  }
+
+  .vac-request-selection-summary__count strong {
+    font-size: 24px;
+  }
+
   .vac-calendar__toolbar {
     grid-template-columns: 1fr;
+    gap: 10px;
   }
 
   .vac-calendar__selectors {
@@ -362,12 +584,11 @@
     height: 34px;
   }
 
-  .vac-calendar__header {
-    flex-direction: column;
-    align-items: flex-start;
+  .vac-calendar__subtitle {
+    max-width: none;
   }
 
-  .vac-calendar__header p {
-    text-align: left;
+  .vac-calendar__selected {
+    align-self: flex-start;
   }
 }

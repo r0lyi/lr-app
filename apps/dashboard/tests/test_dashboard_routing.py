@@ -154,7 +154,7 @@ class DashboardRoutingTests(DashboardRoleBaseTestCase):
         self.assertContains(rrhh_home, "10-06-2026")
         self.assertContains(rrhh_home, "14-06-2026")
         self.assertContains(rrhh_home, "5.00")
-        self.assertContains(rrhh_home, "pending")
+        self.assertContains(rrhh_home, "Pendiente")
         self.assertNotContains(rrhh_home, "Carlos")
         self.assertNotContains(rrhh_home, "Sanchez")
         self.assertNotContains(rrhh_home, "approved</td>", html=False)
@@ -217,7 +217,7 @@ class DashboardRoutingTests(DashboardRoleBaseTestCase):
         self.assertContains(response, "Martinez")
         self.assertContains(response, "10-06-2026")
         self.assertContains(response, "14-06-2026")
-        self.assertContains(response, "pending")
+        self.assertContains(response, "Pendiente")
         self.assertNotContains(response, "Carlos")
         self.assertNotContains(response, "Sanchez")
         self.assertNotContains(response, "01-08-2026")
@@ -253,14 +253,18 @@ class DashboardRoutingTests(DashboardRoleBaseTestCase):
             last_name="Reciente",
             hire_date=date(2024, 1, 1),
         )
-
-        self.create_vacation_request(
-            younger_employee,
-            status=self.pending_status,
-            start_date=date(2026, 7, 10),
-            end_date=date(2026, 7, 14),
-            requested_days="5.00",
+        overlap_employee_user = self.create_active_user(
+            email="employee-review-overlap@example.com",
+            dni="10101010P",
         )
+        overlap_employee = self.create_employee_profile(
+            overlap_employee_user,
+            department=department,
+            first_name="Carlos",
+            last_name="Solape",
+            hire_date=date(2023, 1, 1),
+        )
+
         self.create_vacation_request(
             older_employee,
             status=self.pending_status,
@@ -268,19 +272,35 @@ class DashboardRoutingTests(DashboardRoleBaseTestCase):
             end_date=date(2026, 7, 30),
             requested_days="30.00",
         )
+        self.create_vacation_request(
+            younger_employee,
+            status=self.pending_status,
+            start_date=date(2026, 3, 10),
+            end_date=date(2026, 3, 14),
+            requested_days="5.00",
+        )
+        self.create_vacation_request(
+            overlap_employee,
+            status=self.approved_status,
+            start_date=date(2026, 7, 10),
+            end_date=date(2026, 7, 12),
+            requested_days="3.00",
+        )
 
         self.client.force_login(user)
 
         response = self.client.get(reverse("dashboard:rrhh-home"))
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Resumen previo a exportacion")
+        self.assertContains(response, "Avisos previos")
+        self.assertContains(response, "Resumen antes de exportar")
         self.assertContains(response, "Fecha alta")
-        self.assertContains(response, "Observaciones")
-        self.assertContains(response, "Coincide con 1 empleado")
-        self.assertContains(response, "Alta carga: Verano")
-        self.assertContains(response, "Larga duracion")
-        self.assertContains(response, "el orden actual prioriza a los empleados mas antiguos")
+        self.assertNotContains(response, "Observaciones")
+        self.assertContains(response, "1 coincidencia de departamento")
+        self.assertContains(response, "1 solicitud en periodo de alta carga")
+        self.assertContains(response, "1 solicitud de larga duracion")
+        self.assertContains(response, "Ordenado por antiguedad")
+        self.assertContains(response, "Pendiente")
         self.assertContains(response, "01-01-2020")
         self.assertContains(response, "01-01-2024")
 

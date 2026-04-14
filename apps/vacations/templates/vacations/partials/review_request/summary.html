@@ -9,7 +9,7 @@
     <p class="review-request-summary__label">Estado actual</p>
     <p class="review-request-summary__value">
       <span class="review-request-status-chip{% if vacation_request.status.name == 'approved' %} review-request-status-chip--approved{% elif vacation_request.status.name == 'rejected' %} review-request-status-chip--rejected{% endif %}">
-        {{ vacation_request.status.name|capfirst }}
+        {{ vacation_request.status }}
       </span>
     </p>
   </article>

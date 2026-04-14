@@ -10,7 +10,6 @@
           <th>Fecha final</th>
           <th>Dias</th>
           <th>Estado</th>
-          <th>Observaciones</th>
           <th>Acciones</th>
         </tr>
       </thead>
@@ -25,19 +24,8 @@
             <td data-label="Dias">{{ vacation_request.requested_days }}</td>
             <td data-label="Estado">
               <span class="rrhh-home-table__status{% if vacation_request.status.name == 'approved' %} rrhh-home-table__status--approved{% elif vacation_request.status.name == 'rejected' %} rrhh-home-table__status--rejected{% endif %}">
-                {{ vacation_request.status.name|capfirst }}
+                {{ vacation_request.status }}
               </span>
-            </td>
-            <td data-label="Observaciones">
-              <div class="rrhh-home-table__observations">
-                {% if vacation_request.export_review_observations %}
-                  {% for observation in vacation_request.export_review_observations %}
-                    <span class="rrhh-home-table__observation">{{ observation }}</span>
-                  {% endfor %}
-                {% else %}
-                  <span class="rrhh-home-table__observation rrhh-home-table__observation--muted">Sin avisos</span>
-                {% endif %}
-              </div>
             </td>
             <td data-label="Acciones">
               <a
