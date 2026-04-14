@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from apps.core.utils.client_ip import _client_ip
 from apps.core.utils.decorators import anonymous_required
-from apps.core.utils.responses_toast import toast_response as _toast_response 
+from apps.core.utils.responses_toast import toast_response as _toast_response
 from apps.core.utils.responses_toast import rate_limit_response as _rate_limit_response
 
 from apps.core.utils.rate_limits import (
@@ -165,7 +165,13 @@ def login_view(request):
             )
         messages.error(request, error_message)
 
-    return render(request, "users/pages/login.html", {"form": form})
+    return render(
+        request,
+        "users/pages/login.html",
+        {
+            "form": form,
+        },
+    )
 
 
 def logout_view(request):

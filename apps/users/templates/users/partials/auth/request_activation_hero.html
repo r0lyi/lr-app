@@ -1,0 +1,50 @@
+{% load static %}
+
+<div class="set-password-hero">
+  <div class="set-password-hero__overlay" aria-hidden="true"></div>
+
+  <img
+    src="{% static 'images/brand/logo500x200.png' %}"
+    alt="LR Clean & Service"
+    class="set-password-hero__logo"
+  >
+
+  <div class="set-password-hero__content">
+    <div class="set-password-hero__card">
+      <h2 class="set-password-hero__card-title">Proceso de Activación</h2>
+
+      <ol class="set-password-hero__steps">
+        <li class="set-password-hero__step">
+          <span class="set-password-hero__step-badge">1</span>
+          <div class="set-password-hero__step-copy">
+            <strong>Introduce tu DNI</strong>
+            <span>Usaremos tu identificación para localizar tu cuenta.</span>
+          </div>
+        </li>
+        <li class="set-password-hero__step">
+          <span class="set-password-hero__step-badge">2</span>
+          <div class="set-password-hero__step-copy">
+            <strong>Revisa tu correo</strong>
+            <span>Te enviaremos un enlace seguro para continuar.</span>
+          </div>
+        </li>
+        <li class="set-password-hero__step">
+          <span class="set-password-hero__step-badge">3</span>
+          <div class="set-password-hero__step-copy">
+            <strong>Crea tu contraseña</strong>
+            <span>Completa la activación y entra al sistema.</span>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </div>
+
+  <img
+    src="{% static 'images/oficina.jpg' %}"
+    alt="Oficina de LR Clean & Service"
+    class="set-password-hero__image"
+    loading="eager"
+    fetchpriority="high"
+    decoding="async"
+  >
+</div>

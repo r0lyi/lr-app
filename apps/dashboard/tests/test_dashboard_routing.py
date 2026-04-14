@@ -23,6 +23,32 @@ class DashboardRoutingTests(DashboardRoleBaseTestCase):
         self.assertRedirects(response, reverse("employees:onboarding"))
         self.assertEqual(list(user.roles.values_list("name", flat=True)), ["employee"])
 
+    def test_rrhh_without_profile_is_redirected_to_onboarding(self):
+        user = self.create_active_user(
+            email="rrhh-no-profile@example.com",
+            dni="11111111H",
+        )
+        user.roles.set([self.rrhh_role])
+
+        self.client.force_login(user)
+
+        response = self.client.get(reverse("dashboard:home"))
+
+        self.assertRedirects(response, reverse("employees:onboarding"))
+
+    def test_admin_without_profile_is_redirected_to_onboarding(self):
+        user = self.create_active_user(
+            email="admin-no-profile@example.com",
+            dni="22222222J",
+        )
+        user.roles.set([self.admin_role])
+
+        self.client.force_login(user)
+
+        response = self.client.get(reverse("dashboard:home"))
+
+        self.assertRedirects(response, reverse("employees:onboarding"))
+
     def test_employee_with_profile_is_redirected_to_employee_home(self):
         user = self.create_active_user(
             email="employee-with-profile@example.com",
@@ -99,6 +125,11 @@ class DashboardRoutingTests(DashboardRoleBaseTestCase):
             dni="11111111H",
         )
         user.roles.set([self.rrhh_role])
+        self.create_employee_profile(
+            user,
+            first_name="Rosa",
+            last_name="Ruiz",
+        )
         employee_user = self.create_active_user(
             email="employee-for-rrhh@example.com",
             dni="33333333P",
@@ -313,6 +344,11 @@ class DashboardRoutingTests(DashboardRoleBaseTestCase):
             dni="22222222J",
         )
         user.roles.set([self.admin_role])
+        self.create_employee_profile(
+            user,
+            first_name="Admin",
+            last_name="Sistema",
+        )
 
         self.client.force_login(user)
 

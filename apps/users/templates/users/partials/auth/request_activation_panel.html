@@ -1,0 +1,46 @@
+<div class="set-password-panel">
+  <header class="set-password-panel__header">
+    <h1 class="set-password-panel__title">Crear o Recuperar contraseña</h1>
+    <p class="set-password-panel__subtitle">
+      Introduce tu DNI para recibir el enlace de activación.
+    </p>
+  </header>
+
+  {% if form.non_field_errors %}
+    <div class="set-password-panel__alert" role="alert">
+      {% for error in form.non_field_errors %}
+        <p>{{ error }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <form
+    class="set-password-panel__form"
+    method="post"
+    action="{% url 'auth:request-activation' %}"
+    hx-post="{% url 'auth:request-activation' %}"
+    hx-target="#ui-toast-root"
+    hx-swap="innerHTML"
+    hx-indicator="#request-activation-btn"
+  >
+    {% csrf_token %}
+
+    <div class="set-password-panel__fields">
+      {% include "components/ui/text_input.html" with label="DNI" type="text" id="id_dni" name="dni" placeholder="Introduce tu DNI" autocomplete="off" autofocus=True required=True value=form.dni.value|default:'' error=form.dni.errors.0 full_width=True %}
+    </div>
+
+    <button type="submit" id="request-activation-btn" class="ui-btn ui-btn--primary ui-btn--md ui-btn--full set-password-panel__submit">
+      <span class="ui-spinner htmx-indicator" aria-hidden="true"></span>
+      <span>Enviar enlace de activación</span>
+      <span class="set-password-panel__submit-icon" aria-hidden="true">
+        {% include "components/ui/icon.html" with name="arrow-right" %}
+      </span>
+    </button>
+  </form>
+
+  <div class="set-password-panel__footer">
+    <a class="set-password-panel__back" href="{% url 'auth:login' %}">
+      Volver al inicio de sesión
+    </a>
+  </div>
+</div>

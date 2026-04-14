@@ -1,0 +1,27 @@
+{% load static %}
+
+<div class="login-hero">
+  <div class="login-hero__overlay" aria-hidden="true"></div>
+
+  <img
+    src="{% static 'images/brand/logo500x200.png' %}"
+    alt="LR Clean & Service"
+    class="login-hero__logo"
+  >
+
+  <div class="login-hero__content">
+    <h1 class="login-hero__title">Sistema de Vacaciones</h1>
+    <p class="login-hero__description">
+      Solicita, gestiona y aprueba días libres en segundos. Todo en una plataforma simple, transparente y eficiente.
+    </p>
+  </div>
+
+  <img
+    src="{% static 'images/oficina.jpg' %}"
+    alt="Oficina de LR Clean & Service"
+    class="login-hero__image"
+    loading="eager"
+    fetchpriority="high"
+    decoding="async"
+  >
+</div>

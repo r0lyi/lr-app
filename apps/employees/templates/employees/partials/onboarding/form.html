@@ -1,5 +1,5 @@
 {% if form.non_field_errors %}
-  <div class="onboarding-errors">
+  <div class="onboarding-errors" role="alert">
     <ul>
       {% for error in form.non_field_errors %}
         <li>{{ error }}</li>
@@ -8,27 +8,23 @@
   </div>
 {% endif %}
 
-<form method="post" class="onboarding-form">
+<form method="post" class="onboarding-form" novalidate>
   {% csrf_token %}
 
-  <div class="onboarding-layout">
-    <div class="onboarding-column onboarding-column--left">
-      {% include "components/ui/text_input.html" with label="Nombre/s" name="first_name" value=form.first_name.value|default:'' placeholder="Introduce tu Nombre" autocomplete="given-name" required=True error=form.first_name.errors.0 %}
-      {% include "components/ui/text_input.html" with label="Apellidos" name="last_name" value=form.last_name.value|default:'' placeholder="Introduce tus Apellidos" autocomplete="family-name" required=True error=form.last_name.errors.0 %}
-      {% include "components/ui/text_input.html" with label="Correo Electronico" name="email" type="email" value=form.email.value|default:'' placeholder="Introduce tu Correo Electronico" autocomplete="email" required=True error=form.email.errors.0 %}
-      {% include "components/ui/phone_input.html" with label="Telefono" name="phone" value=form.phone.value|default:'' placeholder="Introduce tu telefono" autocomplete="tel" error=form.phone.errors.0 prefix="+34" %}
+  <div class="onboarding-fields">
+    <div class="onboarding-fields__grid">
+      {% include "components/ui/text_input.html" with label="Nombre" name="first_name" value=form.first_name.value|default:'' placeholder="Ej. Juan" autocomplete="given-name" required=True error=form.first_name.errors.0 %}
+      {% include "components/ui/text_input.html" with label="Apellidos" name="last_name" value=form.last_name.value|default:'' placeholder="Ej. García" autocomplete="family-name" required=True error=form.last_name.errors.0 %}
+      {% include "components/ui/text_input.html" with label="Correo electrónico" name="email" type="email" value=form.email.value|default:'' placeholder="Ej. nombre@empresa.com" autocomplete="email" required=True error=form.email.errors.0 %}
+      {% include "components/ui/phone_input.html" with label="Teléfono" name="phone" value=form.phone.value|default:'' placeholder="Introduce tu teléfono" autocomplete="tel" error=form.phone.errors.0 prefix="+34" %}
+
+      <div class="onboarding-field onboarding-field--full">
+        {% include "components/ui/date_input.html" with label="Fecha de ingreso" name="hire_date" value=form.hire_date.value|default:'' required=True error=form.hire_date.errors.0 %}
+      </div>
     </div>
 
-    <div class="onboarding-side-card">
-      {% include "components/ui/info_panel.html" with title="¿No sabes tu fecha de ingreso?" text_html="Puedes consultar tu fecha de ingreso en la empresa en tu <strong>Informe de Vida Laboral</strong>." line_1="Dentro del documento, busca el apartado donde aparecen tus periodos de alta en empresas." line_2="El nombre de la empresa." line_3="La fecha de alta (inicio del contrato)." line_4="La fecha de baja (si ya no trabajas alli)." note="La fecha de alta es la que debes indicar como fecha de ingreso a la empresa en este formulario." %}
+    <div class="onboarding-form__actions">
+      {% include "components/ui/button_principal.html" with label="Enviar" type="submit" size="md" class_name="onboarding-submit" %}
     </div>
-
-    <div class="onboarding-date-field">
-      {% include "components/ui/date_input.html" with label="Fecha Ingreso" name="hire_date" value=form.hire_date.value|default:'' required=True error=form.hire_date.errors.0 %}
-    </div>
-  </div>
-
-  <div class="onboarding-form__actions">
-    {% include "components/ui/button_principal.html" with label="Enviar" type="submit" size="md" %}
   </div>
 </form>

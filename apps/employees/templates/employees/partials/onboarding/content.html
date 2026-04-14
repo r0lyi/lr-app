@@ -1,12 +1,30 @@
-{% load static %}
-{% static "images/brand/logo500x200.svg" as company_logo %}
-
 <div class="onboarding-page">
   <div class="onboarding-shell">
-    {% include "components/ui/header_title.html" with class_name="onboarding-header" logo_src=company_logo logo_alt="Clean & Service" title="Completa tu perfil" description="Necesitamos confirmar tus datos para calcular correctamente tus vacaciones y accesos." %}
+    <header class="onboarding-intro">
+      <p class="onboarding-intro__eyebrow">Formulario interno</p>
+      <h1 class="onboarding-intro__title">Completa tu perfil</h1>
+      <p class="onboarding-intro__description">
+        Rellena estos datos una sola vez para dejar listo tu expediente, tus
+        vacaciones y tu acceso a la plataforma.
+      </p>
+    </header>
 
-    <section class="onboarding-card">
-      {% include "employees/partials/onboarding/form.html" %}
-    </section>
+    <div class="onboarding-grid">
+      <section class="onboarding-main-card" aria-labelledby="onboarding-form-title">
+        <div class="onboarding-form-head">
+          <p class="onboarding-form-head__eyebrow">Datos personales</p>
+          <h2 id="onboarding-form-title" class="onboarding-form-head__title">Información básica de empleado</h2>
+          <p class="onboarding-form-head__description">
+            Los campos marcados son necesarios para completar tu ficha interna.
+          </p>
+        </div>
+
+        {% include "employees/partials/onboarding/form.html" %}
+      </section>
+
+      <aside class="onboarding-side" aria-label="Ayuda y contexto del formulario">
+        {% include "employees/partials/onboarding/sidebar.html" %}
+      </aside>
+    </div>
   </div>
 </div>
