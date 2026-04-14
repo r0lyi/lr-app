@@ -1,0 +1,42 @@
+<div class="login-panel">
+  <header class="login-panel__header">
+    <h2 class="login-panel__title">Bienvenido de nuevo</h2>
+    <p class="login-panel__subtitle">Ingresa tus credenciales para continuar.</p>
+  </header>
+
+  <form
+    class="login-panel__form"
+    method="post"
+    action="{% url 'auth:login' %}"
+    hx-post="{% url 'auth:login' %}"
+    hx-target="#ui-toast-root"
+    hx-swap="innerHTML"
+    hx-indicator="#login-btn"
+  >
+    {% csrf_token %}
+
+    <div class="login-panel__fields">
+      {% include "components/ui/text_input.html" with label="DNI" left_icon_name="id-card" type="text" id="id_dni" name="dni" placeholder="Introduce tu DNI" autocomplete="username" autofocus=True required=True value=form.dni.value|default:'' error=form.dni.errors.0 full_width=True %}
+
+      {% include "components/ui/password_input.html" with label="Contraseña" left_icon_name="lock" id="id_password" name="password" placeholder="Introduce tu contraseña" autocomplete="current-password" required=True error=form.password.errors.0 full_width=True %}
+    </div>
+
+
+    <button type="submit" id="login-btn" class="ui-btn ui-btn--primary ui-btn--md ui-btn--full login-panel__submit">
+      <span class="ui-spinner htmx-indicator" aria-hidden="true"></span>
+      <span class="login-panel__submit-label">Entrar</span>
+      <span class="login-panel__submit-icon" aria-hidden="true">
+        {% include "components/ui/icon.html" with name="arrow-right" %}
+      </span>
+    </button>
+  </form>
+
+  <div class="login-panel__secondary-action">
+    <a class="ui-btn ui-btn--secondary ui-btn--md login-panel__secondary-link" href="{% url 'auth:request-activation' %}">
+      <span>Crear o cambiar contraseña</span>
+      <span class="login-panel__secondary-icon" aria-hidden="true">
+        {% include "components/ui/icon.html" with name="arrow-right" %}
+      </span>
+    </a>
+  </div>
+</div>

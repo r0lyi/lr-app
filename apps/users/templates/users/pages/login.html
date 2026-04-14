@@ -1,71 +1,18 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Iniciar sesion — Sistema de Vacaciones{% endblock %}
+{% block title %}Iniciar sesión — LR Clean &amp; Service{% endblock %}
 
 {% block extra_css %}
   {{ block.super }}
-  <link rel="stylesheet" href="{% static 'users/css/pages/auth.css' %}">
+  <link rel="stylesheet" href="{% static 'users/css/pages/login.css' %}">
+{% endblock %}
+
+{% block extra_js %}
+  {{ block.super }}
+  <script src="{% static 'users/js/pages/login.js' %}"></script>
 {% endblock %}
 
 {% block content %}
-<div class="auth-page">
-  <div class="auth-card">
-    <section class="auth-side auth-side-left">
-      <div class="auth-side-body">
-        <img
-          src="{% static 'images/brand/logo500x200.svg' %}"
-          alt="LR Clean & Service"
-          class="auth-brand-logo"
-        />
-
-        <h1 class="auth-system-title">Sistema de Gestion de Vacaciones</h1>
-        <p class="auth-system-subtitle">Gestiona tus solicitudes de manera rapida y eficiente</p>
-
-        <div class="auth-help-card">
-          <h3>¿Primera vez aqui?</h3>
-          <p>Introduce tu DNI y crea tu contraseña. Recibiras un correo con las instrucciones.</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="auth-side auth-side-right">
-      <div class="auth-side-body">
-        <h2 class="auth-heading">Iniciar sesion</h2>
-        <p class="auth-subheading">Ingresa tus credenciales para continuar</p>
-
-        <form
-          class="auth-form"
-          method="post"
-          action="{% url 'auth:login' %}"
-          hx-post="{% url 'auth:login' %}"
-          hx-target="#ui-toast-root"
-          hx-swap="innerHTML"
-          hx-indicator="#login-btn"
-        >
-          {% csrf_token %}
-
-          {% include "components/ui/text_input.html" with label="DNI" type="text" id="id_dni" name="dni" placeholder="Introduce tu DNI" autocomplete="username" autofocus=True required=True value=form.dni.value|default:'' error=form.dni.errors.0 %}
-
-          {% include "components/ui/text_input.html" with label="Contraseña" type="password" id="id_password" name="password" placeholder="Introduce tu Contraseña" autocomplete="current-password" required=True error=form.password.errors.0 %}
-
-          <div class="remember-row">
-            <input type="checkbox" id="remember" name="remember" checked />
-            <label for="remember">Recordarme</label>
-          </div>
-
-          {% include "components/ui/button_principal.html" with label="Entrar" type="submit" id="login-btn" size="md" full_width=True htmx_indicator=True %}
-
-          <div class="auth-divider">o</div>
-
-          <a href="{% url 'auth:request-activation' %}" class="auth-link-btn">
-            Crear o recuperar contraseña
-          </a>
-        </form>
-
-        <p class="auth-footer-note">LR Clean &amp; Service 2026</p>
-      </div>
-    </section>
-  </div>
-</div>
+{% include "components/auth/split_screen.html" with class_name="auth-login" media_partial="users/partials/auth/login_hero.html" panel_partial="users/partials/auth/login_panel.html" %}
 {% endblock %}

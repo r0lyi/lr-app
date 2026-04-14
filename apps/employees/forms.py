@@ -33,7 +33,7 @@ class EmployeeOnboardingForm(forms.Form):
         ),
     )
     email = forms.EmailField(
-        label="Correo electronico",
+        label="Correo electrónico",
         widget=forms.EmailInput(
             attrs={
                 "class": "ui-input",
@@ -45,11 +45,11 @@ class EmployeeOnboardingForm(forms.Form):
     phone = forms.CharField(
         max_length=20,
         required=False,
-        label="Telefono",
+        label="Teléfono",
         widget=forms.TextInput(
             attrs={
                 "class": "ui-input",
-                "placeholder": "Introduce tu telefono",
+                "placeholder": "Introduce tu teléfono",
                 "autocomplete": "tel",
             }
         ),
@@ -78,7 +78,7 @@ class EmployeeOnboardingForm(forms.Form):
         if self.user:
             qs = qs.exclude(pk=self.user.pk)
         if qs.exists():
-            raise ValidationError("Este correo ya esta en uso.")
+            raise ValidationError("Este correo ya está en uso.")
         return email
 
 
@@ -101,7 +101,7 @@ class EmployeeProfileUpdateForm(forms.ModelForm):
         labels = {
             "first_name": "Nombre",
             "last_name": "Apellidos",
-            "phone": "Telefono",
+            "phone": "Teléfono",
         }
         widgets = {
             "first_name": forms.TextInput(
