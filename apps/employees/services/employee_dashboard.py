@@ -83,9 +83,24 @@ def build_employee_dashboard_summary(employee_profile, *, request_filters=None):
     """
     employee_requests = get_employee_vacation_requests(employee_profile)
     current_year = timezone.localdate().year
+    latest_request = employee_requests.first()
     latest_resolved_request = employee_requests.filter(
         resolution_date__isnull=False,
     ).order_by("-resolution_date").first()
+    annual_vacation_days_count = calculate_annual_vacation_days_for_year(
+        employee_profile.hire_date,
+        year=current_year,
+    )
+    annual_vacation_progress_percent = Decimal("0.00")
+    if FULL_ANNUAL_VACATION_DAYS:
+        annual_vacation_progress_percent = (
+            annual_vacation_days_count / FULL_ANNUAL_VACATION_DAYS * Decimal("100")
+        ).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+        annual_vacation_progress_percent = min(
+            annual_vacation_progress_percent,
+            Decimal("100.00"),
+        )
+
     request_filters = request_filters or {}
     filtered_employee_requests = get_filtered_employee_vacation_requests(
         employee_profile,
@@ -94,14 +109,22 @@ def build_employee_dashboard_summary(employee_profile, *, request_filters=None):
         status_name=request_filters.get("status"),
     )
 
+    if latest_resolved_request is None:
+        latest_resolution_summary = "Todavía no tienes solicitudes resueltas."
+    elif latest_resolved_request.status.name == "approved":
+        latest_resolution_summary = "Tu última solicitud fue aprobada por RRHH."
+    else:
+        latest_resolution_summary = "Tu última solicitud fue rechazada por RRHH."
+
     return {
         "employee_profile": employee_profile,
+        "employee_requests_count": employee_requests.count(),
         "pending_requests_count": employee_requests.filter(status__name="pending").count(),
-        "annual_vacation_days_count": calculate_annual_vacation_days_for_year(
-            employee_profile.hire_date,
-            year=current_year,
-        ),
+        "annual_vacation_days_count": annual_vacation_days_count,
         "annual_vacation_reference_year": current_year,
+        "annual_vacation_progress_percent": annual_vacation_progress_percent,
+        "latest_request": latest_request,
         "latest_resolution": latest_resolved_request,
+        "latest_resolution_summary": latest_resolution_summary,
         "employee_requests": filtered_employee_requests,
     }

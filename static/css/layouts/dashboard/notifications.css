@@ -9,20 +9,21 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 52px;
-  height: 52px;
-  border: 1px solid rgba(20, 154, 223, 0.12);
-  border-radius: 16px;
-  background: linear-gradient(180deg, #1aa5e8 0%, #0f8fd4 100%);
-  color: #ffffff;
+  width: 44px;
+  height: 44px;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #ffffff;
+  color: #64748b;
   cursor: pointer;
-  box-shadow: 0 10px 20px rgba(15, 143, 212, 0.22);
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  box-shadow: 0 8px 16px rgba(15, 23, 42, 0.04);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
 }
 
 .dash-notifications__button:hover {
+  background: #f8fbfd;
   transform: translateY(-1px);
-  box-shadow: 0 14px 24px rgba(15, 143, 212, 0.25);
+  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.06);
 }
 
 .dash-notifications__icon svg {
@@ -50,7 +51,7 @@
 
 .dash-notifications__panel {
   position: absolute;
-  top: calc(100% + 16px);
+  top: calc(100% + 12px);
   right: 0;
   z-index: 40;
   width: min(45vw, 640px);

@@ -1,12 +1,12 @@
 <form method="get" class="filters-row employee-filters-form">
   <div class="filter-group">
-    <label class="filter-label" for="{{ filter_form.start_date.id_for_label }}">Fecha Inicio</label>
+    <label class="filter-label" for="{{ filter_form.start_date.id_for_label }}">Desde</label>
     <div class="filter-input-wrap">
       {{ filter_form.start_date }}
     </div>
   </div>
   <div class="filter-group">
-    <label class="filter-label" for="{{ filter_form.end_date.id_for_label }}">Fecha Fin</label>
+    <label class="filter-label" for="{{ filter_form.end_date.id_for_label }}">Hasta</label>
     <div class="filter-input-wrap">
       {{ filter_form.end_date }}
     </div>
@@ -18,6 +18,9 @@
     </div>
   </div>
   <div class="employee-filters-form__actions">
-    <button type="submit" class="btn-primary employee-filters-form__submit">Filtrar</button>
+    <button type="submit" class="ui-btn ui-btn--primary ui-btn--md employee-filters-form__submit">Filtrar</button>
+    {% if filter_reset_url %}
+      <a href="{{ filter_reset_url }}" class="ui-btn ui-btn--secondary ui-btn--md employee-filters-form__reset">Limpiar</a>
+    {% endif %}
   </div>
 </form>

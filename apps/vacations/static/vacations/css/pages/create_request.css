@@ -21,7 +21,7 @@
   justify-content: center;
   padding: 22px 24px 18px;
   border-radius: 18px;
-  box-shadow: 0 12px 26px rgba(18, 32, 51, 0.1);
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.06);
 }
 
 .vac-request-info.ui-info-panel {
@@ -30,10 +30,10 @@
   gap: 8px;
   min-height: 100%;
   padding: 28px 30px 26px;
-  border-color: rgba(125, 187, 229, 0.5);
+  border-color: rgba(148, 163, 184, 0.16);
   border-radius: 18px;
-  background: linear-gradient(180deg, #f4faff 0%, #e9f5ff 100%);
-  box-shadow: 0 12px 28px rgba(22, 108, 179, 0.08);
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.06);
 }
 
 .vac-request-info .ui-info-panel__eyebrow {
@@ -42,16 +42,16 @@
 
 .vac-request-info .ui-info-panel__title {
   margin-bottom: 2px;
-  color: #12385d;
-  font-size: 20px;
+  color: #111827;
+  font-size: 19px;
   line-height: 1.2;
 }
 
 .vac-request-info .ui-info-panel__text,
 .vac-request-info .ui-info-panel__note,
 .vac-request-info .ui-info-panel__list {
-  color: #35597b;
-  font-size: 14px;
+  color: #64748b;
+  font-size: 15px;
   line-height: 1.55;
 }
 

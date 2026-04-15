@@ -39,6 +39,7 @@ def employee_home_view(request):
                 request_filters=request_filters,
             ),
             "filter_form": filter_form,
+            "filter_reset_url": request.path,
         },
     )
     return render(request, "dashboard/pages/employee_home.html", context)

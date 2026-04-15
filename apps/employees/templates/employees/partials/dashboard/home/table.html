@@ -2,22 +2,22 @@
   <table class="data-table">
     <thead>
       <tr>
-        <th>No.</th>
-        <th>Fecha solicitada</th>
-        <th>Fecha Inicio</th>
-        <th>Fecha Final</th>
-        <th>Dias</th>
+        <th>Nro</th>
+        <th>Fecha solicitud</th>
+        <th>Rango de fechas</th>
+        <th>Total días</th>
         <th>Estado</th>
       </tr>
     </thead>
     <tbody>
       {% for request_item in employee_requests %}
         <tr>
-          <td data-label="No.">{{ forloop.counter }}</td>
-          <td data-label="Fecha solicitada">{{ request_item.created_at|date:"d-m-Y" }}</td>
-          <td data-label="Fecha Inicio">{{ request_item.start_date|date:"d-m-Y" }}</td>
-          <td data-label="Fecha Final">{{ request_item.end_date|date:"d-m-Y" }}</td>
-          <td data-label="Dias">{{ request_item.requested_days }}</td>
+          <td data-label="Nro">{{ forloop.counter }}</td>
+          <td data-label="Fecha solicitud">{{ request_item.created_at|date:"d-m-Y" }}</td>
+          <td data-label="Rango de fechas">
+            {{ request_item.start_date|date:"d-m-Y" }} - {{ request_item.end_date|date:"d-m-Y" }}
+          </td>
+          <td data-label="Total días">{{ request_item.requested_days }}</td>
           <td data-label="Estado">
             <span class="badge {% if request_item.status.name == 'Pendiente' %}badge-pending{% elif request_item.status.name == 'Aprobada' %}badge-approved{% elif request_item.status.name == 'Rechazada' %}badge-rejected{% endif %}">
               {{ request_item.status.name }}
@@ -26,7 +26,7 @@
         </tr>
       {% empty %}
         <tr>
-          <td class="employee-history-table__empty" colspan="6">No hay solicitudes registradas con estos filtros.</td>
+          <td class="employee-history-table__empty" colspan="5">No hay solicitudes registradas con estos filtros.</td>
         </tr>
       {% endfor %}
     </tbody>

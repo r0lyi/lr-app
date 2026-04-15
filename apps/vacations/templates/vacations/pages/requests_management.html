@@ -3,7 +3,13 @@
 
 {% block title %}{{ requests_page_title|default:"Solicitudes" }}{% endblock %}
 
-{% block dashboard_header_title %}{{ requests_page_title|default:"Solicitudes" }}{% endblock %}
+{% block dashboard_header_title %}
+  {% if role_label == "Administrador" %}
+    Portal de administración
+  {% else %}
+    Portal RRHH
+  {% endif %}
+{% endblock %}
 
 {% block dashboard_content_class %}dash-content--wide{% endblock %}
 

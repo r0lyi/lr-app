@@ -20,16 +20,31 @@ class EmployeeVacationRequestFilterForm(forms.Form):
     start_date = forms.DateField(
         label="Fecha inicio",
         required=False,
-        widget=forms.DateInput(attrs={"type": "date"}),
+        widget=forms.DateInput(
+            attrs={
+                "type": "date",
+                "class": "ui-input ui-input--date",
+            }
+        ),
     )
     end_date = forms.DateField(
         label="Fecha final",
         required=False,
-        widget=forms.DateInput(attrs={"type": "date"}),
+        widget=forms.DateInput(
+            attrs={
+                "type": "date",
+                "class": "ui-input ui-input--date",
+            }
+        ),
     )
     status = forms.ChoiceField(
         label="Estado",
         required=False,
+        widget=forms.Select(
+            attrs={
+                "class": "ui-select",
+            }
+        ),
     )
 
     def __init__(self, *args, **kwargs):
