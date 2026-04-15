@@ -5,6 +5,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.hashers import UNUSABLE_PASSWORD_PREFIX
 
 from apps.employees.models import Department
+from apps.users.models import User
 
 from apps.users.services.validators import normalize_dni, validate_dni
 
@@ -90,7 +91,7 @@ class AdminUserFilterForm(forms.Form):
         widget=forms.TextInput(
             attrs={
                 "class": "ui-input",
-                "placeholder": "Buscar por nombre, correo o DNI",
+                "placeholder": "Buscar por nombre, email o ID...",
             }
         ),
     )
@@ -131,8 +132,61 @@ class AdminUserFilterForm(forms.Form):
         self.fields["department"].queryset = Department.objects.order_by("name")
 
 
+class AdminUserCreateForm(forms.Form):
+    """Formulario corto para crear un usuario pendiente de activacion desde admin."""
+
+    dni = forms.CharField(
+        max_length=20,
+        label="DNI",
+        validators=[validate_dni],
+        widget=forms.TextInput(
+            attrs={
+                "class": "ui-input",
+                "placeholder": "12345678Z",
+                "autofocus": True,
+            }
+        ),
+    )
+    email = forms.EmailField(
+        label="Correo electrónico",
+        widget=forms.TextInput(
+            attrs={
+                "class": "ui-input",
+                "placeholder": "nombre@empresa.com",
+                "inputmode": "email",
+            }
+        ),
+    )
+
+    def clean_dni(self):
+        """Normaliza el DNI antes de validar la unicidad."""
+
+        return normalize_dni(self.cleaned_data["dni"])
+
+    def clean_email(self):
+        """Normaliza el email para evitar duplicados por mayusculas o espacios."""
+
+        return self.cleaned_data["email"].strip().lower()
+
+    def clean(self):
+        """Comprueba que no exista ya un usuario con esos identificadores."""
+
+        cleaned_data = super().clean()
+        dni = cleaned_data.get("dni")
+        email = cleaned_data.get("email")
+
+        if dni and User.objects.filter(dni=dni).exists():
+            self.add_error("dni", "Ya existe un usuario con este DNI.")
+
+        if email and User.objects.filter(email__iexact=email).exists():
+            self.add_error("email", "Ya existe un usuario con este correo electrónico.")
+
+        return cleaned_data
+
+
 __all__ = [
     "AdminUserFilterForm",
+    "AdminUserCreateForm",
     "LoginForm",
     "RequestActivationForm",
     "SetPasswordForm",

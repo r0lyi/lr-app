@@ -1,9 +1,11 @@
 {% extends "layouts/dashboard/base.html" %}
 {% load static %}
 
-{% block title %}Actividad del sistema{% endblock %}
+{% block title %}Historial de Actividad{% endblock %}
 
 {% block dashboard_header_title %}Portal de auditoría{% endblock %}
+
+{% block dashboard_content_class %}dash-content--wide audit-log-content{% endblock %}
 
 {% block dashboard_css %}
   {{ block.super }}

@@ -127,6 +127,8 @@
   const annualDaysTotal = annualDaysTotalRaw
     ? Number(annualDaysTotalRaw.replace(",", "."))
     : Number.NaN;
+  const selectedStartSummary = document.getElementById("selected-start-summary");
+  const selectedEndSummary = document.getElementById("selected-end-summary");
   const selectedDaysCounter = document.getElementById("selected-days-counter");
   const selectedRangeSummary = document.getElementById("selected-range-summary");
   const submitButton = document.getElementById("submit-request-button");
@@ -313,7 +315,11 @@
 
   function formatDayCount(value) {
     if (!Number.isFinite(value)) {
-      return "0.00";
+      return "0";
+    }
+
+    if (Number.isInteger(value)) {
+      return String(value);
     }
 
     return value.toFixed(2);
@@ -358,15 +364,23 @@
     const startDate = parseIsoDate(startInput ? startInput.value : "");
     const endDate = parseIsoDate(endInput ? endInput.value : "");
 
-    if (!selectedDaysCounter || !selectedRangeSummary || !submitButton) {
+    if (
+      !selectedDaysCounter ||
+      !selectedRangeSummary ||
+      !submitButton ||
+      !selectedStartSummary ||
+      !selectedEndSummary
+    ) {
       return;
     }
 
     selectedRangeSummary.classList.remove("is-invalid");
+    selectedStartSummary.textContent = "Sin seleccionar";
+    selectedEndSummary.textContent = "Sin seleccionar";
 
     if (!startDate && !endDate) {
       selectedDaysCounter.textContent = "0";
-      selectedRangeSummary.textContent = "Selecciona la fecha de inicio y la fecha final para continuar.";
+      selectedRangeSummary.textContent = "Selecciona ambas fechas en el calendario.";
       submitButton.disabled = true;
       updateAnnualDaysCounter(0);
       return;
@@ -374,7 +388,9 @@
 
     if (startDate && !endDate) {
       selectedDaysCounter.textContent = "0";
-      selectedRangeSummary.textContent = `Inicio: ${formatDisplayDate(startDate)}. Falta elegir la fecha final.`;
+      selectedStartSummary.textContent = formatDisplayDate(startDate);
+      selectedEndSummary.textContent = "Pendiente";
+      selectedRangeSummary.textContent = "Elige la fecha de fin para completar el periodo.";
       submitButton.disabled = true;
       updateAnnualDaysCounter(0);
       return;
@@ -382,15 +398,20 @@
 
     if (!startDate && endDate) {
       selectedDaysCounter.textContent = "0";
-      selectedRangeSummary.textContent = `Final: ${formatDisplayDate(endDate)}. Falta elegir la fecha de inicio.`;
+      selectedStartSummary.textContent = "Pendiente";
+      selectedEndSummary.textContent = formatDisplayDate(endDate);
+      selectedRangeSummary.textContent = "Elige la fecha de inicio para completar el periodo.";
       submitButton.disabled = true;
       updateAnnualDaysCounter(0);
       return;
     }
 
+    selectedStartSummary.textContent = formatDisplayDate(startDate);
+    selectedEndSummary.textContent = formatDisplayDate(endDate);
+
     if (endDate < startDate) {
       selectedDaysCounter.textContent = "0";
-      selectedRangeSummary.textContent = "La fecha final debe ser igual o posterior a la inicial";
+      selectedRangeSummary.textContent = "La fecha final debe ser igual o posterior a la inicial.";
       selectedRangeSummary.classList.add("is-invalid");
       submitButton.disabled = true;
       updateAnnualDaysCounter(0);
@@ -409,7 +430,7 @@
 
     const remainingDays = annualDaysTotal - totalSelectedDays;
     if (Number.isFinite(annualDaysTotal) && remainingDays < 0) {
-      selectedRangeSummary.textContent = `La seleccion supera tu derecho anual disponible en ${formatDayCount(Math.abs(remainingDays))} dias.`;
+      selectedRangeSummary.textContent = `La selección supera tu saldo disponible en ${formatDayCount(Math.abs(remainingDays))} días.`;
       selectedRangeSummary.classList.add("is-invalid");
       submitButton.disabled = true;
       return;

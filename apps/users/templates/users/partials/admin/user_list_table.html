@@ -64,9 +64,10 @@
               <div class="admin-users-table__actions">
                 <a
                   href="{% url 'dashboard:admin-user-edit' user_row.user.pk %}"
-                  class="ui-btn ui-btn--primary ui-btn--sm admin-users-table__edit-link"
+                  class="admin-users-table__edit-link"
                 >
-                  Editar usuario
+                  {% include "components/ui/icon.html" with name="pencil" %}
+                  <span>Editar usuario</span>
                 </a>
               </div>
             </td>

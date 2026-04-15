@@ -1,18 +1,16 @@
 <section class="audit-log-summary">
-  <article class="audit-log-summary__card">
-    <span class="audit-log-summary__label">Actividad visible</span>
-    <strong class="audit-log-summary__value">{{ total_visible_activity }}</strong>
-  </article>
-  <article class="audit-log-summary__card">
-    <span class="audit-log-summary__label">Cambios de rol</span>
-    <strong class="audit-log-summary__value">{{ visible_role_changes }}</strong>
-  </article>
-  <article class="audit-log-summary__card">
-    <span class="audit-log-summary__label">Cambios de acceso</span>
-    <strong class="audit-log-summary__value">{{ visible_access_changes }}</strong>
-  </article>
-  <article class="audit-log-summary__card">
-    <span class="audit-log-summary__label">Cambios de departamento</span>
-    <strong class="audit-log-summary__value">{{ visible_department_changes }}</strong>
-  </article>
+  {% for card in audit_summary_cards %}
+    <article class="audit-log-summary__card audit-log-summary__card--{{ card.tone }}">
+      <div class="audit-log-summary__top">
+        <span class="audit-log-summary__icon" aria-hidden="true">
+          {% include "components/ui/icon.html" with name=card.icon %}
+        </span>
+        {% if card.meta %}
+          <span class="audit-log-summary__meta">{{ card.meta }}</span>
+        {% endif %}
+      </div>
+      <span class="audit-log-summary__label">{{ card.label }}</span>
+      <strong class="audit-log-summary__value">{{ card.value }}</strong>
+    </article>
+  {% endfor %}
 </section>

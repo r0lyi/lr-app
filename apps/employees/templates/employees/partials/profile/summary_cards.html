@@ -1,16 +1,47 @@
-<section class="dash-card">
-  <div class="profile-summary-grid">
-    <article class="profile-summary-card">
-      <p class="profile-summary-card__label">Departamento</p>
+<div class="profile-summary-stack">
+  <article class="profile-summary-card profile-summary-card--department">
+    <div class="profile-summary-card__icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M4 20V5.5h7v3h9V20H4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+        <path d="M7 8.5h1.5M7 11h1.5M7 13.5h1.5M12 11h1.5M12 13.5h1.5M16 11h1.5M16 13.5h1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+      </svg>
+    </div>
+    <div class="profile-summary-card__body">
+      <p class="profile-summary-card__eyebrow">Departamento</p>
       <p class="profile-summary-card__value">{{ employee_profile.department.name|default:"Sin departamento" }}</p>
-    </article>
-    <article class="profile-summary-card">
-      <p class="profile-summary-card__label">Dias anuales acumulados</p>
-      <p class="profile-summary-card__value">{{ employee_profile.available_days }}</p>
-    </article>
-    <article class="profile-summary-card">
-      <p class="profile-summary-card__label">Dias tomados</p>
-      <p class="profile-summary-card__value">{{ employee_profile.taken_days }}</p>
-    </article>
-  </div>
-</section>
+    </div>
+  </article>
+
+  <article class="profile-summary-card profile-summary-card--annual">
+    <div class="profile-summary-card__header">
+      <span class="profile-summary-card__icon profile-summary-card__icon--soft" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M12 3l6 3v4c0 4-2.7 7.7-6 8.9-3.3-1.2-6-4.9-6-8.9V6l6-3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+          <path d="M9.4 12.1l1.8 1.8 3.4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </span>
+      <span class="profile-summary-card__badge">Anual</span>
+    </div>
+    <div class="profile-summary-card__metric">
+      <strong>{{ employee_profile.available_days|stringformat:"02d" }}</strong>
+      <span>Días anuales acumulados</span>
+    </div>
+  </article>
+
+  <article class="profile-summary-card profile-summary-card--taken">
+    <div class="profile-summary-card__header">
+      <span class="profile-summary-card__icon profile-summary-card__icon--danger" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M5 5.5h14v12.3H5V5.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+          <path d="M5 9.2h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+          <path d="M9 3.8V7M15 3.8V7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+        </svg>
+      </span>
+      <span class="profile-summary-card__badge profile-summary-card__badge--danger">Consumidos</span>
+    </div>
+    <div class="profile-summary-card__metric">
+      <strong>{{ employee_profile.taken_days|stringformat:"02d" }}</strong>
+      <span>Días tomados</span>
+    </div>
+  </article>
+</div>

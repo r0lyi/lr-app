@@ -4,6 +4,7 @@ from django.shortcuts import render
 
 from apps.audit.forms import AuditLogFilterForm
 from apps.audit.selectors import get_audit_log_summary, get_audit_logs
+from apps.audit.services import AUDIT_RESOURCE_TYPE_USER
 from apps.core.presentation.dashboard import build_dashboard_base_context
 from apps.core.utils.decorators import role_required
 
@@ -21,6 +22,33 @@ def audit_log_view(request):
     filter_data = filter_form.cleaned_data if filter_form.is_valid() else None
     audit_logs = get_audit_logs(filters=filter_data)
     summary = get_audit_log_summary(filters=filter_data)
+    audit_summary_cards = [
+        {
+            "label": "Total Actividades",
+            "value": summary["total_visible_activity"],
+            "icon": "chart",
+            "tone": "blue",
+            "meta": "En tiempo real",
+        },
+        {
+            "label": "Cambios de Rol",
+            "value": summary["visible_role_changes"],
+            "icon": "id-card",
+            "tone": "orange",
+        },
+        {
+            "label": "Cambios de Acceso",
+            "value": summary["visible_access_changes"],
+            "icon": "shield",
+            "tone": "slate",
+        },
+        {
+            "label": "Cambios de Departamento",
+            "value": summary["visible_department_changes"],
+            "icon": "building",
+            "tone": "cyan",
+        },
+    ]
     return render(
         request,
         "audit/pages/audit_log.html",
@@ -33,6 +61,8 @@ def audit_log_view(request):
                 "audit_logs": audit_logs,
                 "audit_logs_count": audit_logs.count(),
                 "audit_log_filter_form": filter_form,
+                "audit_summary_cards": audit_summary_cards,
+                "audit_resource_type_user": AUDIT_RESOURCE_TYPE_USER,
                 **summary,
             },
         ),

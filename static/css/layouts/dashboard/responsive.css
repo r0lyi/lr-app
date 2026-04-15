@@ -32,14 +32,21 @@
 
 @media (max-width: 960px) {
   .dash-header-inner {
-    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-columns: 1fr;
+    justify-items: start;
+    gap: 12px;
     padding: 16px var(--dash-main-inline-end) 14px var(--dash-main-inline-start);
   }
 
   .dash-header-actions {
-    grid-column: 1 / -1;
-    justify-content: flex-end;
+    width: 100%;
+    justify-content: space-between;
+    gap: 12px;
     min-width: 0;
+  }
+
+  .dash-notifications {
+    margin-right: 0;
   }
 
   .dash-header-user__role {
@@ -254,6 +261,6 @@
 
   .dash-header-user__name {
     font-size: 13px;
-    max-width: 150px;
+    max-width: 140px;
   }
 }

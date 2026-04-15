@@ -85,15 +85,17 @@ class VacationRequestViewTests(VacationBaseTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Solicitar vacaciones")
-        self.assertContains(response, "Derecho anual")
+        self.assertContains(response, "Selecciona un periodo continuo")
+        self.assertContains(response, "Tu saldo disponible")
         self.assertContains(response, "data-vacation-annual-counter")
         self.assertContains(response, 'id="annual-vacation-remaining-days"')
         self.assertContains(response, "data-annual-days-total=")
         self.assertContains(response, "selected-days-counter")
-        self.assertContains(response, "Solicitud de periodo vacacional")
-        self.assertContains(response, "Rango actual:")
-        self.assertContains(response, "Informacion adicional")
-        self.assertContains(response, "Confirmar")
+        self.assertContains(response, "Guía de Solicitud")
+        self.assertContains(response, "Información adicional")
+        self.assertContains(response, "Enviar solicitud")
+        self.assertContains(response, "selected-start-summary")
+        self.assertContains(response, "selected-end-summary")
         self.assertContains(response, "selected-range-summary")
 
     def test_admin_can_open_request_page_for_testing(self):
@@ -108,7 +110,8 @@ class VacationRequestViewTests(VacationBaseTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Solicitar vacaciones")
-        self.assertContains(response, "Derecho anual")
+        self.assertContains(response, "Selecciona un periodo continuo")
+        self.assertContains(response, "Tu saldo disponible")
         self.assertContains(response, reverse("dashboard:admin-home"))
 
     def test_rrhh_with_employee_profile_can_open_request_page(self):
@@ -123,7 +126,8 @@ class VacationRequestViewTests(VacationBaseTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Solicitar vacaciones")
-        self.assertContains(response, "Derecho anual")
+        self.assertContains(response, "Selecciona un periodo continuo")
+        self.assertContains(response, "Tu saldo disponible")
         self.assertContains(response, reverse("dashboard:rrhh-home"))
         self.assertContains(response, reverse("vacations:create-request"))
 

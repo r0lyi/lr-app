@@ -1,20 +1,21 @@
 <section class="audit-log-page">
-  <section class="dash-card audit-log-card">
-    <div class="audit-log-card__heading">
-      <div>
-        <h1 class="dash-card-title">Actividad reciente</h1>
-        <p class="audit-log-card__description">
-          Busca la actividad por fechas o por lo que ocurrió para encontrar
-          rápido los cambios importantes del sistema.
-        </p>
-      </div>
-      <div class="audit-log-card__count">
-        {{ audit_logs_count }} evento{{ audit_logs_count|pluralize }}
-      </div>
+  <header class="audit-log-hero">
+    <div class="audit-log-hero__copy">
+      <h1 class="audit-log-hero__title">Historial de Actividad</h1>
+      <p class="audit-log-hero__description">
+        Monitorea y audita los cambios realizados en el sistema para mantener la
+        seguridad y transparencia.
+      </p>
     </div>
+  </header>
 
-    {% include "audit/partials/audit_log/summary.html" %}
+  {% include "audit/partials/audit_log/summary.html" %}
+
+  <section class="audit-log-card audit-log-card--filters">
     {% include "audit/partials/audit_log/filters.html" %}
+  </section>
+
+  <section class="audit-log-card audit-log-card--table">
     {% include "audit/partials/audit_log/table.html" %}
   </section>
 </section>

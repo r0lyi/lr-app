@@ -58,13 +58,9 @@
           <input type="hidden" name="next" value="{{ request.path }}">
           <input type="hidden" name="is_active" value="{% if managed_user.user.is_active %}0{% else %}1{% endif %}">
           {% if managed_user.user.is_active %}
-            <button class="ui-btn ui-btn--cancel ui-btn--md admin-user-edit-access__button" type="submit">
-              Desactivar acceso
-            </button>
+            {% include "components/ui/button_secondari.html" with label="Desactivar acceso" type="submit" size="md" class_name="admin-user-edit-access__button" %}
           {% elif managed_user.has_usable_password %}
-            <button class="ui-btn ui-btn--primary ui-btn--md admin-user-edit-access__button" type="submit">
-              Activar acceso
-            </button>
+            {% include "components/ui/button_principal.html" with label="Activar acceso" type="submit" size="md" class_name="admin-user-edit-access__button" %}
           {% else %}
             <p class="admin-user-edit-card__note">
               La cuenta aun necesita completar su acceso desde el enlace inicial antes de poder activarse manualmente.

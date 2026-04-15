@@ -20,6 +20,7 @@ def admin_home_view(request):
     la lista de usuarios, que es la primera herramienta util para un admin.
     """
     broadcast_form = AdminBroadcastNotificationForm()
+    summary = get_admin_dashboard_summary()
 
     if request.method == "POST":
         broadcast_form = AdminBroadcastNotificationForm(request.POST)
@@ -36,6 +37,44 @@ def admin_home_view(request):
             return redirect("dashboard:admin-home")
 
     recipients_count = get_admin_broadcast_notification_recipients().count()
+    summary_cards = [
+        {
+            "label": "Total usuarios",
+            "value": summary["total_users"],
+            "icon": "users",
+            "tone": "blue",
+        },
+        {
+            "label": "Activos",
+            "value": summary["active_users"],
+            "icon": "check-circle",
+            "tone": "green",
+        },
+        {
+            "label": "Fichas emp.",
+            "value": summary["total_employee_profiles"],
+            "icon": "id-card",
+            "tone": "orange",
+        },
+        {
+            "label": "Solicitudes",
+            "value": summary["total_vacation_requests"],
+            "icon": "calendar",
+            "tone": "cyan",
+        },
+        {
+            "label": "Usuarios RRHH",
+            "value": summary["total_rrhh_users"],
+            "icon": "users",
+            "tone": "purple",
+        },
+        {
+            "label": "Admins",
+            "value": summary["total_admin_users"],
+            "icon": "shield",
+            "tone": "dark",
+        },
+    ]
 
     return render(
         request,
@@ -46,7 +85,8 @@ def admin_home_view(request):
             request=request,
             active_section="home",
             extra_context={
-                **get_admin_dashboard_summary(),
+                **summary,
+                "admin_summary_cards": summary_cards,
                 "broadcast_notification_form": broadcast_form,
                 "broadcast_recipients_count": recipients_count,
             },

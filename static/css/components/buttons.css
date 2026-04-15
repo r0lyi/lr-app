@@ -20,6 +20,20 @@
     opacity 0.2s;
 }
 
+.ui-btn__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+.ui-btn__icon svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+
 .ui-btn:active {
   transform: scale(0.98);
 }

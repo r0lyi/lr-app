@@ -3,9 +3,10 @@
 
 {% block title %}Solicitar vacaciones{% endblock %}
 
+{% block dashboard_content_class %}vac-request-content dash-content--wide{% endblock %}
+
 {% block dashboard_css %}
   {{ block.super }}
-  <link rel="stylesheet" href="{% static 'css/components/stat_cards.css' %}">
   <link rel="stylesheet" href="{% static 'vacations/css/pages/create_request.css' %}">
 {% endblock %}
 

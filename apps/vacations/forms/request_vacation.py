@@ -24,7 +24,7 @@ class VacationRequestForm(forms.Form):
         widget=forms.HiddenInput(),
     )
     employee_comment = forms.CharField(
-        label="Informacion adicional",
+        label="Información adicional",
         required=False,
         widget=forms.Textarea(attrs={"rows": 4}),
     )

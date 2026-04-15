@@ -6,30 +6,33 @@
   </div>
 {% endif %}
 
-<form method="get" class="rrhh-filters-form">
-  <div class="rrhh-filters-form__group">
-    <label class="ui-field__label" for="{{ filter_form.search.id_for_label }}">Buscar empleado</label>
-    {{ filter_form.search }}
-  </div>
-  <div class="rrhh-filters-form__group">
-    <label class="ui-field__label" for="{{ filter_form.start_date.id_for_label }}">Fecha inicio</label>
-    {{ filter_form.start_date }}
-  </div>
-  <div class="rrhh-filters-form__group">
-    <label class="ui-field__label" for="{{ filter_form.end_date.id_for_label }}">Fecha final</label>
-    {{ filter_form.end_date }}
-  </div>
-  <div class="rrhh-filters-form__group">
+<form method="get" id="rrhh-requests-filters-form" class="rrhh-filters-form">
+  {% include "components/ui/text_input.html" with label="Empleado" name=filter_form.search.name id=filter_form.search.id_for_label value=filter_form.search.value placeholder="Buscar por nombre..." left_icon_name="search" error=filter_form.search.errors.0 %}
+
+  {% include "components/ui/date_input.html" with label="Fecha inicio" name=filter_form.start_date.name id=filter_form.start_date.id_for_label value=filter_form.start_date.value error=filter_form.start_date.errors.0 %}
+
+  {% include "components/ui/date_input.html" with label="Fecha final" name=filter_form.end_date.name id=filter_form.end_date.id_for_label value=filter_form.end_date.value error=filter_form.end_date.errors.0 %}
+
+  <div class="ui-field ui-field--full rrhh-status-field">
     <label class="ui-field__label" for="{{ filter_form.status.id_for_label }}">Estado</label>
-    {{ filter_form.status }}
-  </div>
-  <div class="rrhh-filters-form__actions">
-    {% include "components/ui/button_principal.html" with label="Filtrar" type="submit" size="md" class_name="rrhh-filters-form__submit" %}
-    <a
-      class="ui-btn ui-btn--secondary ui-btn--md rrhh-filters-form__submit"
-      href="{{ export_url }}"
-    >
-      <span>Exportar Excel</span>
-    </a>
+    <div class="ui-field__control">
+      <select
+        class="ui-select{% if filter_form.status.errors %} ui-select--error{% endif %} rrhh-status-field__select"
+        id="{{ filter_form.status.id_for_label }}"
+        name="{{ filter_form.status.name }}"
+      >
+        {% for choice_value, choice_label in filter_form.status.field.choices %}
+          <option value="{{ choice_value }}"{% if filter_form.status.value == choice_value %} selected{% endif %}>
+            {{ choice_label }}
+          </option>
+        {% endfor %}
+      </select>
+      <span class="ui-field__icon ui-field__icon--right ui-field__icon--accent" aria-hidden="true">
+        {% include "components/ui/icon.html" with name="chevron-down" %}
+      </span>
+    </div>
+    {% if filter_form.status.errors %}
+      <p class="ui-field__feedback ui-field__feedback--error">{{ filter_form.status.errors.0 }}</p>
+    {% endif %}
   </div>
 </form>

@@ -128,11 +128,11 @@ class DashboardPermissionTests(DashboardRoleBaseTestCase):
         request_response = self.client.get(reverse("vacations:create-request"))
 
         self.assertEqual(admin_response.status_code, 200)
-        self.assertContains(admin_response, "Resumen general")
+        self.assertContains(admin_response, "Aviso general")
         self.assertEqual(admin_requests_response.status_code, 200)
         self.assertContains(admin_requests_response, "Solicitudes")
         self.assertEqual(admin_users_response.status_code, 200)
-        self.assertContains(admin_users_response, "Usuarios del sistema")
+        self.assertContains(admin_users_response, "Gestión de Usuarios")
         self.assertEqual(rrhh_response.status_code, 302)
         self.assertEqual(rrhh_response.url, reverse("dashboard:admin-requests"))
         self.assertEqual(request_response.status_code, 200)

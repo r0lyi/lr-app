@@ -16,12 +16,12 @@ class RrhhVacationRequestFilterForm(forms.Form):
     """
 
     search = forms.CharField(
-        label="Nombre o apellido",
+        label="Empleado",
         required=False,
         widget=forms.TextInput(
             attrs={
                 "class": "ui-input",
-                "placeholder": "Buscar empleado",
+                "placeholder": "Buscar por nombre...",
                 "autocomplete": "off",
             }
         ),
@@ -60,7 +60,7 @@ class RrhhVacationRequestFilterForm(forms.Form):
         """Carga los estados reales de BD para no hardcodear el filtro."""
 
         super().__init__(*args, **kwargs)
-        status_choices = [("", "Todos")]
+        status_choices = [("", "Todos los estados")]
         status_choices.extend(
             (status.name, str(status))
             for status in VacationStatus.objects.order_by("name")
