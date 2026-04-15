@@ -1,17 +1,32 @@
-{% load static %}
-
 <header class="dash-header">
-  <div class="dash-header-card">
-    <div class="dash-header-logo">
-      <img src="{% static 'images/brand/logo500x200.svg' %}" alt="Clean & Service" />
-    </div>
-
+  <div class="dash-header-inner">
     <div class="dash-header-title">
-      {% block dashboard_header_title %}Bienvenido/a {{ display_name }}{% endblock %}
+      {% block dashboard_header_title %}
+        {% if role_label == "RRHH" %}
+          Portal RRHH
+        {% elif role_label %}
+          Portal de {{ role_label|lower }}
+        {% else %}
+          Portal
+        {% endif %}
+      {% endblock %}
     </div>
 
     <div class="dash-header-actions">
       {% include "components/ui/notification_dropdown.html" %}
+      <div class="dash-header-user" aria-label="Usuario conectado">
+        <div class="dash-header-user__copy">
+          <strong class="dash-header-user__name">{{ display_name }}</strong>
+          <span class="dash-header-user__role">{{ role_label }}</span>
+        </div>
+        <span
+          class="dash-header-user__avatar"
+          aria-hidden="true"
+          style="--dash-avatar-bg: {{ display_avatar_background }}; --dash-avatar-fg: {{ display_avatar_foreground }};"
+        >
+          {{ display_initials }}
+        </span>
+      </div>
       {% block header_actions %}{% endblock %}
     </div>
   </div>

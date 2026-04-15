@@ -70,15 +70,18 @@ class DashboardRoutingTests(DashboardRoleBaseTestCase):
         self.assertContains(employee_home, "Derecho anual de vacaciones")
         self.assertContains(employee_home, "30.00")
         self.assertContains(employee_home, "Ultima Resolucion")
-        self.assertContains(employee_home, "Ninguna")
+        self.assertContains(employee_home, "Sin resoluciones")
         self.assertContains(
             employee_home,
             "No hay solicitudes registradas con estos filtros.",
         )
-        self.assertContains(employee_home, "Fecha Inicio")
-        self.assertContains(employee_home, "Fecha Fin")
+        self.assertContains(employee_home, "Desde")
+        self.assertContains(employee_home, "Hasta")
         self.assertContains(employee_home, "Estado")
         self.assertContains(employee_home, "Filtrar")
+        self.assertContains(employee_home, "Limpiar")
+        self.assertContains(employee_home, "Rango de fechas")
+        self.assertContains(employee_home, "Total días")
 
     def test_employee_home_filters_requests_by_dates_and_status(self):
         user = self.create_active_user(

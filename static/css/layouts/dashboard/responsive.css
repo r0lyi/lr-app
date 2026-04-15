@@ -4,11 +4,13 @@
   }
 
   .dash-main {
-    padding: 20px 22px 32px;
+    --dash-main-inline-start: 20px;
+    --dash-main-inline-end: 20px;
+    padding: 20px var(--dash-main-inline-end) 32px var(--dash-main-inline-start);
   }
 
-  .dash-header-card {
-    padding: 14px 18px;
+  .dash-header-inner {
+    padding: 14px var(--dash-main-inline-end) 16px var(--dash-main-inline-start);
   }
 }
 
@@ -18,27 +20,30 @@
   }
 
   .dash-main {
-    padding: 18px 18px 30px;
+    --dash-main-inline-start: 18px;
+    --dash-main-inline-end: 18px;
+    padding: 18px var(--dash-main-inline-end) 30px var(--dash-main-inline-start);
   }
 
-  .dash-header-card {
-    padding: 14px 18px;
-  }
-
-  .dash-header-title {
-    font-size: 22px;
+  .dash-header-inner {
+    padding: 14px var(--dash-main-inline-end) 16px var(--dash-main-inline-start);
   }
 }
 
 @media (max-width: 960px) {
-  .dash-header-card {
-    grid-template-columns: 124px minmax(0, 1fr);
+  .dash-header-inner {
+    grid-template-columns: minmax(0, 1fr) auto;
+    padding: 16px var(--dash-main-inline-end) 14px var(--dash-main-inline-start);
   }
 
   .dash-header-actions {
     grid-column: 1 / -1;
     justify-content: flex-end;
     min-width: 0;
+  }
+
+  .dash-header-user__role {
+    display: none;
   }
 }
 
@@ -128,23 +133,17 @@
 
   .dash-main {
     min-height: 100vh;
-    padding: 78px 18px 28px;
+    --dash-main-inline-start: 16px;
+    --dash-main-inline-end: 16px;
+    padding: 78px var(--dash-main-inline-end) 28px var(--dash-main-inline-start);
   }
 
-  .dash-header-card {
+  .dash-header-inner {
     grid-template-columns: 1fr;
-    justify-items: center;
-    text-align: center;
+    justify-items: start;
+    text-align: left;
     gap: 12px;
-    padding: 16px 18px;
-  }
-
-  .dash-header-logo img {
-    width: 132px;
-  }
-
-  .dash-header-title {
-    font-size: clamp(1.3rem, 2vw + 0.8rem, 1.75rem);
+    padding: 16px var(--dash-main-inline-end) 14px var(--dash-main-inline-start);
   }
 
   .dash-header-actions {
@@ -175,7 +174,9 @@
   }
 
   .dash-main {
-    padding: 68px 12px 20px;
+    --dash-main-inline-start: 12px;
+    --dash-main-inline-end: 12px;
+    padding: 68px var(--dash-main-inline-end) 20px var(--dash-main-inline-start);
   }
 
   .dash-sidebar {
@@ -190,9 +191,9 @@
   }
 
   .dash-notifications__button {
-    width: 48px;
-    height: 48px;
-    border-radius: 14px;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
   }
 
   .dash-notifications__header {
@@ -240,7 +241,19 @@
     padding: 14px 14px 0;
   }
 
-  .dash-header-card {
-    border-radius: 16px;
+  .dash-header-user {
+    gap: 10px;
+  }
+
+  .dash-header-user__avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 14px;
+    font-size: 16px;
+  }
+
+  .dash-header-user__name {
+    font-size: 13px;
+    max-width: 150px;
   }
 }

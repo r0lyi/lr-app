@@ -19,11 +19,11 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding: 14px 16px;
+  padding: 16px 18px;
   border-radius: 18px;
-  background: #fff5b8;
-  border: 1px solid rgba(234, 179, 8, 0.2);
-  box-shadow: 0 10px 24px rgba(192, 157, 27, 0.08);
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.06);
 }
 
 .rrhh-export-review__header {
@@ -35,7 +35,7 @@
 
 .rrhh-export-review__eyebrow {
   margin: 0 0 4px;
-  color: #8a6a00;
+  color: #1b8fca;
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -44,7 +44,7 @@
 
 .rrhh-export-review__title {
   margin: 0;
-  color: #6f5b11;
+  color: #111827;
   font-size: 17px;
   font-weight: 800;
 }
@@ -52,7 +52,7 @@
 .rrhh-export-review__text,
 .rrhh-export-review__order-note {
   margin: 0;
-  color: #6f5b11;
+  color: #64748b;
   line-height: 1.5;
 }
 

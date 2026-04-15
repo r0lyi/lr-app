@@ -1,41 +1,50 @@
 .dash {
   min-height: 100vh;
   display: grid;
-  grid-template-columns: 252px minmax(0, 1fr);
+  grid-template-columns: 250px minmax(0, 1fr);
   align-items: start;
-  background: linear-gradient(180deg, #e6e8ee 0%, #dfe2e9 100%);
+  background: var(--bg);
 }
 
 .dash-main {
   min-height: 100vh;
-  padding: 22px 28px 36px;
+  --dash-main-inline-start: 20px;
+  --dash-main-inline-end: 20px;
+  padding: 22px var(--dash-main-inline-end) 34px var(--dash-main-inline-start);
   display: flex;
   flex-direction: column;
   gap: 18px;
   position: relative;
+  background: var(--bg);
 }
 
 .dash-content {
-  width: min(1080px, 100%);
+  width: min(1180px, 100%);
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 20px;
+}
+
+.dash-content--wide {
+  width: min(1440px, 100%);
 }
 
 .dash-card {
-  padding: 20px 24px;
-  border-radius: 18px;
+  padding: 24px 26px;
+  border-radius: 20px;
   background: #ffffff;
-  border: 1px solid rgba(15, 23, 42, 0.06);
-  box-shadow: 0 16px 28px rgba(20, 24, 31, 0.12);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
 }
 
 .dash-card-title {
   margin-bottom: 14px;
-  color: #6b7280;
-  font-size: var(--fs-heading-sm);
-  font-weight: 700;
+  color: #111827;
+  font-size: clamp(1.25rem, 1.4vw, 1.55rem);
+  font-weight: 900;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
 }
 
 .dash-hamburger {

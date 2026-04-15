@@ -13,7 +13,7 @@ ROLE_NAV_CONFIG = {
             "section": "home",
             "url_name": "dashboard:employee-home",
             "label": "Inicio",
-            "icon": "home",
+            "icon": "drop",
         },
         {
             "section": "request",
@@ -25,7 +25,7 @@ ROLE_NAV_CONFIG = {
             "section": "profile",
             "url_name": "employees:profile",
             "label": "Perfil",
-            "icon": "home",
+            "icon": "drop",
         },
     ],
     "rrhh": [
@@ -33,7 +33,7 @@ ROLE_NAV_CONFIG = {
             "section": "home",
             "url_name": "dashboard:rrhh-home",
             "label": "Inicio",
-            "icon": "home",
+            "icon": "drop",
         },
         {
             "section": "request",
@@ -45,13 +45,13 @@ ROLE_NAV_CONFIG = {
             "section": "history",
             "url_name": "audit:export-history",
             "label": "Historial",
-            "icon": "home",
+            "icon": "drop",
         },
         {
             "section": "profile",
             "url_name": "employees:profile",
             "label": "Perfil",
-            "icon": "home",
+            "icon": "drop",
         },
     ],
     "admin": [
@@ -59,7 +59,7 @@ ROLE_NAV_CONFIG = {
             "section": "home",
             "url_name": "dashboard:admin-home",
             "label": "Inicio",
-            "icon": "home",
+            "icon": "drop",
         },
         {
             "section": "request",
@@ -77,19 +77,19 @@ ROLE_NAV_CONFIG = {
             "section": "users",
             "url_name": "dashboard:admin-users",
             "label": "Usuarios",
-            "icon": "home",
+            "icon": "drop",
         },
         {
             "section": "activity",
             "url_name": "audit:activity-log",
             "label": "Actividad",
-            "icon": "home",
+            "icon": "drop",
         },
         {
             "section": "profile",
             "url_name": "employees:profile",
             "label": "Perfil",
-            "icon": "home",
+            "icon": "drop",
         },
     ],
 }

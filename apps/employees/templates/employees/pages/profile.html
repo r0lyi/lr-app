@@ -3,15 +3,11 @@
 
 {% block title %}Perfil{% endblock %}
 
-{% block dashboard_header_title %}Perfil{% endblock %}
+{% block dashboard_header_title %}Portal de empleado{% endblock %}
 
 {% block dashboard_css %}
   {{ block.super }}
   <link rel="stylesheet" href="{% static 'employees/css/pages/profile.css' %}">
-{% endblock %}
-
-{% block header_actions %}
-  <span class="profile-role-chip">Role: {{ role_label }}</span>
 {% endblock %}
 
 {% block dashboard_content %}
