@@ -18,7 +18,7 @@ class AuditLogFilterForm(forms.Form):
         widget=forms.TextInput(
             attrs={
                 "class": "ui-input",
-                "placeholder": "Buscar por usuario o por lo que sucedió",
+                "placeholder": "Ej. Roly Silvestre...",
             }
         ),
     )
@@ -26,7 +26,7 @@ class AuditLogFilterForm(forms.Form):
         required=False,
         label="Tipo de cambio",
         choices=(
-            ("", "Todas las actividades"),
+            ("", "Todos"),
             ("user_primary_role_changed", "Cambio de rol"),
             ("user_access_state_changed", "Cambio de acceso"),
             ("user_department_changed", "Cambio de departamento"),

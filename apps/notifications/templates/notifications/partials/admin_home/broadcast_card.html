@@ -1,15 +1,28 @@
-<section class="dash-card admin-home-card admin-home-card--broadcast">
-  <div class="admin-home-card__heading">
-    <div>
-      <h2 class="dash-card-title">Aviso general</h2>
-      <p class="admin-home-card__description">
-        Envía una notificación interna a todos los usuarios activos para comunicar un aviso importante del sistema.
+<section class="admin-home-broadcast-card">
+  <div class="admin-home-broadcast-card__header">
+    <div class="admin-home-broadcast-card__heading">
+      <h2 class="admin-home-broadcast-card__title">Aviso general</h2>
+      <p class="admin-home-broadcast-card__recipients">
+        <span class="admin-home-broadcast-card__recipients-icon" aria-hidden="true">
+          {% include "components/ui/icon.html" with name="users" %}
+        </span>
+        <span>{{ broadcast_recipients_count }} destinatario{{ broadcast_recipients_count|pluralize }}</span>
       </p>
     </div>
-    <div class="admin-home-card__count">
-      {{ broadcast_recipients_count }} destinatario{{ broadcast_recipients_count|pluralize }}
-    </div>
+    <a
+      class="admin-home-broadcast-card__action"
+      href="{% url 'dashboard:admin-users' %}"
+      aria-label="Ver usuarios"
+      title="Ver usuarios"
+    >
+      {% include "components/ui/icon.html" with name="arrow-right" %}
+    </a>
   </div>
+
+  <p class="admin-home-broadcast-card__description">
+    Envía una notificación interna a todos los usuarios activos registrados en el sistema.
+    Asegúrate de que el mensaje sea claro y pertinente para toda la organización.
+  </p>
 
   <form method="post" class="admin-home-broadcast-form" novalidate>
     {% csrf_token %}
@@ -49,7 +62,7 @@
     </div>
 
     <div class="admin-home-broadcast-form__footer">
-      {% include "components/ui/button_principal.html" with label="Enviar aviso general" type="submit" size="md" class_name="admin-home-broadcast-form__submit" %}
+      {% include "components/ui/button_principal.html" with label="Enviar aviso general" type="submit" size="md" right_icon_name="arrow-right" class_name="admin-home-broadcast-form__submit" %}
     </div>
   </form>
 </section>

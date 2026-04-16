@@ -1,8 +1,13 @@
 <section class="rrhh-home-page">
-  <section class="dash-card rrhh-home-card">
-    {% include "vacations/partials/requests_management/heading.html" %}
+  {% include "vacations/partials/requests_management/heading.html" %}
+
+  <section class="rrhh-filters-card" aria-label="Filtros de solicitudes">
     {% include "vacations/partials/requests_management/filters.html" %}
-    {% include "vacations/partials/requests_management/export_review_summary.html" %}
-    {% include "vacations/partials/requests_management/table.html" %}
   </section>
+
+  {% include "vacations/partials/requests_management/export_review_summary.html" %}
+
+  {% include "vacations/partials/requests_management/table.html" %}
+
+  {% include "vacations/partials/requests_management/metrics.html" %}
 </section>

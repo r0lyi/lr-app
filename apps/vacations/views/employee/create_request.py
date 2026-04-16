@@ -67,6 +67,31 @@ def create_vacation_request_view(request):
     current_year = today.year
     min_request_start_date = today + timedelta(days=MIN_ADVANCE_NOTICE_DAYS)
     current_role = get_primary_role(request.user) or "employee"
+    annual_vacation_days_count = calculate_annual_vacation_days_for_year(
+        employee_profile.hire_date,
+        year=current_year,
+    )
+    annual_vacation_remaining_days_count = get_request_annual_balance(
+        employee_profile,
+        year=current_year,
+    )
+    annual_vacation_balance_percentage = 0.0
+    if annual_vacation_days_count:
+        annual_vacation_balance_percentage = round(
+            max(
+                0.0,
+                min(
+                    100.0,
+                    (
+                        float(annual_vacation_remaining_days_count)
+                        / float(annual_vacation_days_count)
+                    )
+                    * 100.0,
+                ),
+            ),
+            2,
+        )
+
     context = build_dashboard_base_context(
         request.user,
         current_role,
@@ -75,15 +100,11 @@ def create_vacation_request_view(request):
         extra_context={
             "form": form,
             "annual_vacation_reference_year": current_year,
-            "annual_vacation_days_count": calculate_annual_vacation_days_for_year(
-                employee_profile.hire_date,
-                year=current_year,
-            ),
-            "annual_vacation_remaining_days_count": get_request_annual_balance(
-                employee_profile,
-                year=current_year,
-            ),
+            "annual_vacation_days_count": annual_vacation_days_count,
+            "annual_vacation_remaining_days_count": annual_vacation_remaining_days_count,
+            "annual_vacation_balance_percentage": annual_vacation_balance_percentage,
             "min_request_start_date": min_request_start_date,
+            "min_advance_notice_days": MIN_ADVANCE_NOTICE_DAYS,
         },
     )
     return render(request, "vacations/pages/create_request.html", context)

@@ -1,16 +1,47 @@
-<section class="dash-card">
-  <div class="profile-summary-grid">
-    <article class="profile-summary-card">
-      <p class="profile-summary-card__label">Departamento</p>
+<div class="profile-summary-stack">
+  <article class="profile-summary-card profile-summary-card--department">
+    <div class="profile-summary-card__icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M4 20V5.5h7v3h9V20H4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+        <path d="M7 8.5h1.5M7 11h1.5M7 13.5h1.5M12 11h1.5M12 13.5h1.5M16 11h1.5M16 13.5h1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+      </svg>
+    </div>
+    <div class="profile-summary-card__body">
+      <p class="profile-summary-card__eyebrow">Departamento</p>
       <p class="profile-summary-card__value">{{ employee_profile.department.name|default:"Sin departamento" }}</p>
-    </article>
-    <article class="profile-summary-card">
-      <p class="profile-summary-card__label">Dias anuales acumulados</p>
-      <p class="profile-summary-card__value">{{ employee_profile.available_days }}</p>
-    </article>
-    <article class="profile-summary-card">
-      <p class="profile-summary-card__label">Dias tomados</p>
-      <p class="profile-summary-card__value">{{ employee_profile.taken_days }}</p>
-    </article>
-  </div>
-</section>
+    </div>
+  </article>
+
+  <article class="profile-summary-card profile-summary-card--annual">
+    <div class="profile-summary-card__header">
+      <span class="profile-summary-card__icon profile-summary-card__icon--soft" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <rect x="4.5" y="5.5" width="15" height="14" rx="2.5" stroke="currentColor" stroke-width="1.8"></rect>
+          <path d="M8.5 3.8v3.4M15.5 3.8v3.4M4.5 10h15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+          <path d="m9 14 2 2 4-4.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </span>
+      <span class="profile-summary-card__badge">Disponibles</span>
+    </div>
+    <div class="profile-summary-card__metric">
+      <strong>{{ annual_vacation_remaining_days_count|floatformat:0 }}</strong>
+      <span>Días disponibles</span>
+    </div>
+  </article>
+
+  <article class="profile-summary-card profile-summary-card--taken">
+    <div class="profile-summary-card__header">
+      <span class="profile-summary-card__icon profile-summary-card__icon--pending" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.8"></circle>
+          <path d="M12 7.8v4.6l3 1.9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </span>
+      <span class="profile-summary-card__badge profile-summary-card__badge--pending">Pendientes</span>
+    </div>
+    <div class="profile-summary-card__metric">
+      <strong>{{ pending_requests_count }}</strong>
+      <span>Solicitudes pendientes</span>
+    </div>
+  </article>
+</div>

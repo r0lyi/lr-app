@@ -219,38 +219,7 @@
 }
 
 .auth-login .login-panel__submit {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
   min-height: 58px;
-  border: 0;
-  border-radius: 14px;
-  background: linear-gradient(180deg, #1ea2e7 0%, #0e86c9 100%);
-  box-shadow: none;
-  color: #fff;
-  font-size: 17px;
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  transition:
-    transform 0.15s,
-    background-color 0.15s;
-}
-
-.auth-login .login-panel__submit:hover:not(:disabled) {
-  transform: translateY(-1px);
-  background: linear-gradient(180deg, #1798d8 0%, #0b7cbc 100%);
-}
-
-.auth-login .login-panel__submit-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.auth-login .login-panel__submit-icon svg {
-  width: 18px;
-  height: 18px;
 }
 
 .auth-login .login-panel__secondary-action {
@@ -260,31 +229,6 @@
 
 .auth-login .login-panel__secondary-link {
   width: min(100%, 320px);
-  justify-content: center;
-  gap: 8px;
-  border: 1px solid transparent;
-  border-radius: 14px;
-  background: linear-gradient(180deg, #dcebf6 0%, #cfe2f0 100%);
-  color: #5e7283;
-  box-shadow: none;
-  font-size: 16px;
-  font-weight: 700;
-}
-
-.auth-login .login-panel__secondary-link:hover {
-  background: linear-gradient(180deg, #d3e7f4 0%, #c0dae9 100%);
-  color: #405e71;
-}
-
-.auth-login .login-panel__secondary-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.auth-login .login-panel__secondary-icon svg {
-  width: 16px;
-  height: 16px;
 }
 
 @media (max-width: 1080px) {
@@ -396,9 +340,5 @@
 @media (prefers-reduced-motion: reduce) {
   .auth-login.auth-shell {
     animation: none;
-  }
-
-  .auth-login .login-panel__submit {
-    transition: none;
   }
 }

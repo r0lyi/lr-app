@@ -20,6 +20,20 @@
     opacity 0.2s;
 }
 
+.ui-btn__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+.ui-btn__icon svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+
 .ui-btn:active {
   transform: scale(0.98);
 }
@@ -101,4 +115,67 @@
 
 .ui-btn--cancel:active:not(:disabled) {
   background: #cbd5e1;
+}
+
+.ui-btn--danger {
+  border-color: #dc2626;
+  background: #dc2626;
+  color: #ffffff;
+}
+
+.ui-btn--danger:hover:not(:disabled) {
+  border-color: #b91c1c;
+  background: #b91c1c;
+}
+
+.ui-btn--danger:active:not(:disabled) {
+  border-color: #991b1b;
+  background: #991b1b;
+}
+
+.filter-actions {
+  display: flex;
+  align-items: end;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.filter-actions .ui-btn {
+  min-height: 54px;
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+.filter-actions__submit.ui-btn {
+  min-width: 132px;
+  padding-inline: 22px;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.filter-actions__reset.ui-btn {
+  min-width: 112px;
+  border-color: #d7dee8;
+  color: #64748b;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.filter-actions__reset.ui-btn:hover:not(:disabled) {
+  border-color: #c7d2df;
+  background: #f8fafc;
+  color: #334155;
+}
+
+@media (max-width: 760px) {
+  .filter-actions {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .filter-actions .ui-btn {
+    width: 100%;
+    min-width: 0;
+  }
 }

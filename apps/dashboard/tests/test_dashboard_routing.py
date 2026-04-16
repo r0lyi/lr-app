@@ -67,8 +67,12 @@ class DashboardRoutingTests(DashboardRoleBaseTestCase):
         self.assertContains(employee_home, "Panel de empleado")
         self.assertContains(employee_home, "Ana")
         self.assertContains(employee_home, "Solicitudes Pendientes")
-        self.assertContains(employee_home, "Derecho anual de vacaciones")
-        self.assertContains(employee_home, "30.00")
+        self.assertContains(employee_home, "Vacaciones disponibles")
+        self.assertContains(
+            employee_home,
+            '<strong class="employee-home-summary-card__value">30</strong>',
+            html=True,
+        )
         self.assertContains(employee_home, "Ultima Resolucion")
         self.assertContains(employee_home, "Sin resoluciones")
         self.assertContains(
@@ -82,6 +86,40 @@ class DashboardRoutingTests(DashboardRoleBaseTestCase):
         self.assertContains(employee_home, "Limpiar")
         self.assertContains(employee_home, "Rango de fechas")
         self.assertContains(employee_home, "Total días")
+
+    def test_employee_home_subtracts_active_requests_from_available_days(self):
+        user = self.create_active_user(
+            email="employee-balance-home@example.com",
+            dni="12345678Z",
+        )
+        employee = self.create_employee_profile(user)
+        self.create_vacation_request(
+            employee,
+            status=self.pending_status,
+            start_date=date(2026, 7, 1),
+            end_date=date(2026, 7, 5),
+            requested_days="5.00",
+        )
+        self.create_vacation_request(
+            employee,
+            status=self.approved_status,
+            start_date=date(2026, 8, 10),
+            end_date=date(2026, 8, 12),
+            requested_days="3.00",
+        )
+
+        self.client.force_login(user)
+
+        response = self.client.get(reverse("dashboard:employee-home"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Vacaciones disponibles")
+        self.assertContains(
+            response,
+            '<strong class="employee-home-summary-card__value">22</strong>',
+            html=True,
+        )
+        self.assertContains(response, "8.00 días solicitados")
 
     def test_employee_home_filters_requests_by_dates_and_status(self):
         user = self.create_active_user(
@@ -118,9 +156,49 @@ class DashboardRoutingTests(DashboardRoleBaseTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "10-08-2026")
         self.assertContains(response, "12-08-2026")
-        self.assertContains(response, "approved")
+        self.assertContains(response, "Aprobada")
+        self.assertContains(response, "employee-history-table__status--approved")
         self.assertNotContains(response, "01-07-2026")
         self.assertNotContains(response, "05-07-2026")
+
+    def test_employee_home_shows_delete_action_only_for_pending_requests(self):
+        user = self.create_active_user(
+            email="employee-delete-action@example.com",
+            dni="12121212M",
+        )
+        employee = self.create_employee_profile(user)
+        pending_request = self.create_vacation_request(
+            employee,
+            status=self.pending_status,
+            start_date=date(2026, 7, 1),
+            end_date=date(2026, 7, 5),
+            requested_days="5.00",
+        )
+        approved_request = self.create_vacation_request(
+            employee,
+            status=self.approved_status,
+            start_date=date(2026, 8, 10),
+            end_date=date(2026, 8, 12),
+            requested_days="3.00",
+        )
+
+        self.client.force_login(user)
+
+        response = self.client.get(reverse("dashboard:employee-home"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Acciones")
+        self.assertContains(response, "Eliminar solicitud")
+        self.assertContains(response, "¿Seguro que quieres eliminar esta solicitud?")
+        self.assertContains(
+            response,
+            reverse("vacations:delete-request", args=[pending_request.pk]),
+        )
+        self.assertNotContains(
+            response,
+            reverse("vacations:delete-request", args=[approved_request.pk]),
+        )
+        self.assertContains(response, "Solo se pueden eliminar solicitudes pendientes")
 
     def test_rrhh_is_redirected_to_rrhh_home(self):
         user = self.create_active_user(
@@ -176,13 +254,15 @@ class DashboardRoutingTests(DashboardRoleBaseTestCase):
         self.assertEqual(rrhh_home.status_code, 200)
         self.assertContains(rrhh_home, "Solicitudes")
         self.assertContains(rrhh_home, "Filtrar")
+        self.assertContains(rrhh_home, "Limpiar")
         self.assertContains(rrhh_home, "Nombre")
         self.assertContains(rrhh_home, "Apellidos")
         self.assertContains(rrhh_home, "Fecha inicio")
         self.assertContains(rrhh_home, "Fecha final")
-        self.assertContains(rrhh_home, "Dias")
+        self.assertContains(rrhh_home, "Días")
         self.assertContains(rrhh_home, "Estado")
         self.assertContains(rrhh_home, "Exportar Excel")
+        self.assertContains(rrhh_home, "Control de ausencias y vacaciones del personal.")
         self.assertContains(rrhh_home, "Lucia")
         self.assertContains(rrhh_home, "Martinez")
         self.assertContains(rrhh_home, "10-06-2026")
@@ -326,14 +406,13 @@ class DashboardRoutingTests(DashboardRoleBaseTestCase):
         response = self.client.get(reverse("dashboard:rrhh-home"))
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Avisos previos")
         self.assertContains(response, "Resumen antes de exportar")
+        self.assertContains(response, "solicitudes detectadas en los filtros actuales")
         self.assertContains(response, "Fecha alta")
         self.assertNotContains(response, "Observaciones")
-        self.assertContains(response, "1 coincidencia de departamento")
-        self.assertContains(response, "1 solicitud en periodo de alta carga")
-        self.assertContains(response, "1 solicitud de larga duracion")
-        self.assertContains(response, "Ordenado por antiguedad")
+        self.assertContains(response, "Ver detalles")
+        self.assertContains(response, "Total este mes")
+        self.assertContains(response, "Pendientes de revisión")
         self.assertContains(response, "Pendiente")
         self.assertContains(response, "01-01-2020")
         self.assertContains(response, "01-01-2024")
@@ -392,7 +471,7 @@ class DashboardRoutingTests(DashboardRoleBaseTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Solicitudes")
-        self.assertContains(response, "Gestiona y revisa las solicitudes")
+        self.assertContains(response, "Control de ausencias y vacaciones del personal.")
         self.assertContains(response, "Lucia")
         self.assertContains(response, "Martinez")
         self.assertContains(response, "10-06-2026")

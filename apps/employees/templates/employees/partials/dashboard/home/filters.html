@@ -17,10 +17,5 @@
       {{ filter_form.status }}
     </div>
   </div>
-  <div class="employee-filters-form__actions">
-    <button type="submit" class="ui-btn ui-btn--primary ui-btn--md employee-filters-form__submit">Filtrar</button>
-    {% if filter_reset_url %}
-      <a href="{{ filter_reset_url }}" class="ui-btn ui-btn--secondary ui-btn--md employee-filters-form__reset">Limpiar</a>
-    {% endif %}
-  </div>
+  {% include "components/ui/filter_actions.html" with reset_url=filter_reset_url class_name="employee-filters-form__actions" %}
 </form>

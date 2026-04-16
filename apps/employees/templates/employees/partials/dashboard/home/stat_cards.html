@@ -2,7 +2,7 @@
   <article class="employee-home-summary-card employee-home-summary-card--blue">
     <div class="employee-home-summary-card__top">
       <div>
-        <p class="employee-home-summary-card__label">Derecho anual de vacaciones</p>
+        <p class="employee-home-summary-card__label">Vacaciones disponibles</p>
       </div>
       <span class="employee-home-summary-card__icon employee-home-summary-card__icon--blue" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none">
@@ -13,7 +13,7 @@
     </div>
 
     <div class="employee-home-summary-card__value-row">
-      <strong class="employee-home-summary-card__value">{{ annual_vacation_days_count|floatformat:2 }}</strong>
+      <strong class="employee-home-summary-card__value">{{ annual_vacation_remaining_days_count|floatformat:0 }}</strong>
       <span class="employee-home-summary-card__unit">días</span>
     </div>
 
@@ -22,7 +22,7 @@
     </div>
 
     <p class="employee-home-summary-card__note">
-      Derecho anual {{ annual_vacation_reference_year }}
+      Derecho anual {{ annual_vacation_reference_year }} · {{ annual_vacation_reserved_days_count|floatformat:2 }} días solicitados
     </p>
   </article>
 

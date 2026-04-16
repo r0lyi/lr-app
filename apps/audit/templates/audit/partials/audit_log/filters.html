@@ -10,7 +10,12 @@
   <div class="audit-log-filters__grid">
     <div class="audit-log-filters__field audit-log-filters__field--search">
       <label class="audit-log-filters__label" for="{{ audit_log_filter_form.search.id_for_label }}">Buscar actividad</label>
-      {{ audit_log_filter_form.search }}
+      <div class="audit-log-filters__search-shell">
+        <span class="audit-log-filters__search-icon" aria-hidden="true">
+          {% include "components/ui/icon.html" with name="search" %}
+        </span>
+        {{ audit_log_filter_form.search }}
+      </div>
     </div>
     <div class="audit-log-filters__field">
       <label class="audit-log-filters__label" for="{{ audit_log_filter_form.action.id_for_label }}">Tipo de cambio</label>
@@ -27,9 +32,9 @@
   </div>
 
   <div class="audit-log-filters__actions">
-    {% include "components/ui/button_principal.html" with label="Filtrar" type="submit" size="md" class_name="audit-log-filters__submit" %}
+    {% include "components/ui/button_principal.html" with label="Filtrar" type="submit" size="md" left_icon_name="filter" class_name="audit-log-filters__submit" %}
     <a href="{% url 'audit:activity-log' %}" class="ui-btn ui-btn--secondary ui-btn--md audit-log-filters__reset">
-      Limpiar filtros
+      Limpiar
     </a>
   </div>
 </form>

@@ -45,6 +45,9 @@
 }
 
 .ui-modal__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 32px;
   height: 32px;
   border: 1px solid #e5e7eb;
@@ -52,6 +55,7 @@
   background: #ffffff;
   color: #6b7280;
   font-weight: 700;
+  text-decoration: none;
   cursor: pointer;
 }
 

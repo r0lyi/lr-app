@@ -1,21 +1,24 @@
 <section class="admin-users-page">
+  <header class="admin-users-hero">
+    <div class="admin-users-hero__copy">
+      <p class="admin-users-hero__eyebrow">Panel de administración</p>
+      <h1 class="admin-users-hero__title">Gestión de Usuarios</h1>
+      <p class="admin-users-hero__description">
+        Administra los accesos, roles y permisos de los empleados del sistema.
+      </p>
+    </div>
+    {% include "components/ui/button_principal.html" with label="Nuevo Usuario" size="md" left_icon_name="user-plus" id="open-admin-user-create-modal" class_name="admin-users-hero__cta" type="button" %}
+  </header>
+
   {% include "users/partials/admin/user_list_summary.html" %}
 
-  <section class="dash-card admin-users-card">
-    <div class="admin-users-card__heading">
-      <div>
-        <h1 class="dash-card-title">Usuarios del sistema</h1>
-        <p class="admin-users-card__description">
-          Consulta el estado general de cada cuenta y entra a una pantalla
-          individual cuando necesites modificarla con mas detalle.
-        </p>
-      </div>
-      <div class="admin-users-card__count">
-        {{ managed_users_count }} usuario{{ managed_users_count|pluralize }}
-      </div>
-    </div>
-
+  <section class="admin-users-card admin-users-card--filters">
     {% include "users/partials/admin/user_list_filters.html" %}
+  </section>
+
+  <section class="admin-users-card admin-users-card--table">
     {% include "users/partials/admin/user_list_table.html" %}
   </section>
+
+  {% include "users/partials/admin/user_create_modal.html" %}
 </section>

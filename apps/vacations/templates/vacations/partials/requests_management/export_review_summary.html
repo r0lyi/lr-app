@@ -1,32 +1,15 @@
-<section class="rrhh-export-review" aria-labelledby="rrhh-export-review-title">
-  <div class="rrhh-export-review__header">
-    <div>
-      <p class="rrhh-export-review__eyebrow">Avisos previos</p>
-      <h2 class="rrhh-export-review__title" id="rrhh-export-review-title">Resumen antes de exportar</h2>
-    </div>
-    <p class="rrhh-export-review__order-note">
-      Ordenado por antiguedad.
-    </p>
+<section class="rrhh-info-banner" aria-label="Resumen antes de exportar">
+  <div class="rrhh-info-banner__icon" aria-hidden="true">
+    {% include "components/ui/icon.html" with name="info" %}
   </div>
 
-  {% with overlap=export_review_summary.department_overlap_requests_count high_load=export_review_summary.high_load_requests_count long_duration=export_review_summary.long_duration_requests_count %}
-    <p class="rrhh-export-review__text">
-      {% if overlap or high_load or long_duration %}
-        <strong>Avisos detectados:</strong>
-        {% if overlap %}
-          {{ overlap }} coincidencia{{ overlap|pluralize }} de departamento
-        {% endif %}
-        {% if high_load %}
-          {% if overlap %}; {% endif %}
-          {{ high_load }} solicitud{{ high_load|pluralize:"es" }} en periodo{{ high_load|pluralize }} de alta carga
-        {% endif %}
-        {% if long_duration %}
-          {% if overlap or high_load %}; {% endif %}
-          {{ long_duration }} solicitud{{ long_duration|pluralize:"es" }} de larga duracion
-        {% endif %}
-      {% else %}
-        No hay avisos relevantes para la seleccion actual.
-      {% endif %}
-    </p>
-  {% endwith %}
+  <p class="rrhh-info-banner__text">
+    <strong>Resumen antes de exportar:</strong>
+    {{ filtered_requests_count }} solicitud{{ filtered_requests_count|pluralize:"es" }} detectada{{ filtered_requests_count|pluralize:"s" }} en los filtros actuales.
+  </p>
+
+  <a class="rrhh-info-banner__link" href="#rrhh-home-table">
+    <span>Ver detalles</span>
+    {% include "components/ui/icon.html" with name="arrow-right" %}
+  </a>
 </section>

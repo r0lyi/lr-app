@@ -1,10 +1,8 @@
 <div class="employee-home-page">
   <header class="employee-home-hero">
     <div class="employee-home-hero__copy">
-      <h1 class="employee-home-hero__title">¡Bienvenido de nuevo, {{ display_name }}!</h1>
-      <p class="employee-home-hero__description">
-        Aquí tienes un resumen de tu gestión de tiempo y vacaciones para este año.
-      </p>
+      <h1 class="employee-home-hero__title">¡ {{ display_name }}, ya puedes gestionar tus vacaciones !</h1>
+
     </div>
   </header>
 
@@ -26,4 +24,6 @@
     </div>
     {% include "employees/partials/dashboard/home/table.html" %}
   </section>
+
+  {% include "employees/partials/dashboard/home/delete_modal.html" %}
 </div>

@@ -1,13 +1,1 @@
-<button
-  type="{{ type|default:'button' }}"
-  class="ui-btn ui-btn--primary ui-btn--{{ size|default:'md' }}{% if full_width %} ui-btn--full{% endif %}{% if class_name %} {{ class_name }}{% endif %}"
-  {% if id %}id="{{ id }}"{% endif %}
-  {% if name %}name="{{ name }}"{% endif %}
-  {% if value %}value="{{ value }}"{% endif %}
-  {% if disabled %}disabled{% endif %}
->
-  {% if htmx_indicator %}
-    <span class="ui-spinner{% if spinner_dark %} ui-spinner--dark{% endif %} htmx-indicator" aria-hidden="true"></span>
-  {% endif %}
-  <span>{{ label }}</span>
-</button>
+{% include "components/ui/button.html" with variant="primary" href=href type=type size=size full_width=full_width class_name=class_name id=id name=name value=value form_id=form_id disabled=disabled label=label htmx_indicator=htmx_indicator spinner_dark=spinner_dark left_icon_name=left_icon_name left_icon_html=left_icon_html right_icon_name=right_icon_name right_icon_html=right_icon_html aria_label=aria_label title=title %}

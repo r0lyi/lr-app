@@ -81,11 +81,20 @@ class AuditLogViewTests(DashboardRoleBaseTestCase):
         response = self.client.get(reverse("audit:activity-log"))
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Actividad reciente")
+        self.assertContains(response, "Historial de Actividad")
         self.assertContains(response, "Buscar actividad")
         self.assertContains(response, "Tipo de cambio")
         self.assertContains(response, "Realizado por")
         self.assertContains(response, "Qué sucedió")
+        self.assertContains(response, "Acciones")
+        self.assertContains(response, "Total Actividades")
+        self.assertContains(response, "Cambios de Rol")
+        self.assertContains(response, "Cambios de Acceso")
+        self.assertContains(response, "Cambios de Departamento")
+        self.assertContains(
+            response,
+            reverse("dashboard:admin-user-edit", args=[admin_user.pk]),
+        )
         self.assertContains(
             response,
             "admin-audit-view@example.com cambió el rol principal de empleado@example.com de Empleado a RRHH.",

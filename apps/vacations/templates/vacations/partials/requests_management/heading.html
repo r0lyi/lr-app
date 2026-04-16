@@ -1,11 +1,12 @@
-<div class="rrhh-home-card__heading">
-  <div>
-    <h1 class="dash-card-title">{{ requests_page_title|default:"Solicitudes" }}</h1>
-    <p class="rrhh-home-card__description">
-      {{ requests_page_description|default:"Visualiza, filtra y revisa las solicitudes activas del equipo desde un solo panel." }}
+<header class="rrhh-home-hero">
+  <div class="rrhh-home-hero__copy">
+    <h1 class="rrhh-home-hero__title">{{ requests_page_title|default:"Gestión de Solicitudes" }}</h1>
+    <p class="rrhh-home-hero__description">
+      {{ requests_page_description|default:"Control de ausencias y vacaciones del personal." }}
     </p>
   </div>
-  <div class="rrhh-home-card__count">
-    {{ filtered_requests_count }} solicitud{{ filtered_requests_count|pluralize:"es" }}
+
+  <div class="rrhh-home-actions">
+    {% include "components/ui/button_secondari.html" with label="Exportar Excel" href=export_url size="md" class_name="rrhh-home-actions__export" left_icon_name="download" %}
   </div>
-</div>
+</header>

@@ -45,6 +45,7 @@ class EmployeeProfileViewTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Perfil")
+        self.assertContains(response, "¿Necesitas actualizar tus datos?")
         self.assertContains(response, "Ana")
         self.assertContains(response, "Lopez")
         self.assertContains(response, "employee-profile@example.com")
@@ -53,16 +54,18 @@ class EmployeeProfileViewTests(TestCase):
         self.assertContains(response, "30")
         self.assertContains(response, "5")
         self.assertContains(response, "Editar datos del empleado")
-        self.assertContains(response, "Editar datos")
+        self.assertContains(response, "Guardar cambios")
         self.assertContains(response, "Cambiar contrasena")
         self.assertContains(response, "Actualizar contrasena")
+        self.assertContains(response, "Departamento")
+        self.assertContains(response, "Próximos pasos")
         self.assertNotContains(response, 'name="hire_date"')
         self.assertNotContains(response, 'name="email"')
         self.assertNotContains(response, 'name="department"')
         self.assertNotContains(response, 'name="available_days"')
         self.assertNotContains(response, 'name="taken_days"')
 
-    def test_profile_view_edit_mode_shows_save_and_cancel_actions(self):
+    def test_profile_view_edit_mode_keeps_save_actions_visible(self):
         user, _profile = self.create_user_with_profile(
             email="employee-profile-edit@example.com",
             dni="12345678Z",
@@ -74,12 +77,7 @@ class EmployeeProfileViewTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Guardar cambios")
-        self.assertContains(response, "Cancelar")
-        self.assertNotContains(
-            response,
-            'href="/employees/profile/?edit=1"',
-            html=False,
-        )
+        self.assertContains(response, "Cambiar contrasena")
 
     def test_admin_without_employee_profile_sees_clear_message(self):
         user = User.objects.create_user(

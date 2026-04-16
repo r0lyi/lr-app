@@ -2,7 +2,12 @@
   <div class="admin-users-filters__grid">
     <div class="admin-users-filters__field admin-users-filters__field--search">
       <label class="admin-users-filters__label" for="{{ filter_form.search.id_for_label }}">Buscar usuario</label>
-      {{ filter_form.search }}
+      <div class="admin-users-filters__search-shell">
+        <span class="admin-users-filters__search-icon" aria-hidden="true">
+          {% include "components/ui/icon.html" with name="search" %}
+        </span>
+        {{ filter_form.search }}
+      </div>
     </div>
     <div class="admin-users-filters__field">
       <label class="admin-users-filters__label" for="{{ filter_form.primary_role.id_for_label }}">Rol</label>
@@ -20,8 +25,6 @@
 
   <div class="admin-users-filters__actions">
     {% include "components/ui/button_principal.html" with label="Filtrar" type="submit" size="md" class_name="admin-users-filters__submit" %}
-    <a href="{% url 'dashboard:admin-users' %}" class="ui-btn ui-btn--secondary ui-btn--md admin-users-filters__reset">
-      Limpiar filtros
-    </a>
+    {% include "components/ui/button_secondari.html" with label="Limpiar filtros" href=request.path size="md" class_name="admin-users-filters__reset" %}
   </div>
 </form>

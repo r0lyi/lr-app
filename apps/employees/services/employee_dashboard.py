@@ -1,23 +1,12 @@
 """Servicios para preparar el resumen basico del panel de empleado.
 
-La idea clave de este modulo es no mezclar dos conceptos distintos:
+Este modulo compone el resumen que ve el usuario en su home con una idea
+principal: mostrar el saldo anual disponible de vacaciones y no solo el
+derecho bruto del ejercicio. Para ello:
 
-1. "Dias anuales de vacaciones":
-   El derecho total que corresponde al trabajador dentro del ano natural.
-   En nuestro sistema leemos ese valor desde la politica central de vacaciones.
-   Hoy esta fijado en 30 dias naturales al ano, que es el minimo legal del
-   articulo 38 del Estatuto de los Trabajadores y, ademas, encaja con el
-   criterio que estamos usando para este proyecto.
-
-2. "Saldo disponible actual":
-   Lo que queda libre despues de descontar vacaciones ya disfrutadas o
-   aprobadas. Ese calculo real llegara mas adelante, cuando el flujo completo
-   de solicitudes este terminado.
-
-Por eso, en esta primera version del dashboard NO mostramos un saldo restante.
-Mostramos el derecho anual del ano en curso. Si la persona ya estaba contratada
-antes de empezar el ano, el sistema ensena 30 dias. Si se incorporo durante el
-ano en curso, se prorratea desde su fecha de alta hasta el 31 de diciembre.
+- calculamos el derecho anual segun la fecha de alta
+- restamos las solicitudes activas ya registradas
+- devolvemos tanto el saldo restante como el total anual de referencia
 """
 
 from calendar import isleap
@@ -30,6 +19,7 @@ from apps.vacations.services.requests.policies import FULL_ANNUAL_VACATION_DAYS
 from apps.vacations.selectors import (
     get_employee_vacation_requests,
     get_filtered_employee_vacation_requests,
+    get_reserved_annual_vacation_days_for_year,
 )
 
 
@@ -77,7 +67,7 @@ def build_employee_dashboard_summary(employee_profile, *, request_filters=None):
 
     Este resumen intenta responder a cuatro preguntas muy concretas:
     - cuantas solicitudes siguen pendientes
-    - cuantos dias de vacaciones genera este empleado en el ano natural
+    - cuantos dias de vacaciones tiene disponibles en el ano natural
     - cual fue la ultima resolucion registrada
     - que solicitudes tiene ya guardadas en el sistema
     """
@@ -87,14 +77,24 @@ def build_employee_dashboard_summary(employee_profile, *, request_filters=None):
     latest_resolved_request = employee_requests.filter(
         resolution_date__isnull=False,
     ).order_by("-resolution_date").first()
-    annual_vacation_days_count = calculate_annual_vacation_days_for_year(
+    annual_vacation_entitlement_days_count = calculate_annual_vacation_days_for_year(
         employee_profile.hire_date,
         year=current_year,
     )
+    annual_vacation_reserved_days_count = get_reserved_annual_vacation_days_for_year(
+        employee_profile,
+        year=current_year,
+    )
+    annual_vacation_remaining_days_count = max(
+        annual_vacation_entitlement_days_count - annual_vacation_reserved_days_count,
+        Decimal("0.00"),
+    ).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
     annual_vacation_progress_percent = Decimal("0.00")
-    if FULL_ANNUAL_VACATION_DAYS:
+    if annual_vacation_entitlement_days_count:
         annual_vacation_progress_percent = (
-            annual_vacation_days_count / FULL_ANNUAL_VACATION_DAYS * Decimal("100")
+            annual_vacation_remaining_days_count
+            / annual_vacation_entitlement_days_count
+            * Decimal("100")
         ).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
         annual_vacation_progress_percent = min(
             annual_vacation_progress_percent,
@@ -120,7 +120,10 @@ def build_employee_dashboard_summary(employee_profile, *, request_filters=None):
         "employee_profile": employee_profile,
         "employee_requests_count": employee_requests.count(),
         "pending_requests_count": employee_requests.filter(status__name="pending").count(),
-        "annual_vacation_days_count": annual_vacation_days_count,
+        "annual_vacation_days_count": annual_vacation_remaining_days_count,
+        "annual_vacation_entitlement_days_count": annual_vacation_entitlement_days_count,
+        "annual_vacation_reserved_days_count": annual_vacation_reserved_days_count,
+        "annual_vacation_remaining_days_count": annual_vacation_remaining_days_count,
         "annual_vacation_reference_year": current_year,
         "annual_vacation_progress_percent": annual_vacation_progress_percent,
         "latest_request": latest_request,

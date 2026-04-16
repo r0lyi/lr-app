@@ -13,7 +13,7 @@ from apps.users.services.admin.management import (
     change_user_primary_role,
 )
 
-from .common import redirect_to_admin_users_target
+from .common import parse_boolean_post_value, redirect_to_admin_users_target
 
 
 @role_required("admin")
@@ -62,7 +62,10 @@ def admin_user_active_state_update_view(request, user_id):
         User.objects.prefetch_related("roles"),
         pk=user_id,
     )
-    desired_state = request.POST.get("is_active") == "1"
+    desired_state = parse_boolean_post_value(request.POST.get("is_active"))
+    if desired_state is None:
+        messages.error(request, "Selecciona un estado de acceso valido.")
+        return redirect_to_admin_users_target(request)
 
     try:
         change_user_active_state(

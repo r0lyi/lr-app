@@ -1,5 +1,8 @@
 """Vistas del panel de gestion de solicitudes para RRHH y admin."""
 
+from datetime import date
+
+from django.core.paginator import Paginator
 from django.urls import reverse
 from django.shortcuts import redirect, render
 
@@ -9,6 +12,22 @@ from apps.users.selectors import get_primary_role
 from apps.vacations.forms import RrhhVacationRequestFilterForm
 from apps.vacations.selectors import get_filtered_rrhh_vacation_requests
 from apps.vacations.services import build_rrhh_export_review
+
+
+SPANISH_MONTH_ABBREVIATIONS = {
+    1: "Ene",
+    2: "Feb",
+    3: "Mar",
+    4: "Abr",
+    5: "May",
+    6: "Jun",
+    7: "Jul",
+    8: "Ago",
+    9: "Sep",
+    10: "Oct",
+    11: "Nov",
+    12: "Dic",
+}
 
 
 def _render_requests_management_view(request, *, role_name, active_section):
@@ -45,22 +64,22 @@ def _render_requests_management_view(request, *, role_name, active_section):
         status_name=request_filters.get("status"),
     )
     export_review = build_rrhh_export_review(vacation_requests)
-    export_querystring = filter_form.data.urlencode() if filter_form.is_bound else ""
+    reviewed_requests = export_review["vacation_requests"]
+    requests_metrics = _build_rrhh_requests_metrics(reviewed_requests)
+
+    paginator = Paginator(reviewed_requests, 50)
+    page_obj = paginator.get_page(request.GET.get("page") or 1)
+
+    export_querydict = filter_form.data.copy() if filter_form.is_bound else None
+    if export_querydict is not None:
+        export_querydict.pop("page", None)
+    export_querystring = export_querydict.urlencode() if export_querydict else ""
     export_url = reverse("vacations:export-rrhh-requests-excel")
     if export_querystring:
         export_url = f"{export_url}?{export_querystring}"
 
-    panel_title = "Solicitudes"
-    if role_name == "admin":
-        panel_description = (
-            "Gestiona y revisa las solicitudes registradas desde el panel de "
-            "administracion sin salir de tu area de trabajo."
-        )
-    else:
-        panel_description = (
-            "Visualiza, filtra y revisa las solicitudes activas del equipo "
-            "desde un solo panel."
-        )
+    panel_title = "Gestión de Solicitudes"
+    panel_description = "Control de ausencias y vacaciones del personal."
 
     return render(
         request,
@@ -74,13 +93,159 @@ def _render_requests_management_view(request, *, role_name, active_section):
                 "export_url": export_url,
                 "export_review_summary": export_review["summary"],
                 "filter_form": filter_form,
-                "vacation_requests": export_review["vacation_requests"],
-                "filtered_requests_count": len(export_review["vacation_requests"]),
+                "vacation_requests": page_obj.object_list,
+                "filtered_requests_count": len(reviewed_requests),
+                "page_obj": page_obj,
+                "pagination_context": _build_rrhh_pagination_links(
+                    request,
+                    page_obj,
+                ),
+                "requests_metrics": requests_metrics,
                 "requests_page_title": panel_title,
                 "requests_page_description": panel_description,
             },
         ),
     )
+
+
+def _build_rrhh_requests_metrics(vacation_requests):
+    """Construye los tres KPIs visibles en el panel de solicitudes."""
+
+    today = date.today()
+    current_month_count = _count_requests_in_month(
+        vacation_requests,
+        today.year,
+        today.month,
+    )
+    previous_year, previous_month = _previous_month(today.year, today.month)
+    previous_month_count = _count_requests_in_month(
+        vacation_requests,
+        previous_year,
+        previous_month,
+    )
+
+    if previous_month_count:
+        difference = current_month_count - previous_month_count
+        percent = round(abs(difference) / previous_month_count * 100)
+        if difference > 0:
+            month_note = f"+{percent}% vs mes anterior"
+        elif difference < 0:
+            month_note = f"-{percent}% vs mes anterior"
+        else:
+            month_note = "Sin variación vs mes anterior"
+    else:
+        month_note = "Sin referencia del mes anterior"
+
+    pending_requests_count = sum(
+        1
+        for vacation_request in vacation_requests
+        if getattr(vacation_request.status, "name", "").lower() == "pending"
+    )
+
+    return [
+        {
+            "label": "Total este mes",
+            "value": current_month_count,
+            "unit": "Solicitudes",
+            "note": month_note,
+            "theme": "blue",
+            "icon": "chart",
+        },
+        {
+            "label": "Pendientes de revisión",
+            "value": pending_requests_count,
+            "unit": "Solicitudes",
+            "note": "Requieren atención"
+            if pending_requests_count
+            else "Sin pendientes",
+            "theme": "amber",
+            "icon": "clock",
+        },
+    ]
+
+
+def _count_requests_in_month(vacation_requests, year, month):
+    """Cuenta solicitudes cuyo inicio cae en un mes concreto."""
+
+    return sum(
+        1
+        for vacation_request in vacation_requests
+        if vacation_request.start_date.year == year
+        and vacation_request.start_date.month == month
+    )
+
+
+def _previous_month(year, month):
+    """Devuelve el mes anterior conservando el cambio de año."""
+
+    if month == 1:
+        return year - 1, 12
+    return year, month - 1
+
+
+def _format_spanish_date_range(start_date, end_date):
+    """Formatea un rango corto de fechas con meses en español."""
+
+    if start_date == end_date:
+        return _format_spanish_day_month(start_date)
+
+    if start_date.year == end_date.year and start_date.month == end_date.month:
+        return (
+            f"{start_date.day:02d} - {end_date.day:02d} "
+            f"{SPANISH_MONTH_ABBREVIATIONS[start_date.month]}"
+        )
+
+    if start_date.year == end_date.year:
+        return (
+            f"{start_date.day:02d} {SPANISH_MONTH_ABBREVIATIONS[start_date.month]} - "
+            f"{end_date.day:02d} {SPANISH_MONTH_ABBREVIATIONS[end_date.month]}"
+        )
+
+    return (
+        f"{start_date.day:02d} {SPANISH_MONTH_ABBREVIATIONS[start_date.month]} "
+        f"{start_date.year} - "
+        f"{end_date.day:02d} {SPANISH_MONTH_ABBREVIATIONS[end_date.month]} "
+        f"{end_date.year}"
+    )
+
+
+def _format_spanish_day_month(value):
+    return f"{value.day:02d} {SPANISH_MONTH_ABBREVIATIONS[value.month]}"
+
+
+def _build_rrhh_pagination_links(request, page_obj):
+    """Genera enlaces de paginacion preservando los filtros actuales."""
+
+    if page_obj.paginator.num_pages <= 1:
+        return {
+            "pages": [],
+            "previous_url": "",
+            "next_url": "",
+        }
+
+    def build_page_url(page_number):
+        querydict = request.GET.copy()
+        querydict["page"] = page_number
+        return f"?{querydict.urlencode()}"
+
+    pages = [
+        {
+            "number": page_number,
+            "url": build_page_url(page_number),
+            "current": page_number == page_obj.number,
+        }
+        for page_number in range(1, page_obj.paginator.num_pages + 1)
+    ]
+
+    return {
+        "pages": pages,
+        "previous_url": build_page_url(page_obj.previous_page_number())
+        if page_obj.has_previous()
+        else "",
+        "next_url": build_page_url(page_obj.next_page_number())
+        if page_obj.has_next()
+        else "",
+    }
 
 
 @role_required("rrhh", allow_admin=True)

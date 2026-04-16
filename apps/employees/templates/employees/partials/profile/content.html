@@ -1,6 +1,16 @@
 {% if employee_profile and employee_form %}
-  {% include "employees/partials/profile/form_card.html" %}
-  {% include "employees/partials/profile/summary_cards.html" %}
+  <section class="profile-page">
+    {% include "employees/partials/profile/intro_banner.html" %}
+
+    <div class="profile-layout">
+      {% include "employees/partials/profile/form_card.html" %}
+
+      <aside class="profile-side" aria-label="Resumen del perfil">
+        {% include "employees/partials/profile/summary_cards.html" %}
+        {% include "employees/partials/profile/visual_card.html" %}
+      </aside>
+    </div>
+  </section>
 {% else %}
   {% include "employees/partials/profile/no_employee_state.html" %}
 {% endif %}

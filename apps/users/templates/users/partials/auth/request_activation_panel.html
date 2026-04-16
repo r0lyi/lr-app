@@ -1,4 +1,5 @@
 <div class="set-password-panel">
+  {% url 'auth:login' as request_login_url %}
   <header class="set-password-panel__header">
     <h1 class="set-password-panel__title">Crear o Recuperar contraseña</h1>
     <p class="set-password-panel__subtitle">
@@ -29,18 +30,10 @@
       {% include "components/ui/text_input.html" with label="DNI" type="text" id="id_dni" name="dni" placeholder="Introduce tu DNI" autocomplete="off" autofocus=True required=True value=form.dni.value|default:'' error=form.dni.errors.0 full_width=True %}
     </div>
 
-    <button type="submit" id="request-activation-btn" class="ui-btn ui-btn--primary ui-btn--md ui-btn--full set-password-panel__submit">
-      <span class="ui-spinner htmx-indicator" aria-hidden="true"></span>
-      <span>Enviar enlace de activación</span>
-      <span class="set-password-panel__submit-icon" aria-hidden="true">
-        {% include "components/ui/icon.html" with name="arrow-right" %}
-      </span>
-    </button>
+    {% include "components/ui/button_principal.html" with label="Enviar enlace de activación" type="submit" size="md" full_width=True id="request-activation-btn" htmx_indicator=True right_icon_name="arrow-right" class_name="set-password-panel__submit" %}
   </form>
 
   <div class="set-password-panel__footer">
-    <a class="set-password-panel__back" href="{% url 'auth:login' %}">
-      Volver al inicio de sesión
-    </a>
+    {% include "components/ui/button_secondari.html" with label="Volver al inicio de sesión" href=request_login_url size="md" class_name="set-password-panel__back" %}
   </div>
 </div>

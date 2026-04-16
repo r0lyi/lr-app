@@ -9,6 +9,7 @@ from django.shortcuts import redirect, render
 from apps.core.presentation.dashboard import build_dashboard_base_context
 from apps.employees.forms import EmployeeProfileUpdateForm
 from apps.employees.selectors import get_employee_profile_for_user
+from apps.employees.services.employee_dashboard import build_employee_dashboard_summary
 from apps.users.selectors import get_primary_role
 
 
@@ -31,10 +32,8 @@ def employee_profile_view(request):
     if employee_profile is None and current_role == "employee":
         return redirect("employees:onboarding")
 
-    # El perfil se abre en modo solo lectura por defecto. Solo entramos en modo
-    # edicion cuando el usuario lo solicita expresamente o cuando un envio del
-    # formulario devuelve errores y hay que corregirlos.
-    profile_edit_mode = request.GET.get("edit") == "1"
+    # El perfil se presenta como formulario editable por defecto.
+    profile_edit_mode = True
 
     employee_form = (
         EmployeeProfileUpdateForm(instance=employee_profile)
@@ -75,12 +74,19 @@ def employee_profile_view(request):
                 )
                 return redirect("employees:profile")
 
+    profile_summary_context = (
+        build_employee_dashboard_summary(employee_profile)
+        if employee_profile is not None
+        else {}
+    )
+
     context = build_dashboard_base_context(
         request.user,
         current_role,
         request=request,
         active_section="profile",
         extra_context={
+            **profile_summary_context,
             "employee_profile": employee_profile,
             "employee_form": employee_form,
             "password_form": password_form,

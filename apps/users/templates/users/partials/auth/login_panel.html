@@ -1,4 +1,5 @@
 <div class="login-panel">
+  {% url 'auth:request-activation' as request_activation_url %}
   <header class="login-panel__header">
     <h2 class="login-panel__title">Bienvenido de nuevo</h2>
     <p class="login-panel__subtitle">Ingresa tus credenciales para continuar.</p>
@@ -22,21 +23,10 @@
     </div>
 
 
-    <button type="submit" id="login-btn" class="ui-btn ui-btn--primary ui-btn--md ui-btn--full login-panel__submit">
-      <span class="ui-spinner htmx-indicator" aria-hidden="true"></span>
-      <span class="login-panel__submit-label">Entrar</span>
-      <span class="login-panel__submit-icon" aria-hidden="true">
-        {% include "components/ui/icon.html" with name="arrow-right" %}
-      </span>
-    </button>
+    {% include "components/ui/button_principal.html" with label="Entrar" type="submit" size="md" full_width=True id="login-btn" htmx_indicator=True right_icon_name="arrow-right" class_name="login-panel__submit" %}
   </form>
 
   <div class="login-panel__secondary-action">
-    <a class="ui-btn ui-btn--secondary ui-btn--md login-panel__secondary-link" href="{% url 'auth:request-activation' %}">
-      <span>Crear o cambiar contraseña</span>
-      <span class="login-panel__secondary-icon" aria-hidden="true">
-        {% include "components/ui/icon.html" with name="arrow-right" %}
-      </span>
-    </a>
+    {% include "components/ui/button_secondari.html" with label="Crear o cambiar contraseña" href=request_activation_url size="md" right_icon_name="arrow-right" class_name="login-panel__secondary-link" %}
   </div>
 </div>

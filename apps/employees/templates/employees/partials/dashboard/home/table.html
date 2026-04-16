@@ -7,6 +7,7 @@
         <th>Rango de fechas</th>
         <th>Total días</th>
         <th>Estado</th>
+        <th>Acciones</th>
       </tr>
     </thead>
     <tbody>
@@ -19,14 +20,38 @@
           </td>
           <td data-label="Total días">{{ request_item.requested_days }}</td>
           <td data-label="Estado">
-            <span class="badge {% if request_item.status.name == 'Pendiente' %}badge-pending{% elif request_item.status.name == 'Aprobada' %}badge-approved{% elif request_item.status.name == 'Rechazada' %}badge-rejected{% endif %}">
-              {{ request_item.status.name }}
+            <span class="employee-history-table__status employee-history-table__status--{{ request_item.status.name }}">
+              {{ request_item.status }}
             </span>
+          </td>
+          <td data-label="Acciones">
+            {% if request_item.status.name == "pending" %}
+              <button
+                class="employee-history-table__delete"
+                type="button"
+                aria-label="Eliminar solicitud pendiente del {{ request_item.start_date|date:'d-m-Y' }} al {{ request_item.end_date|date:'d-m-Y' }}"
+                title="Eliminar solicitud"
+                data-vacation-delete-open
+                data-delete-url="{% url 'vacations:delete-request' request_item.pk %}"
+                data-request-range="{{ request_item.start_date|date:'d-m-Y' }} - {{ request_item.end_date|date:'d-m-Y' }}"
+                data-request-days="{{ request_item.requested_days }}"
+              >
+                {% include "components/ui/icon.html" with name="trash" %}
+              </button>
+            {% else %}
+              <span
+                class="employee-history-table__delete employee-history-table__delete--disabled"
+                aria-label="Solo se pueden eliminar solicitudes pendientes"
+                title="Solo se pueden eliminar solicitudes pendientes"
+              >
+                {% include "components/ui/icon.html" with name="trash" %}
+              </span>
+            {% endif %}
           </td>
         </tr>
       {% empty %}
         <tr>
-          <td class="employee-history-table__empty" colspan="5">No hay solicitudes registradas con estos filtros.</td>
+          <td class="employee-history-table__empty" colspan="6">No hay solicitudes registradas con estos filtros.</td>
         </tr>
       {% endfor %}
     </tbody>

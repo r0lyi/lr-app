@@ -16,3 +16,8 @@
 {% block dashboard_content %}
   {% include "employees/partials/dashboard/home/content.html" %}
 {% endblock %}
+
+{% block extra_js %}
+  {{ block.super }}
+  <script src="{% static 'employees/js/pages/employee_home.js' %}"></script>
+{% endblock %}

@@ -5,9 +5,12 @@ admin puede disparar sin mover reglas de negocio al dashboard.
 """
 
 from django.core.exceptions import ValidationError
+from django.db import transaction
 
 from apps.employees.models import Employee
 from apps.users.models import User
+from apps.users.services.auth_service import request_activation
+from apps.users.services.validators import normalize_dni
 
 ROLE_LABELS = {
     "employee": "Empleado",
@@ -162,3 +165,33 @@ def change_user_department(*, acting_user, target_user, new_department):
     )
 
     return target_user
+
+
+def create_admin_user(*, email, dni):
+    """Crea una cuenta pendiente de activacion con DNI y correo electronico.
+
+    El usuario queda inactivo y recibe automaticamente un enlace de activacion
+    para que complete su acceso sin que el admin tenga que abandonar el panel.
+    """
+
+    normalized_email = (email or "").strip().lower()
+    normalized_dni = normalize_dni(dni)
+
+    if User.objects.filter(dni=normalized_dni).exists():
+        raise ValidationError({"dni": "Ya existe un usuario con este DNI."})
+
+    if User.objects.filter(email__iexact=normalized_email).exists():
+        raise ValidationError({"email": "Ya existe un usuario con este correo electrónico."})
+
+    with transaction.atomic():
+        user = User.objects.create_user(
+            email=normalized_email,
+            dni=normalized_dni,
+        )
+        sent, _ = request_activation(user.dni)
+        if not sent:
+            raise ValidationError(
+                "No se pudo generar el enlace de activacion para el nuevo usuario."
+            )
+
+    return user
