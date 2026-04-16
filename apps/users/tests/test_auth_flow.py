@@ -68,3 +68,24 @@ class AuthFlowTests(TestCase):
                 (reverse("employees:onboarding"), 302),
             ],
         )
+
+    def test_login_requires_uppercase_dni_letter(self):
+        """Rechaza el acceso cuando la letra del DNI se escribe en minusculas."""
+
+        self.user.set_password("PruebaSegura123!")
+        self.user.is_active = True
+        self.user.save(update_fields=["password", "is_active"])
+
+        response = self.client.post(
+            reverse("auth:login"),
+            {
+                "dni": "12345678z",
+                "password": "PruebaSegura123!",
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(
+            response,
+            "La letra del DNI debe escribirse en mayúsculas.",
+        )

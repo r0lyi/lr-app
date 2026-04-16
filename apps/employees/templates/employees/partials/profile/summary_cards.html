@@ -16,32 +16,32 @@
     <div class="profile-summary-card__header">
       <span class="profile-summary-card__icon profile-summary-card__icon--soft" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none">
-          <path d="M12 3l6 3v4c0 4-2.7 7.7-6 8.9-3.3-1.2-6-4.9-6-8.9V6l6-3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
-          <path d="M9.4 12.1l1.8 1.8 3.4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+          <rect x="4.5" y="5.5" width="15" height="14" rx="2.5" stroke="currentColor" stroke-width="1.8"></rect>
+          <path d="M8.5 3.8v3.4M15.5 3.8v3.4M4.5 10h15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+          <path d="m9 14 2 2 4-4.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
         </svg>
       </span>
-      <span class="profile-summary-card__badge">Anual</span>
+      <span class="profile-summary-card__badge">Disponibles</span>
     </div>
     <div class="profile-summary-card__metric">
-      <strong>{{ employee_profile.available_days|stringformat:"02d" }}</strong>
-      <span>Días anuales acumulados</span>
+      <strong>{{ annual_vacation_remaining_days_count|floatformat:0 }}</strong>
+      <span>Días disponibles</span>
     </div>
   </article>
 
   <article class="profile-summary-card profile-summary-card--taken">
     <div class="profile-summary-card__header">
-      <span class="profile-summary-card__icon profile-summary-card__icon--danger" aria-hidden="true">
+      <span class="profile-summary-card__icon profile-summary-card__icon--pending" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none">
-          <path d="M5 5.5h14v12.3H5V5.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
-          <path d="M5 9.2h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
-          <path d="M9 3.8V7M15 3.8V7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+          <circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.8"></circle>
+          <path d="M12 7.8v4.6l3 1.9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
         </svg>
       </span>
-      <span class="profile-summary-card__badge profile-summary-card__badge--danger">Consumidos</span>
+      <span class="profile-summary-card__badge profile-summary-card__badge--pending">Pendientes</span>
     </div>
     <div class="profile-summary-card__metric">
-      <strong>{{ employee_profile.taken_days|stringformat:"02d" }}</strong>
-      <span>Días tomados</span>
+      <strong>{{ pending_requests_count }}</strong>
+      <span>Solicitudes pendientes</span>
     </div>
   </article>
 </div>

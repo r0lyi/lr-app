@@ -52,7 +52,7 @@ class EmployeeVacationRequestFilterForm(forms.Form):
         super().__init__(*args, **kwargs)
         status_choices = [("", "Todos")]
         status_choices.extend(
-            (status.name, status.name)
+            (status.name, str(status))
             for status in VacationStatus.objects.order_by("name")
         )
         self.fields["status"].choices = status_choices

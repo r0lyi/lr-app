@@ -9,6 +9,7 @@ from django.shortcuts import redirect, render
 from apps.core.presentation.dashboard import build_dashboard_base_context
 from apps.employees.forms import EmployeeProfileUpdateForm
 from apps.employees.selectors import get_employee_profile_for_user
+from apps.employees.services.employee_dashboard import build_employee_dashboard_summary
 from apps.users.selectors import get_primary_role
 
 
@@ -73,12 +74,19 @@ def employee_profile_view(request):
                 )
                 return redirect("employees:profile")
 
+    profile_summary_context = (
+        build_employee_dashboard_summary(employee_profile)
+        if employee_profile is not None
+        else {}
+    )
+
     context = build_dashboard_base_context(
         request.user,
         current_role,
         request=request,
         active_section="profile",
         extra_context={
+            **profile_summary_context,
             "employee_profile": employee_profile,
             "employee_form": employee_form,
             "password_form": password_form,

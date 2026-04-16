@@ -152,7 +152,11 @@ def login_view(request):
             )
             form.add_error(None, "DNI o contraseña incorrectos.")
         else:
-            form.add_error(None, "Debes completar DNI y contraseña.")
+            dni_errors = form.errors.get("dni")
+            if dni_errors:
+                form.add_error(None, dni_errors[0])
+            else:
+                form.add_error(None, "Debes completar DNI y contraseña.")
 
         error_message = form.non_field_errors()[0]
         if request.headers.get("HX-Request"):

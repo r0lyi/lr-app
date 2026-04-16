@@ -121,6 +121,10 @@
   grid-column: 1 / -1;
 }
 
+.admin-user-edit-card--account {
+  grid-column: 1 / -1;
+}
+
 .admin-user-edit-card__heading {
   display: flex;
   align-items: flex-start;
@@ -141,6 +145,14 @@
   margin: 8px 0 0;
   color: #64748b;
   line-height: 1.6;
+}
+
+.admin-user-edit-card__badges {
+  flex-shrink: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
 }
 
 .admin-user-edit-card__badge {
@@ -180,6 +192,23 @@
   align-items: flex-start;
 }
 
+.admin-user-edit-form--stacked {
+  align-items: stretch;
+}
+
+.admin-user-edit-form__fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.admin-user-edit-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
 .admin-user-edit-form__label {
   color: #475569;
   font-size: 14px;
@@ -188,6 +217,10 @@
 
 .admin-user-edit-form__select {
   min-width: 300px;
+}
+
+.admin-user-edit-form__field .admin-user-edit-form__select {
+  min-width: 0;
 }
 
 .admin-user-edit-form__submit {
@@ -284,6 +317,14 @@
   .admin-user-edit-card__heading {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .admin-user-edit-card__badges {
+    justify-content: flex-start;
+  }
+
+  .admin-user-edit-form__fields {
+    grid-template-columns: 1fr;
   }
 
   .admin-user-edit-access__details {

@@ -68,9 +68,16 @@ class LoginForm(forms.Form):
     )
 
     def clean_dni(self):
-        """Aplica la misma normalizacion del DNI usada en el resto del flujo."""
+        """Normaliza el DNI pero exige que la letra ya venga en mayusculas."""
 
-        return normalize_dni(self.cleaned_data["dni"])
+        raw_dni = self.data.get(self.add_prefix("dni"), self.data.get("dni", ""))
+        compact_dni = "".join(ch for ch in str(raw_dni) if ch not in {" ", "-"})
+        normalized_dni = normalize_dni(self.cleaned_data["dni"])
+
+        if compact_dni and compact_dni != normalized_dni and compact_dni.upper() == normalized_dni:
+            raise forms.ValidationError("La letra del DNI debe escribirse en mayúsculas.")
+
+        return normalized_dni
 
 
 class AdminUserFilterForm(forms.Form):

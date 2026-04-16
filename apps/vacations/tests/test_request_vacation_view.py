@@ -85,7 +85,7 @@ class VacationRequestViewTests(VacationBaseTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Solicitar vacaciones")
-        self.assertContains(response, "Selecciona un periodo continuo")
+        self.assertContains(response, "Selecciona tu periodo")
         self.assertContains(response, "Tu saldo disponible")
         self.assertContains(response, "data-vacation-annual-counter")
         self.assertContains(response, 'id="annual-vacation-remaining-days"')
@@ -110,7 +110,7 @@ class VacationRequestViewTests(VacationBaseTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Solicitar vacaciones")
-        self.assertContains(response, "Selecciona un periodo continuo")
+        self.assertContains(response, "Selecciona tu periodo")
         self.assertContains(response, "Tu saldo disponible")
         self.assertContains(response, reverse("dashboard:admin-home"))
 
@@ -126,7 +126,7 @@ class VacationRequestViewTests(VacationBaseTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Solicitar vacaciones")
-        self.assertContains(response, "Selecciona un periodo continuo")
+        self.assertContains(response, "Selecciona tu periodo")
         self.assertContains(response, "Tu saldo disponible")
         self.assertContains(response, reverse("dashboard:rrhh-home"))
         self.assertContains(response, reverse("vacations:create-request"))
@@ -502,3 +502,85 @@ class VacationRequestViewTests(VacationBaseTestCase):
             "Ya existe una solicitud pendiente o aprobada que se solapa con ese periodo.",
         )
         self.assertEqual(VacationRequest.objects.filter(employee=employee).count(), 1)
+
+    def test_employee_can_delete_own_pending_request(self):
+        user, employee = self.create_employee_user(
+            email="employee-delete-pending@example.com",
+            dni="12121212M",
+        )
+        start_date, end_date = self.get_request_range(
+            offset_days=40,
+            duration_days=5,
+        )
+        vacation_request = VacationRequest.objects.create(
+            employee=employee,
+            status=self.pending_status,
+            start_date=start_date,
+            end_date=end_date,
+            requested_days="5.00",
+        )
+
+        self.client.force_login(user)
+
+        response = self.client.post(
+            reverse("vacations:delete-request", args=[vacation_request.pk]),
+        )
+
+        self.assertRedirects(response, reverse("dashboard:employee-home"))
+        self.assertFalse(VacationRequest.objects.filter(pk=vacation_request.pk).exists())
+
+    def test_employee_cannot_delete_approved_request(self):
+        user, employee = self.create_employee_user(
+            email="employee-delete-approved@example.com",
+            dni="23232323T",
+        )
+        start_date, end_date = self.get_request_range(
+            offset_days=45,
+            duration_days=4,
+        )
+        vacation_request = VacationRequest.objects.create(
+            employee=employee,
+            status=self.approved_status,
+            start_date=start_date,
+            end_date=end_date,
+            requested_days="4.00",
+        )
+
+        self.client.force_login(user)
+
+        response = self.client.post(
+            reverse("vacations:delete-request", args=[vacation_request.pk]),
+        )
+
+        self.assertRedirects(response, reverse("dashboard:employee-home"))
+        self.assertTrue(VacationRequest.objects.filter(pk=vacation_request.pk).exists())
+
+    def test_employee_cannot_delete_another_employee_request(self):
+        user, _employee = self.create_employee_user(
+            email="employee-delete-other@example.com",
+            dni="45454545J",
+        )
+        _other_user, other_employee = self.create_employee_user(
+            email="other-delete-owner@example.com",
+            dni="56565656P",
+        )
+        start_date, end_date = self.get_request_range(
+            offset_days=50,
+            duration_days=3,
+        )
+        vacation_request = VacationRequest.objects.create(
+            employee=other_employee,
+            status=self.pending_status,
+            start_date=start_date,
+            end_date=end_date,
+            requested_days="3.00",
+        )
+
+        self.client.force_login(user)
+
+        response = self.client.post(
+            reverse("vacations:delete-request", args=[vacation_request.pk]),
+        )
+
+        self.assertEqual(response.status_code, 404)
+        self.assertTrue(VacationRequest.objects.filter(pk=vacation_request.pk).exists())

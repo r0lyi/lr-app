@@ -291,28 +291,7 @@
 }
 
 .employee-filters-form__actions {
-  display: flex;
   justify-content: flex-end;
-}
-
-.employee-filters-form__submit.ui-btn {
-  min-width: 132px;
-  min-height: 56px;
-  border: 0;
-  border-radius: 14px;
-  background: linear-gradient(180deg, #1ea2e7 0%, #0e86c9 100%);
-  color: #ffffff;
-  font-size: 16px;
-  font-weight: 700;
-  box-shadow: none;
-  transition:
-    transform 0.15s,
-    background-color 0.15s;
-}
-
-.employee-filters-form__submit.ui-btn:hover:not(:disabled) {
-  transform: translateY(-1px);
-  background: linear-gradient(180deg, #1798d8 0%, #0b7cbc 100%);
 }
 
 .employee-history-table {
@@ -325,7 +304,7 @@
 
 .employee-history-table .data-table {
   width: 100%;
-  min-width: 780px;
+  min-width: 860px;
   border-collapse: separate;
   border-spacing: 0;
 }
@@ -354,12 +333,33 @@
   background: #f8fafc;
 }
 
-.employee-history-table .badge {
-  min-width: 92px;
-  padding: 6px 12px;
+.employee-history-table__status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 88px;
+  min-height: 32px;
+  padding: 0 12px;
   border-radius: 999px;
+  background: #f1f5f9;
+  color: #475569;
   font-size: 13px;
   font-weight: 800;
+}
+
+.employee-history-table__status--pending {
+  background: #fff4d8;
+  color: #c77b00;
+}
+
+.employee-history-table__status--approved {
+  background: #e7f9ef;
+  color: #0f8f5b;
+}
+
+.employee-history-table__status--rejected {
+  background: #ffe6e6;
+  color: #be123c;
 }
 
 .employee-history-table__empty {
@@ -410,11 +410,6 @@
 
   .employee-filters-form {
     grid-template-columns: 1fr;
-  }
-
-  .employee-filters-form__submit.ui-btn {
-    width: 100%;
-    min-width: 0;
   }
 
   .employee-history-table {
@@ -483,14 +478,157 @@
     align-items: flex-start;
   }
 
-  .employee-history-table .data-table td[data-label="Estado"] .badge {
+  .employee-history-table .data-table td[data-label="Estado"] .employee-history-table__status {
     min-width: 0;
   }
 
-  .employee-history-table__empty {
+.employee-history-table__empty {
     display: block;
     padding: 20px 16px !important;
   }
+}
+
+.employee-history-table__delete {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid #fee2e2;
+  border-radius: 8px;
+  background: #fff7f7;
+  color: #dc2626;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.employee-history-table__delete:hover {
+  border-color: #fecaca;
+  background: #fee2e2;
+  color: #b91c1c;
+  transform: translateY(-1px);
+}
+
+.employee-history-table__delete svg {
+  width: 16px;
+  height: 16px;
+}
+
+.employee-history-table__delete--disabled {
+  border-color: #e5e7eb;
+  background: #f8fafc;
+  color: #cbd5e1;
+  cursor: not-allowed;
+}
+
+.employee-history-table__delete--disabled:hover {
+  border-color: #e5e7eb;
+  background: #f8fafc;
+  color: #cbd5e1;
+  transform: none;
+}
+
+.employee-delete-request-modal__content {
+  width: min(560px, calc(100% - 32px));
+  border-radius: 14px;
+}
+
+.employee-delete-request-modal__header {
+  align-items: flex-start;
+  padding: 22px 24px 18px;
+  background: #ffffff;
+}
+
+.employee-delete-request-modal__heading {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.employee-delete-request-modal__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  background: #fff1f2;
+  color: #dc2626;
+}
+
+.employee-delete-request-modal__icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.employee-delete-request-modal__subtitle {
+  max-width: 380px;
+  margin-top: 8px;
+  color: #64748b;
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.employee-delete-request-modal__body {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 22px 24px 24px;
+}
+
+.employee-delete-request-modal__summary {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px 18px;
+  border: 1px solid #e5edf5;
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+.employee-delete-request-modal__summary-label {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.employee-delete-request-modal__summary-value {
+  color: #111827;
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.employee-delete-request-modal__summary-note {
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.employee-delete-request-modal__question {
+  margin: 0;
+  color: #334155;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.employee-delete-request-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.employee-delete-request-modal__actions .ui-btn {
+  min-height: 48px;
+  border-radius: 8px;
+  box-shadow: none;
 }
 
 @media (max-width: 540px) {
@@ -538,6 +676,24 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 6px;
+  }
+
+  .employee-delete-request-modal__header,
+  .employee-delete-request-modal__body {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .employee-delete-request-modal__heading {
+    gap: 12px;
+  }
+
+  .employee-delete-request-modal__actions {
+    flex-direction: column-reverse;
+  }
+
+  .employee-delete-request-modal__actions .ui-btn {
+    width: 100%;
   }
 }
 
@@ -602,11 +758,6 @@
   gap: 10px;
 }
 
-.employee-filters-form__submit.ui-btn,
-.employee-filters-form__reset.ui-btn {
-  min-height: 54px;
-}
-
 .employee-history-table {
   border-radius: 18px;
   border-color: rgba(148, 163, 184, 0.16);
@@ -614,7 +765,7 @@
 }
 
 .employee-history-table .data-table {
-  min-width: 760px;
+  min-width: 860px;
   text-align: left;
   font-size: 15px;
 }
@@ -658,12 +809,33 @@
   text-align: right;
 }
 
-.employee-history-table .badge {
+.employee-history-table__status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-width: 88px;
-  padding: 6px 12px;
+  min-height: 32px;
+  padding: 0 12px;
   border-radius: 999px;
+  background: #f1f5f9;
+  color: #475569;
   font-size: 13px;
   font-weight: 800;
+}
+
+.employee-history-table__status--pending {
+  background: #fff4d8;
+  color: #c77b00;
+}
+
+.employee-history-table__status--approved {
+  background: #e7f9ef;
+  color: #0f8f5b;
+}
+
+.employee-history-table__status--rejected {
+  background: #ffe6e6;
+  color: #be123c;
 }
 
 .employee-history-table__empty {
@@ -694,12 +866,6 @@
 
   .employee-filters-form {
     grid-template-columns: 1fr;
-  }
-
-  .employee-filters-form__submit.ui-btn,
-  .employee-filters-form__reset.ui-btn {
-    width: 100%;
-    min-width: 0;
   }
 
   .employee-history-table {
@@ -768,7 +934,7 @@
     align-items: flex-start;
   }
 
-  .employee-history-table .data-table td[data-label="Estado"] .badge {
+  .employee-history-table .data-table td[data-label="Estado"] .employee-history-table__status {
     min-width: 0;
   }
 

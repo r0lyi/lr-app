@@ -35,4 +35,6 @@
       <p class="ui-field__feedback ui-field__feedback--error">{{ filter_form.status.errors.0 }}</p>
     {% endif %}
   </div>
+
+  {% include "components/ui/filter_actions.html" with reset_url=request.path class_name="rrhh-filters-form__actions" %}
 </form>

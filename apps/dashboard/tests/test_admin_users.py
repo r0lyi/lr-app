@@ -338,17 +338,17 @@ class AdminUsersTests(DashboardRoleBaseTestCase):
         self.assertContains(response, "Editar usuario")
         self.assertContains(response, "Clara Diaz")
         self.assertContains(response, "Finanzas")
+        self.assertContains(response, "Rol y estado")
+        self.assertContains(response, "Nuevo rol principal")
+        self.assertContains(response, "Estado de la cuenta")
+        self.assertContains(response, "Guardar cambios")
         self.assertContains(
             response,
-            reverse("dashboard:admin-user-primary-role", args=[target_user.pk]),
+            reverse("dashboard:admin-user-edit", args=[target_user.pk]),
         )
         self.assertContains(
             response,
             reverse("dashboard:admin-user-department", args=[target_user.pk]),
-        )
-        self.assertContains(
-            response,
-            reverse("dashboard:admin-user-access-state", args=[target_user.pk]),
         )
 
     def test_admin_can_change_the_primary_role_from_users_list(self):
@@ -411,6 +411,38 @@ class AdminUsersTests(DashboardRoleBaseTestCase):
             ["rrhh"],
         )
 
+    def test_admin_edit_modal_replaces_existing_roles(self):
+        admin = self.create_active_user(
+            email="admin-replace-role@example.com",
+            dni="90909090A",
+        )
+        admin.roles.set([self.admin_role])
+
+        target_user = self.create_active_user(
+            email="target-replace-role@example.com",
+            dni="32323232K",
+        )
+        target_user.roles.set([self.employee_role, self.rrhh_role])
+
+        self.client.force_login(admin)
+
+        edit_url = reverse("dashboard:admin-user-edit", args=[target_user.pk])
+        response = self.client.post(
+            edit_url,
+            {
+                "primary_role": self.admin_role.pk,
+                "is_active": "true",
+                "next": edit_url,
+            },
+        )
+
+        self.assertRedirects(response, edit_url)
+        target_user.refresh_from_db()
+        self.assertEqual(
+            list(target_user.roles.values_list("name", flat=True)),
+            ["admin"],
+        )
+
     def test_admin_can_deactivate_a_user_from_users_list(self):
         admin = self.create_active_user(
             email="admin-change-active@example.com",
@@ -433,6 +465,47 @@ class AdminUsersTests(DashboardRoleBaseTestCase):
         self.assertRedirects(response, reverse("dashboard:admin-users"))
         target_user.refresh_from_db()
         self.assertFalse(target_user.is_active)
+
+    def test_admin_can_change_access_state_from_edit_page_with_boolean_values(self):
+        admin = self.create_active_user(
+            email="admin-edit-active-state@example.com",
+            dni="34343434H",
+        )
+        admin.roles.set([self.admin_role])
+
+        target_user = self.create_active_user(
+            email="target-edit-active-state@example.com",
+            dni="27272727V",
+        )
+        edit_url = reverse("dashboard:admin-user-edit", args=[target_user.pk])
+
+        self.client.force_login(admin)
+
+        response = self.client.post(
+            edit_url,
+            {
+                "primary_role": self.employee_role.pk,
+                "is_active": "false",
+                "next": edit_url,
+            },
+        )
+
+        self.assertRedirects(response, edit_url)
+        target_user.refresh_from_db()
+        self.assertFalse(target_user.is_active)
+
+        response = self.client.post(
+            edit_url,
+            {
+                "primary_role": self.employee_role.pk,
+                "is_active": "true",
+                "next": edit_url,
+            },
+        )
+
+        self.assertRedirects(response, edit_url)
+        target_user.refresh_from_db()
+        self.assertTrue(target_user.is_active)
 
     def test_admin_can_change_department_from_users_list(self):
         admin = self.create_active_user(
