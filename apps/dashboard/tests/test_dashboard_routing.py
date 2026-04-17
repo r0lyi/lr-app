@@ -161,6 +161,40 @@ class DashboardRoutingTests(DashboardRoleBaseTestCase):
         self.assertNotContains(response, "01-07-2026")
         self.assertNotContains(response, "05-07-2026")
 
+    def test_employee_home_paginates_requests_by_ten(self):
+        user = self.create_active_user(
+            email="employee-pagination@example.com",
+            dni="23232323T",
+        )
+        employee = self.create_employee_profile(user)
+        for day in range(1, 13):
+            self.create_vacation_request(
+                employee,
+                status=self.pending_status,
+                start_date=date(2026, 1, day),
+                end_date=date(2026, 1, day),
+                requested_days="1.00",
+            )
+
+        self.client.force_login(user)
+
+        first_page = self.client.get(reverse("dashboard:employee-home"))
+        second_page = self.client.get(
+            reverse("dashboard:employee-home"),
+            {"page": "2"},
+        )
+
+        self.assertEqual(first_page.status_code, 200)
+        self.assertEqual(first_page.context["page_obj"].paginator.per_page, 10)
+        self.assertEqual(first_page.context["filtered_employee_requests_count"], 12)
+        self.assertEqual(len(first_page.context["employee_requests"]), 10)
+        self.assertContains(first_page, "Mostrando 1-10 de 12 solicitudes")
+        self.assertContains(first_page, 'href="?page=2"', html=False)
+
+        self.assertEqual(second_page.status_code, 200)
+        self.assertEqual(len(second_page.context["employee_requests"]), 2)
+        self.assertContains(second_page, "Mostrando 11-12 de 12 solicitudes")
+
     def test_employee_home_shows_delete_action_only_for_pending_requests(self):
         user = self.create_active_user(
             email="employee-delete-action@example.com",
@@ -336,6 +370,46 @@ class DashboardRoutingTests(DashboardRoleBaseTestCase):
         self.assertNotContains(response, "Sanchez")
         self.assertNotContains(response, "01-08-2026")
         self.assertNotContains(response, "03-08-2026")
+
+    def test_rrhh_requests_are_paginated_by_ten(self):
+        rrhh_user = self.create_active_user(
+            email="rrhh-pagination@example.com",
+            dni=self.build_valid_dni(34000000),
+        )
+        rrhh_user.roles.set([self.rrhh_role])
+        self.create_employee_profile(rrhh_user, first_name="Rosa", last_name="Ruiz")
+        for index in range(12):
+            employee_user = self.create_active_user(
+                email=f"rrhh-pagination-employee-{index:02d}@example.com",
+                dni=self.build_valid_dni(34000001 + index),
+            )
+            employee = self.create_employee_profile(
+                employee_user,
+                first_name=f"Empleado{index:02d}",
+                last_name="Paginado",
+            )
+            self.create_vacation_request(
+                employee,
+                status=self.pending_status,
+                start_date=date(2026, 5, index + 1),
+                end_date=date(2026, 5, index + 1),
+                requested_days="1.00",
+            )
+
+        self.client.force_login(rrhh_user)
+
+        first_page = self.client.get(reverse("dashboard:rrhh-home"))
+        second_page = self.client.get(reverse("dashboard:rrhh-home"), {"page": "2"})
+
+        self.assertEqual(first_page.status_code, 200)
+        self.assertEqual(first_page.context["page_obj"].paginator.per_page, 10)
+        self.assertEqual(first_page.context["filtered_requests_count"], 12)
+        self.assertEqual(len(first_page.context["vacation_requests"]), 10)
+        self.assertContains(first_page, "Mostrando 1-10 de 12 solicitudes")
+
+        self.assertEqual(second_page.status_code, 200)
+        self.assertEqual(len(second_page.context["vacation_requests"]), 2)
+        self.assertContains(second_page, "Mostrando 11-12 de 12 solicitudes")
 
     def test_rrhh_home_shows_export_review_summary_and_seniority_order(self):
         user = self.create_active_user(

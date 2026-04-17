@@ -48,40 +48,6 @@
   </div>
 
   <div class="rrhh-table-card__footer">
-    <p class="rrhh-table-card__footer-text">
-      Mostrando {{ page_obj.start_index }}-{{ page_obj.end_index }} de {{ filtered_requests_count }} solicitudes
-    </p>
-
-    {% if page_obj.paginator.num_pages > 1 %}
-      <nav class="rrhh-pagination" aria-label="Paginación de solicitudes">
-        {% if page_obj.has_previous %}
-          <a class="rrhh-pagination__control" href="{{ pagination_context.previous_url }}" aria-label="Página anterior">
-            {% include "components/ui/icon.html" with name="chevron-left" %}
-          </a>
-        {% else %}
-          <span class="rrhh-pagination__control rrhh-pagination__control--disabled" aria-hidden="true">
-            {% include "components/ui/icon.html" with name="chevron-left" %}
-          </span>
-        {% endif %}
-
-        {% for page_link in pagination_context.pages %}
-          {% if page_link.current %}
-            <span class="rrhh-pagination__page rrhh-pagination__page--current">{{ page_link.number }}</span>
-          {% else %}
-            <a class="rrhh-pagination__page" href="{{ page_link.url }}">{{ page_link.number }}</a>
-          {% endif %}
-        {% endfor %}
-
-        {% if page_obj.has_next %}
-          <a class="rrhh-pagination__control" href="{{ pagination_context.next_url }}" aria-label="Página siguiente">
-            {% include "components/ui/icon.html" with name="chevron-right" %}
-          </a>
-        {% else %}
-          <span class="rrhh-pagination__control rrhh-pagination__control--disabled" aria-hidden="true">
-            {% include "components/ui/icon.html" with name="chevron-right" %}
-          </span>
-        {% endif %}
-      </nav>
-    {% endif %}
+    {% include "components/ui/table_footer.html" with total_count=filtered_requests_count item_label_plural="solicitudes" aria_label="Paginación de solicitudes" %}
   </div>
 </section>

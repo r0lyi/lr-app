@@ -184,6 +184,47 @@ class AdminUsersTests(DashboardRoleBaseTestCase):
         self.assertContains(response, "Editar usuario")
         self.assertEqual(response.context["managed_users_count"], User.objects.count())
 
+    def test_admin_users_page_paginates_users_by_ten(self):
+        admin = self.create_active_user(
+            email="zz-admin-users-pagination@example.com",
+            dni=self.build_valid_dni(31000000),
+        )
+        admin.roles.set([self.admin_role])
+        for index in range(12):
+            self.create_active_user(
+                email=f"pagination-user-{index:02d}@example.com",
+                dni=self.build_valid_dni(31000001 + index),
+            )
+
+        self.client.force_login(admin)
+
+        first_page = self.client.get(reverse("dashboard:admin-users"))
+        second_page = self.client.get(
+            reverse("dashboard:admin-users"),
+            {"page": "2"},
+        )
+
+        self.assertEqual(first_page.status_code, 200)
+        expected_users_count = User.objects.count()
+        self.assertEqual(first_page.context["page_obj"].paginator.per_page, 10)
+        self.assertEqual(first_page.context["managed_users_count"], expected_users_count)
+        self.assertEqual(len(first_page.context["managed_users"]), 10)
+        self.assertContains(
+            first_page,
+            f"Mostrando 1-10 de {expected_users_count} usuarios",
+        )
+        self.assertContains(first_page, 'href="?page=2"', html=False)
+
+        self.assertEqual(second_page.status_code, 200)
+        self.assertEqual(
+            len(second_page.context["managed_users"]),
+            expected_users_count - 10,
+        )
+        self.assertContains(
+            second_page,
+            f"Mostrando 11-{expected_users_count} de {expected_users_count} usuarios",
+        )
+
     @override_settings(
         EMAIL_PROVIDER="console",
         EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",

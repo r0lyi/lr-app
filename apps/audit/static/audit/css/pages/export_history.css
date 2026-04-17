@@ -108,6 +108,10 @@
   border-bottom: none;
 }
 
+.export-history-card .ui-table-footer {
+  padding-top: 0;
+}
+
 .export-history-table__file-link {
   display: flex;
   align-items: center;

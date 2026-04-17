@@ -2,6 +2,7 @@
 
 from django.shortcuts import redirect, render
 
+from apps.core.presentation.pagination import paginate_dashboard_list
 from apps.core.presentation.dashboard import build_dashboard_base_context
 from apps.core.utils.decorators import role_required
 from apps.employees.selectors.employee_dashboard import get_employee_profile_for_user
@@ -27,6 +28,15 @@ def employee_home_view(request):
 
     filter_form = EmployeeVacationRequestFilterForm(request.GET or None)
     request_filters = filter_form.cleaned_data if filter_form.is_valid() else {}
+    dashboard_summary = build_employee_dashboard_summary(
+        employee_profile,
+        request_filters=request_filters,
+    )
+    employee_requests_page = paginate_dashboard_list(
+        request,
+        dashboard_summary["employee_requests"],
+    )
+    dashboard_summary["employee_requests"] = employee_requests_page["items"]
 
     context = build_dashboard_base_context(
         request.user,
@@ -34,12 +44,12 @@ def employee_home_view(request):
         request=request,
         active_section="home",
         extra_context={
-            **build_employee_dashboard_summary(
-                employee_profile,
-                request_filters=request_filters,
-            ),
+            **dashboard_summary,
             "filter_form": filter_form,
             "filter_reset_url": request.path,
+            "filtered_employee_requests_count": employee_requests_page["total_count"],
+            "page_obj": employee_requests_page["page_obj"],
+            "pagination_context": employee_requests_page["pagination_context"],
         },
     )
     return render(request, "dashboard/pages/employee_home.html", context)

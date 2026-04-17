@@ -52,3 +52,5 @@
     </p>
   {% endif %}
 </div>
+
+{% include "components/ui/table_footer.html" with total_count=filtered_exports_count item_label_plural="exportaciones" aria_label="Paginación de exportaciones" %}

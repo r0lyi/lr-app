@@ -6,6 +6,7 @@ from apps.audit.forms import AuditLogFilterForm
 from apps.audit.selectors import get_audit_log_summary, get_audit_logs
 from apps.audit.services import AUDIT_RESOURCE_TYPE_USER
 from apps.core.presentation.dashboard import build_dashboard_base_context
+from apps.core.presentation.pagination import paginate_dashboard_list
 from apps.core.utils.decorators import role_required
 
 
@@ -21,6 +22,7 @@ def audit_log_view(request):
     filter_form = AuditLogFilterForm(request.GET or None)
     filter_data = filter_form.cleaned_data if filter_form.is_valid() else None
     audit_logs = get_audit_logs(filters=filter_data)
+    audit_logs_page = paginate_dashboard_list(request, audit_logs)
     summary = get_audit_log_summary(filters=filter_data)
     audit_summary_cards = [
         {
@@ -58,8 +60,10 @@ def audit_log_view(request):
             request=request,
             active_section="activity",
             extra_context={
-                "audit_logs": audit_logs,
-                "audit_logs_count": audit_logs.count(),
+                "audit_logs": audit_logs_page["items"],
+                "audit_logs_count": audit_logs_page["total_count"],
+                "page_obj": audit_logs_page["page_obj"],
+                "pagination_context": audit_logs_page["pagination_context"],
                 "audit_log_filter_form": filter_form,
                 "audit_summary_cards": audit_summary_cards,
                 "audit_resource_type_user": AUDIT_RESOURCE_TYPE_USER,

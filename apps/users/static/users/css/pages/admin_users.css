@@ -244,6 +244,12 @@
   border-bottom: none;
 }
 
+.admin-users-card--table .ui-table-footer {
+  padding: 16px 18px 18px;
+  border-top: 1px solid #edf2f7;
+  background: #ffffff;
+}
+
 .admin-users-table__identity,
 .admin-users-table__access {
   display: flex;

@@ -116,6 +116,42 @@ class ExportHistoryViewTests(DashboardRoleBaseTestCase):
         self.assertContains(response, "vacation_26-03-2026.xlsx")
         self.assertNotContains(response, "vacation_15-02-2026.xlsx")
 
+    def test_export_history_is_paginated_by_ten(self):
+        rrhh_user = self.create_rrhh_user(
+            email="rrhh-history-pagination@example.com",
+            dni=self.build_valid_dni(32000000),
+        )
+        for index in range(12):
+            export_history = create_export_history(
+                user=rrhh_user,
+                export_type=EXPORT_TYPE_RRHH_VACATION_REQUESTS,
+                filters={"status": "pending"},
+            )
+            mark_export_success(
+                export_history=export_history,
+                file_name=f"solicitudes_paginadas_{index:02d}.xlsx",
+                file_bytes=b"excel-content",
+                total_records=index + 1,
+            )
+
+        self.client.force_login(rrhh_user)
+
+        first_page = self.client.get(reverse("audit:export-history"))
+        second_page = self.client.get(
+            reverse("audit:export-history"),
+            {"page": "2"},
+        )
+
+        self.assertEqual(first_page.status_code, 200)
+        self.assertEqual(first_page.context["page_obj"].paginator.per_page, 10)
+        self.assertEqual(first_page.context["filtered_exports_count"], 12)
+        self.assertEqual(len(first_page.context["export_histories"]), 10)
+        self.assertContains(first_page, "Mostrando 1-10 de 12 exportaciones")
+
+        self.assertEqual(second_page.status_code, 200)
+        self.assertEqual(len(second_page.context["export_histories"]), 2)
+        self.assertContains(second_page, "Mostrando 11-12 de 12 exportaciones")
+
     def test_rrhh_can_download_a_previous_export(self):
         rrhh_user = self.create_rrhh_user(
             email="rrhh-history-download@example.com",

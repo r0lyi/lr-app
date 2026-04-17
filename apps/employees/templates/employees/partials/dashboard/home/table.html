@@ -13,7 +13,7 @@
     <tbody>
       {% for request_item in employee_requests %}
         <tr>
-          <td data-label="Nro">{{ forloop.counter }}</td>
+          <td data-label="Nro">{{ page_obj.start_index|add:forloop.counter0 }}</td>
           <td data-label="Fecha solicitud">{{ request_item.created_at|date:"d-m-Y" }}</td>
           <td data-label="Rango de fechas">
             {{ request_item.start_date|date:"d-m-Y" }} - {{ request_item.end_date|date:"d-m-Y" }}
@@ -57,3 +57,5 @@
     </tbody>
   </table>
 </div>
+
+{% include "components/ui/table_footer.html" with total_count=filtered_employee_requests_count item_label_plural="solicitudes" aria_label="Paginación de solicitudes del empleado" %}

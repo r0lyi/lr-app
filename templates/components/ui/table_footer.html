@@ -1,0 +1,11 @@
+<div class="ui-table-footer {{ class_name|default:'' }}">
+  <p class="ui-table-footer__count">
+    {% if total_count %}
+      Mostrando {{ page_obj.start_index }}-{{ page_obj.end_index }} de {{ total_count }} {{ item_label_plural|default:"registros" }}
+    {% else %}
+      Mostrando 0 {{ item_label_plural|default:"registros" }}
+    {% endif %}
+  </p>
+
+  {% include "components/ui/pagination.html" %}
+</div>
