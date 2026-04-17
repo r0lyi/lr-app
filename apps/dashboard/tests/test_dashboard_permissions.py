@@ -188,32 +188,3 @@ class DashboardPermissionTests(DashboardRoleBaseTestCase):
         self.assertEqual(response.url, reverse("dashboard:home"))
         target_user.refresh_from_db()
         self.assertTrue(target_user.is_active)
-
-    def test_employee_cannot_change_department_from_admin_users_panel(self):
-        user = self.create_active_user(
-            email="employee-admin-department-change@example.com",
-            dni="90909090A",
-        )
-        self.create_employee_profile(user)
-
-        target_user = self.create_active_user(
-            email="target-admin-department-change@example.com",
-            dni="23232323T",
-        )
-        employee_profile = self.create_employee_profile(target_user)
-        previous_department = self.create_department(name="Limpieza")
-        new_department = self.create_department(name="Mantenimiento")
-        employee_profile.department = previous_department
-        employee_profile.save(update_fields=["department"])
-
-        self.client.force_login(user)
-
-        response = self.client.post(
-            reverse("dashboard:admin-user-department", args=[target_user.pk]),
-            {"department": new_department.pk},
-        )
-
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, reverse("dashboard:home"))
-        employee_profile.refresh_from_db()
-        self.assertEqual(employee_profile.department, previous_department)

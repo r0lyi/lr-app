@@ -107,7 +107,7 @@ def get_admin_user_list(*, limit=None, filters=None):
     """
 
     users = (
-        User.objects.select_related("employee_profile__department")
+        User.objects.select_related("employee_profile")
         .prefetch_related("roles")
         .order_by("email")
     )
@@ -122,7 +122,7 @@ def get_admin_user_detail(*, user_id):
     """Devuelve una sola ficha administrativa preparada para la vista de edición."""
 
     user = (
-        User.objects.select_related("employee_profile__department")
+        User.objects.select_related("employee_profile")
         .prefetch_related("roles")
         .get(pk=user_id)
     )
@@ -149,15 +149,6 @@ def _build_admin_user_row(user):
         "has_employee_profile": employee_profile is not None,
         "can_change_primary_role": not user.is_superuser,
         "can_change_access_state": not user.is_superuser,
-        "can_change_department": employee_profile is not None,
-        "current_department_id": (
-            employee_profile.department_id if employee_profile else None
-        ),
-        "current_department_name": (
-            employee_profile.department.name
-            if employee_profile and employee_profile.department
-            else "Sin departamento"
-        ),
         "access_status_label": _get_access_status_label(user),
         "has_usable_password": user.has_usable_password(),
     }
@@ -176,7 +167,6 @@ def _apply_admin_user_filters(users, *, filters=None):
     search = (filters.get("search") or "").strip()
     primary_role = (filters.get("primary_role") or "").strip()
     access_state = (filters.get("access_state") or "").strip()
-    department = filters.get("department")
 
     if search:
         users = users.filter(
@@ -200,8 +190,5 @@ def _apply_admin_user_filters(users, *, filters=None):
             is_active=False,
             password__startswith=UNUSABLE_PASSWORD_PREFIX,
         )
-
-    if department is not None:
-        users = users.filter(employee_profile__department=department)
 
     return users.distinct()

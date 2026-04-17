@@ -5,7 +5,6 @@
         <tr>
           <th>Usuario</th>
           <th>Rol principal</th>
-          <th>Departamento</th>
           <th>Estado</th>
           <th>Acciones</th>
         </tr>
@@ -26,11 +25,6 @@
             <td data-label="Rol principal">
               <span class="admin-users-table__role">
                 {{ user_row.primary_role_label }}
-              </span>
-            </td>
-            <td data-label="Departamento">
-              <span class="admin-users-table__department-badge{% if not user_row.can_change_department %} admin-users-table__department-badge--muted{% endif %}">
-                {{ user_row.current_department_name }}
               </span>
             </td>
             <td data-label="Estado">

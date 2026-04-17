@@ -15,7 +15,7 @@
           <tr>
             <td data-label="Fecha">{{ audit_item.created_at|date:"d-m-Y H:i" }}</td>
             <td data-label="Tipo de cambio">
-              <span class="audit-log-table__badge{% if audit_item.action == 'user_access_state_changed' %} audit-log-table__badge--access{% elif audit_item.action == 'user_department_changed' %} audit-log-table__badge--department{% endif %}">
+              <span class="audit-log-table__badge{% if audit_item.action == 'user_access_state_changed' %} audit-log-table__badge--access{% endif %}">
                 {{ audit_item.action_label }}
               </span>
             </td>

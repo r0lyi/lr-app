@@ -157,7 +157,7 @@
 
 .admin-users-filters__grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.7fr) repeat(3, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1.7fr) repeat(2, minmax(0, 1fr));
   gap: 14px;
 }
 
@@ -270,7 +270,6 @@
 }
 
 .admin-users-table__role,
-.admin-users-table__department-badge,
 .admin-users-table__status {
   display: inline-flex;
   align-items: center;
@@ -286,17 +285,6 @@
   min-width: 124px;
   background: #eff6ff;
   color: #1d4ed8;
-}
-
-.admin-users-table__department-badge {
-  min-width: 140px;
-  background: #f2f4f7;
-  color: #344054;
-}
-
-.admin-users-table__department-badge--muted {
-  background: #f8fafc;
-  color: #98a2b3;
 }
 
 .admin-users-table__status {

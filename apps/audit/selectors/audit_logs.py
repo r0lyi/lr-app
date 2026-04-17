@@ -5,6 +5,9 @@ from django.db.models import Q
 from apps.audit.models import AuditLog
 
 
+HIDDEN_AUDIT_ACTIONS = {"user_department_changed"}
+
+
 def get_audit_logs(*, action=None, resource_type=None, limit=None, filters=None):
     """Devuelve el historial de auditoria listo para pintar en pantalla."""
 
@@ -32,16 +35,17 @@ def get_audit_log_summary(*, filters=None):
         "visible_access_changes": audit_logs.filter(
             action="user_access_state_changed"
         ).count(),
-        "visible_department_changes": audit_logs.filter(
-            action="user_department_changed"
-        ).count(),
     }
 
 
 def _build_filtered_audit_logs(*, action=None, resource_type=None, filters=None):
     """Aplica filtros reutilizables sobre el historial de auditoría."""
 
-    audit_logs = AuditLog.objects.select_related("user").order_by("-created_at")
+    audit_logs = (
+        AuditLog.objects.select_related("user")
+        .exclude(action__in=HIDDEN_AUDIT_ACTIONS)
+        .order_by("-created_at")
+    )
 
     if action:
         audit_logs = audit_logs.filter(action=action)

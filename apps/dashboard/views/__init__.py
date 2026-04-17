@@ -3,7 +3,6 @@
 from apps.employees.views import employee_home_view
 from apps.users.views import (
     admin_user_active_state_update_view,
-    admin_user_department_update_view,
     admin_user_edit_view,
     admin_user_list_view,
     admin_user_primary_role_update_view,
@@ -18,7 +17,6 @@ __all__ = [
     "admin_home_view",
     "admin_requests_view",
     "admin_user_active_state_update_view",
-    "admin_user_department_update_view",
     "admin_user_edit_view",
     "admin_user_list_view",
     "admin_user_primary_role_update_view",

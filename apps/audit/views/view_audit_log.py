@@ -44,12 +44,6 @@ def audit_log_view(request):
             "icon": "shield",
             "tone": "slate",
         },
-        {
-            "label": "Cambios de Departamento",
-            "value": summary["visible_department_changes"],
-            "icon": "building",
-            "tone": "cyan",
-        },
     ]
     return render(
         request,

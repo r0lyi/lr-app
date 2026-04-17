@@ -38,19 +38,20 @@
     padding: 16px var(--dash-main-inline-end) 14px var(--dash-main-inline-start);
   }
 
+  .dash-header-title {
+    order: 2;
+  }
+
   .dash-header-actions {
+    order: 1;
     width: 100%;
-    justify-content: space-between;
+    justify-content: flex-end;
     gap: 12px;
     min-width: 0;
   }
 
   .dash-notifications {
     margin-right: 0;
-  }
-
-  .dash-header-user__role {
-    display: none;
   }
 }
 
@@ -261,6 +262,13 @@
 
   .dash-header-user__name {
     font-size: 13px;
-    max-width: 140px;
+    max-width: 132px;
+  }
+
+  .dash-header-user__role {
+    max-width: 132px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }

@@ -195,15 +195,6 @@
   box-shadow: 0 12px 24px rgba(15, 23, 42, 0.05);
 }
 
-.profile-summary-card--department {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: 14px;
-  align-items: center;
-  padding: 18px;
-  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
-}
-
 .profile-summary-card__icon {
   display: inline-flex;
   align-items: center;
@@ -420,9 +411,6 @@
     gap: 14px;
   }
 
-  .profile-summary-card--department {
-    grid-column: 1 / -1;
-  }
 }
 
 @media (max-width: 760px) {
@@ -463,9 +451,6 @@
     gap: 4px;
   }
 
-  .profile-summary-card--department {
-    grid-column: auto;
-  }
 }
 
 @media (max-width: 560px) {
@@ -478,7 +463,6 @@
     padding: 20px 16px;
   }
 
-  .profile-summary-card--department,
   .profile-summary-card--annual,
   .profile-summary-card--taken,
   .profile-visual-card {
