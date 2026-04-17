@@ -315,55 +315,8 @@
   background: #ffffff;
 }
 
-.rrhh-table-card__footer-text {
-  color: #64748b;
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.rrhh-pagination {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.rrhh-pagination__page,
-.rrhh-pagination__control {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 34px;
-  height: 34px;
-  padding: 0 10px;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  background: #ffffff;
-  color: #64748b;
-  font-size: 13px;
-  font-weight: 700;
-  text-decoration: none;
-  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
-}
-
-.rrhh-pagination__page:hover,
-.rrhh-pagination__control:hover {
-  border-color: #cfe8f7;
-  color: #0f84bf;
-}
-
-.rrhh-pagination__page--current {
-  border-color: #1ba3e8;
-  background: #1ba3e8;
-  color: #ffffff;
-}
-
-.rrhh-pagination__control--disabled {
-  opacity: 0.45;
-}
-
-.rrhh-pagination__control svg {
-  width: 16px;
-  height: 16px;
+.rrhh-table-card__footer .ui-table-footer {
+  padding: 0;
 }
 
 .rrhh-summary-grid {

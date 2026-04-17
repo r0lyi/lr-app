@@ -2,11 +2,11 @@
 
 from datetime import date
 
-from django.core.paginator import Paginator
 from django.urls import reverse
 from django.shortcuts import redirect, render
 
 from apps.core.presentation.dashboard import build_dashboard_base_context
+from apps.core.presentation.pagination import paginate_dashboard_list
 from apps.core.utils.decorators import role_required
 from apps.users.selectors import get_primary_role
 from apps.vacations.forms import RrhhVacationRequestFilterForm
@@ -66,9 +66,7 @@ def _render_requests_management_view(request, *, role_name, active_section):
     export_review = build_rrhh_export_review(vacation_requests)
     reviewed_requests = export_review["vacation_requests"]
     requests_metrics = _build_rrhh_requests_metrics(reviewed_requests)
-
-    paginator = Paginator(reviewed_requests, 50)
-    page_obj = paginator.get_page(request.GET.get("page") or 1)
+    requests_page = paginate_dashboard_list(request, reviewed_requests)
 
     export_querydict = filter_form.data.copy() if filter_form.is_bound else None
     if export_querydict is not None:
@@ -93,13 +91,10 @@ def _render_requests_management_view(request, *, role_name, active_section):
                 "export_url": export_url,
                 "export_review_summary": export_review["summary"],
                 "filter_form": filter_form,
-                "vacation_requests": page_obj.object_list,
+                "vacation_requests": requests_page["items"],
                 "filtered_requests_count": len(reviewed_requests),
-                "page_obj": page_obj,
-                "pagination_context": _build_rrhh_pagination_links(
-                    request,
-                    page_obj,
-                ),
+                "page_obj": requests_page["page_obj"],
+                "pagination_context": requests_page["pagination_context"],
                 "requests_metrics": requests_metrics,
                 "requests_page_title": panel_title,
                 "requests_page_description": panel_description,
@@ -211,41 +206,6 @@ def _format_spanish_date_range(start_date, end_date):
 
 def _format_spanish_day_month(value):
     return f"{value.day:02d} {SPANISH_MONTH_ABBREVIATIONS[value.month]}"
-
-
-def _build_rrhh_pagination_links(request, page_obj):
-    """Genera enlaces de paginacion preservando los filtros actuales."""
-
-    if page_obj.paginator.num_pages <= 1:
-        return {
-            "pages": [],
-            "previous_url": "",
-            "next_url": "",
-        }
-
-    def build_page_url(page_number):
-        querydict = request.GET.copy()
-        querydict["page"] = page_number
-        return f"?{querydict.urlencode()}"
-
-    pages = [
-        {
-            "number": page_number,
-            "url": build_page_url(page_number),
-            "current": page_number == page_obj.number,
-        }
-        for page_number in range(1, page_obj.paginator.num_pages + 1)
-    ]
-
-    return {
-        "pages": pages,
-        "previous_url": build_page_url(page_obj.previous_page_number())
-        if page_obj.has_previous()
-        else "",
-        "next_url": build_page_url(page_obj.next_page_number())
-        if page_obj.has_next()
-        else "",
-    }
 
 
 @role_required("rrhh", allow_admin=True)

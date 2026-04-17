@@ -11,6 +11,7 @@ from apps.audit.services import EXPORT_TYPE_RRHH_VACATION_REQUESTS
 from apps.audit.selectors import get_export_histories
 from apps.audit.models import ExportHistory
 from apps.core.presentation.dashboard import build_dashboard_base_context
+from apps.core.presentation.pagination import paginate_dashboard_list
 from apps.core.utils.decorators import role_required
 from apps.users.selectors import get_primary_role
 
@@ -34,6 +35,7 @@ def export_history_view(request):
         start_date=filters.get("start_date"),
         end_date=filters.get("end_date"),
     )
+    export_histories_page = paginate_dashboard_list(request, export_histories)
 
     return render(
         request,
@@ -44,8 +46,10 @@ def export_history_view(request):
             request=request,
             active_section="requests" if current_role == "admin" else "history",
             extra_context={
-                "export_histories": export_histories,
-                "filtered_exports_count": export_histories.count(),
+                "export_histories": export_histories_page["items"],
+                "filtered_exports_count": export_histories_page["total_count"],
+                "page_obj": export_histories_page["page_obj"],
+                "pagination_context": export_histories_page["pagination_context"],
                 "filter_form": filter_form,
             },
         ),

@@ -8,6 +8,7 @@ from django.test import TestCase
 from apps.employees.models import Department, Employee
 from apps.vacations.models import VacationRequest, VacationStatus
 from apps.users.models import Role, User
+from apps.users.services.validators import DNI_LETTERS
 
 
 class DashboardRoleBaseTestCase(TestCase):
@@ -31,6 +32,11 @@ class DashboardRoleBaseTestCase(TestCase):
             password="PruebaSegura123!",
             is_active=True,
         )
+
+    def build_valid_dni(self, number):
+        """Genera un DNI valido para datos masivos de prueba."""
+
+        return f"{number:08d}{DNI_LETTERS[number % 23]}"
 
     def create_employee_profile(
         self,

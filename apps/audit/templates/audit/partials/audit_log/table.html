@@ -49,3 +49,5 @@
     </p>
   {% endif %}
 </div>
+
+{% include "components/ui/table_footer.html" with total_count=audit_logs_count item_label_plural="actividades" aria_label="Paginación del historial de actividad" %}

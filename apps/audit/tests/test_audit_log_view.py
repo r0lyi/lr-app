@@ -160,6 +160,36 @@ class AuditLogViewTests(DashboardRoleBaseTestCase):
         self.assertEqual(response.context["visible_department_changes"], 1)
         self.assertEqual(response.context["visible_role_changes"], 0)
 
+    def test_admin_activity_log_is_paginated_by_ten(self):
+        admin_user = self.create_active_user(
+            email="admin-audit-pagination@example.com",
+            dni=self.build_valid_dni(33000000),
+        )
+        admin_user.roles.set([self.admin_role])
+        for index in range(12):
+            AuditLog.objects.create(
+                user=admin_user,
+                action=AUDIT_ACTION_USER_PRIMARY_ROLE_CHANGED,
+                resource_type=AUDIT_RESOURCE_TYPE_USER,
+                resource_id=admin_user.pk,
+                description=f"Actividad paginada {index:02d}",
+            )
+
+        self.client.force_login(admin_user)
+
+        first_page = self.client.get(reverse("audit:activity-log"))
+        second_page = self.client.get(reverse("audit:activity-log"), {"page": "2"})
+
+        self.assertEqual(first_page.status_code, 200)
+        self.assertEqual(first_page.context["page_obj"].paginator.per_page, 10)
+        self.assertEqual(first_page.context["audit_logs_count"], 12)
+        self.assertEqual(len(first_page.context["audit_logs"]), 10)
+        self.assertContains(first_page, "Mostrando 1-10 de 12 actividades")
+
+        self.assertEqual(second_page.status_code, 200)
+        self.assertEqual(len(second_page.context["audit_logs"]), 2)
+        self.assertContains(second_page, "Mostrando 11-12 de 12 actividades")
+
     def test_admin_department_change_creates_a_clear_audit_log_entry(self):
         admin_user = self.create_active_user(
             email="admin-audit-department@example.com",
