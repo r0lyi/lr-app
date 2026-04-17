@@ -6,6 +6,8 @@ from django.core import mail
 from django.test import override_settings
 from django.urls import reverse
 
+from apps.audit.models import AuditLog
+from apps.audit.services import AUDIT_ACTION_USER_CREATED, AUDIT_RESOURCE_TYPE_USER
 from apps.employees.models import Employee
 from apps.notifications.models import Notification
 from apps.users.models import User
@@ -28,6 +30,7 @@ class AdminUsersTests(DashboardRoleBaseTestCase):
             email="employee-summary@example.com",
             dni="78787878K",
         )
+        employee_user.roles.set([self.employee_role])
         employee = self.create_employee_profile(employee_user)
         self.create_vacation_request(
             employee,
@@ -49,9 +52,9 @@ class AdminUsersTests(DashboardRoleBaseTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Total usuarios")
-        self.assertContains(response, "Activos")
-        self.assertContains(response, "Fichas emp.")
-        self.assertContains(response, "Solicitudes")
+        self.assertContains(response, "Usuarios empleados")
+        self.assertContains(response, "Usuarios RRHH")
+        self.assertContains(response, "Admins")
         self.assertContains(response, "Aviso general")
         self.assertContains(response, "Comunicación Directa")
         self.assertContains(response, "Consejo Profesional")
@@ -64,6 +67,10 @@ class AdminUsersTests(DashboardRoleBaseTestCase):
         self.assertEqual(
             response.context["total_employee_profiles"],
             Employee.objects.count(),
+        )
+        self.assertEqual(
+            response.context["total_employee_users"],
+            User.objects.filter(roles__name="employee").distinct().count(),
         )
         self.assertEqual(
             response.context["total_vacation_requests"],
@@ -253,6 +260,17 @@ class AdminUsersTests(DashboardRoleBaseTestCase):
         self.assertFalse(created_user.has_usable_password())
         self.assertTrue(created_user.activation_token)
         self.assertEqual(len(mail.outbox), 1)
+        audit_entry = AuditLog.objects.get(
+            action=AUDIT_ACTION_USER_CREATED,
+            resource_type=AUDIT_RESOURCE_TYPE_USER,
+            resource_id=created_user.pk,
+        )
+        self.assertEqual(audit_entry.user, admin)
+        self.assertIn(
+            "admin-users-create@example.com creó la cuenta de nuevo.usuario@example.com",
+            audit_entry.description,
+        )
+        self.assertIn("DNI 10101010P", audit_entry.description)
 
     def test_admin_users_page_filters_by_search_role_and_access(self):
         admin = self.create_active_user(

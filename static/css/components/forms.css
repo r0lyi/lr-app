@@ -140,6 +140,14 @@
   padding-right: 40px;
 }
 
+.ui-field__control .ui-input.ui-input--has-left-icon {
+  padding-left: 44px;
+}
+
+.ui-field__control .ui-input.ui-input--has-right-icon {
+  padding-right: 44px;
+}
+
 .ui-input--date {
   padding-left: 40px;
   padding-right: 14px;

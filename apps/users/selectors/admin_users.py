@@ -89,6 +89,9 @@ def get_admin_dashboard_summary():
         "inactive_users": User.objects.filter(is_active=False).count(),
         "total_employee_profiles": Employee.objects.count(),
         "total_vacation_requests": VacationRequest.objects.count(),
+        "total_employee_users": User.objects.filter(roles__name="employee")
+        .distinct()
+        .count(),
         "total_rrhh_users": User.objects.filter(roles__name="rrhh")
         .distinct()
         .count(),

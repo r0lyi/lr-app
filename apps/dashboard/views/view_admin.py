@@ -45,28 +45,16 @@ def admin_home_view(request):
             "tone": "blue",
         },
         {
-            "label": "Activos",
-            "value": summary["active_users"],
-            "icon": "check-circle",
-            "tone": "green",
-        },
-        {
-            "label": "Fichas emp.",
-            "value": summary["total_employee_profiles"],
+            "label": "Usuarios empleados",
+            "value": summary["total_employee_users"],
             "icon": "id-card",
-            "tone": "orange",
-        },
-        {
-            "label": "Solicitudes",
-            "value": summary["total_vacation_requests"],
-            "icon": "calendar",
-            "tone": "cyan",
+            "tone": "green",
         },
         {
             "label": "Usuarios RRHH",
             "value": summary["total_rrhh_users"],
             "icon": "users",
-            "tone": "purple",
+            "tone": "orange",
         },
         {
             "label": "Admins",

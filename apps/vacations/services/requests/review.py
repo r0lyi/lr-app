@@ -35,6 +35,10 @@ def review_vacation_request(
     - solo notificamos al empleado cuando el estado cambia realmente
     """
     previous_status_name = vacation_request.status.name
+    previous_start_date = vacation_request.start_date
+    previous_end_date = vacation_request.end_date
+    previous_requested_days = vacation_request.requested_days
+    previous_hr_comment = vacation_request.hr_comment
 
     if (
         vacation_request.employee.user_id == acting_user.id
@@ -61,13 +65,15 @@ def review_vacation_request(
                 "Ya existe otra solicitud activa del empleado que se solapa con ese periodo."
             )
 
-    vacation_request.status = status
-    vacation_request.start_date = start_date
-    vacation_request.end_date = end_date
-    vacation_request.requested_days = calculate_requested_natural_days(
+    new_requested_days = calculate_requested_natural_days(
         start_date,
         end_date,
     )
+
+    vacation_request.status = status
+    vacation_request.start_date = start_date
+    vacation_request.end_date = end_date
+    vacation_request.requested_days = new_requested_days
     vacation_request.hr_comment = hr_comment.strip() or None
     vacation_request.resolution_date = (
         timezone.now() if status.name != "pending" else None
@@ -90,6 +96,23 @@ def review_vacation_request(
         vacation_request,
         previous_status_name=previous_status_name,
         new_status_name=status.name,
+    )
+
+    from apps.audit.services import log_vacation_request_reviewed
+
+    log_vacation_request_reviewed(
+        acting_user=acting_user,
+        vacation_request=vacation_request,
+        previous_status_name=previous_status_name,
+        new_status_name=status.name,
+        previous_start_date=previous_start_date,
+        new_start_date=start_date,
+        previous_end_date=previous_end_date,
+        new_end_date=end_date,
+        previous_requested_days=previous_requested_days,
+        new_requested_days=new_requested_days,
+        previous_hr_comment=previous_hr_comment,
+        new_hr_comment=vacation_request.hr_comment,
     )
 
     return vacation_request

@@ -10,9 +10,14 @@ class AuditLog(CreatedAtModel):
     """Registra una accion concreta sobre un recurso de negocio."""
 
     ACTION_LABELS = {
+        "user_created": "Usuario creado",
         "user_primary_role_changed": "Cambio de rol",
         "user_access_state_changed": "Cambio de acceso",
         "user_department_changed": "Cambio de departamento",
+        "user_profile_updated": "Datos de usuario",
+        "user_password_changed": "Contraseña actualizada",
+        "user_account_activated": "Cuenta activada",
+        "vacation_request_reviewed": "Solicitud editada",
     }
 
     user = models.ForeignKey(

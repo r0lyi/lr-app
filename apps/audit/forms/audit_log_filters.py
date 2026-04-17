@@ -3,12 +3,26 @@
 from django import forms
 
 from apps.audit.models import AuditLog
+from apps.audit.services import (
+    AUDIT_ACTION_USER_ACCESS_STATE_CHANGED,
+    AUDIT_ACTION_USER_ACCOUNT_ACTIVATED,
+    AUDIT_ACTION_USER_CREATED,
+    AUDIT_ACTION_USER_PASSWORD_CHANGED,
+    AUDIT_ACTION_USER_PRIMARY_ROLE_CHANGED,
+    AUDIT_ACTION_USER_PROFILE_UPDATED,
+    AUDIT_ACTION_VACATION_REQUEST_REVIEWED,
+)
 
 
 VISIBLE_AUDIT_ACTION_CHOICES = (
     ("", "Todos"),
-    ("user_primary_role_changed", "Cambio de rol"),
-    ("user_access_state_changed", "Cambio de acceso"),
+    (AUDIT_ACTION_USER_CREATED, "Usuario creado"),
+    (AUDIT_ACTION_USER_PRIMARY_ROLE_CHANGED, "Cambio de rol"),
+    (AUDIT_ACTION_USER_ACCESS_STATE_CHANGED, "Cambio de acceso"),
+    (AUDIT_ACTION_USER_PROFILE_UPDATED, "Datos de usuario"),
+    (AUDIT_ACTION_USER_PASSWORD_CHANGED, "Contraseña actualizada"),
+    (AUDIT_ACTION_USER_ACCOUNT_ACTIVATED, "Cuenta activada"),
+    (AUDIT_ACTION_VACATION_REQUEST_REVIEWED, "Solicitud editada"),
 )
 VISIBLE_AUDIT_ACTIONS = {
     action
@@ -30,7 +44,7 @@ class AuditLogFilterForm(forms.Form):
         widget=forms.TextInput(
             attrs={
                 "class": "ui-input",
-                "placeholder": "Ej. Roly Silvestre...",
+                "placeholder": "Ej. usuario, solicitud o cambio...",
             }
         ),
     )

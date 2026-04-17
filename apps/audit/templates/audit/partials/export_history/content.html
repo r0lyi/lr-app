@@ -1,19 +1,60 @@
 <section class="export-history-page">
-  <section class="dash-card export-history-card">
-    <div class="export-history-card__heading">
-      <div>
-        <h1 class="dash-card-title">Historial de exportaciones</h1>
-        <p class="export-history-card__description">
-          Consulta las descargas realizadas por RRHH, revisa la fecha de generacion
-          y vuelve a descargar cada archivo cuando lo necesites.
-        </p>
-      </div>
-      <div class="export-history-card__count">
-        {{ filtered_exports_count }} exportacion{{ filtered_exports_count|pluralize:"es" }}
-      </div>
+  <header class="export-history-hero">
+    <div class="export-history-hero__copy">
+      <h1 class="export-history-hero__title">Historial de exportaciones</h1>
+      <p class="export-history-hero__description">
+        Consulta las exportaciones generadas por RRHH, revisa sus fechas y vuelve a
+        descargar cada archivo cuando sea necesario.
+      </p>
     </div>
+  </header>
 
+  <section class="export-history-summary" aria-label="Resumen de exportaciones">
+    <article class="export-history-summary__card export-history-summary__card--blue">
+      <div class="export-history-summary__top">
+        <span class="export-history-summary__label">Total exportaciones</span>
+        <span class="export-history-summary__icon" aria-hidden="true">
+          {% include "components/ui/icon.html" with name="download" %}
+        </span>
+      </div>
+      <strong class="export-history-summary__value">{{ total_exports_count }}</strong>
+      <p class="export-history-summary__note">Exportaciones generadas por usuarios. Descargar un histórico no suma aquí.</p>
+    </article>
+
+    <article class="export-history-summary__card export-history-summary__card--slate">
+      <div class="export-history-summary__top">
+        <span class="export-history-summary__label">Última exportación</span>
+        <span class="export-history-summary__icon" aria-hidden="true">
+          {% include "components/ui/icon.html" with name="clock" %}
+        </span>
+      </div>
+      {% if latest_export %}
+        <strong class="export-history-summary__value export-history-summary__value--date">
+          {{ latest_export.created_at|date:"d M Y" }}
+        </strong>
+        <p class="export-history-summary__note">{{ latest_export.created_at|date:"H:i" }} · {{ latest_export.file_name|default:"Archivo registrado" }}</p>
+      {% else %}
+        <strong class="export-history-summary__value export-history-summary__value--date">Sin registros</strong>
+        <p class="export-history-summary__note">Todavía no hay descargas guardadas.</p>
+      {% endif %}
+    </article>
+  </section>
+
+  <section class="export-history-filters-card" aria-label="Rango de fechas">
     {% include "audit/partials/export_history/filters.html" %}
+  </section>
+
+  <section class="export-history-info-banner" aria-label="Información del historial">
+    <span class="export-history-info-banner__icon" aria-hidden="true">
+      {% include "components/ui/icon.html" with name="info" %}
+    </span>
+    <p class="export-history-info-banner__text">
+      <strong>Control de archivos:</strong> usa este historial para recuperar
+      exportaciones previas sin volver a generar documentos duplicados.
+    </p>
+  </section>
+
+  <section class="export-history-table-card dash-card">
     {% include "audit/partials/export_history/table.html" %}
   </section>
 </section>

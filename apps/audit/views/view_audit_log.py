@@ -4,7 +4,10 @@ from django.shortcuts import render
 
 from apps.audit.forms import AuditLogFilterForm
 from apps.audit.selectors import get_audit_log_summary, get_audit_logs
-from apps.audit.services import AUDIT_RESOURCE_TYPE_USER
+from apps.audit.services import (
+    AUDIT_RESOURCE_TYPE_USER,
+    AUDIT_RESOURCE_TYPE_VACATION_REQUEST,
+)
 from apps.core.presentation.dashboard import build_dashboard_base_context
 from apps.core.presentation.pagination import paginate_dashboard_list
 from apps.core.utils.decorators import role_required
@@ -33,15 +36,21 @@ def audit_log_view(request):
             "meta": "En tiempo real",
         },
         {
-            "label": "Cambios de Rol",
-            "value": summary["visible_role_changes"],
-            "icon": "id-card",
+            "label": "Usuarios Creados",
+            "value": summary["visible_user_creations"],
+            "icon": "user-plus",
+            "tone": "green",
+        },
+        {
+            "label": "Cambios de Usuario",
+            "value": summary["visible_user_changes"],
+            "icon": "users-settings",
             "tone": "orange",
         },
         {
-            "label": "Cambios de Acceso",
-            "value": summary["visible_access_changes"],
-            "icon": "shield",
+            "label": "Solicitudes Editadas",
+            "value": summary["visible_vacation_request_reviews"],
+            "icon": "calendar",
             "tone": "slate",
         },
     ]
@@ -61,6 +70,9 @@ def audit_log_view(request):
                 "audit_log_filter_form": filter_form,
                 "audit_summary_cards": audit_summary_cards,
                 "audit_resource_type_user": AUDIT_RESOURCE_TYPE_USER,
+                "audit_resource_type_vacation_request": (
+                    AUDIT_RESOURCE_TYPE_VACATION_REQUEST
+                ),
                 **summary,
             },
         ),
