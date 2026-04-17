@@ -1,21 +1,17 @@
-{% if filter_form.non_field_errors %}
-  <div class="export-history-filter-errors">
-    {% for error in filter_form.non_field_errors %}
-      <p class="ui-field__feedback ui-field__feedback--error">{{ error }}</p>
-    {% endfor %}
-  </div>
-{% endif %}
+<form method="get" class="export-history-filters-form" novalidate>
+  {% if filter_form.non_field_errors %}
+    <div class="export-history-filter-errors">
+      {% for error in filter_form.non_field_errors %}
+        <p class="ui-field__feedback ui-field__feedback--error">{{ error }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
 
-<form method="get" class="export-history-filters-form">
-  <div class="export-history-filters-form__group">
-    <label class="ui-field__label" for="{{ filter_form.start_date.id_for_label }}">Fecha inicio</label>
-    {{ filter_form.start_date }}
-  </div>
-  <div class="export-history-filters-form__group">
-    <label class="ui-field__label" for="{{ filter_form.end_date.id_for_label }}">Fecha final</label>
-    {{ filter_form.end_date }}
-  </div>
-  <div class="export-history-filters-form__actions">
-    {% include "components/ui/button_principal.html" with label="Filtrar" type="submit" size="md" class_name="export-history-filters-form__submit" %}
+  <div class="export-history-filters-form__grid">
+    {% include "components/ui/date_input.html" with label="Fecha inicio" name=filter_form.start_date.name id=filter_form.start_date.id_for_label value=filter_form.start_date.value error=filter_form.start_date.errors.0 %}
+
+    {% include "components/ui/date_input.html" with label="Fecha final" name=filter_form.end_date.name id=filter_form.end_date.id_for_label value=filter_form.end_date.value error=filter_form.end_date.errors.0 %}
+
+    {% include "components/ui/filter_actions.html" with reset_url=request.path class_name="export-history-filters-form__actions" %}
   </div>
 </form>

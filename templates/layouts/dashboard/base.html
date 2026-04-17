@@ -12,17 +12,6 @@
   {% include "layouts/dashboard/partials/sidebar.html" %}
 
   <main class="dash-main">
-    <button
-      class="dash-hamburger"
-      id="dash-hamburger"
-      type="button"
-      aria-label="Abrir menú"
-      aria-controls="dash-sidebar"
-      aria-expanded="false"
-    >
-      <span></span><span></span><span></span>
-    </button>
-
     {% include "layouts/dashboard/partials/header.html" %}
 
     <section class="dash-content {% block dashboard_content_class %}{% endblock %}">

@@ -3,9 +3,25 @@
 from django.db.models import Q
 
 from apps.audit.models import AuditLog
+from apps.audit.services import (
+    AUDIT_ACTION_USER_ACCESS_STATE_CHANGED,
+    AUDIT_ACTION_USER_ACCOUNT_ACTIVATED,
+    AUDIT_ACTION_USER_CREATED,
+    AUDIT_ACTION_USER_PASSWORD_CHANGED,
+    AUDIT_ACTION_USER_PRIMARY_ROLE_CHANGED,
+    AUDIT_ACTION_USER_PROFILE_UPDATED,
+    AUDIT_ACTION_VACATION_REQUEST_REVIEWED,
+)
 
 
 HIDDEN_AUDIT_ACTIONS = {"user_department_changed"}
+USER_CHANGE_ACTIONS = {
+    AUDIT_ACTION_USER_ACCESS_STATE_CHANGED,
+    AUDIT_ACTION_USER_ACCOUNT_ACTIVATED,
+    AUDIT_ACTION_USER_PASSWORD_CHANGED,
+    AUDIT_ACTION_USER_PRIMARY_ROLE_CHANGED,
+    AUDIT_ACTION_USER_PROFILE_UPDATED,
+}
 
 
 def get_audit_logs(*, action=None, resource_type=None, limit=None, filters=None):
@@ -30,10 +46,19 @@ def get_audit_log_summary(*, filters=None):
     return {
         "total_visible_activity": audit_logs.count(),
         "visible_role_changes": audit_logs.filter(
-            action="user_primary_role_changed"
+            action=AUDIT_ACTION_USER_PRIMARY_ROLE_CHANGED
         ).count(),
         "visible_access_changes": audit_logs.filter(
-            action="user_access_state_changed"
+            action=AUDIT_ACTION_USER_ACCESS_STATE_CHANGED
+        ).count(),
+        "visible_user_creations": audit_logs.filter(
+            action=AUDIT_ACTION_USER_CREATED
+        ).count(),
+        "visible_user_changes": audit_logs.filter(
+            action__in=USER_CHANGE_ACTIONS
+        ).count(),
+        "visible_vacation_request_reviews": audit_logs.filter(
+            action=AUDIT_ACTION_VACATION_REQUEST_REVIEWED
         ).count(),
     }
 

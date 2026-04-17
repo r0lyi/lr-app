@@ -1,15 +1,114 @@
-<section class="rrhh-info-banner" aria-label="Resumen antes de exportar">
-  <div class="rrhh-info-banner__icon" aria-hidden="true">
-    {% include "components/ui/icon.html" with name="info" %}
+<section class="rrhh-info-banner" aria-label="Alertas e información de solicitudes">
+  <div class="rrhh-info-banner__header">
+    <div class="rrhh-info-banner__title-block">
+      <span class="rrhh-info-banner__icon" aria-hidden="true">
+        {% include "components/ui/icon.html" with name="info" %}
+      </span>
+      <div>
+        <h2 class="rrhh-info-banner__title">Alertas e información</h2>
+        <p class="rrhh-info-banner__text">
+          {{ filtered_requests_count }} solicitud{{ filtered_requests_count|pluralize:"es" }} revisada{{ filtered_requests_count|pluralize:"s" }} con los filtros actuales.
+        </p>
+      </div>
+    </div>
+
+    <a class="rrhh-info-banner__link" href="#rrhh-home-table">
+      <span>Ver detalles</span>
+      {% include "components/ui/icon.html" with name="arrow-right" %}
+    </a>
   </div>
 
-  <p class="rrhh-info-banner__text">
-    <strong>Resumen antes de exportar:</strong>
-    {{ filtered_requests_count }} solicitud{{ filtered_requests_count|pluralize:"es" }} detectada{{ filtered_requests_count|pluralize:"s" }} en los filtros actuales.
-  </p>
+  <div class="rrhh-info-banner__grid">
+    <article class="rrhh-info-banner__item rrhh-info-banner__item--blue">
+      <span class="rrhh-info-banner__item-icon" aria-hidden="true">
+        {% include "components/ui/icon.html" with name="users" %}
+      </span>
+      <div>
+        <strong class="rrhh-info-banner__item-value">{{ export_review_summary.department_overlap_requests_count|default:0 }}</strong>
+        <p class="rrhh-info-banner__item-title">Solapamientos de fechas</p>
+        <p class="rrhh-info-banner__item-description">Solicitudes que se cruzan con vacaciones activas de otros compañeros.</p>
+      </div>
+    </article>
 
-  <a class="rrhh-info-banner__link" href="#rrhh-home-table">
-    <span>Ver detalles</span>
-    {% include "components/ui/icon.html" with name="arrow-right" %}
-  </a>
+    <article class="rrhh-info-banner__item rrhh-info-banner__item--amber">
+      <span class="rrhh-info-banner__item-icon" aria-hidden="true">
+        {% include "components/ui/icon.html" with name="calendar" %}
+      </span>
+      <div>
+        <strong class="rrhh-info-banner__item-value">{{ export_review_summary.long_duration_requests_count|default:0 }}</strong>
+        <p class="rrhh-info-banner__item-title">Solicitudes de larga duración</p>
+        <p class="rrhh-info-banner__item-description">Peticiones de 30 días que requieren una revisión más cuidadosa.</p>
+      </div>
+    </article>
+  </div>
+
+  {% with visible_alerts=export_review_summary.visible_alert_entries %}
+    <details class="rrhh-alert-log"{% if visible_alerts %} open{% endif %}>
+      <summary class="rrhh-alert-log__summary">
+        <div>
+          <h3 class="rrhh-alert-log__title">Registro detallado</h3>
+          <p class="rrhh-alert-log__description">
+            Solapamientos de fechas y solicitudes de larga duración detectadas automáticamente.
+          </p>
+        </div>
+        <span class="rrhh-alert-log__summary-actions">
+          <span class="rrhh-alert-log__badge">
+            {{ visible_alerts|length }} evento{{ visible_alerts|length|pluralize:"s" }}
+          </span>
+          <span class="rrhh-alert-log__toggle" aria-hidden="true">
+            {% include "components/ui/icon.html" with name="chevron-down" %}
+          </span>
+        </span>
+      </summary>
+
+      <div class="rrhh-alert-log__content">
+        {% if visible_alerts %}
+          <div class="rrhh-alert-log__list">
+            {% for alert in visible_alerts %}
+              <article class="rrhh-alert-log__entry rrhh-alert-log__entry--{{ alert.type }}">
+                <div class="rrhh-alert-log__entry-main">
+                  <span class="rrhh-alert-log__entry-dot" aria-hidden="true"></span>
+                  <div class="rrhh-alert-log__entry-copy">
+                    <div class="rrhh-alert-log__entry-top">
+                      <strong class="rrhh-alert-log__entry-label">{{ alert.label }}</strong>
+                      <span class="rrhh-alert-log__entry-range">
+                        {{ alert.start_date|date:"d-m-Y" }} - {{ alert.end_date|date:"d-m-Y" }}
+                      </span>
+                    </div>
+                    <p class="rrhh-alert-log__entry-text">
+                      <span class="rrhh-alert-log__entry-person">{{ alert.employee_name }}</span>
+                      {% if alert.type == "overlap" %}
+                        solicita {{ alert.requested_days }} días y coincide con:
+                      {% elif alert.type == "long_duration" %}
+                        solicita {{ alert.requested_days }} días consecutivos. Requiere revisión adicional por duración.
+                      {% endif %}
+                    </p>
+
+                    {% if alert.details %}
+                      <ul class="rrhh-alert-log__matches">
+                        {% for detail in alert.details %}
+                          <li>
+                            <span class="rrhh-alert-log__match-name">{{ detail.name }}</span>
+                            {% for request_detail in detail.requests %}
+                              <span class="rrhh-alert-log__match-range">
+                                {{ request_detail.start_date|date:"d-m-Y" }} - {{ request_detail.end_date|date:"d-m-Y" }} · {{ request_detail.status }}
+                              </span>
+                            {% endfor %}
+                          </li>
+                        {% endfor %}
+                      </ul>
+                    {% endif %}
+                  </div>
+                </div>
+              </article>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p class="rrhh-alert-log__empty">
+            No hay solapamientos ni solicitudes de larga duración con los filtros actuales.
+          </p>
+        {% endif %}
+      </div>
+    </details>
+  {% endwith %}
 </section>

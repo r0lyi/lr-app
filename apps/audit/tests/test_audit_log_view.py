@@ -1,6 +1,6 @@
 """Tests del historial de auditoria mostrado al administrador."""
 
-from datetime import timedelta
+from datetime import date, timedelta
 
 from django.urls import reverse
 from django.utils import timezone
@@ -9,7 +9,9 @@ from apps.audit.models import AuditLog
 from apps.audit.services import (
     AUDIT_ACTION_USER_ACCESS_STATE_CHANGED,
     AUDIT_ACTION_USER_PRIMARY_ROLE_CHANGED,
+    AUDIT_ACTION_VACATION_REQUEST_REVIEWED,
     AUDIT_RESOURCE_TYPE_USER,
+    AUDIT_RESOURCE_TYPE_VACATION_REQUEST,
     build_user_role_change_description,
 )
 from apps.dashboard.tests.base import DashboardRoleBaseTestCase
@@ -87,8 +89,9 @@ class AuditLogViewTests(DashboardRoleBaseTestCase):
         self.assertContains(response, "Qué sucedió")
         self.assertContains(response, "Acciones")
         self.assertContains(response, "Total Actividades")
-        self.assertContains(response, "Cambios de Rol")
-        self.assertContains(response, "Cambios de Acceso")
+        self.assertContains(response, "Usuarios Creados")
+        self.assertContains(response, "Cambios de Usuario")
+        self.assertContains(response, "Solicitudes Editadas")
         self.assertNotContains(response, "Cambios de Departamento")
         self.assertNotContains(response, "Cambio de departamento")
         self.assertContains(
@@ -159,6 +162,53 @@ class AuditLogViewTests(DashboardRoleBaseTestCase):
         self.assertEqual(response.context["audit_logs_count"], 1)
         self.assertEqual(response.context["visible_access_changes"], 1)
         self.assertEqual(response.context["visible_role_changes"], 0)
+
+    def test_admin_can_filter_vacation_request_review_activity(self):
+        admin_user = self.create_active_user(
+            email="admin-audit-vacation@example.com",
+            dni="34343434H",
+        )
+        admin_user.roles.set([self.admin_role])
+
+        employee_user = self.create_active_user(
+            email="employee-audit-vacation@example.com",
+            dni="27272727V",
+        )
+        employee = self.create_employee_profile(employee_user)
+        vacation_request = self.create_vacation_request(
+            employee,
+            status=self.approved_status,
+            start_date=date(2026, 8, 10),
+            end_date=date(2026, 8, 15),
+            requested_days="6.00",
+        )
+        AuditLog.objects.create(
+            user=admin_user,
+            action=AUDIT_ACTION_VACATION_REQUEST_REVIEWED,
+            resource_type=AUDIT_RESOURCE_TYPE_VACATION_REQUEST,
+            resource_id=vacation_request.pk,
+            description=(
+                "admin-audit-vacation@example.com editó la solicitud de "
+                "vacaciones de Ana Lopez. Cambios: estado de Pendiente a Aprobada."
+            ),
+        )
+
+        self.client.force_login(admin_user)
+
+        response = self.client.get(
+            reverse("audit:activity-log"),
+            {"action": AUDIT_ACTION_VACATION_REQUEST_REVIEWED},
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Solicitud editada")
+        self.assertContains(response, "estado de Pendiente a Aprobada")
+        self.assertContains(
+            response,
+            reverse("vacations:review-request", args=[vacation_request.pk]),
+        )
+        self.assertEqual(response.context["audit_logs_count"], 1)
+        self.assertEqual(response.context["visible_vacation_request_reviews"], 1)
 
     def test_admin_activity_log_is_paginated_by_ten(self):
         admin_user = self.create_active_user(

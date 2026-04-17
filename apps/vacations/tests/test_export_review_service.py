@@ -74,11 +74,37 @@ class ExportReviewServiceTests(VacationBaseTestCase):
         reviewed_request = export_review["vacation_requests"][0]
 
         self.assertEqual(reviewed_request.department_overlap_employees_count, 2)
+        self.assertEqual(len(reviewed_request.department_overlap_details), 2)
+        self.assertEqual(
+            reviewed_request.department_overlap_details[0]["name"],
+            "Carlos Ruiz",
+        )
+        self.assertEqual(
+            reviewed_request.department_overlap_details[1]["name"],
+            "Marta Vega",
+        )
         self.assertIn("Coincide con 2 empleados", reviewed_request.export_review_observations)
         self.assertEqual(
             export_review["summary"]["department_overlap_requests_count"],
             1,
         )
+        overlap_alert = next(
+            alert
+            for alert in export_review["summary"]["alert_entries"]
+            if alert["type"] == "overlap"
+        )
+        self.assertEqual(overlap_alert["employee_name"], "Lucia Martin")
+        self.assertEqual(overlap_alert["details"][0]["name"], "Carlos Ruiz")
+        self.assertEqual(
+            overlap_alert["details"][0]["requests"][0]["start_date"],
+            date(2026, 7, 3),
+        )
+        visible_overlap_alert = next(
+            alert
+            for alert in export_review["summary"]["visible_alert_entries"]
+            if alert["type"] == "overlap"
+        )
+        self.assertEqual(visible_overlap_alert["employee_name"], "Lucia Martin")
 
     def test_review_ignores_rejected_requests_when_calculating_overlaps(self):
         department = self.create_department(name="Limpieza")
@@ -187,6 +213,18 @@ class ExportReviewServiceTests(VacationBaseTestCase):
         self.assertEqual(reviewed_requests[0].high_load_period_labels, ["Verano"])
         self.assertEqual(reviewed_requests[1].high_load_period_labels, ["Navidad"])
         self.assertEqual(export_review["summary"]["high_load_requests_count"], 2)
+        self.assertTrue(
+            any(
+                alert["type"] == "high_load"
+                for alert in export_review["summary"]["alert_entries"]
+            )
+        )
+        self.assertFalse(
+            any(
+                alert["type"] == "high_load"
+                for alert in export_review["summary"]["visible_alert_entries"]
+            )
+        )
 
     def test_review_marks_only_requests_with_exactly_thirty_days_as_long_duration(self):
         department = self.create_department(name="RRHH")
@@ -229,6 +267,13 @@ class ExportReviewServiceTests(VacationBaseTestCase):
         )
         self.assertFalse(reviewed_requests[short_request.pk].is_long_duration)
         self.assertEqual(export_review["summary"]["long_duration_requests_count"], 1)
+        self.assertTrue(
+            any(
+                alert["type"] == "long_duration"
+                and alert["employee_name"] == "Ana Lopez"
+                for alert in export_review["summary"]["visible_alert_entries"]
+            )
+        )
 
     def test_review_orders_requests_by_seniority_then_start_date_and_creation(self):
         department = self.create_department(name="Cocina")
@@ -298,4 +343,14 @@ class ExportReviewServiceTests(VacationBaseTestCase):
                 old_late_request.pk,
                 young_request.pk,
             ],
+        )
+        first_alert = export_review["summary"]["alert_entries"][0]
+        self.assertEqual(first_alert["type"], "seniority")
+        self.assertEqual(first_alert["employee_name"], "Alba Veterana")
+        self.assertEqual(first_alert["hire_date"], date(2020, 1, 10))
+        self.assertFalse(
+            any(
+                alert["type"] == "seniority"
+                for alert in export_review["summary"]["visible_alert_entries"]
+            )
         )

@@ -34,6 +34,11 @@ def onboarding_view(request):
         form = EmployeeOnboardingForm(request.POST, user=user)
         if form.is_valid():
             data = form.cleaned_data
+            previous_email = user.email or ""
+            previous_first_name = profile.first_name if profile else None
+            previous_last_name = profile.last_name if profile else None
+            previous_phone = profile.phone if profile else None
+            previous_hire_date = profile.hire_date if profile else None
 
             if profile is None:
                 profile = Employee(user=user)
@@ -47,6 +52,20 @@ def onboarding_view(request):
             if data["email"] and data["email"] != user.email:
                 user.email = data["email"]
                 user.save(update_fields=["email"])
+
+            from apps.audit.services import log_user_profile_updated
+
+            log_user_profile_updated(
+                acting_user=user,
+                target_user=user,
+                field_changes=[
+                    ("correo electrónico", previous_email, data["email"]),
+                    ("nombre", previous_first_name, profile.first_name),
+                    ("apellidos", previous_last_name, profile.last_name),
+                    ("teléfono", previous_phone, profile.phone),
+                    ("fecha de ingreso", previous_hire_date, profile.hire_date),
+                ],
+            )
 
             messages.success(request, "Tu perfil de empleado se ha guardado correctamente.")
             # El dispatcher del dashboard decide el destino final una vez existe la ficha.

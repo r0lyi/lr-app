@@ -59,3 +59,7 @@ def set_password(user: User, password: str) -> None:
             "token_expires_at",
         ]
     )
+
+    from apps.audit.services import log_user_account_activated
+
+    log_user_account_activated(user=user)

@@ -115,6 +115,11 @@ class ExportHistoryViewTests(DashboardRoleBaseTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "vacation_26-03-2026.xlsx")
         self.assertNotContains(response, "vacation_15-02-2026.xlsx")
+        self.assertEqual(response.context["filtered_exports_count"], 1)
+        self.assertEqual(response.context["total_exports_count"], 2)
+        self.assertEqual(response.context["latest_export"].pk, recent_export.pk)
+        self.assertContains(response, "Última exportación")
+        self.assertContains(response, "Descargar un histórico no suma aquí")
 
     def test_export_history_is_paginated_by_ten(self):
         rrhh_user = self.create_rrhh_user(

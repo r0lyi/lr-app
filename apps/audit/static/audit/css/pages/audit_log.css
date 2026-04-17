@@ -37,7 +37,7 @@
 
 .audit-log-summary {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 14px;
 }
 
@@ -113,6 +113,11 @@
 .audit-log-summary__card--orange .audit-log-summary__icon {
   color: #d97706;
   background: rgba(217, 119, 6, 0.14);
+}
+
+.audit-log-summary__card--green .audit-log-summary__icon {
+  color: #16a34a;
+  background: rgba(22, 163, 74, 0.14);
 }
 
 .audit-log-summary__card--slate .audit-log-summary__icon {
@@ -256,6 +261,21 @@
 .audit-log-table__badge--access {
   background: #dcfce7;
   color: #166534;
+}
+
+.audit-log-table__badge--created {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.audit-log-table__badge--profile {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.audit-log-table__badge--request {
+  background: #fce7f3;
+  color: #be185d;
 }
 
 .audit-log-table__actions {

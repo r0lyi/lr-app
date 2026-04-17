@@ -167,7 +167,7 @@ def change_user_department(*, acting_user, target_user, new_department):
     return target_user
 
 
-def create_admin_user(*, email, dni):
+def create_admin_user(*, acting_user, email, dni):
     """Crea una cuenta pendiente de activacion con DNI y correo electronico.
 
     El usuario queda inactivo y recibe automaticamente un enlace de activacion
@@ -193,5 +193,12 @@ def create_admin_user(*, email, dni):
             raise ValidationError(
                 "No se pudo generar el enlace de activacion para el nuevo usuario."
             )
+
+        from apps.audit.services import log_user_created
+
+        log_user_created(
+            acting_user=acting_user,
+            target_user=user,
+        )
 
     return user

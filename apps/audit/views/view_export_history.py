@@ -30,11 +30,16 @@ def export_history_view(request):
         filter_form = ExportHistoryFilterForm()
         filters = {}
 
+    all_export_histories = get_export_histories(
+        export_type=EXPORT_TYPE_RRHH_VACATION_REQUESTS,
+    )
     export_histories = get_export_histories(
         export_type=EXPORT_TYPE_RRHH_VACATION_REQUESTS,
         start_date=filters.get("start_date"),
         end_date=filters.get("end_date"),
     )
+    total_exports_count = all_export_histories.count()
+    latest_export = all_export_histories.first()
     export_histories_page = paginate_dashboard_list(request, export_histories)
 
     return render(
@@ -48,6 +53,8 @@ def export_history_view(request):
             extra_context={
                 "export_histories": export_histories_page["items"],
                 "filtered_exports_count": export_histories_page["total_count"],
+                "total_exports_count": total_exports_count,
+                "latest_export": latest_export,
                 "page_obj": export_histories_page["page_obj"],
                 "pagination_context": export_histories_page["pagination_context"],
                 "filter_form": filter_form,

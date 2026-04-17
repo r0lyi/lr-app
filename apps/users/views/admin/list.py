@@ -65,6 +65,7 @@ def admin_user_list_view(request):
         if create_user_form.is_valid():
             try:
                 user = create_admin_user(
+                    acting_user=request.user,
                     email=create_user_form.cleaned_data["email"],
                     dni=create_user_form.cleaned_data["dni"],
                 )

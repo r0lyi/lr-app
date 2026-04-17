@@ -5,6 +5,11 @@ from datetime import date
 from django.urls import reverse
 from django.utils import timezone
 
+from apps.audit.models import AuditLog
+from apps.audit.services import (
+    AUDIT_ACTION_VACATION_REQUEST_REVIEWED,
+    AUDIT_RESOURCE_TYPE_VACATION_REQUEST,
+)
 from apps.notifications.models import Notification
 from apps.users.models import Role, User
 from apps.vacations.models import VacationRequest, VacationStatus
@@ -131,6 +136,28 @@ class VacationRequestReviewViewTests(VacationBaseTestCase):
         self.assertEqual(notification.vacation_request, vacation_request)
         self.assertEqual(notification.previous_status_name, "pending")
         self.assertIn("pending -> approved", notification.message)
+
+        audit_entry = AuditLog.objects.get(
+            action=AUDIT_ACTION_VACATION_REQUEST_REVIEWED,
+            resource_type=AUDIT_RESOURCE_TYPE_VACATION_REQUEST,
+            resource_id=vacation_request.pk,
+        )
+        self.assertEqual(audit_entry.user, rrhh_user)
+        self.assertIn(
+            "rrhh-review-update@example.com editó la solicitud de vacaciones de Ana Lopez",
+            audit_entry.description,
+        )
+        self.assertIn("estado de Pendiente a Aprobada", audit_entry.description)
+        self.assertIn(
+            "fecha de inicio de 01/07/2026 a 10/07/2026",
+            audit_entry.description,
+        )
+        self.assertIn(
+            "fecha final de 05/07/2026 a 12/07/2026",
+            audit_entry.description,
+        )
+        self.assertIn("días solicitados de 5 a 3", audit_entry.description)
+        self.assertIn("comentario de RRHH añadido", audit_entry.description)
 
     def test_rrhh_editing_dates_without_status_change_does_not_notify_employee(self):
         rrhh_user = self.create_rrhh_user(

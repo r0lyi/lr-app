@@ -55,7 +55,31 @@ def employee_profile_view(request):
             )
             profile_edit_mode = True
             if employee_form.is_valid():
+                field_changes = [
+                    (
+                        "nombre",
+                        employee_profile.first_name,
+                        employee_form.cleaned_data["first_name"],
+                    ),
+                    (
+                        "apellidos",
+                        employee_profile.last_name,
+                        employee_form.cleaned_data["last_name"],
+                    ),
+                    (
+                        "teléfono",
+                        employee_profile.phone,
+                        employee_form.cleaned_data["phone"],
+                    ),
+                ]
                 employee_form.save()
+                from apps.audit.services import log_user_profile_updated
+
+                log_user_profile_updated(
+                    acting_user=request.user,
+                    target_user=request.user,
+                    field_changes=field_changes,
+                )
                 messages.success(
                     request,
                     "Tus datos de empleado se han actualizado correctamente.",
@@ -68,6 +92,12 @@ def employee_profile_view(request):
             if password_form.is_valid():
                 user = password_form.save()
                 update_session_auth_hash(request, user)
+                from apps.audit.services import log_user_password_changed
+
+                log_user_password_changed(
+                    acting_user=user,
+                    target_user=user,
+                )
                 messages.success(
                     request,
                     "Tu contrasena se ha actualizado correctamente.",

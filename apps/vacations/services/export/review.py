@@ -19,16 +19,19 @@ def build_rrhh_export_review(vacation_requests):
         list(vacation_requests),
         key=_get_seniority_sort_key,
     )
-    overlap_counts = _get_department_overlap_counts(reviewed_requests)
+    overlap_details_by_request = _get_department_overlap_details(reviewed_requests)
 
     summary = {
         "department_overlap_requests_count": 0,
         "high_load_requests_count": 0,
         "long_duration_requests_count": 0,
+        "alert_entries": [],
+        "visible_alert_entries": [],
     }
 
     for vacation_request in reviewed_requests:
-        overlap_count = overlap_counts.get(vacation_request.pk, 0)
+        overlap_details = overlap_details_by_request.get(vacation_request.pk, [])
+        overlap_count = len(overlap_details)
         high_load_labels = _get_high_load_period_labels(
             vacation_request.start_date,
             vacation_request.end_date,
@@ -38,6 +41,7 @@ def build_rrhh_export_review(vacation_requests):
         ) == LONG_DURATION_VACATION_DAYS
 
         vacation_request.department_overlap_employees_count = overlap_count
+        vacation_request.department_overlap_details = overlap_details
         vacation_request.high_load_period_labels = high_load_labels
         vacation_request.is_high_load_period = bool(high_load_labels)
         vacation_request.is_long_duration = is_long_duration
@@ -54,6 +58,25 @@ def build_rrhh_export_review(vacation_requests):
         if is_long_duration:
             summary["long_duration_requests_count"] += 1
 
+        alert_entries = _build_request_alert_entries(
+            vacation_request,
+            overlap_details,
+            high_load_labels,
+            is_long_duration,
+        )
+        summary["alert_entries"].extend(alert_entries)
+        summary["visible_alert_entries"].extend(
+            alert_entry
+            for alert_entry in alert_entries
+            if alert_entry["type"] in ("overlap", "long_duration")
+        )
+
+    if reviewed_requests:
+        summary["alert_entries"].insert(
+            0,
+            _build_seniority_alert_entry(reviewed_requests[0]),
+        )
+
     return {
         "vacation_requests": reviewed_requests,
         "summary": summary,
@@ -69,7 +92,7 @@ def _get_seniority_sort_key(vacation_request):
     )
 
 
-def _get_department_overlap_counts(vacation_requests):
+def _get_department_overlap_details(vacation_requests):
     department_ids = {
         vacation_request.employee.department_id
         for vacation_request in vacation_requests
@@ -93,27 +116,122 @@ def _get_department_overlap_counts(vacation_requests):
             active_request
         )
 
-    overlap_counts = {}
+    overlap_details = {}
     for vacation_request in vacation_requests:
         department_id = vacation_request.employee.department_id
         if department_id is None:
-            overlap_counts[vacation_request.pk] = 0
+            overlap_details[vacation_request.pk] = []
             continue
 
-        overlapping_employee_ids = {
-            other_request.employee_id
-            for other_request in requests_by_department.get(department_id, [])
-            if other_request.employee_id != vacation_request.employee_id
-            and _date_ranges_overlap(
-                vacation_request.start_date,
-                vacation_request.end_date,
-                other_request.start_date,
-                other_request.end_date,
-            )
-        }
-        overlap_counts[vacation_request.pk] = len(overlapping_employee_ids)
+        overlapping_by_employee = {}
+        for other_request in requests_by_department.get(department_id, []):
+            if (
+                other_request.employee_id == vacation_request.employee_id
+                or not _date_ranges_overlap(
+                    vacation_request.start_date,
+                    vacation_request.end_date,
+                    other_request.start_date,
+                    other_request.end_date,
+                )
+            ):
+                continue
 
-    return overlap_counts
+            overlapping_by_employee.setdefault(
+                other_request.employee_id,
+                {
+                    "name": str(other_request.employee),
+                    "requests": [],
+                },
+            )["requests"].append(
+                {
+                    "start_date": other_request.start_date,
+                    "end_date": other_request.end_date,
+                    "status": str(other_request.status),
+                }
+            )
+
+        overlap_details[vacation_request.pk] = [
+            {
+                "name": detail["name"],
+                "requests": sorted(
+                    detail["requests"],
+                    key=lambda request_detail: (
+                        request_detail["start_date"],
+                        request_detail["end_date"],
+                    ),
+                ),
+            }
+            for detail in sorted(
+                overlapping_by_employee.values(),
+                key=lambda detail: detail["name"],
+            )
+        ]
+
+    return overlap_details
+
+
+def _build_request_alert_entries(
+    vacation_request,
+    overlap_details,
+    high_load_labels,
+    is_long_duration,
+):
+    entries = []
+
+    if overlap_details:
+        entries.append(
+            {
+                "type": "overlap",
+                "label": "Solapamiento de fechas",
+                "employee_name": str(vacation_request.employee),
+                "start_date": vacation_request.start_date,
+                "end_date": vacation_request.end_date,
+                "requested_days": vacation_request.requested_days,
+                "details": overlap_details,
+            }
+        )
+
+    if is_long_duration:
+        entries.append(
+            {
+                "type": "long_duration",
+                "label": "Solicitud de larga duración",
+                "employee_name": str(vacation_request.employee),
+                "start_date": vacation_request.start_date,
+                "end_date": vacation_request.end_date,
+                "requested_days": vacation_request.requested_days,
+                "details": [],
+            }
+        )
+
+    if high_load_labels:
+        entries.append(
+            {
+                "type": "high_load",
+                "label": "Periodo de alta carga",
+                "employee_name": str(vacation_request.employee),
+                "start_date": vacation_request.start_date,
+                "end_date": vacation_request.end_date,
+                "requested_days": vacation_request.requested_days,
+                "period_labels": high_load_labels,
+                "details": [],
+            }
+        )
+
+    return entries
+
+
+def _build_seniority_alert_entry(vacation_request):
+    return {
+        "type": "seniority",
+        "label": "Orden aplicado por antigüedad",
+        "employee_name": str(vacation_request.employee),
+        "start_date": vacation_request.start_date,
+        "end_date": vacation_request.end_date,
+        "requested_days": vacation_request.requested_days,
+        "hire_date": vacation_request.employee.hire_date,
+        "details": [],
+    }
 
 
 def _build_request_observations(overlap_count, high_load_labels, is_long_duration):
