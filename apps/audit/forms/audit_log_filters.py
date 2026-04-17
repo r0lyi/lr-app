@@ -5,6 +5,18 @@ from django import forms
 from apps.audit.models import AuditLog
 
 
+VISIBLE_AUDIT_ACTION_CHOICES = (
+    ("", "Todos"),
+    ("user_primary_role_changed", "Cambio de rol"),
+    ("user_access_state_changed", "Cambio de acceso"),
+)
+VISIBLE_AUDIT_ACTIONS = {
+    action
+    for action, _label in VISIBLE_AUDIT_ACTION_CHOICES
+    if action
+}
+
+
 class AuditLogFilterForm(forms.Form):
     """Ayuda a localizar actividad por fecha o por lo que ocurrió.
 
@@ -25,12 +37,7 @@ class AuditLogFilterForm(forms.Form):
     action = forms.ChoiceField(
         required=False,
         label="Tipo de cambio",
-        choices=(
-            ("", "Todos"),
-            ("user_primary_role_changed", "Cambio de rol"),
-            ("user_access_state_changed", "Cambio de acceso"),
-            ("user_department_changed", "Cambio de departamento"),
-        ),
+        choices=VISIBLE_AUDIT_ACTION_CHOICES,
         widget=forms.Select(attrs={"class": "ui-select"}),
     )
     start_date = forms.DateField(
@@ -58,7 +65,10 @@ class AuditLogFilterForm(forms.Form):
         """Acepta solo acciones que el historial actual sabe mostrar bien."""
 
         action = (self.cleaned_data.get("action") or "").strip()
-        if action and action not in AuditLog.ACTION_LABELS:
+        if action and (
+            action not in AuditLog.ACTION_LABELS
+            or action not in VISIBLE_AUDIT_ACTIONS
+        ):
             raise forms.ValidationError("Selecciona un tipo de actividad válido.")
         return action
 

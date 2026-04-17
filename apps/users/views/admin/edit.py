@@ -8,7 +8,6 @@ from django.shortcuts import render
 
 from apps.core.presentation.dashboard import build_dashboard_base_context
 from apps.core.utils.decorators import role_required
-from apps.employees.models import Department
 from apps.users.models import Role, User
 from apps.users.services.admin import change_user_active_state, change_user_primary_role
 from apps.users.selectors import get_admin_user_detail
@@ -36,7 +35,6 @@ def admin_user_edit_view(request, user_id):
         extra_context={
             "managed_user": managed_user,
             "available_roles": Role.objects.order_by("name"),
-            "available_departments": Department.objects.order_by("name"),
         },
     )
     return render(request, "users/pages/admin/user_edit.html", context)

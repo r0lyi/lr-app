@@ -135,14 +135,11 @@ class AdminUsersTests(DashboardRoleBaseTestCase):
             email="ana.lopez@example.com",
             dni="45454545J",
         )
-        department = self.create_department(name="Operaciones")
-        employee_profile = self.create_employee_profile(
+        self.create_employee_profile(
             employee_user,
             first_name="Ana",
             last_name="Lopez",
         )
-        employee_profile.department = department
-        employee_profile.save(update_fields=["department"])
 
         rrhh_user = self.create_active_user(
             email="rrhh-users-list@example.com",
@@ -172,11 +169,11 @@ class AdminUsersTests(DashboardRoleBaseTestCase):
         self.assertContains(response, "ana.lopez@example.com")
         self.assertContains(response, "45454545J")
         self.assertContains(response, "Empleado")
-        self.assertContains(response, "Operaciones")
         self.assertContains(response, "RRHH")
         self.assertContains(response, "Administrador")
         self.assertContains(response, "Acceso activo")
         self.assertContains(response, "Acceso desactivado")
+        self.assertNotContains(response, "Departamento")
         self.assertContains(
             response,
             reverse("dashboard:admin-user-edit", args=[employee_user.pk]),
@@ -257,40 +254,33 @@ class AdminUsersTests(DashboardRoleBaseTestCase):
         self.assertTrue(created_user.activation_token)
         self.assertEqual(len(mail.outbox), 1)
 
-    def test_admin_users_page_filters_by_search_role_access_and_department(self):
+    def test_admin_users_page_filters_by_search_role_and_access(self):
         admin = self.create_active_user(
             email="admin-users-filters@example.com",
             dni="15151515N",
         )
         admin.roles.set([self.admin_role])
 
-        operations = self.create_department(name="Operaciones")
-        finances = self.create_department(name="Finanzas")
-
         employee_user = self.create_active_user(
             email="laura.sanz@example.com",
             dni="26262626F",
         )
-        employee_profile = self.create_employee_profile(
+        self.create_employee_profile(
             employee_user,
             first_name="Laura",
             last_name="Sanz",
         )
-        employee_profile.department = operations
-        employee_profile.save(update_fields=["department"])
 
         rrhh_user = self.create_active_user(
             email="manuel.rrhh@example.com",
             dni="13131313S",
         )
         rrhh_user.roles.set([self.rrhh_role])
-        rrhh_profile = self.create_employee_profile(
+        self.create_employee_profile(
             rrhh_user,
             first_name="Manuel",
             last_name="Lopez",
         )
-        rrhh_profile.department = finances
-        rrhh_profile.save(update_fields=["department"])
 
         pending_user = self.create_active_user(
             email="pendiente@example.com",
@@ -308,7 +298,6 @@ class AdminUsersTests(DashboardRoleBaseTestCase):
                 "search": "Laura",
                 "primary_role": "employee",
                 "access_state": "active",
-                "department": operations.pk,
             },
         )
 
@@ -360,14 +349,11 @@ class AdminUsersTests(DashboardRoleBaseTestCase):
             email="edit-user@example.com",
             dni="26262626F",
         )
-        employee_profile = self.create_employee_profile(
+        self.create_employee_profile(
             target_user,
             first_name="Clara",
             last_name="Diaz",
         )
-        department = self.create_department(name="Finanzas")
-        employee_profile.department = department
-        employee_profile.save(update_fields=["department"])
 
         self.client.force_login(admin)
 
@@ -378,18 +364,15 @@ class AdminUsersTests(DashboardRoleBaseTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Editar usuario")
         self.assertContains(response, "Clara Diaz")
-        self.assertContains(response, "Finanzas")
         self.assertContains(response, "Rol y estado")
         self.assertContains(response, "Nuevo rol principal")
         self.assertContains(response, "Estado de la cuenta")
         self.assertContains(response, "Guardar cambios")
+        self.assertNotContains(response, "Departamento")
+        self.assertNotContains(response, "Guardar departamento")
         self.assertContains(
             response,
             reverse("dashboard:admin-user-edit", args=[target_user.pk]),
-        )
-        self.assertContains(
-            response,
-            reverse("dashboard:admin-user-department", args=[target_user.pk]),
         )
 
     def test_admin_can_change_the_primary_role_from_users_list(self):
@@ -547,31 +530,3 @@ class AdminUsersTests(DashboardRoleBaseTestCase):
         self.assertRedirects(response, edit_url)
         target_user.refresh_from_db()
         self.assertTrue(target_user.is_active)
-
-    def test_admin_can_change_department_from_users_list(self):
-        admin = self.create_active_user(
-            email="admin-change-department@example.com",
-            dni="56565656P",
-        )
-        admin.roles.set([self.admin_role])
-
-        target_user = self.create_active_user(
-            email="target-change-department@example.com",
-            dni="78787878K",
-        )
-        employee_profile = self.create_employee_profile(target_user)
-        previous_department = self.create_department(name="Limpieza")
-        new_department = self.create_department(name="Mantenimiento")
-        employee_profile.department = previous_department
-        employee_profile.save(update_fields=["department"])
-
-        self.client.force_login(admin)
-
-        response = self.client.post(
-            reverse("dashboard:admin-user-department", args=[target_user.pk]),
-            {"department": new_department.pk},
-        )
-
-        self.assertRedirects(response, reverse("dashboard:admin-users"))
-        employee_profile.refresh_from_db()
-        self.assertEqual(employee_profile.department, new_department)

@@ -57,7 +57,7 @@ class EmployeeProfileViewTests(TestCase):
         self.assertContains(response, "Guardar cambios")
         self.assertContains(response, "Cambiar contrasena")
         self.assertContains(response, "Actualizar contrasena")
-        self.assertContains(response, "Departamento")
+        self.assertNotContains(response, "Departamento")
         self.assertContains(response, "Próximos pasos")
         self.assertNotContains(response, 'name="hire_date"')
         self.assertNotContains(response, 'name="email"')

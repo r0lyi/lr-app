@@ -6,7 +6,6 @@ from .views import (
     admin_home_view,
     admin_requests_view,
     admin_user_active_state_update_view,
-    admin_user_department_update_view,
     admin_user_edit_view,
     admin_user_list_view,
     admin_user_primary_role_update_view,
@@ -35,11 +34,6 @@ urlpatterns = [
         "admin/users/<int:user_id>/access-state/",
         admin_user_active_state_update_view,
         name="admin-user-access-state",
-    ),
-    path(
-        "admin/users/<int:user_id>/department/",
-        admin_user_department_update_view,
-        name="admin-user-department",
     ),
     path("error-400/", error_400_view, name="error-400"),
 ]

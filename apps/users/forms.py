@@ -4,7 +4,6 @@ from django import forms
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.hashers import UNUSABLE_PASSWORD_PREFIX
 
-from apps.employees.models import Department
 from apps.users.models import User
 
 from apps.users.services.validators import normalize_dni, validate_dni
@@ -85,7 +84,7 @@ class AdminUserFilterForm(forms.Form):
 
     La pantalla de usuarios la usan personas que necesitan localizar cuentas
     con rapidez, asi que este formulario prioriza criterios muy directos:
-    nombre o correo, rol principal, estado de acceso y departamento.
+    nombre o correo, rol principal y estado de acceso.
     """
 
     ACCESS_STATE_ACTIVE = "active"
@@ -124,19 +123,6 @@ class AdminUserFilterForm(forms.Form):
         ),
         widget=forms.Select(attrs={"class": "ui-select"}),
     )
-    department = forms.ModelChoiceField(
-        required=False,
-        label="Departamento",
-        queryset=Department.objects.none(),
-        empty_label="Todos los departamentos",
-        widget=forms.Select(attrs={"class": "ui-select"}),
-    )
-
-    def __init__(self, *args, **kwargs):
-        """Carga departamentos al vuelo para no fijar queryset al importar."""
-
-        super().__init__(*args, **kwargs)
-        self.fields["department"].queryset = Department.objects.order_by("name")
 
 
 class AdminUserCreateForm(forms.Form):
