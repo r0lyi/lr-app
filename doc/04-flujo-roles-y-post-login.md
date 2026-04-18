@@ -96,6 +96,35 @@ if is_new:
 
 No significa que todo usuario vaya a quedarse como empleado para siempre. Solo marca el punto de partida.
 
+## Gestion administrativa de usuarios
+
+El panel de administracion funcional permite crear y editar usuarios sin entrar
+directamente a Django Admin.
+
+La gestion vive principalmente en:
+
+- `apps/users/views/admin/list.py`: listado y modal de alta rapida.
+- `apps/users/views/admin/edit.py`: edicion de rol y estado.
+- `apps/users/services/admin/management.py`: reglas de negocio de administracion.
+
+Reglas importantes:
+
+- Al crear un usuario desde el panel admin se pide solo `DNI` y `email`.
+- El usuario nace inactivo y sin contraseña usable.
+- Se envia un enlace de activacion para que la persona configure su contraseña.
+- El usuario nuevo mantiene `employee` como rol base hasta que un admin lo cambie.
+- Cambiar rol significa reemplazar el rol funcional, no añadir roles acumulados.
+- No se permite quitar el ultimo admin funcional del sistema.
+- No se permite activar manualmente una cuenta sin contraseña usable.
+- No se permite desactivar al ultimo admin activo.
+
+Acciones de administracion que generan auditoria:
+
+- crear usuario
+- cambiar rol principal
+- activar o desactivar acceso
+- cambiar departamento si se usa desde flujos internos preparados
+
 ## El contrato real de las rutas
 
 Estas son las rutas que definen el flujo post-login:
@@ -197,6 +226,7 @@ Y al guardar:
 - crea la ficha `Employee` si no existia
 - actualiza el email del `User` si ha cambiado
 - redirige otra vez a `dashboard:home`
+- registra cambios de datos de usuario en el historial de actividad
 
 Ese ultimo redirect es deliberado: deja que el mismo dispatcher confirme que el usuario ya puede entrar al panel correcto.
 
@@ -323,6 +353,8 @@ Los tests mas utiles para leer este flujo son:
 - `apps/dashboard/tests/test_dashboard_permissions.py`
 - `apps/dashboard/tests/test_dashboard_navigation.py`
 - `apps/users/tests/test_auth_flow.py`
+- `apps/dashboard/tests/test_admin_users.py`
+- `apps/audit/tests/test_audit_log_view.py`
 
 En conjunto cubren:
 

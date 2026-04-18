@@ -105,6 +105,12 @@ Eso evita problemas como:
 - letras incorrectas
 - formatos invalidos
 
+Detalle importante para mantenimiento:
+
+- El sistema guarda y compara el DNI normalizado.
+- La letra del DNI queda en mayuscula.
+- El login debe validar usando ese valor normalizado para evitar diferencias entre `12345678z` y `12345678Z`.
+
 ## 4. Formularios implicados
 
 En `apps/users/forms.py` hay tres formularios:
@@ -277,6 +283,11 @@ def set_password(user: User, password: str) -> None:
 - la cuenta se activa
 - se registra la fecha de activacion
 - el token queda invalidado para no poder reutilizarlo
+- se registra en auditoria la accion `Cuenta activada`
+
+La auditoria se registra desde `apps/users/services/auth_service.py` llamando a
+`log_user_account_activated(...)`. Esto permite saber cuando un usuario completo
+su acceso inicial o recupero su acceso mediante el enlace temporal.
 
 ## 10. Login con DNI y contraseña
 
@@ -493,6 +504,7 @@ No hay dos flujos separados; hay un flujo reutilizable.
 ### Medidas ya presentes
 
 - validacion fuerte del DNI
+- normalizacion del DNI con letra en mayuscula
 - contraseña hasheada con `set_password`
 - usuario inactivo hasta terminar activacion
 - token con expiracion de 24 horas
@@ -500,6 +512,7 @@ No hay dos flujos separados; hay un flujo reutilizable.
 - mensaje generico para no revelar si el DNI existe
 - rate limit por IP + identificador
 - CSRF activo en formularios POST
+- auditoria de activacion de cuenta
 
 ### Detalle tecnico importante
 

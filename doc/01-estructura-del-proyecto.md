@@ -2,7 +2,8 @@
 
 ## Vista general
 
-Este proyecto sigue una organizacion por dominios dentro de `apps/`. La idea es que cada modulo del negocio tenga su propia carpeta y que dentro de ella viva todo lo necesario: modelos, vistas, servicios, tests, templates y URLs.
+El proyecto se organiza por dominios funcionales dentro de `apps/`. Cada dominio
+agrupa su modelo, vistas, servicios, selectores, templates, static y tests.
 
 ```text
 lr-app/
@@ -15,10 +16,8 @@ lr-app/
 │   ├── users/
 │   └── vacations/
 ├── config/
-│   ├── settings/
-│   ├── asgi.py
-│   ├── urls.py
-│   └── wsgi.py
+├── doc/
+├── docs/
 ├── static/
 ├── templates/
 ├── manage.py
@@ -26,166 +25,179 @@ lr-app/
 └── uv.lock
 ```
 
-## Que significa cada carpeta raiz
+La idea importante es esta:
 
-### `apps/`
+- `apps/` contiene negocio.
+- `templates/` y `static/` globales contienen piezas compartidas.
+- `doc/` explica el producto y sus flujos.
+- `docs/` define convenciones tecnicas y decisiones.
+- `config/` arranca Django y conecta settings, URLs, ASGI y WSGI.
 
-Es el corazon funcional del proyecto. Cada subcarpeta representa una parte del negocio.
+## Que contiene cada app
 
-- `apps/users/`: usuario personalizado, roles, validacion de DNI, email de activacion, backend de autenticacion por DNI y vistas de login.
-- `apps/employees/`: perfil de empleado y departamentos.
-- `apps/vacations/`: solicitudes de vacaciones y sus estados.
-- `apps/notifications/`: notificaciones para usuarios.
-- `apps/audit/`: logs de auditoria e historial de exportaciones.
-- `apps/dashboard/`: landing autenticada despues del login.
-- `apps/core/`: piezas compartidas entre apps, como modelos base, decoradores y utilidades de rate limit.
+- `apps/users/`: usuario personalizado, DNI, roles, login, activacion, formularios y gestion admin de usuarios.
+- `apps/employees/`: ficha `Employee`, departamentos, onboarding, perfil y panel del empleado.
+- `apps/vacations/`: solicitudes de vacaciones, estados, validaciones, revision, eliminacion y exportacion.
+- `apps/notifications/`: notificaciones internas para empleados, RRHH y administracion.
+- `apps/audit/`: log de actividad, filtros de auditoria e historial de exportaciones.
+- `apps/dashboard/`: shell autenticado, layout, navegacion y homes por rol.
+- `apps/core/`: utilidades transversales, paginacion, decoradores, modelos base y helpers de presentacion.
 
-### `config/`
-
-Contiene la configuracion global de Django.
-
-- `config/urls.py`: define las rutas raiz del sitio.
-- `config/settings/`: separa settings comunes y settings por entorno.
-- `config/asgi.py` y `config/wsgi.py`: puntos de entrada para servir la aplicacion.
-
-### `templates/`
-
-Templates globales compartidos. En este proyecto se usan sobre todo para:
-
-- `templates/base.html`: layout base.
-- `templates/components/`: componentes reutilizables, como toasts y campos de formulario.
-- `templates/emails/`: emails HTML y texto plano.
-
-### `static/`
-
-Activos globales del frontend.
-
-- `static/css/foundation/`: estilos base y tokens visuales.
-- `static/css/components/`: botones, formularios, modales, toasts.
-- `static/css/layout/`: helpers de layout.
-- `static/css/pages/`: CSS especifico de paginas, por ejemplo auth.
-- `static/js/`: JavaScript global, como el manejo de toasts.
-- `static/images/`: logos e iconos.
-
-### Archivos de raiz
-
-- `manage.py`: ejecuta comandos de Django.
-- `pyproject.toml`: dependencias del proyecto.
-- `uv.lock`: lockfile del entorno.
-- `main.py`: no forma parte del flujo normal de Django; parece un archivo generado por plantilla inicial.
-
-## Patron interno de cada app
-
-Aunque algunas carpetas aun estan vacias o preparadas para crecer, el patron general ya se ve claro:
+## Patron interno recomendado
 
 ```text
 apps/<dominio>/
 ├── admin.py
 ├── apps.py
+├── forms.py
 ├── migrations/
 ├── models/
 ├── selectors/
 ├── services/
-├── templates/
+├── static/<dominio>/
+├── templates/<dominio>/
 ├── tests/
-├── views/
-└── urls.py
+├── urls.py
+└── views/
 ```
 
-## Para que sirve cada tipo de carpeta
+No todas las apps tienen todas las carpetas, pero si una responsabilidad crece,
+debe moverse al lugar correcto.
+
+## Responsabilidad de cada capa
 
 ### `models/`
 
-Define las tablas y relaciones de base de datos.
+Define tablas, relaciones y restricciones de base de datos.
 
-Ejemplo:
+Ejemplos:
 
-- `apps/users/models/user.py`: define el usuario personalizado.
-- `apps/employees/models/employee.py`: relaciona un usuario con su perfil de empleado.
+- `apps/users/models/user.py`: usuario personalizado con `email`, `dni`, token de activacion y roles.
+- `apps/employees/models/employee.py`: ficha interna que conecta usuario con datos operativos.
+- `apps/vacations/models/vacation_request.py`: solicitud de vacaciones y rango de fechas.
 
 ### `views/`
 
-Reciben la peticion HTTP, validan formularios, llaman a servicios y devuelven la respuesta.
+Reciben la peticion HTTP y orquestan el caso de uso.
 
-Ejemplo:
+Una vista puede:
 
-- `apps/users/views/auth_views.py`: login, logout, activacion y establecimiento de contraseña.
+- Validar formularios.
+- Llamar a un servicio.
+- Preparar contexto para un template.
+- Redirigir o devolver errores.
+
+Una vista no debe:
+
+- Duplicar reglas de negocio.
+- Construir consultas complejas que deban vivir en `selectors`.
+- Registrar efectos secundarios sin pasar por el servicio adecuado cuando exista.
 
 ### `services/`
 
-Contienen la logica de negocio para no cargar demasiado las vistas.
+Ejecutan escritura y reglas de negocio.
 
-Ejemplo:
+Ejemplos:
 
-- `apps/users/services/auth_service.py`: genera tokens, valida vencimientos y guarda contraseñas.
-- `apps/users/services/email_service.py`: construye y envia el email de activacion.
-- `apps/core/utils/rate_limits.py`: controla intentos de login y activacion.
+- Crear una solicitud tras validar fechas, saldo y solapamientos.
+- Revisar una solicitud desde RRHH y registrar auditoria.
+- Crear un usuario pendiente de activacion.
+- Generar un enlace de activacion.
 
 ### `selectors/`
 
-La idea de esta carpeta es centralizar lecturas complejas o consultas reutilizables. En este repositorio muchos `selectors/` estan preparados pero todavia no tienen implementacion real. Aun asi, la estructura ya deja claro que el proyecto quiere separar:
+Concentran lecturas y consultas ORM reutilizables.
 
-- escritura y reglas de negocio en `services/`
-- lectura especializada en `selectors/`
+Ejemplos:
+
+- Obtener solicitudes filtradas para RRHH.
+- Calcular contadores de dashboard.
+- Preparar filas de usuarios para el panel admin.
+- Consultar actividad visible del log.
 
 ### `templates/`
 
-Cada app puede tener sus propias vistas HTML.
+Cada app es dueña de sus templates de dominio.
 
-Ejemplo:
+Reglas clave:
 
-- `apps/users/templates/users/login.html`
-- `apps/users/templates/users/request_activation.html`
-- `apps/users/templates/users/set_password.html`
+- `pages/`: wrapper completo renderizado por una vista.
+- `partials/`: fragmentos internos de una pantalla.
+- `templates/components/`: componentes compartidos entre apps.
+- Una app no debe incluir directamente templates privados de otra app.
 
-### `tests/`
+Referencia: [`../docs/conventions/templates.md`](../docs/conventions/templates.md).
 
-Los tests viven junto al dominio al que pertenecen.
+### `static/`
 
-Ejemplo:
+Se divide entre assets globales y assets de app.
 
-- `apps/users/tests/test_auth_flow.py`: prueba el flujo completo de activacion y login.
+- `static/`: foundations, layouts, componentes globales, branding y JS compartido.
+- `apps/<app>/static/<app>/`: estilos o scripts propios de una pagina o flujo de esa app.
 
-## Por que esta estructura es util
+Referencia: [`../docs/conventions/static.md`](../docs/conventions/static.md).
 
-### 1. Reduce el acoplamiento
+## `dashboard` como shell, no como dueño de todo
 
-La logica del login no esta mezclada con vacaciones, notificaciones o auditoria.
+`dashboard` sirve para:
 
-### 2. Hace mas facil crecer
+- Resolver a que home va el usuario.
+- Construir el layout autenticado.
+- Renderizar navegacion por rol.
+- Mostrar las homes de cada rol cuando actuan como entrada.
 
-Si mas adelante `employees` o `vacations` necesitan servicios, vistas, APIs o consultas complejas, ya existe un lugar claro donde poner cada cosa.
+Pero las pantallas de dominio siguen perteneciendo a su app:
 
-### 3. Facilita el onboarding
+- Solicitar vacaciones vive en `apps/vacations/`.
+- Perfil y onboarding viven en `apps/employees/`.
+- Auditoria vive en `apps/audit/`.
+- Gestion de usuarios vive en `apps/users/` aunque se vea dentro del panel admin.
 
-Un desarrollador nuevo puede entrar en `apps/users/` y encontrar casi todo lo relacionado con autenticacion sin navegar por medio proyecto.
+Decision relacionada: [`../docs/adr/001-dashboard-ownership.md`](../docs/adr/001-dashboard-ownership.md).
 
-### 4. Ayuda a mantener vistas delgadas
+## `doc/` y `docs/`
 
-La vista se ocupa de HTTP; el servicio se ocupa de la regla de negocio.
+El proyecto usa dos carpetas porque tienen publicos distintos.
 
-## Como se reparte el flujo de autenticacion dentro del proyecto
+### `doc/`
 
-El auth no vive en un solo archivo. Esta distribuido intencionalmente:
+Es la documentacion de onboarding:
 
-- `apps/users/models/user.py`: define el usuario y los campos del token.
-- `apps/users/forms.py`: valida el DNI y las contraseñas.
-- `apps/users/services/validators.py`: normaliza y valida el DNI.
-- `apps/users/services/backends.py`: permite autenticar usando DNI.
-- `apps/users/services/auth_service.py`: genera y valida tokens; activa cuentas.
-- `apps/users/services/email_service.py`: crea y envia el correo.
-- `apps/users/views/auth_views.py`: orquesta la peticion HTTP.
-- `apps/users/urls.py`: expone las rutas.
-- `apps/users/templates/users/*.html`: presenta la UI del login y activacion.
-- `templates/emails/*`: contenido del email de activacion.
-- `apps/users/tests/test_auth_flow.py`: comprueba el flujo completo.
+- Explica flujos completos.
+- Usa lenguaje didactico.
+- Incluye listas de validaciones, efectos secundarios y ejemplos mentales.
+- Esta pensada para leer antes de implementar.
+
+### `docs/`
+
+Es referencia tecnica:
+
+- Convenciones de codigo.
+- ADR.
+- Estructura oficial.
+- Reglas cortas para decidir donde poner un archivo.
+
+Entrada tecnica: [`../docs/README.md`](../docs/README.md).
 
 ## Modelo mental simple
 
-Si se lo explicas a una persona nueva, esta es una buena forma:
+Si eres nuevo, piensa en el proyecto asi:
 
-- `config/` dice a Django como arrancar.
-- `apps/` dice que sabe hacer el negocio.
-- `templates/` dice como se ve.
-- `static/` dice como se estiliza y que scripts usa.
-- `tests/` comprueban que todo eso sigue funcionando.
+- `users` sabe quien eres y como entras.
+- `employees` sabe tus datos internos como empleado.
+- `vacations` sabe que vacaciones pides y como se revisan.
+- `notifications` avisa a las personas correctas.
+- `audit` registra que acciones importantes ocurrieron.
+- `dashboard` te da una experiencia autenticada segun tu rol.
+- `core` ofrece piezas compartidas para no repetir codigo.
+
+## Regla practica antes de crear codigo
+
+Antes de crear un archivo nuevo, hazte estas preguntas:
+
+- Si escribe o valida negocio, debe ir a `services`.
+- Si solo lee o prepara consultas, debe ir a `selectors`.
+- Si recibe HTTP, debe ir a `views`.
+- Si es UI compartida, debe ir a `templates/components/` o `static/`.
+- Si es UI de una app, debe vivir dentro de esa app.
+- Si cambia una decision de arquitectura, debe actualizar `docs/adr/`.
