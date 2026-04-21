@@ -1,6 +1,9 @@
 """Tests basicos de la vista de historial de exportaciones."""
 
 from datetime import timedelta
+from io import BytesIO
+from xml.etree import ElementTree
+from zipfile import ZipFile
 
 from django.urls import reverse
 from django.utils import timezone
@@ -13,6 +16,52 @@ from apps.audit.services import (
 from apps.users.models import User
 
 from apps.dashboard.tests.base import DashboardRoleBaseTestCase
+
+
+XLSX_NAMESPACE = {"sheet": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
+
+
+def build_snapshot_row(
+    *,
+    employee_number="88888888Y",
+    last_name="Lopez Gomez",
+    first_name="Ana",
+    start_date="01-07-2026",
+    end_date="05-07-2026",
+    phone="600123123",
+    requested_days=5,
+):
+    return {
+        "employee_number": employee_number,
+        "last_name": last_name,
+        "first_name": first_name,
+        "start_date": start_date,
+        "end_date": end_date,
+        "phone": phone,
+        "requested_days": requested_days,
+    }
+
+
+def read_sheet_rows(file_content):
+    with ZipFile(BytesIO(file_content)) as workbook:
+        sheet_xml = workbook.read("xl/worksheets/sheet1.xml").decode("utf-8")
+    root = ElementTree.fromstring(sheet_xml)
+
+    rows = []
+    for row in root.findall(".//sheet:row", XLSX_NAMESPACE):
+        values = []
+        for cell in row.findall("sheet:c", XLSX_NAMESPACE):
+            inline_text = cell.find("sheet:is/sheet:t", XLSX_NAMESPACE)
+            numeric_value = cell.find("sheet:v", XLSX_NAMESPACE)
+            if inline_text is not None:
+                values.append(inline_text.text or "")
+            elif numeric_value is not None:
+                values.append(numeric_value.text or "")
+            else:
+                values.append("")
+        rows.append(values)
+
+    return rows
 
 
 class ExportHistoryViewTests(DashboardRoleBaseTestCase):
@@ -43,7 +92,8 @@ class ExportHistoryViewTests(DashboardRoleBaseTestCase):
         mark_export_success(
             export_history=export_history,
             file_name="solicitudes_prueba.xlsx",
-            file_bytes=b"excel-content",
+            rows_snapshot=[build_snapshot_row(), build_snapshot_row()],
+            columns_version="rrhh_vacation_requests_v1",
             total_records=2,
         )
 
@@ -63,6 +113,10 @@ class ExportHistoryViewTests(DashboardRoleBaseTestCase):
             response,
             reverse("audit:download-export", args=[export_history.pk]),
         )
+        self.assertContains(
+            response,
+            reverse("audit:preview-export", args=[export_history.pk]),
+        )
 
     def test_rrhh_can_filter_export_history_by_date_range(self):
         rrhh_user = self.create_rrhh_user(
@@ -77,7 +131,8 @@ class ExportHistoryViewTests(DashboardRoleBaseTestCase):
         mark_export_success(
             export_history=recent_export,
             file_name="vacation_26-03-2026.xlsx",
-            file_bytes=b"recent-file",
+            rows_snapshot=[build_snapshot_row(requested_days=3)],
+            columns_version="rrhh_vacation_requests_v1",
             total_records=3,
         )
 
@@ -89,7 +144,8 @@ class ExportHistoryViewTests(DashboardRoleBaseTestCase):
         mark_export_success(
             export_history=old_export,
             file_name="vacation_15-02-2026.xlsx",
-            file_bytes=b"old-file",
+            rows_snapshot=[build_snapshot_row(requested_days=1)],
+            columns_version="rrhh_vacation_requests_v1",
             total_records=1,
         )
 
@@ -135,7 +191,8 @@ class ExportHistoryViewTests(DashboardRoleBaseTestCase):
             mark_export_success(
                 export_history=export_history,
                 file_name=f"solicitudes_paginadas_{index:02d}.xlsx",
-                file_bytes=b"excel-content",
+                rows_snapshot=[build_snapshot_row(requested_days=index + 1)],
+                columns_version="rrhh_vacation_requests_v1",
                 total_records=index + 1,
             )
 
@@ -170,7 +227,15 @@ class ExportHistoryViewTests(DashboardRoleBaseTestCase):
         mark_export_success(
             export_history=export_history,
             file_name="solicitudes_descarga.xlsx",
-            file_bytes=b"excel-download-content",
+            rows_snapshot=[
+                build_snapshot_row(
+                    employee_number="55555555K",
+                    last_name="Descarga",
+                    first_name="Elena",
+                    requested_days=7,
+                )
+            ],
+            columns_version="rrhh_vacation_requests_v1",
             total_records=1,
         )
 
@@ -183,7 +248,46 @@ class ExportHistoryViewTests(DashboardRoleBaseTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn("attachment;", response["Content-Disposition"])
         self.assertIn("solicitudes_descarga.xlsx", response["Content-Disposition"])
+        rows = read_sheet_rows(response.content)
         self.assertEqual(
-            b"".join(response.streaming_content),
-            b"excel-download-content",
+            rows[1],
+            ["55555555K", "Descarga", "Elena", "01-07-2026", "05-07-2026", "600123123", "7"],
         )
+
+    def test_rrhh_can_preview_a_previous_export_snapshot(self):
+        rrhh_user = self.create_rrhh_user(
+            email="rrhh-history-preview@example.com",
+            dni="12121212M",
+        )
+        export_history = create_export_history(
+            user=rrhh_user,
+            export_type=EXPORT_TYPE_RRHH_VACATION_REQUESTS,
+            filters={"status": "pending"},
+        )
+        mark_export_success(
+            export_history=export_history,
+            file_name="solicitudes_preview.xlsx",
+            rows_snapshot=[
+                build_snapshot_row(
+                    employee_number="12121212M",
+                    last_name="Preview",
+                    first_name="Paula",
+                    requested_days=4,
+                )
+            ],
+            columns_version="rrhh_vacation_requests_v1",
+            total_records=1,
+        )
+
+        self.client.force_login(rrhh_user)
+
+        response = self.client.get(
+            reverse("audit:preview-export", args=[export_history.pk])
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Vista previa de exportación")
+        self.assertContains(response, "solicitudes_preview.xlsx")
+        self.assertContains(response, "12121212M")
+        self.assertContains(response, "Preview")
+        self.assertContains(response, "4")

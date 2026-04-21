@@ -156,17 +156,40 @@ Cuando se active en interfaz, conviene documentar:
 ## Exportacion a Excel
 
 La exportacion se ejecuta desde la vista de RRHH con los filtros actuales.
+El resultado se descarga directamente en el navegador como archivo `.xlsx`; no
+se envia por correo electronico.
+
+Columnas del archivo, en orden:
+
+- Numero empleado.
+- Apellidos.
+- Nombre.
+- Fecha inicio.
+- Fecha final.
+- Telefono.
+- Dias solicitados.
+
+El archivo define anchos de columna legibles y cabecera en negrita para evitar
+que los textos queden ocultos al abrirlo.
+
+Cada exportacion guarda un snapshot JSON de las filas exportadas en
+`ExportHistory.rows_snapshot_json`. El historial no depende de archivos en disco:
+al descargar o previsualizar una exportacion historica, el Excel o la tabla se
+regeneran desde ese snapshot.
+
+Los nombres de archivo usan fecha ISO y sufijo corto unico:
+
+`vacation_2026-04-21_9f3a2c.xlsx`
 
 Debe registrar:
 
 - Usuario que exporto.
 - Tipo de exportacion.
 - Nombre de archivo.
-- Ruta de archivo.
+- Snapshot JSON.
+- Version de columnas.
 - Fecha de creacion.
 - Total de registros si el servicio lo informa.
-
-El archivo se guarda en `var/exports/`, fuera del codigo versionado.
 
 ## Historial de exportaciones
 

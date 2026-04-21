@@ -18,7 +18,6 @@ lr-app/
   docs/
   static/
   templates/
-  var/
 ```
 
 Responsabilidades:
@@ -29,7 +28,6 @@ Responsabilidades:
 - `docs/`: referencia tecnica, convenciones y ADR.
 - `static/`: CSS, JS, imagenes y componentes visuales compartidos.
 - `templates/`: layouts y componentes HTML compartidos.
-- `var/`: archivos generados en runtime, como exportaciones.
 
 ## Apps actuales
 

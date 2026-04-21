@@ -1,9 +1,12 @@
 """Tests del flujo de exportacion Excel desde el panel de RRHH."""
 
+import re
 from datetime import date
 from io import BytesIO
+from xml.etree import ElementTree
 from zipfile import ZipFile
 
+from django.core import mail
 from django.urls import reverse
 from django.utils import timezone
 
@@ -13,6 +16,35 @@ from apps.users.models import Role, User
 from apps.vacations.models import VacationRequest, VacationStatus
 
 from .base import VacationBaseTestCase
+
+
+XLSX_NAMESPACE = {"sheet": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
+
+
+def _read_workbook_file(file_content, path):
+    with ZipFile(BytesIO(file_content)) as workbook:
+        return workbook.read(path).decode("utf-8")
+
+
+def _read_sheet_rows(file_content):
+    sheet_xml = _read_workbook_file(file_content, "xl/worksheets/sheet1.xml")
+    root = ElementTree.fromstring(sheet_xml)
+
+    rows = []
+    for row in root.findall(".//sheet:row", XLSX_NAMESPACE):
+        values = []
+        for cell in row.findall("sheet:c", XLSX_NAMESPACE):
+            inline_text = cell.find("sheet:is/sheet:t", XLSX_NAMESPACE)
+            numeric_value = cell.find("sheet:v", XLSX_NAMESPACE)
+            if inline_text is not None:
+                values.append(inline_text.text or "")
+            elif numeric_value is not None:
+                values.append(numeric_value.text or "")
+            else:
+                values.append("")
+        rows.append(values)
+
+    return rows
 
 
 class ExportRrhhRequestsExcelViewTests(VacationBaseTestCase):
@@ -57,10 +89,14 @@ class ExportRrhhRequestsExcelViewTests(VacationBaseTestCase):
         _employee_one_user, employee_one = self.create_employee_user(
             email="employee-export-one@example.com",
             dni="88888888Y",
+            first_name="Ana",
+            last_name="Lopez Gomez",
         )
         _employee_two_user, employee_two = self.create_employee_user(
             email="employee-export-two@example.com",
             dni="99999999R",
+            first_name="Carlos",
+            last_name="Fuera Lista",
         )
 
         VacationRequest.objects.create(
@@ -79,6 +115,7 @@ class ExportRrhhRequestsExcelViewTests(VacationBaseTestCase):
         )
 
         self.client.force_login(rrhh_user)
+        mail.outbox.clear()
 
         response = self.client.get(
             reverse("vacations:export-rrhh-requests-excel"),
@@ -91,8 +128,13 @@ class ExportRrhhRequestsExcelViewTests(VacationBaseTestCase):
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         )
         self.assertIn("attachment;", response["Content-Disposition"])
-        expected_file_name = f'vacation_{timezone.localdate().strftime("%d-%m-%Y")}.xlsx'
-        self.assertIn(expected_file_name, response["Content-Disposition"])
+        expected_file_name_pattern = (
+            rf"vacation_{timezone.localdate().isoformat()}_[0-9a-f]{{6}}\.xlsx"
+        )
+        content_disposition = response["Content-Disposition"]
+        file_name_match = re.search(expected_file_name_pattern, content_disposition)
+        self.assertIsNotNone(file_name_match)
+        self.assertEqual(mail.outbox, [])
 
         export_history = ExportHistory.objects.get()
         self.assertEqual(
@@ -102,17 +144,74 @@ class ExportRrhhRequestsExcelViewTests(VacationBaseTestCase):
         self.assertEqual(export_history.status, "success")
         self.assertEqual(export_history.total_records, 1)
         self.assertEqual(export_history.filters_json["status"], "pending")
-        self.assertEqual(export_history.file_name, expected_file_name)
-        self.assertTrue(export_history.file_path)
+        self.assertRegex(export_history.file_name, expected_file_name_pattern)
+        self.assertEqual(
+            export_history.columns_version,
+            "rrhh_vacation_requests_v1",
+        )
+        self.assertEqual(
+            export_history.rows_snapshot_json,
+            [
+                {
+                    "employee_number": "88888888Y",
+                    "last_name": "Lopez Gomez",
+                    "first_name": "Ana",
+                    "start_date": "01-07-2026",
+                    "end_date": "05-07-2026",
+                    "phone": "600123123",
+                    "requested_days": 5,
+                }
+            ],
+        )
 
-        workbook = ZipFile(BytesIO(response.content))
-        sheet_xml = workbook.read("xl/worksheets/sheet1.xml").decode("utf-8")
-        self.assertIn("Lopez", sheet_xml)
-        self.assertIn("Ana", sheet_xml)
-        self.assertIn("pending", sheet_xml)
-        self.assertNotIn("approved", sheet_xml)
-        self.assertNotIn("Fecha alta", sheet_xml)
-        self.assertNotIn("Observaciones", sheet_xml)
+        rows = _read_sheet_rows(response.content)
+        self.assertEqual(
+            rows,
+            [
+                [
+                    "Numero empleado",
+                    "Apellidos",
+                    "Nombre",
+                    "Fecha inicio",
+                    "Fecha final",
+                    "Telefono",
+                    "Dias solicitados",
+                ],
+                [
+                    "88888888Y",
+                    "Lopez Gomez",
+                    "Ana",
+                    "01-07-2026",
+                    "05-07-2026",
+                    "600123123",
+                    "5",
+                ],
+            ],
+        )
+        sheet_xml = _read_workbook_file(response.content, "xl/worksheets/sheet1.xml")
+        sheet_root = ElementTree.fromstring(sheet_xml)
+        columns = sheet_root.findall(".//sheet:col", XLSX_NAMESPACE)
+        self.assertEqual(
+            [column.attrib["width"] for column in columns],
+            ["18", "30", "22", "16", "16", "18", "18"],
+        )
+        self.assertEqual(
+            [column.attrib["customWidth"] for column in columns],
+            ["1", "1", "1", "1", "1", "1", "1"],
+        )
+        header_cells = sheet_root.findall(
+            ".//sheet:row[@r='1']/sheet:c",
+            XLSX_NAMESPACE,
+        )
+        self.assertTrue(header_cells)
+        self.assertTrue(all(cell.attrib.get("s") == "1" for cell in header_cells))
+        requested_days_cell = sheet_root.find(".//sheet:c[@r='G2']", XLSX_NAMESPACE)
+        self.assertIsNotNone(requested_days_cell)
+        self.assertNotIn("t", requested_days_cell.attrib)
+
+        styles_xml = _read_workbook_file(response.content, "xl/styles.xml")
+        self.assertIn("<b/>", styles_xml)
+        self.assertIn('<cellXfs count="2">', styles_xml)
 
     def test_admin_can_export_filtered_requests_to_excel_and_log_history(self):
         admin_user = self.create_admin_user(
@@ -199,14 +298,24 @@ class ExportRrhhRequestsExcelViewTests(VacationBaseTestCase):
 
         self.assertEqual(response.status_code, 200)
 
-        workbook = ZipFile(BytesIO(response.content))
-        sheet_xml = workbook.read("xl/worksheets/sheet1.xml").decode("utf-8")
-        self.assertIn("Apellidos", sheet_xml)
-        self.assertIn("Nombre", sheet_xml)
-        self.assertIn("Fecha inicio", sheet_xml)
-        self.assertIn("Fecha final", sheet_xml)
-        self.assertIn("Dias seleccionados", sheet_xml)
-        self.assertIn("Estado", sheet_xml)
-        self.assertNotIn("Fecha alta", sheet_xml)
-        self.assertNotIn("Observaciones", sheet_xml)
-        self.assertLess(sheet_xml.index("Veterana"), sheet_xml.index("Reciente"))
+        rows = _read_sheet_rows(response.content)
+        self.assertEqual(
+            rows[0],
+            [
+                "Numero empleado",
+                "Apellidos",
+                "Nombre",
+                "Fecha inicio",
+                "Fecha final",
+                "Telefono",
+                "Dias solicitados",
+            ],
+        )
+        self.assertNotIn("Dias seleccionados", rows[0])
+        self.assertNotIn("Estado", rows[0])
+        self.assertNotIn("Fecha alta", rows[0])
+        self.assertNotIn("Observaciones", rows[0])
+        self.assertEqual(
+            [row[1] for row in rows[1:]],
+            ["Veterana", "Reciente"],
+        )

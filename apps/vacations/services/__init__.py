@@ -1,6 +1,11 @@
 """Servicios reservados para logica de vacaciones."""
 
-from .export.excel import build_rrhh_vacation_requests_excel
+from .export.excel import (
+    RRHH_EXPORT_COLUMNS,
+    RRHH_EXPORT_COLUMNS_VERSION,
+    build_rrhh_vacation_requests_excel,
+    build_rrhh_vacation_requests_excel_from_snapshot,
+)
 from .export.review import build_rrhh_export_review
 from .requests.create import create_employee_vacation_request
 from .requests.delete import delete_pending_vacation_request
@@ -12,6 +17,9 @@ from .requests.validators import (
 
 __all__ = [
     "build_rrhh_vacation_requests_excel",
+    "build_rrhh_vacation_requests_excel_from_snapshot",
+    "RRHH_EXPORT_COLUMNS",
+    "RRHH_EXPORT_COLUMNS_VERSION",
     "build_rrhh_export_review",
     "calculate_requested_natural_days",
     "create_employee_vacation_request",

@@ -16,7 +16,6 @@ db.sqlite3
 # Archivos estáticos y media (generados en local)
 media/
 staticfiles/
-var/exports/
 generated_exports/
 
 # Logs

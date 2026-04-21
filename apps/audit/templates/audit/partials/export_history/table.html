@@ -8,6 +8,7 @@
             <th>Usuario</th>
             <th>Archivo</th>
             <th>Cantidad de solicitudes</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -22,7 +23,7 @@
                 {% endif %}
               </td>
               <td data-label="Archivo">
-                {% if export_item.file_path %}
+                {% if export_item.rows_snapshot_json is not None %}
                   <a class="export-history-table__file-link" href="{% url 'audit:download-export' export_item.pk %}">
                     <span class="export-history-table__file-name">
                       {{ export_item.file_name|default:"Descargar" }}
@@ -39,6 +40,18 @@
                 <span class="export-history-table__requests-count">
                   {{ export_item.total_records|default:"-" }}
                 </span>
+              </td>
+              <td data-label="Acciones">
+                {% if export_item.rows_snapshot_json is not None %}
+                  <a class="export-history-table__preview-link" href="{% url 'audit:preview-export' export_item.pk %}">
+                    <span class="export-history-table__preview-icon" aria-hidden="true">
+                      {% include "components/ui/icon.html" with name="eye" %}
+                    </span>
+                    <span>Vista previa</span>
+                  </a>
+                {% else %}
+                  <span class="export-history-table__muted">No disponible</span>
+                {% endif %}
               </td>
             </tr>
           {% endfor %}

@@ -669,7 +669,11 @@
   }
 
   .dash-content.vac-request-content .vac-request-summary-panel__item--total strong {
-    font-size: 24px;
+    font-size: 16px;
+  }
+
+  .dash-content.vac-request-content #selected-days-counter {
+    font-size: 32px;
   }
 
   .dash-content.vac-request-content .vac-request-guide {
@@ -1130,7 +1134,7 @@
   background: #f8fafc;
 }
 
-.dash-content.vac-request-content .vac-request-summary-panel__item span {
+.dash-content.vac-request-content .vac-request-summary-panel__item > span {
   color: #64748b;
   font-size: 13px;
   font-weight: 800;
@@ -1151,9 +1155,21 @@
 }
 
 .dash-content.vac-request-content .vac-request-summary-panel__item--total strong {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
   color: #1b84c6;
-  font-size: 28px;
-  line-height: 1;
+  font-size: 17px;
+  line-height: 1.1;
+}
+
+.dash-content.vac-request-content #selected-days-counter {
+  color: #0878b8;
+  font-size: 36px;
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+  text-transform: none;
 }
 
 .dash-content.vac-request-content .vac-request-summary-panel__range {

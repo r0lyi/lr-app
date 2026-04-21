@@ -14,7 +14,7 @@ def get_rrhh_vacation_requests():
     """
 
     return (
-        VacationRequest.objects.select_related("employee", "status")
+        VacationRequest.objects.select_related("employee", "employee__user", "status")
         .order_by("-request_date", "-id")
     )
 
