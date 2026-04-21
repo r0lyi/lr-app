@@ -42,11 +42,21 @@ Contiene lo propio del desarrollo local:
 
 ### `production.py`
 
-Existe como lugar reservado para la configuracion de produccion, pero ahora mismo esta practicamente vacio y comentado. La estructura esta preparada, pero la configuracion de produccion todavia no esta terminada.
+Contiene overrides minimos de produccion:
+
+- `DEBUG = False`
+- `ALLOWED_HOSTS` con el dominio permitido.
+
+La estructura esta preparada para crecer con seguridad, storage externo,
+logging, cache persistente o cualquier ajuste propio del despliegue real.
 
 ### `test.py`
 
-Tambien existe como lugar reservado para settings de test, pero ahora mismo esta vacio.
+Contiene overrides para ejecutar tests de forma mas rapida y aislada:
+
+- `DEBUG = False`
+- password hasher MD5 para acelerar la suite
+- backend de email en memoria (`locmem`)
 
 ## Como decide Django que settings cargar
 
@@ -80,10 +90,25 @@ Arranca Django
 
 ## Que configura `base.py`
 
+`base.py` no contiene toda la configuracion directamente. Actua como punto de
+ensamblado de componentes pequenos dentro de `config/settings/components/`.
+
+Mapa actual:
+
+- `components/apps.py`: apps de Django y apps locales.
+- `components/auth.py`: usuario custom, backends y validadores de contrasena.
+- `components/cache.py`: cache y limites de rate limiting.
+- `components/email.py`: proveedor y parametros de email.
+- `components/i18n.py`: idioma, zona horaria y soporte i18n.
+- `components/middleware.py`: middleware comun.
+- `components/shared.py`: `BASE_DIR`, `.env`, `SECRET_KEY` y `env`.
+- `components/static.py`: static files.
+- `components/templates.py`: motor de templates.
+
 ## 1. Variables de entorno y ruta base
 
 ```python
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent
 env = environ.Env()
 environ.Env.read_env(BASE_DIR / ".env")
 ```
@@ -275,6 +300,10 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 ```
 
 Esto hace que Django sirva CSS, JS e imagenes desde la carpeta `static/`.
+
+Las exportaciones ya no dependen de un directorio local configurado en settings.
+El historial de Excel guarda un snapshot JSON en base de datos y regenera la
+descarga desde ese snapshot.
 
 ## Que configura `local.py`
 

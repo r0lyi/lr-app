@@ -66,6 +66,18 @@ Indice tecnico relacionado:
 6. Si vas a tocar permisos, trazabilidad o soporte interno, lee [`07-auditoria-y-admin-django.md`](./07-auditoria-y-admin-django.md).
 7. Antes de crear archivos nuevos, consulta las convenciones en [`../docs/README.md`](../docs/README.md).
 
+## Mapa rapido de flujos actuales
+
+| Flujo | Entrada principal | Persistencia clave | Efectos secundarios |
+| --- | --- | --- | --- |
+| Auth por DNI | `/auth/login/`, `/auth/activate/` | `User`, token temporal | email, rate limit, auditoria de activacion |
+| Post-login | `/dashboard/` | roles y `Employee` | redireccion por rol/onboarding |
+| Solicitud de vacaciones | `/vacations/request/` | `VacationRequest` | notificacion a RRHH |
+| Revision RRHH/admin | `/vacations/requests/<id>/review/` | `VacationRequest`, historial | auditoria, notificacion al empleado |
+| Exportacion RRHH | `/vacations/requests/export/excel/` | `ExportHistory.rows_snapshot_json` | descarga directa del Excel |
+| Historial de exportaciones | `/audit/exports/` | snapshot JSON | preview HTML y descarga regenerada |
+| Gestion admin usuarios | `/dashboard/admin/users/` | `User`, roles, `Employee` | email de activacion y auditoria |
+
 ## Comandos utiles
 
 ```bash

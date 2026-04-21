@@ -22,7 +22,11 @@ para soporte, RRHH y administracion.
 - `apps/audit/services/audit_logs.py`: funciones para construir y registrar eventos.
 - `apps/audit/selectors/audit_logs.py`: consultas y acciones ocultas.
 - `apps/audit/views/view_audit_log.py`: vista de historial.
+- `apps/audit/views/view_export_history.py`: historial, preview y descarga de exportaciones.
 - `apps/audit/templates/audit/partials/audit_log/table.html`: tabla visible.
+- `apps/audit/templates/audit/partials/export_history/table.html`: tabla de exportaciones.
+- `apps/audit/templates/audit/pages/export_preview.html`: preview HTML desde snapshot.
+- `apps/audit/services/export_history.py`: registro de snapshot de exportacion.
 - `apps/users/services/admin/management.py`: cambios administrativos de usuarios.
 - `apps/users/services/auth_service.py`: activacion de cuenta.
 - `apps/employees/views/onboarding.py`: registro inicial de ficha.
@@ -253,6 +257,27 @@ Reglas:
 - No se deben borrar para ocultar cambios de negocio.
 - Si se necesita depuracion tecnica, se hace con permisos administrativos claros.
 
+### Historial de exportaciones
+
+El historial de exportaciones no guarda archivos Excel en disco. Guarda
+metadatos y un snapshot JSON de las filas exportadas.
+
+Campos relevantes:
+
+- `file_name`: nombre visible de descarga.
+- `filters_json`: filtros usados en el listado.
+- `rows_snapshot_json`: filas exactas que se exportaron.
+- `columns_version`: version de estructura de columnas.
+- `total_records`: cantidad de solicitudes exportadas.
+- `status`: `pending`, `success` o `failed`.
+
+Desde la interfaz funcional:
+
+- La exportacion inicial genera snapshot y descarga el Excel en memoria.
+- La preview historica renderiza una tabla HTML desde `rows_snapshot_json`.
+- La descarga historica regenera el `.xlsx` desde `rows_snapshot_json`.
+- Ni preview ni descarga historica crean nuevas exportaciones.
+
 ## Checklist antes de anadir una accion auditada
 
 Antes de crear una nueva accion:
@@ -270,10 +295,9 @@ Antes de crear una nueva accion:
 Cuando se toca auditoria o admin, revisar o ampliar tests en:
 
 - `apps/audit/tests/test_audit_log_view.py`
-- `apps/audit/tests/test_audit_log_service.py`
 - `apps/audit/tests/test_export_history_view.py`
 - `apps/users/tests/test_admin_users.py`
-- `apps/vacations/tests/test_review_vacation_request.py`
+- `apps/vacations/tests/test_review_request_view.py`
 
 Casos minimos a cubrir:
 
@@ -284,3 +308,4 @@ Casos minimos a cubrir:
 - Cambiar perfil o contrasena registra auditoria sin valores sensibles.
 - Revisar solicitud registra cambios de estado, fechas, dias o comentario.
 - Acciones ocultas como departamento no aparecen en la interfaz principal.
+- Exportar Excel registra snapshot y permite preview/descarga historica.

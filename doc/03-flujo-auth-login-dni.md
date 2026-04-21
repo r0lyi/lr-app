@@ -419,7 +419,7 @@ Con eso Django destruye la sesion del usuario y lo devuelve a la pantalla de log
 
 Las pantallas de login y activacion usan HTMX para mejorar la experiencia sin tener que recargar toda la pagina en algunos casos.
 
-Ejemplo desde `apps/users/templates/users/login.html`:
+Ejemplo desde `apps/users/templates/users/partials/auth/login_panel.html`:
 
 ```html
 <form
@@ -450,8 +450,8 @@ Eso le dice a HTMX que haga una navegacion completa hacia el dispatcher del dash
 
 ### Como se muestran los toasts
 
-- HTML del toast: `templates/components/toast_card.html`
-- JS de comportamiento: `static/js/toast.js`
+- HTML del toast: `templates/components/feedback/toast_card.html`
+- JS de comportamiento: `static/js/core/toast.js`
 
 ## 16. Secuencia completa del primer acceso
 
@@ -546,9 +546,10 @@ uv run python manage.py test apps.users.tests.test_auth_flow
 - `apps/users/services/backends.py`
 - `apps/users/views/auth_views.py`
 - `apps/users/urls.py`
-- `apps/users/templates/users/login.html`
-- `apps/users/templates/users/request_activation.html`
-- `apps/users/templates/users/set_password.html`
+- `apps/users/templates/users/pages/login.html`
+- `apps/users/templates/users/pages/request_activation.html`
+- `apps/users/templates/users/pages/set_password.html`
+- `apps/users/templates/users/partials/auth/`
 - `templates/emails/activation_email.html`
 - `apps/users/tests/test_auth_flow.py`
 
