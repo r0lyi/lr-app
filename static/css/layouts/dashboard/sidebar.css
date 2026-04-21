@@ -231,4 +231,10 @@
 .dash-sidebar-action--logout {
   padding-top: 10px;
   padding-bottom: 10px;
+  color: #b42318;
+}
+
+.dash-sidebar-action--logout:hover,
+.dash-sidebar-action--logout:focus-visible {
+  color: #dc2626;
 }
