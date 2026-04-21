@@ -1,13 +1,4 @@
-"""Servicios para registrar y completar exportaciones realizadas por usuarios.
-
-Este modulo concentra la logica de persistencia del historial de exportaciones
-para que las vistas y los dominios de negocio no tengan que conocer detalles
-de almacenamiento en disco ni del modelo `ExportHistory`.
-"""
-
-from pathlib import Path
-
-from django.conf import settings
+"""Servicios para registrar exportaciones realizadas por usuarios."""
 
 from apps.audit.models import ExportHistory
 
@@ -52,37 +43,30 @@ def create_export_history(*, user, export_type, filters):
     )
 
 
-def get_exports_root():
-    """Devuelve la carpeta raiz donde se guardan los archivos exportados."""
-
-    exports_root = Path(settings.EXPORTS_ROOT)
-    exports_root.mkdir(parents=True, exist_ok=True)
-    return exports_root
-
-
-def mark_export_success(*, export_history, file_name, file_bytes, total_records):
-    """Guarda el archivo generado y marca el historial como exitoso."""
-
-    export_dir = get_exports_root() / (export_history.export_type or "general")
-    export_dir.mkdir(parents=True, exist_ok=True)
-
-    export_path = export_dir / file_name
-    export_path.write_bytes(file_bytes)
+def mark_export_success(
+    *,
+    export_history,
+    file_name,
+    rows_snapshot,
+    columns_version,
+    total_records,
+):
+    """Guarda el snapshot exportado y marca el historial como exitoso."""
 
     export_history.file_name = file_name
-    export_history.file_path = str(export_path)
+    export_history.rows_snapshot_json = rows_snapshot
+    export_history.columns_version = columns_version
     export_history.total_records = total_records
     export_history.status = EXPORT_STATUS_SUCCESS
     export_history.save(
         update_fields=[
             "file_name",
-            "file_path",
+            "rows_snapshot_json",
+            "columns_version",
             "total_records",
             "status",
         ]
     )
-
-    return export_path
 
 
 def mark_export_failed(*, export_history):

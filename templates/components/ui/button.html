@@ -8,6 +8,7 @@
     {% if form_id %}form="{{ form_id }}"{% endif %}
     {% if aria_label %}aria-label="{{ aria_label }}"{% endif %}
     {% if title %}title="{{ title }}"{% endif %}
+    {% if download_name %}download="{{ download_name }}"{% elif download %}download{% endif %}
     {% if disabled %}aria-disabled="true" tabindex="-1"{% endif %}
   >
 {% else %}

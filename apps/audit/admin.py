@@ -78,16 +78,17 @@ class ExportHistoryAdmin(admin.ModelAdmin):
         "user__email",
         "user__dni",
         "file_name",
-        "file_path",
         "export_type",
         "status",
+        "columns_version",
     )
     autocomplete_fields = ("user",)
     readonly_fields = (
         "user",
         "file_name",
-        "file_path",
         "filters_json",
+        "rows_snapshot_json",
+        "columns_version",
         "total_records",
         "export_type",
         "status",

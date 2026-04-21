@@ -296,6 +296,7 @@ class DashboardRoutingTests(DashboardRoleBaseTestCase):
         self.assertContains(rrhh_home, "Días")
         self.assertContains(rrhh_home, "Estado")
         self.assertContains(rrhh_home, "Exportar Excel")
+        self.assertContains(rrhh_home, "download")
         self.assertContains(rrhh_home, "Control de ausencias y vacaciones del personal.")
         self.assertContains(rrhh_home, "Lucia")
         self.assertContains(rrhh_home, "Martinez")
@@ -563,3 +564,4 @@ class DashboardRoutingTests(DashboardRoleBaseTestCase):
         self.assertContains(response, "10-06-2026")
         self.assertContains(response, "14-06-2026")
         self.assertContains(response, "Exportar Excel")
+        self.assertContains(response, "download")

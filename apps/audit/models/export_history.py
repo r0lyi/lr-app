@@ -16,8 +16,9 @@ class ExportHistory(CreatedAtModel):
         related_name="export_histories",
     )
     file_name = models.CharField(max_length=255, blank=True, null=True)
-    file_path = models.TextField(blank=True, null=True)
     filters_json = models.JSONField(blank=True, null=True)
+    rows_snapshot_json = models.JSONField(blank=True, null=True)
+    columns_version = models.CharField(max_length=80, blank=True, null=True)
     total_records = models.IntegerField(blank=True, null=True)
     export_type = models.CharField(max_length=50, blank=True, null=True)
     status = models.CharField(max_length=50, blank=True, null=True)

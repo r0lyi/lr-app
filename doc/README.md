@@ -44,7 +44,7 @@ Indice tecnico relacionado:
 - Email: backend de Django o Resend.
 - Autenticacion: usuario personalizado, login con DNI y activacion por token.
 - UI: templates Django, CSS propio, componentes compartidos y JavaScript puntual.
-- Exportaciones: archivos generados en `var/exports/`, fuera del codigo versionado.
+- Exportaciones: historial con snapshot JSON y descarga regenerada desde base de datos.
 
 ## Modulos principales
 

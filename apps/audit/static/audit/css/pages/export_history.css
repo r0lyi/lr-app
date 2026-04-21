@@ -330,7 +330,8 @@
   transition: color 0.15s ease;
 }
 
-.export-history-table__file-link:hover {
+.export-history-table__file-link:hover,
+.export-history-table__preview-link:hover {
   color: #0b6f9f;
 }
 
@@ -354,6 +355,41 @@
 .export-history-table__file-icon svg {
   width: 16px;
   height: 16px;
+}
+
+.export-history-table__preview-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #0f84bf;
+  font-weight: 800;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.export-history-table__preview-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #eef6fb;
+  color: #1b8fca;
+  flex-shrink: 0;
+}
+
+.export-history-table__preview-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.export-history-preview__actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 .export-history-table__requests-count {
@@ -425,6 +461,11 @@
   .export-history-info-banner {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .export-history-preview__actions {
+    justify-content: flex-start;
+    width: 100%;
   }
 
   .export-history-table-card.dash-card {

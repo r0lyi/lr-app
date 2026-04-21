@@ -16,6 +16,7 @@ from apps.vacations.forms import RrhhVacationRequestFilterForm
 from apps.vacations.selectors import get_filtered_rrhh_vacation_requests
 from apps.vacations.services import build_rrhh_export_review
 from apps.vacations.services.export.excel import (
+    RRHH_EXPORT_COLUMNS_VERSION,
     build_rrhh_vacation_requests_excel,
 )
 
@@ -62,11 +63,14 @@ def export_rrhh_requests_excel_view(request):
     )
 
     try:
-        file_name, file_bytes = build_rrhh_vacation_requests_excel(reviewed_requests)
+        file_name, file_bytes, snapshot_rows = build_rrhh_vacation_requests_excel(
+            reviewed_requests
+        )
         mark_export_success(
             export_history=export_history,
             file_name=file_name,
-            file_bytes=file_bytes,
+            rows_snapshot=snapshot_rows,
+            columns_version=RRHH_EXPORT_COLUMNS_VERSION,
             total_records=len(reviewed_requests),
         )
     except Exception:
