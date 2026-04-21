@@ -63,7 +63,7 @@ Responsable de:
 - Validaciones de solicitud.
 - Revision RRHH/admin.
 - Alertas previas a exportacion.
-- Exportacion a Excel.
+- Generacion Excel desde solicitudes o snapshot.
 
 ### `apps/notifications`
 
@@ -78,7 +78,7 @@ Responsable de:
 Responsable de:
 
 - Historial de actividad.
-- Historial de exportaciones.
+- Historial de exportaciones con snapshot JSON.
 - Selectors y filtros de auditoria.
 
 ### `apps/dashboard`
@@ -164,7 +164,7 @@ Ejemplos:
 - Revisar solicitud.
 - Crear usuario desde admin.
 - Cambiar rol principal.
-- Registrar exportacion.
+- Registrar exportacion con snapshot.
 
 ### `selectors`
 
@@ -176,6 +176,7 @@ Ejemplos:
 - Sumar dias reservados.
 - Filtrar historial de actividad.
 - Listar exportaciones.
+- Regenerar exportaciones desde snapshot.
 
 ### `templates`
 

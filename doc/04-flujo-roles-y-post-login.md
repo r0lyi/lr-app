@@ -258,15 +258,16 @@ Esto explica dos comportamientos importantes:
 - un `employee` no puede abrir RRHH ni admin
 - un `admin` si puede abrir RRHH
 
-## Navegacion generada por helpers
+## Navegacion generada por presentacion compartida
 
 El menu lateral no se construye a mano en cada template.
 
-La configuracion vive en `apps/dashboard/views/helpers.py`:
+La configuracion vive en `apps/core/presentation/dashboard/`:
 
-- `ROLE_LABELS` traduce el nombre interno del rol a una etiqueta legible
-- `ROLE_NAV_CONFIG` define las entradas del menu por rol
-- `build_dashboard_base_context(...)` prepara el contexto comun
+- `navigation.py`: entradas del menu por rol.
+- `display.py`: etiquetas, iniciales y avatar textual.
+- `notifications.py`: resumen de notificaciones visibles.
+- `context.py`: `build_dashboard_base_context(...)` para layout, header y sidebar.
 
 Eso aporta dos ventajas:
 
@@ -368,10 +369,12 @@ En conjunto cubren:
 - `apps/users/selectors/roles.py`
 - `apps/core/utils/decorators.py`
 - `apps/dashboard/views/view_dashboard.py`
-- `apps/dashboard/views/view_employee.py`
-- `apps/dashboard/views/view_rrhh.py`
 - `apps/dashboard/views/view_admin.py`
-- `apps/dashboard/views/helpers.py`
+- `apps/dashboard/views/__init__.py`
+- `apps/employees/views/view_employee_home.py`
+- `apps/vacations/views/rrhh/requests_management.py`
+- `apps/core/presentation/dashboard/context.py`
+- `apps/core/presentation/dashboard/navigation.py`
 - `apps/employees/views/onboarding.py`
 - `apps/dashboard/tests/`
 

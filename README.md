@@ -13,8 +13,10 @@ Actualmente el proyecto ya incluye:
 - usuario personalizado con roles
 - dashboard autenticado con despacho por rol
 - onboarding obligatorio para empleados sin ficha interna
-- modulos base para empleados, vacaciones, notificaciones y auditoria
-- documentacion tecnica en `/doc/`
+- paneles de empleado, RRHH y administracion
+- solicitudes de vacaciones con revision, notificaciones y auditoria
+- exportacion Excel directa con historial basado en snapshot JSON
+- documentacion funcional en `doc/` y convenciones tecnicas en `docs/`
 
 ## Stack tecnologico
 
@@ -54,12 +56,12 @@ lr-app/
 ## Modulos principales
 
 - `apps/users/`: autenticacion, usuario personalizado, roles, validacion de DNI, backend custom, emails y vistas de acceso.
-- `apps/employees/`: perfil de empleado y departamentos.
-- `apps/vacations/`: solicitudes de vacaciones y estados.
-- `apps/notifications/`: notificaciones de usuario.
-- `apps/audit/`: logs de auditoria e historial de exportaciones.
-- `apps/dashboard/`: zona autenticada inicial despues del login.
-- `apps/core/`: modelos base, decoradores y utilidades compartidas.
+- `apps/employees/`: onboarding, perfil, home del empleado y departamentos internos.
+- `apps/vacations/`: solicitudes de vacaciones, revision RRHH/admin y generacion Excel.
+- `apps/notifications/`: inbox interno, avisos de solicitudes y mensajes admin.
+- `apps/audit/`: logs de auditoria e historial de exportaciones con snapshot JSON.
+- `apps/dashboard/`: dispatcher, rutas del shell autenticado y home admin.
+- `apps/core/`: modelos base, decoradores, paginacion y presentacion compartida.
 
 ## Flujo de autenticacion
 
@@ -151,7 +153,15 @@ http://127.0.0.1:8000/
 - `/auth/activate/`: solicitud de enlace para crear o recuperar contrasena
 - `/auth/set-password/<token>/`: definicion de contrasena mediante token
 - `/dashboard/`: dispatcher autenticado que decide a que pantalla va el usuario
+- `/dashboard/rrhh/`: gestion RRHH de solicitudes
+- `/dashboard/admin/`: home de administracion
+- `/dashboard/admin/users/`: gestion funcional de usuarios
+- `/dashboard/admin/requests/`: gestion de solicitudes desde admin
 - `/employees/onboarding/`: alta interna del perfil del empleado
+- `/employees/profile/`: perfil del empleado
+- `/vacations/request/`: solicitud de vacaciones
+- `/audit/activity/`: historial de actividad
+- `/audit/exports/`: historial de exportaciones
 - `/admin/`: panel de administracion Django
 
 ## Settings y entornos
@@ -160,8 +170,8 @@ La configuracion Django esta separada en:
 
 - `config/settings/base.py`: configuracion comun
 - `config/settings/local.py`: desarrollo local
-- `config/settings/production.py`: reservado para produccion
-- `config/settings/test.py`: reservado para tests
+- `config/settings/production.py`: overrides minimos de produccion
+- `config/settings/test.py`: overrides de pruebas
 
 Si no se define `DJANGO_SETTINGS_MODULE`, el proyecto arranca por defecto con:
 
@@ -177,6 +187,14 @@ Para ejecutar el test del flujo principal de autenticacion:
 uv run python manage.py test apps.users.tests.test_auth_flow
 ```
 
+Tests utiles por flujo:
+
+```bash
+uv run python manage.py test apps.dashboard.tests
+uv run python manage.py test apps.vacations.tests
+uv run python manage.py test apps.audit.tests
+```
+
 ## Documentacion
 
 La documentacion detallada del proyecto vive en [`doc/`](./doc/README.md).
@@ -188,13 +206,17 @@ Guias disponibles:
 - [`doc/02-settings-y-configuracion-django.md`](./doc/02-settings-y-configuracion-django.md): settings, entornos y configuracion base de Django
 - [`doc/03-flujo-auth-login-dni.md`](./doc/03-flujo-auth-login-dni.md): flujo tecnico completo del login por DNI y activacion por email
 - [`doc/04-flujo-roles-y-post-login.md`](./doc/04-flujo-roles-y-post-login.md): resolucion de roles, onboarding y navegacion real despues del login
+- [`doc/05-flujo-solicitudes-vacaciones.md`](./doc/05-flujo-solicitudes-vacaciones.md): validaciones y ciclo de vida de solicitudes
+- [`doc/06-rrhh-alertas-exportaciones.md`](./doc/06-rrhh-alertas-exportaciones.md): revision RRHH, alertas y exportaciones Excel
+- [`doc/07-auditoria-y-admin-django.md`](./doc/07-auditoria-y-admin-django.md): auditoria, historial y Django Admin
 
 ## Estado actual
 
-El proyecto ya tiene base solida para autenticacion y estructura de dominio, pero hay dos puntos a tener en cuenta:
+El proyecto ya tiene flujos funcionales para autenticacion, roles, vacaciones,
+notificaciones, exportaciones e historial. Hay dos puntos a tener en cuenta:
 
 - `config/settings/production.py` aun no esta completado
-- `config/settings/test.py` existe como lugar preparado para crecer, pero todavia no tiene configuracion propia
+- `config/settings/test.py` solo define overrides minimos para acelerar tests
 
 ## Comandos utiles
 
@@ -208,4 +230,7 @@ uv run python manage.py test
 
 ## Resumen
 
-Este repositorio esta pensado como una base de aplicacion interna en Django, con separacion clara por dominios, autenticacion personalizada y una documentacion que permite a otro desarrollador entender rapido tanto la arquitectura general como el flujo de acceso, roles y post-login.
+Este repositorio esta pensado como una aplicacion interna en Django, con
+separacion clara por dominios, autenticacion personalizada y documentacion para
+entender rapido acceso, roles, vacaciones, exportaciones, auditoria y soporte
+administrativo.

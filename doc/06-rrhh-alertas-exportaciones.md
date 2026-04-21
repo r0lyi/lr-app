@@ -181,6 +181,41 @@ Los nombres de archivo usan fecha ISO y sufijo corto unico:
 
 `vacation_2026-04-21_9f3a2c.xlsx`
 
+### Flujo completo desde el boton de exportar
+
+1. El usuario pulsa `Exportar Excel` desde el panel de solicitudes de RRHH o
+   admin.
+2. El enlace conserva los filtros actuales del listado, excepto la paginacion.
+   Si no llega filtro de estado, se usa `pending` como valor por defecto.
+3. La vista `export_rrhh_requests_excel_view` valida los filtros con
+   `RrhhVacationRequestFilterForm`.
+4. Con filtros validos, la vista consulta las solicitudes con
+   `get_filtered_rrhh_vacation_requests`.
+5. El servicio `build_rrhh_export_review` aplica la revision previa: orden de
+   antiguedad, alertas internas y listado final que se exporta.
+6. Antes de generar el archivo, se crea un `ExportHistory` en estado `pending`
+   con usuario, tipo de exportacion y filtros serializados.
+7. El servicio `build_rrhh_vacation_requests_excel` construye tres piezas desde
+   el mismo listado revisado:
+   - `file_name`, con formato `vacation_YYYY-MM-DD_xxxxxx.xlsx`.
+   - `file_bytes`, el `.xlsx` generado en memoria.
+   - `snapshot_rows`, una lista JSON-safe con las filas exactas exportadas.
+8. Si la generacion termina correctamente, `mark_export_success` actualiza el
+   historial a `success` y guarda:
+   - `file_name`.
+   - `rows_snapshot_json`.
+   - `columns_version`.
+   - `total_records`.
+9. La vista devuelve `file_bytes` como `HttpResponse` con
+   `Content-Disposition: attachment`, por lo que el navegador descarga el Excel
+   directamente en el ordenador del usuario.
+10. Si algo falla durante la generacion, `mark_export_failed` marca el historial
+    como `failed` y el usuario vuelve al panel con un mensaje de error.
+
+No se guarda ningun archivo `.xlsx` en carpetas locales. El archivo solo existe
+como bytes durante la respuesta de descarga; la evidencia persistente es el
+snapshot guardado en base de datos.
+
 Debe registrar:
 
 - Usuario que exporto.
@@ -195,10 +230,26 @@ Debe registrar:
 
 La vista de historial muestra exportaciones reales realizadas por usuarios.
 
+Cada fila del historial usa los metadatos guardados en `ExportHistory`:
+
+- Fecha de creacion.
+- Usuario que genero la exportacion.
+- Nombre del archivo.
+- Total de solicitudes exportadas.
+- Acciones disponibles.
+
+Desde el historial hay dos acciones sobre una exportacion:
+
+- `Vista previa`: renderiza una tabla HTML desde `rows_snapshot_json`; no genera
+  ni guarda un archivo temporal.
+- `Descargar`: regenera el `.xlsx` en memoria desde `rows_snapshot_json` y lo
+  entrega como descarga directa.
+
 Reglas actuales:
 
 - Solo cuenta exportaciones de solicitudes de vacaciones de RRHH.
 - No cuenta descargas posteriores del historial.
+- No cuenta vistas previas del historial.
 - Muestra contador de total de exportaciones.
 - Muestra fecha de la ultima exportacion.
 - Permite filtrar por fecha.
@@ -223,4 +274,7 @@ Casos minimos a cubrir:
 - Detecta solicitudes de 30 dias.
 - Mantiene alta carga calculada aunque no sea visible.
 - Registra exportaciones reales.
+- Guarda snapshot JSON con las filas exportadas.
+- Regenera la descarga historica desde snapshot.
+- Muestra preview historica desde snapshot.
 - No registra una nueva exportacion al descargar desde el historial.

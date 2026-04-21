@@ -7,6 +7,11 @@ Si necesitas entender el producto paso a paso, empieza por
 [`../doc/README.md`](../doc/README.md). Si ya sabes que vas a tocar una capa
 concreta, usa este indice.
 
+El mapa actualizado de flujos funcionales esta en
+[`../doc/README.md`](../doc/README.md#mapa-rapido-de-flujos-actuales). Desde ahi
+se salta a la guia concreta de auth, roles, vacaciones, exportaciones o
+auditoria.
+
 ## Arquitectura
 
 - [`architecture/project_structure.md`](./architecture/project_structure.md): estructura oficial por apps, capas y ownership.

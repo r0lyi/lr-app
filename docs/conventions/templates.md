@@ -70,6 +70,10 @@ Ejemplo:
 - Correcto: `apps/vacations/templates/vacations/pages/create_request.html`
 - Incorrecto: `apps/dashboard/templates/dashboard/pages/create_request.html`
 
+Excepcion de shell: `apps/dashboard/views/__init__.py` puede reexportar vistas de
+otras apps para montar rutas del dashboard, pero el template y la logica de
+dominio siguen viviendo en su app funcional.
+
 ## Reutilizacion
 
 Cuando dos pantallas copian el mismo bloque, revisar si debe ser componente.
@@ -122,6 +126,10 @@ Ejemplo de uso:
 - Confirmar eliminacion de solicitud pendiente.
 - Crear usuario desde gestion admin.
 - Editar rol y acceso de usuario.
+
+Las vistas historicas simples, como la preview de una exportacion, deben
+preferir una pagina HTML normal antes que generar archivos temporales si el dato
+ya existe como snapshot.
 
 ## Listas y tablas
 
