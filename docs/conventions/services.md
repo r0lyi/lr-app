@@ -54,6 +54,7 @@ Ejemplos del proyecto:
 - `review_vacation_request`: revisa solicitud, recalcula dias, notifica y audita.
 - `create_admin_user`: crea usuario con DNI/email, genera activacion y audita.
 - `change_user_primary_role`: reemplaza rol funcional y audita el cambio.
+- `mark_export_success`: marca una exportacion como exitosa y guarda snapshot JSON.
 
 ## Validaciones de escritura
 
@@ -124,6 +125,7 @@ Regla practica:
 - Si una accion solo descarga o renderiza, normalmente no debe auditar.
 - Si una descarga representa una exportacion nueva, debe registrar historial.
 - Si una descarga recupera un archivo ya exportado, no debe crear nueva exportacion.
+- Si una exportacion debe poder reconstruirse, guardar snapshot JSON y version de columnas.
 
 Acciones auditadas actualmente:
 

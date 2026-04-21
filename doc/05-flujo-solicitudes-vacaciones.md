@@ -18,9 +18,14 @@ El flujo esta pensado para proteger tres cosas:
 
 ## Archivos principales
 
-- `apps/vacations/forms.py`: formulario HTTP de fechas y comentario.
+- `apps/vacations/forms/request_vacation.py`: formulario HTTP de fechas y comentario.
+- `apps/vacations/forms/employee_request_filters.py`: filtros del historial del empleado.
+- `apps/vacations/forms/rrhh_request_filters.py`: filtros del listado RRHH/admin.
+- `apps/vacations/forms/review_request.py`: formulario de revision RRHH/admin.
 - `apps/vacations/views/employee/create_request.py`: vista de alta de solicitud.
 - `apps/vacations/views/employee/delete_request.py`: vista de eliminacion.
+- `apps/vacations/views/rrhh/requests_management.py`: listado compartido RRHH/admin.
+- `apps/vacations/views/rrhh/review_request.py`: vista de revision.
 - `apps/vacations/services/requests/create.py`: caso de uso para crear.
 - `apps/vacations/services/requests/delete.py`: caso de uso para eliminar.
 - `apps/vacations/services/requests/review.py`: caso de uso para revisar desde RRHH/admin.
@@ -178,8 +183,8 @@ Mas detalle en [`07-auditoria-y-admin-django.md`](./07-auditoria-y-admin-django.
 Cuando se toca este flujo, revisar o ampliar tests en:
 
 - `apps/vacations/tests/test_request_vacation_view.py`
-- `apps/vacations/tests/test_review_vacation_request.py`
-- `apps/vacations/tests/test_delete_vacation_request.py`
+- `apps/vacations/tests/test_review_request_view.py`
+- `apps/dashboard/tests/test_dashboard_routing.py`
 
 Casos minimos a cubrir:
 

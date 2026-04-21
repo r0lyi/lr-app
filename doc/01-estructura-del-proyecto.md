@@ -37,9 +37,9 @@ La idea importante es esta:
 
 - `apps/users/`: usuario personalizado, DNI, roles, login, activacion, formularios y gestion admin de usuarios.
 - `apps/employees/`: ficha `Employee`, departamentos, onboarding, perfil y panel del empleado.
-- `apps/vacations/`: solicitudes de vacaciones, estados, validaciones, revision, eliminacion y exportacion.
+- `apps/vacations/`: solicitudes de vacaciones, estados, validaciones, revision, eliminacion y generacion Excel.
 - `apps/notifications/`: notificaciones internas para empleados, RRHH y administracion.
-- `apps/audit/`: log de actividad, filtros de auditoria e historial de exportaciones.
+- `apps/audit/`: log de actividad, filtros de auditoria e historial de exportaciones con snapshot JSON.
 - `apps/dashboard/`: shell autenticado, layout, navegacion y homes por rol.
 - `apps/core/`: utilidades transversales, paginacion, decoradores, modelos base y helpers de presentacion.
 
@@ -103,6 +103,7 @@ Ejemplos:
 - Revisar una solicitud desde RRHH y registrar auditoria.
 - Crear un usuario pendiente de activacion.
 - Generar un enlace de activacion.
+- Registrar una exportacion con snapshot JSON.
 
 ### `selectors/`
 
