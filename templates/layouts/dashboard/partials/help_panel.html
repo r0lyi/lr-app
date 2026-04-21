@@ -1,0 +1,104 @@
+<div
+  class="dash-help"
+  id="dash-help-panel"
+  aria-hidden="true"
+  data-help-panel
+  hidden
+>
+  <div class="dash-help__scrim" data-help-close aria-hidden="true"></div>
+
+  <aside
+    class="dash-help__dialog"
+    id="dash-help-dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="dash-help-title"
+    aria-describedby="dash-help-description"
+    tabindex="-1"
+  >
+    <header class="dash-help__header">
+      <div class="dash-help__heading">
+        <span class="dash-help__eyebrow">Centro de ayuda</span>
+        <h2 class="dash-help__title" id="dash-help-title">Ayuda rápida</h2>
+      </div>
+      <button class="dash-help__close" type="button" data-help-close aria-label="Cerrar ayuda">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </button>
+    </header>
+
+    <div class="dash-help__body">
+      <section class="dash-help__intro" aria-labelledby="dash-help-intro-title">
+        <span class="dash-help__intro-icon" aria-hidden="true">
+          {% include "components/ui/icon.html" with name="info" %}
+        </span>
+        <div>
+          <p class="dash-help__role">{{ role_label|default:"Usuario" }}</p>
+          <h3 class="dash-help__intro-title" id="dash-help-intro-title">Soporte interno</h3>
+          <p class="dash-help__intro-text" id="dash-help-description">
+            Encuentra accesos clave y canales de contacto sin abandonar tu trabajo actual.
+          </p>
+        </div>
+      </section>
+
+      {% if nav_items %}
+        <section class="dash-help__section" aria-labelledby="dash-help-shortcuts-title">
+          <div class="dash-help__section-header">
+            <h3 class="dash-help__section-title" id="dash-help-shortcuts-title">Accesos frecuentes</h3>
+            <span class="dash-help__section-count">{{ nav_items|length }}</span>
+          </div>
+          <div class="dash-help__links">
+            {% for item in nav_items %}
+              <a class="dash-help-link" href="{% url item.url_name %}">
+                <span class="dash-help-link__marker" aria-hidden="true"></span>
+                <span class="dash-help-link__copy">
+                  <strong>{{ item.label }}</strong>
+                  <small>Ir a {{ item.label|lower }}</small>
+                </span>
+                <span class="dash-help-link__arrow" aria-hidden="true">
+                  {% include "components/ui/icon.html" with name="chevron-right" %}
+                </span>
+              </a>
+            {% endfor %}
+          </div>
+        </section>
+      {% endif %}
+
+      <section class="dash-help__section" aria-labelledby="dash-help-topics-title">
+        <div class="dash-help__section-header">
+          <h3 class="dash-help__section-title" id="dash-help-topics-title">Temas comunes</h3>
+        </div>
+        <div class="dash-help__topic-grid">
+          <article class="dash-help-topic dash-help-topic--vacations">
+            <span class="dash-help-topic__label">Vacaciones</span>
+            <strong>Solicitudes, días y estados</strong>
+          </article>
+          <article class="dash-help-topic dash-help-topic--profile">
+            <span class="dash-help-topic__label">Perfil</span>
+            <strong>Datos personales y acceso</strong>
+          </article>
+          {% if role_label == "RRHH" %}
+            <article class="dash-help-topic dash-help-topic--exports">
+              <span class="dash-help-topic__label">RRHH</span>
+              <strong>Revisión y exportaciones</strong>
+            </article>
+          {% elif role_label == "Administrador" %}
+            <article class="dash-help-topic dash-help-topic--admin">
+              <span class="dash-help-topic__label">Admin</span>
+              <strong>Usuarios, roles y actividad</strong>
+            </article>
+          {% endif %}
+        </div>
+      </section>
+
+      <section class="dash-help__contact" aria-labelledby="dash-help-contact-title">
+        <div>
+          <span class="dash-help__contact-kicker">Canal recomendado</span>
+          <h3 class="dash-help__contact-title" id="dash-help-contact-title">RRHH o administración</h3>
+          <p>Para incidencias urgentes, usa el canal interno habitual de tu equipo.</p>
+        </div>
+        <span class="dash-help__status">Activo</span>
+      </section>
+    </div>
+  </aside>
+</div>

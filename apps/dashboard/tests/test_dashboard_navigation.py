@@ -79,6 +79,22 @@ class DashboardNavigationTests(DashboardRoleBaseTestCase):
         )
         self.assertContains(response, "Marcar todas")
 
+    def test_dashboard_shell_renders_help_panel(self):
+        employee = self.create_active_user(
+            email="employee-help@example.com",
+            dni="24682468H",
+        )
+        self.create_employee_profile(employee)
+
+        self.client.force_login(employee)
+
+        response = self.client.get(reverse("dashboard:employee-home"))
+
+        self.assertContains(response, "data-help-toggle")
+        self.assertContains(response, 'id="dash-help-panel"')
+        self.assertContains(response, "Centro de ayuda")
+        self.assertContains(response, "Accesos frecuentes")
+
     def test_dashboard_header_paginates_notifications_ten_by_ten(self):
         employee = self.create_active_user(
             email="employee-notifications-page@example.com",
