@@ -2681,3 +2681,12 @@ msgstr ""
 #: templates/layouts/dashboard/partials/sidebar.html:71
 msgid "Cerrar Sesión"
 msgstr ""
+
+msgid "Cambiar idioma"
+msgstr "Cambiar idioma"
+
+msgid "Seleccionar idioma"
+msgstr "Seleccionar idioma"
+
+msgid "Idioma seleccionado"
+msgstr "Idioma seleccionado"

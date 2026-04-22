@@ -16,6 +16,7 @@
 
     <div class="dash-header-actions">
       {% include "components/ui/notification_dropdown.html" %}
+      {% include "components/ui/language_switcher.html" with variant="header" %}
       <div class="dash-header-user" aria-label="{% translate 'Usuario conectado' %}">
         <div class="dash-header-user__copy">
           <strong class="dash-header-user__name">{{ display_name }}</strong>

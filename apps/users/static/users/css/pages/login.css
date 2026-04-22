@@ -130,6 +130,11 @@
   gap: 20px;
 }
 
+.auth-login .login-panel__language {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .auth-login .login-panel__header {
   display: flex;
   flex-direction: column;

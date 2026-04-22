@@ -8,6 +8,10 @@
 
 <div class="login-panel">
   {% url 'auth:request-activation' as request_activation_url %}
+  <div class="login-panel__language">
+    {% include "components/ui/language_switcher.html" with variant="auth" %}
+  </div>
+
   <header class="login-panel__header">
     <h2 class="login-panel__title">{% translate "Bienvenido de nuevo" %}</h2>
     <p class="login-panel__subtitle">{% translate "Ingresa tus credenciales para continuar." %}</p>
