@@ -1,13 +1,13 @@
 {% extends "layouts/dashboard/base.html" %}
-{% load static %}
+{% load i18n static %}
 
-{% block title %}{{ requests_page_title|default:"Solicitudes" }}{% endblock %}
+{% block title %}{% translate "Solicitudes" as default_requests_title %}{% firstof requests_page_title default_requests_title %}{% endblock %}
 
 {% block dashboard_header_title %}
-  {% if role_label == "Administrador" %}
-    Portal de administración
+  {% if role_name == "admin" %}
+    {% translate "Portal de administración" %}
   {% else %}
-    Portal RRHH
+    {% translate "Portal RRHH" %}
   {% endif %}
 {% endblock %}
 

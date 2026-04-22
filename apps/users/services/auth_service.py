@@ -4,6 +4,7 @@ import secrets
 from datetime import timedelta
 
 from django.utils import timezone
+from django.utils.translation import gettext as _
 
 from apps.users.models import User
 
@@ -17,7 +18,7 @@ def request_activation(dni: str) -> tuple[bool, str]:
         user = User.objects.get(dni=dni)
     except User.DoesNotExist:
         # La respuesta no revela si el usuario existe para evitar enumeracion.
-        return False, "Si el DNI es correcto, recibirás un email."
+        return False, _("Si el DNI es correcto, recibirás un email.")
 
     token = secrets.token_urlsafe(32)
 
@@ -27,7 +28,7 @@ def request_activation(dni: str) -> tuple[bool, str]:
 
     send_activation_email(user.email, token)
 
-    return True, "Si el DNI es correcto, recibirás un email."
+    return True, _("Si el DNI es correcto, recibirás un email.")
 
 
 def validate_token(token: str) -> User | None:

@@ -1,4 +1,5 @@
-{% load static %}
+{% load i18n static %}
+{% translate "Cerrar sesion" as logout_label %}
 {% static "images/brand/logo500x200.svg" as company_logo %}
 
 <div class="error-page error-page--400">
@@ -18,23 +19,25 @@
       </div>
 
       <div class="error-visual__copy">
-        <h1 class="error-visual__title">Error de Solicitud Incorrecta</h1>
+        <h1 class="error-visual__title">{% translate "Error de Solicitud Incorrecta" %}</h1>
         <p class="error-visual__description">
-          La cuenta autenticada no tiene una configuracion de rol valida para
-          abrir este panel. Revisa el rol asignado y vuelve a intentarlo.
+          {% blocktranslate trimmed %}
+            La cuenta autenticada no tiene una configuracion de rol valida para
+            abrir este panel. Revisa el rol asignado y vuelve a intentarlo.
+          {% endblocktranslate %}
         </p>
       </div>
 
       <div class="error-visual__brand">
-        <img src="{{ company_logo }}" alt="Clean & Service" class="error-visual__logo" />
-        <p class="error-visual__brand-text">Logistica de Recursos del Agua</p>
+        <img src="{{ company_logo }}" alt="{% translate 'Clean & Service' %}" class="error-visual__logo" />
+        <p class="error-visual__brand-text">{% translate "Logistica de Recursos del Agua" %}</p>
       </div>
 
       <div class="error-visual__actions">
-        <a class="error-link-btn error-link-btn--ghost" href="{% url 'root' %}">Volver al inicio</a>
+        <a class="error-link-btn error-link-btn--ghost" href="{% url 'root' %}">{% translate "Volver al inicio" %}</a>
         <form method="post" action="{% url 'auth:logout' %}">
           {% csrf_token %}
-          {% include "components/ui/button_secondari.html" with label="Cerrar sesion" type="submit" size="md" class_name="error-action-btn" %}
+          {% include "components/ui/button_secondari.html" with label=logout_label type="submit" size="md" class_name="error-action-btn" %}
         </form>
       </div>
     </div>

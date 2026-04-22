@@ -3,6 +3,7 @@
 from django import forms
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.hashers import UNUSABLE_PASSWORD_PREFIX
+from django.utils.translation import gettext_lazy as _
 
 from apps.users.models import User
 
@@ -16,7 +17,7 @@ class RequestActivationForm(forms.Form):
         max_length=20,
         validators=[validate_dni],
         widget=forms.TextInput(attrs={
-            "placeholder": "Introduce tu DNI",
+            "placeholder": _("Introduce tu DNI"),
             "class": "input",
             "autofocus": True,
         })
@@ -32,12 +33,12 @@ class SetPasswordForm(forms.Form):
     """Permite definir la contraseña desde un token valido de activacion."""
 
     password1 = forms.CharField(
-        label="Nueva contraseña",
+        label=_("Nueva contraseña"),
         widget=forms.PasswordInput(attrs={"class": "input"}),
         validators=[validate_password],
     )
     password2 = forms.CharField(
-        label="Confirmar contraseña",
+        label=_("Confirmar contraseña"),
         widget=forms.PasswordInput(attrs={"class": "input"}),
     )
 
@@ -49,7 +50,7 @@ class SetPasswordForm(forms.Form):
         p2 = cleaned_data.get("password2")
 
         if p1 and p2 and p1 != p2:
-            raise forms.ValidationError("Las contraseñas no coinciden.")
+            raise forms.ValidationError(_("Las contraseñas no coinciden."))
 
         return cleaned_data
 
@@ -60,10 +61,12 @@ class LoginForm(forms.Form):
     dni = forms.CharField(
         max_length=20,
         validators=[validate_dni],
-        widget=forms.TextInput(attrs={"class": "input", "placeholder": "DNI"}),
+        widget=forms.TextInput(attrs={"class": "input", "placeholder": _("DNI")}),
     )
     password = forms.CharField(
-        widget=forms.PasswordInput(attrs={"class": "input", "placeholder": "Contraseña"}),
+        widget=forms.PasswordInput(
+            attrs={"class": "input", "placeholder": _("Contraseña")}
+        ),
     )
 
     def clean_dni(self):
@@ -74,7 +77,9 @@ class LoginForm(forms.Form):
         normalized_dni = normalize_dni(self.cleaned_data["dni"])
 
         if compact_dni and compact_dni != normalized_dni and compact_dni.upper() == normalized_dni:
-            raise forms.ValidationError("La letra del DNI debe escribirse en mayúsculas.")
+            raise forms.ValidationError(
+                _("La letra del DNI debe escribirse en mayúsculas.")
+            )
 
         return normalized_dni
 
@@ -93,33 +98,33 @@ class AdminUserFilterForm(forms.Form):
 
     search = forms.CharField(
         required=False,
-        label="Buscar usuario",
+        label=_("Buscar usuario"),
         widget=forms.TextInput(
             attrs={
                 "class": "ui-input",
-                "placeholder": "Buscar por nombre, email o ID...",
+                "placeholder": _("Buscar por nombre, email o ID..."),
             }
         ),
     )
     primary_role = forms.ChoiceField(
         required=False,
-        label="Rol",
+        label=_("Rol"),
         choices=(
-            ("", "Todos los roles"),
-            ("employee", "Empleado"),
-            ("rrhh", "RRHH"),
-            ("admin", "Administrador"),
+            ("", _("Todos los roles")),
+            ("employee", _("Empleado")),
+            ("rrhh", _("RRHH")),
+            ("admin", _("Administrador")),
         ),
         widget=forms.Select(attrs={"class": "ui-select"}),
     )
     access_state = forms.ChoiceField(
         required=False,
-        label="Acceso",
+        label=_("Acceso"),
         choices=(
-            ("", "Todos los estados"),
-            (ACCESS_STATE_ACTIVE, "Acceso activo"),
-            (ACCESS_STATE_INACTIVE, "Acceso desactivado"),
-            (ACCESS_STATE_PENDING, "Pendiente de activar"),
+            ("", _("Todos los estados")),
+            (ACCESS_STATE_ACTIVE, _("Acceso activo")),
+            (ACCESS_STATE_INACTIVE, _("Acceso desactivado")),
+            (ACCESS_STATE_PENDING, _("Pendiente de activar")),
         ),
         widget=forms.Select(attrs={"class": "ui-select"}),
     )
@@ -130,7 +135,7 @@ class AdminUserCreateForm(forms.Form):
 
     dni = forms.CharField(
         max_length=20,
-        label="DNI",
+        label=_("DNI"),
         validators=[validate_dni],
         widget=forms.TextInput(
             attrs={
@@ -141,7 +146,7 @@ class AdminUserCreateForm(forms.Form):
         ),
     )
     email = forms.EmailField(
-        label="Correo electrónico",
+        label=_("Correo electrónico"),
         widget=forms.TextInput(
             attrs={
                 "class": "ui-input",
@@ -169,10 +174,12 @@ class AdminUserCreateForm(forms.Form):
         email = cleaned_data.get("email")
 
         if dni and User.objects.filter(dni=dni).exists():
-            self.add_error("dni", "Ya existe un usuario con este DNI.")
+            self.add_error("dni", _("Ya existe un usuario con este DNI."))
 
         if email and User.objects.filter(email__iexact=email).exists():
-            self.add_error("email", "Ya existe un usuario con este correo electrónico.")
+            self.add_error(
+                "email", _("Ya existe un usuario con este correo electrónico.")
+            )
 
         return cleaned_data
 

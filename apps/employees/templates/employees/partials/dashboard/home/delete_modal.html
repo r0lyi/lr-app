@@ -1,3 +1,7 @@
+{% load i18n %}
+{% translate "No, mantener" as keep_label %}
+{% translate "Sí, eliminar" as delete_label %}
+
 <div
   class="ui-modal employee-delete-request-modal"
   id="employee-delete-request-modal"
@@ -18,26 +22,26 @@
           {% include "components/ui/icon.html" with name="trash" %}
         </span>
         <div>
-          <h2 class="ui-modal__title" id="employee-delete-request-title">Eliminar solicitud</h2>
+          <h2 class="ui-modal__title" id="employee-delete-request-title">{% translate "Eliminar solicitud" %}</h2>
           <p class="employee-delete-request-modal__subtitle" id="employee-delete-request-description">
-            Esta accion quitara la solicitud pendiente de tu historial y liberara esos dias.
+            {% translate "Esta accion quitara la solicitud pendiente de tu historial y liberara esos dias." %}
           </p>
         </div>
       </div>
-      <button class="ui-modal__close" type="button" data-vacation-delete-close aria-label="Cerrar modal">×</button>
+      <button class="ui-modal__close" type="button" data-vacation-delete-close aria-label="{% translate 'Cerrar modal' %}">×</button>
     </div>
 
     <div class="ui-modal__body employee-delete-request-modal__body">
       <div class="employee-delete-request-modal__summary">
-        <span class="employee-delete-request-modal__summary-label">Periodo seleccionado</span>
+        <span class="employee-delete-request-modal__summary-label">{% translate "Periodo seleccionado" %}</span>
         <strong class="employee-delete-request-modal__summary-value" data-delete-request-range>--</strong>
         <span class="employee-delete-request-modal__summary-note">
-          <span data-delete-request-days>--</span> días solicitados
+          {% blocktranslate %}<span data-delete-request-days>--</span> días solicitados{% endblocktranslate %}
         </span>
       </div>
 
       <p class="employee-delete-request-modal__question">
-        ¿Seguro que quieres eliminar esta solicitud?
+        {% translate "¿Seguro que quieres eliminar esta solicitud?" %}
       </p>
 
       <form
@@ -48,8 +52,8 @@
       >
         {% csrf_token %}
         <div class="employee-delete-request-modal__actions">
-          {% include "components/ui/button_secondari.html" with label="No, mantener" type="button" size="md" class_name="employee-delete-request-modal__cancel" %}
-          {% include "components/ui/button.html" with label="Sí, eliminar" type="submit" size="md" variant="danger" class_name="employee-delete-request-modal__confirm" left_icon_name="trash" %}
+          {% include "components/ui/button_secondari.html" with label=keep_label type="button" size="md" class_name="employee-delete-request-modal__cancel" %}
+          {% include "components/ui/button.html" with label=delete_label type="submit" size="md" variant="danger" class_name="employee-delete-request-modal__confirm" left_icon_name="trash" %}
         </div>
       </form>
     </div>

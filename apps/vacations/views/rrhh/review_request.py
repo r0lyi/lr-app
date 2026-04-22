@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.utils.translation import gettext as _
 
 from apps.core.presentation.dashboard import build_dashboard_base_context
 from apps.core.utils.decorators import role_required
@@ -33,7 +34,9 @@ def review_vacation_request_view(request, request_id):
     ):
         messages.error(
             request,
-            "No puedes revisar tu propia solicitud de vacaciones. Debe gestionarla otro usuario de RRHH.",
+            _(
+                "No puedes revisar tu propia solicitud de vacaciones. Debe gestionarla otro usuario de RRHH."
+            ),
         )
         return redirect(return_url_name)
 
@@ -54,7 +57,7 @@ def review_vacation_request_view(request, request_id):
             else:
                 messages.success(
                     request,
-                    "La solicitud se ha actualizado correctamente desde RRHH.",
+                    _("La solicitud se ha actualizado correctamente desde RRHH."),
                 )
                 return redirect(return_url_name)
     else:

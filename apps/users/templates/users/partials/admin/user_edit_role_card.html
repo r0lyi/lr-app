@@ -1,9 +1,12 @@
+{% load i18n %}
+{% translate "Guardar cambios" as save_changes_label %}
+
 <article class="admin-user-edit-card admin-user-edit-card--account">
   <div class="admin-user-edit-card__heading">
     <div>
-      <h2 class="admin-user-edit-card__title">Rol y estado</h2>
+      <h2 class="admin-user-edit-card__title">{% translate "Rol y estado" %}</h2>
       <p class="admin-user-edit-card__description">
-        Actualiza el rol operativo y si la cuenta puede acceder al sistema.
+        {% translate "Actualiza el rol operativo y si la cuenta puede acceder al sistema." %}
       </p>
     </div>
     <div class="admin-user-edit-card__badges">
@@ -24,7 +27,7 @@
       <input type="hidden" name="next" value="{{ request.path }}">
       <div class="admin-user-edit-form__fields">
         <div class="admin-user-edit-form__field">
-          <label class="admin-user-edit-form__label" for="primary-role-select">Nuevo rol principal</label>
+          <label class="admin-user-edit-form__label" for="primary-role-select">{% translate "Nuevo rol principal" %}</label>
           <select
             id="primary-role-select"
             name="primary_role"
@@ -42,27 +45,27 @@
         </div>
 
         <div class="admin-user-edit-form__field">
-          <label class="admin-user-edit-form__label" for="access-state-select">Estado de la cuenta</label>
+          <label class="admin-user-edit-form__label" for="access-state-select">{% translate "Estado de la cuenta" %}</label>
           <select
             id="access-state-select"
             name="is_active"
             class="ui-select admin-user-edit-form__select"
           >
-            <option value="true" {% if managed_user.user.is_active %}selected{% endif %}>Activa</option>
-            <option value="false" {% if not managed_user.user.is_active %}selected{% endif %}>Inactiva</option>
+            <option value="true" {% if managed_user.user.is_active %}selected{% endif %}>{% translate "Activa" %}</option>
+            <option value="false" {% if not managed_user.user.is_active %}selected{% endif %}>{% translate "Inactiva" %}</option>
           </select>
         </div>
       </div>
-      {% include "components/ui/button_principal.html" with label="Guardar cambios" type="submit" size="md" class_name="admin-user-edit-form__submit" %}
+      {% include "components/ui/button_principal.html" with label=save_changes_label type="submit" size="md" class_name="admin-user-edit-form__submit" %}
       {% if not managed_user.user.is_active and not managed_user.has_usable_password %}
         <p class="admin-user-edit-card__note">
-          Para activar esta cuenta, primero debe configurar una contrasena desde el enlace inicial.
+          {% translate "Para activar esta cuenta, primero debe configurar una contrasena desde el enlace inicial." %}
         </p>
       {% endif %}
     </form>
   {% else %}
     <p class="admin-user-edit-card__note">
-      Este usuario se gestiona desde Django admin.
+      {% translate "Este usuario se gestiona desde Django admin." %}
     </p>
   {% endif %}
 </article>

@@ -6,6 +6,7 @@ admin puede disparar sin mover reglas de negocio al dashboard.
 
 from django.core.exceptions import ValidationError
 from django.db import transaction
+from django.utils.translation import gettext_lazy as _
 
 from apps.employees.models import Employee
 from apps.users.models import User
@@ -13,9 +14,9 @@ from apps.users.services.auth_service import request_activation
 from apps.users.services.validators import normalize_dni
 
 ROLE_LABELS = {
-    "employee": "Empleado",
-    "rrhh": "RRHH",
-    "admin": "Administrador",
+    "employee": _("Empleado"),
+    "rrhh": _("RRHH"),
+    "admin": _("Administrador"),
 }
 
 
@@ -42,7 +43,7 @@ def change_user_primary_role(*, acting_user, target_user, new_role):
 
     if target_user.is_superuser:
         raise ValidationError(
-            "Los superusuarios se gestionan desde Django admin.",
+            _("Los superusuarios se gestionan desde Django admin."),
         )
 
     previous_role_name = _get_user_primary_role_name(target_user)
@@ -53,7 +54,7 @@ def change_user_primary_role(*, acting_user, target_user, new_role):
         admin_users_count = User.objects.filter(roles__name="admin").distinct().count()
         if admin_users_count <= 1:
             raise ValidationError(
-                "No puedes quitar el rol admin al ultimo administrador del sistema.",
+                _("No puedes quitar el rol admin al ultimo administrador del sistema."),
             )
 
     target_user.roles.set([new_role])
@@ -88,7 +89,7 @@ def change_user_active_state(*, acting_user, target_user, is_active):
 
     if target_user.is_superuser:
         raise ValidationError(
-            "Los superusuarios se gestionan desde Django admin.",
+            _("Los superusuarios se gestionan desde Django admin."),
         )
 
     if target_user.is_active == is_active:
@@ -104,13 +105,17 @@ def change_user_active_state(*, acting_user, target_user, is_active):
         )
         if remaining_active_admins <= 0:
             raise ValidationError(
-                "No puedes desactivar al ultimo administrador activo del sistema.",
+                _(
+                    "No puedes desactivar al ultimo administrador activo del sistema."
+                ),
             )
 
     if is_active and not target_user.has_usable_password():
         raise ValidationError(
-            "Esta cuenta aun no tiene una contrasena configurada. "
-            "Primero debe completar su acceso desde el enlace de activacion.",
+            _(
+                "Esta cuenta aun no tiene una contrasena configurada. "
+                "Primero debe completar su acceso desde el enlace de activacion."
+            ),
         )
 
     target_user.is_active = is_active
@@ -140,8 +145,10 @@ def change_user_department(*, acting_user, target_user, new_department):
         employee_profile = target_user.employee_profile
     except Employee.DoesNotExist as exc:
         raise ValidationError(
-            "Este usuario aun no tiene ficha de empleado. "
-            "Primero debe completar su registro interno.",
+            _(
+                "Este usuario aun no tiene ficha de empleado. "
+                "Primero debe completar su registro interno."
+            ),
         ) from exc
 
     previous_department_name = (
@@ -178,10 +185,12 @@ def create_admin_user(*, acting_user, email, dni):
     normalized_dni = normalize_dni(dni)
 
     if User.objects.filter(dni=normalized_dni).exists():
-        raise ValidationError({"dni": "Ya existe un usuario con este DNI."})
+        raise ValidationError({"dni": _("Ya existe un usuario con este DNI.")})
 
     if User.objects.filter(email__iexact=normalized_email).exists():
-        raise ValidationError({"email": "Ya existe un usuario con este correo electrónico."})
+        raise ValidationError(
+            {"email": _("Ya existe un usuario con este correo electrónico.")}
+        )
 
     with transaction.atomic():
         user = User.objects.create_user(
@@ -191,7 +200,7 @@ def create_admin_user(*, acting_user, email, dni):
         sent, _ = request_activation(user.dni)
         if not sent:
             raise ValidationError(
-                "No se pudo generar el enlace de activacion para el nuevo usuario."
+                _("No se pudo generar el enlace de activacion para el nuevo usuario.")
             )
 
         from apps.audit.services import log_user_created

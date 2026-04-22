@@ -4,6 +4,7 @@ from datetime import date
 
 from django.urls import reverse
 from django.shortcuts import redirect, render
+from django.utils.translation import gettext_lazy as _
 
 from apps.core.presentation.dashboard import build_dashboard_base_context
 from apps.core.presentation.pagination import paginate_dashboard_list
@@ -15,18 +16,18 @@ from apps.vacations.services import build_rrhh_export_review
 
 
 SPANISH_MONTH_ABBREVIATIONS = {
-    1: "Ene",
-    2: "Feb",
-    3: "Mar",
-    4: "Abr",
-    5: "May",
-    6: "Jun",
-    7: "Jul",
-    8: "Ago",
-    9: "Sep",
-    10: "Oct",
-    11: "Nov",
-    12: "Dic",
+    1: _("Ene"),
+    2: _("Feb"),
+    3: _("Mar"),
+    4: _("Abr"),
+    5: _("May"),
+    6: _("Jun"),
+    7: _("Jul"),
+    8: _("Ago"),
+    9: _("Sep"),
+    10: _("Oct"),
+    11: _("Nov"),
+    12: _("Dic"),
 }
 
 
@@ -76,8 +77,8 @@ def _render_requests_management_view(request, *, role_name, active_section):
     if export_querystring:
         export_url = f"{export_url}?{export_querystring}"
 
-    panel_title = "Gestión de Solicitudes"
-    panel_description = "Control de ausencias y vacaciones del personal."
+    panel_title = _("Gestión de Solicitudes")
+    panel_description = _("Control de ausencias y vacaciones del personal.")
 
     return render(
         request,
@@ -123,13 +124,13 @@ def _build_rrhh_requests_metrics(vacation_requests):
         difference = current_month_count - previous_month_count
         percent = round(abs(difference) / previous_month_count * 100)
         if difference > 0:
-            month_note = f"+{percent}% vs mes anterior"
+            month_note = _("+%(percent)s%% vs mes anterior") % {"percent": percent}
         elif difference < 0:
-            month_note = f"-{percent}% vs mes anterior"
+            month_note = _("-%(percent)s%% vs mes anterior") % {"percent": percent}
         else:
-            month_note = "Sin variación vs mes anterior"
+            month_note = _("Sin variación vs mes anterior")
     else:
-        month_note = "Sin referencia del mes anterior"
+        month_note = _("Sin referencia del mes anterior")
 
     pending_requests_count = sum(
         1
@@ -139,20 +140,20 @@ def _build_rrhh_requests_metrics(vacation_requests):
 
     return [
         {
-            "label": "Total este mes",
+            "label": _("Total este mes"),
             "value": current_month_count,
-            "unit": "Solicitudes",
+            "unit": _("Solicitudes"),
             "note": month_note,
             "theme": "blue",
             "icon": "chart",
         },
         {
-            "label": "Pendientes de revisión",
+            "label": _("Pendientes de revisión"),
             "value": pending_requests_count,
-            "unit": "Solicitudes",
-            "note": "Requieren atención"
+            "unit": _("Solicitudes"),
+            "note": _("Requieren atención")
             if pending_requests_count
-            else "Sin pendientes",
+            else _("Sin pendientes"),
             "theme": "amber",
             "icon": "clock",
         },

@@ -1,48 +1,52 @@
+{% load i18n %}
+{% translate "solicitudes" as requests_item_label %}
+{% translate "Paginación de solicitudes del empleado" as requests_pagination_label %}
+
 <div class="data-table-wrapper employee-history-table">
   <table class="data-table">
     <thead>
       <tr>
-        <th>Nro</th>
-        <th>Fecha solicitud</th>
-        <th>Rango de fechas</th>
-        <th>Total días</th>
-        <th>Estado</th>
-        <th>Acciones</th>
+        <th>{% translate "Nro" %}</th>
+        <th>{% translate "Fecha solicitud" %}</th>
+        <th>{% translate "Rango de fechas" %}</th>
+        <th>{% translate "Total días" %}</th>
+        <th>{% translate "Estado" %}</th>
+        <th>{% translate "Acciones" %}</th>
       </tr>
     </thead>
     <tbody>
       {% for request_item in employee_requests %}
         <tr>
-          <td data-label="Nro">{{ page_obj.start_index|add:forloop.counter0 }}</td>
-          <td data-label="Fecha solicitud">{{ request_item.created_at|date:"d-m-Y" }}</td>
-          <td data-label="Rango de fechas">
+          <td data-label="{% translate 'Nro' %}">{{ page_obj.start_index|add:forloop.counter0 }}</td>
+          <td data-label="{% translate 'Fecha solicitud' %}">{{ request_item.created_at|date:"d-m-Y" }}</td>
+          <td data-label="{% translate 'Rango de fechas' %}">
             {{ request_item.start_date|date:"d-m-Y" }} - {{ request_item.end_date|date:"d-m-Y" }}
           </td>
-          <td data-label="Total días">{{ request_item.requested_days }}</td>
-          <td data-label="Estado">
+          <td data-label="{% translate 'Total días' %}">{{ request_item.requested_days|floatformat:"2u" }}</td>
+          <td data-label="{% translate 'Estado' %}">
             <span class="employee-history-table__status employee-history-table__status--{{ request_item.status.name }}">
               {{ request_item.status }}
             </span>
           </td>
-          <td data-label="Acciones">
+          <td data-label="{% translate 'Acciones' %}">
             {% if request_item.status.name == "pending" %}
               <button
                 class="employee-history-table__delete"
                 type="button"
-                aria-label="Eliminar solicitud pendiente del {{ request_item.start_date|date:'d-m-Y' }} al {{ request_item.end_date|date:'d-m-Y' }}"
-                title="Eliminar solicitud"
+                aria-label="{% blocktranslate with start=request_item.start_date|date:'d-m-Y' end=request_item.end_date|date:'d-m-Y' %}Eliminar solicitud pendiente del {{ start }} al {{ end }}{% endblocktranslate %}"
+                title="{% translate 'Eliminar solicitud' %}"
                 data-vacation-delete-open
                 data-delete-url="{% url 'vacations:delete-request' request_item.pk %}"
                 data-request-range="{{ request_item.start_date|date:'d-m-Y' }} - {{ request_item.end_date|date:'d-m-Y' }}"
-                data-request-days="{{ request_item.requested_days }}"
+                data-request-days="{{ request_item.requested_days|floatformat:"2u" }}"
               >
                 {% include "components/ui/icon.html" with name="trash" %}
               </button>
             {% else %}
               <span
                 class="employee-history-table__delete employee-history-table__delete--disabled"
-                aria-label="Solo se pueden eliminar solicitudes pendientes"
-                title="Solo se pueden eliminar solicitudes pendientes"
+                aria-label="{% translate 'Solo se pueden eliminar solicitudes pendientes' %}"
+                title="{% translate 'Solo se pueden eliminar solicitudes pendientes' %}"
               >
                 {% include "components/ui/icon.html" with name="trash" %}
               </span>
@@ -51,11 +55,11 @@
         </tr>
       {% empty %}
         <tr>
-          <td class="employee-history-table__empty" colspan="6">No hay solicitudes registradas con estos filtros.</td>
+          <td class="employee-history-table__empty" colspan="6">{% translate "No hay solicitudes registradas con estos filtros." %}</td>
         </tr>
       {% endfor %}
     </tbody>
   </table>
 </div>
 
-{% include "components/ui/table_footer.html" with total_count=filtered_employee_requests_count item_label_plural="solicitudes" aria_label="Paginación de solicitudes del empleado" %}
+{% include "components/ui/table_footer.html" with total_count=filtered_employee_requests_count item_label_plural=requests_item_label aria_label=requests_pagination_label %}

@@ -1,28 +1,32 @@
+{% load i18n %}
+
 <div class="onboarding-page">
   <div class="onboarding-shell">
     <header class="onboarding-intro">
-      <p class="onboarding-intro__eyebrow">Formulario interno</p>
-      <h1 class="onboarding-intro__title">Completa tu perfil</h1>
+      <p class="onboarding-intro__eyebrow">{% translate "Formulario interno" %}</p>
+      <h1 class="onboarding-intro__title">{% translate "Completa tu perfil" %}</h1>
       <p class="onboarding-intro__description">
-        Rellena estos datos una sola vez para dejar listo tu expediente, tus
-        vacaciones y tu acceso a la plataforma.
+        {% blocktranslate trimmed %}
+          Rellena estos datos una sola vez para dejar listo tu expediente, tus
+          vacaciones y tu acceso a la plataforma.
+        {% endblocktranslate %}
       </p>
     </header>
 
     <div class="onboarding-grid">
       <section class="onboarding-main-card" aria-labelledby="onboarding-form-title">
         <div class="onboarding-form-head">
-          <p class="onboarding-form-head__eyebrow">Datos personales</p>
-          <h2 id="onboarding-form-title" class="onboarding-form-head__title">Información básica de empleado</h2>
+          <p class="onboarding-form-head__eyebrow">{% translate "Datos personales" %}</p>
+          <h2 id="onboarding-form-title" class="onboarding-form-head__title">{% translate "Información básica de empleado" %}</h2>
           <p class="onboarding-form-head__description">
-            Los campos marcados son necesarios para completar tu ficha interna.
+            {% translate "Los campos marcados son necesarios para completar tu ficha interna." %}
           </p>
         </div>
 
         {% include "employees/partials/onboarding/form.html" %}
       </section>
 
-      <aside class="onboarding-side" aria-label="Ayuda y contexto del formulario">
+      <aside class="onboarding-side" aria-label="{% translate 'Ayuda y contexto del formulario' %}">
         {% include "employees/partials/onboarding/sidebar.html" %}
       </aside>
     </div>

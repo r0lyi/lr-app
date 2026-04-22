@@ -1,7 +1,10 @@
+{% load i18n %}
+{% translate "Paginación" as default_pagination_label %}
+
 {% if page_obj and page_obj.paginator.num_pages > 1 %}
-  <nav class="ui-pagination {{ pagination_class_name|default:'' }}" aria-label="{{ aria_label|default:'Paginación' }}">
+  <nav class="ui-pagination {{ pagination_class_name|default:'' }}" aria-label="{{ aria_label|default:default_pagination_label }}">
     {% if page_obj.has_previous %}
-      <a class="ui-pagination__control" href="{{ pagination_context.previous_url }}" aria-label="Página anterior">
+      <a class="ui-pagination__control" href="{{ pagination_context.previous_url }}" aria-label="{% translate 'Página anterior' %}">
         {% include "components/ui/icon.html" with name="chevron-left" %}
       </a>
     {% else %}
@@ -19,7 +22,7 @@
     {% endfor %}
 
     {% if page_obj.has_next %}
-      <a class="ui-pagination__control" href="{{ pagination_context.next_url }}" aria-label="Página siguiente">
+      <a class="ui-pagination__control" href="{{ pagination_context.next_url }}" aria-label="{% translate 'Página siguiente' %}">
         {% include "components/ui/icon.html" with name="chevron-right" %}
       </a>
     {% else %}

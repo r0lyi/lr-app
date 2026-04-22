@@ -26,6 +26,7 @@ def build_dashboard_base_context(
         "display_initials": get_dashboard_display_initials(user),
         "display_avatar_background": avatar_theme["background"],
         "display_avatar_foreground": avatar_theme["foreground"],
+        "role_name": role_name,
         "role_label": get_role_label(role_name),
         "nav_items": get_dashboard_nav_items(
             role_name,

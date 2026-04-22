@@ -1,6 +1,7 @@
 """Formulario minimo para que RRHH revise una solicitud existente."""
 
 from django import forms
+from django.utils.translation import gettext_lazy as _
 
 from apps.vacations.models import VacationStatus
 
@@ -15,7 +16,7 @@ class VacationRequestReviewForm(forms.Form):
     """
 
     status = forms.ModelChoiceField(
-        label="Estado",
+        label=_("Estado"),
         queryset=VacationStatus.objects.order_by("name"),
         empty_label=None,
         widget=forms.Select(
@@ -25,7 +26,7 @@ class VacationRequestReviewForm(forms.Form):
         ),
     )
     start_date = forms.DateField(
-        label="Fecha inicio",
+        label=_("Fecha inicio"),
         widget=forms.DateInput(
             attrs={
                 "class": "ui-input ui-input--date ui-input--has-right-icon",
@@ -34,7 +35,7 @@ class VacationRequestReviewForm(forms.Form):
         ),
     )
     end_date = forms.DateField(
-        label="Fecha final",
+        label=_("Fecha final"),
         widget=forms.DateInput(
             attrs={
                 "class": "ui-input ui-input--date ui-input--has-right-icon",
@@ -43,13 +44,15 @@ class VacationRequestReviewForm(forms.Form):
         ),
     )
     hr_comment = forms.CharField(
-        label="Comentario RRHH",
+        label=_("Comentario RRHH"),
         required=False,
         widget=forms.Textarea(
             attrs={
                 "class": "ui-input ui-input--textarea",
                 "rows": 4,
-                "placeholder": "Escribe una observacion interna si necesitas dejar contexto sobre el cambio realizado.",
+                "placeholder": _(
+                    "Escribe una observacion interna si necesitas dejar contexto sobre el cambio realizado."
+                ),
             }
         ),
     )
@@ -63,7 +66,7 @@ class VacationRequestReviewForm(forms.Form):
 
         if start_date and end_date and end_date < start_date:
             raise forms.ValidationError(
-                "La fecha final no puede ser anterior a la fecha de inicio."
+                _("La fecha final no puede ser anterior a la fecha de inicio.")
             )
 
         return cleaned_data

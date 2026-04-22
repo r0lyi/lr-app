@@ -3,6 +3,7 @@
 import re
 
 from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 
 
 DNI_LETTERS = "TRWAGMYFPDXBNJZSQVHLCKE"
@@ -21,13 +22,13 @@ def validate_dni(value: str) -> None:
     """Comprueba formato y letra de control del DNI espanol."""
 
     if not value:
-        raise ValidationError("El DNI es obligatorio.")
+        raise ValidationError(_("El DNI es obligatorio."))
 
     normalized = normalize_dni(value)
     if not DNI_RE.match(normalized):
-        raise ValidationError("El DNI debe tener 8 numeros y una letra.")
+        raise ValidationError(_("El DNI debe tener 8 numeros y una letra."))
 
     number = int(normalized[:8])
     expected_letter = DNI_LETTERS[number % 23]
     if normalized[-1] != expected_letter:
-        raise ValidationError("El DNI no es valido.")
+        raise ValidationError(_("El DNI no es valido."))
