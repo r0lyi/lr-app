@@ -1,6 +1,7 @@
 """Administracion de auditoria y exportaciones."""
 
 from django.contrib import admin
+from django.utils.translation import gettext_lazy as _
 
 from apps.audit.models import AuditLog, ExportHistory
 
@@ -38,11 +39,11 @@ class AuditLogAdmin(admin.ModelAdmin):
     ordering = ("-created_at",)
     list_per_page = 25
 
-    @admin.display(description="Detalle")
+    @admin.display(description=_("Detalle"))
     def description_preview(self, obj):
         """Resumen compacto para el listado."""
 
-        description = obj.description or "Sin detalle"
+        description = obj.description or _("Sin detalle")
         return description if len(description) <= 90 else f"{description[:90]}..."
 
     def has_add_permission(self, request):

@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -22,20 +24,20 @@
           <tr>
             <td style="padding:32px;">
               <p style="margin:0 0 16px 0; font-size:18px; line-height:1.5; color:#1a2233; font-family:'Rubik', Arial, Helvetica, sans-serif;">
-                Hola,
+                {% translate "Hola," %}
               </p>
 
               <p style="margin:0 0 16px 0; font-size:18px; line-height:1.6; color:#1a2233; font-family:'Rubik', Arial, Helvetica, sans-serif;">
-                Para entrar en el sistema por primera vez, primero debe crear su contraseña.
+                {% translate "Para entrar en el sistema por primera vez, primero debe crear su contraseña." %}
               </p>
 
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:0 0 22px 0; background-color:#f8fbfd; border:1px solid #dbeaf5; border-radius:12px;">
                 <tr>
                   <td style="padding:18px 20px;">
-                    <p style="margin:0 0 10px 0; font-size:16px; font-weight:700; color:#125f9f; font-family:'Rubik', Arial, Helvetica, sans-serif;">Que tiene que hacer ahora</p>
-                    <p style="margin:0 0 8px 0; font-size:16px; line-height:1.6; color:#334155; font-family:'Rubik', Arial, Helvetica, sans-serif;">1. Pulse el boton azul de abajo.</p>
-                    <p style="margin:0 0 8px 0; font-size:16px; line-height:1.6; color:#334155; font-family:'Rubik', Arial, Helvetica, sans-serif;">2. Escriba su nueva contraseña.</p>
-                    <p style="margin:0; font-size:16px; line-height:1.6; color:#334155; font-family:'Rubik', Arial, Helvetica, sans-serif;">3. Guarde la contraseña y despues podra entrar con su DNI.</p>
+                    <p style="margin:0 0 10px 0; font-size:16px; font-weight:700; color:#125f9f; font-family:'Rubik', Arial, Helvetica, sans-serif;">{% translate "Que tiene que hacer ahora" %}</p>
+                    <p style="margin:0 0 8px 0; font-size:16px; line-height:1.6; color:#334155; font-family:'Rubik', Arial, Helvetica, sans-serif;">{% translate "1. Pulse el boton azul de abajo." %}</p>
+                    <p style="margin:0 0 8px 0; font-size:16px; line-height:1.6; color:#334155; font-family:'Rubik', Arial, Helvetica, sans-serif;">{% translate "2. Escriba su nueva contraseña." %}</p>
+                    <p style="margin:0; font-size:16px; line-height:1.6; color:#334155; font-family:'Rubik', Arial, Helvetica, sans-serif;">{% translate "3. Guarde la contraseña y despues podra entrar con su DNI." %}</p>
                   </td>
                 </tr>
               </table>
@@ -44,18 +46,18 @@
                 <tr>
                   <td align="center">
                     <a href="{{ activation_url }}" style="display:inline-block; background-color:#1ba3e8; border:1px solid #1ba3e8; border-radius:12px; color:#ffffff; font-size:18px; font-weight:700; line-height:1; padding:18px 28px; text-decoration:none; font-family:'Rubik', Arial, Helvetica, sans-serif;">
-                      Crear mi contraseña
+                      {% translate "Crear mi contraseña" %}
                     </a>
                   </td>
                 </tr>
               </table>
 
               <p style="margin:0 0 14px 0; font-size:15px; line-height:1.6; color:#5f6b7a; font-family:'Rubik', Arial, Helvetica, sans-serif;">
-                Este enlace caduca en {{ expires_in_hours }} horas.
+                {% blocktranslate with hours=expires_in_hours %}Este enlace caduca en {{ hours }} horas.{% endblocktranslate %}
               </p>
 
               <p style="margin:0 0 8px 0; font-size:15px; line-height:1.6; color:#5f6b7a; font-family:'Rubik', Arial, Helvetica, sans-serif;">
-                Si el botón no funciona, copie y pegue este enlace en su navegador:
+                {% translate "Si el botón no funciona, copie y pegue este enlace en su navegador:" %}
               </p>
 
               <p style="margin:0 0 22px 0; padding:14px 16px; background-color:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; font-size:14px; line-height:1.6; color:#125f9f; word-break:break-word; font-family:'Rubik', Arial, Helvetica, sans-serif;">
@@ -63,7 +65,7 @@
               </p>
 
               <p style="margin:0; font-size:14px; line-height:1.6; color:#7b8794; font-family:'Rubik', Arial, Helvetica, sans-serif;">
-                Si usted no ha solicitado este acceso, puede ignorar este mensaje.
+                {% translate "Si usted no ha solicitado este acceso, puede ignorar este mensaje." %}
               </p>
             </td>
           </tr>
@@ -71,7 +73,7 @@
           <tr>
             <td style="padding:18px 32px 26px 32px; text-align:center; border-top:1px solid #eef2f7; background-color:#ffffff;">
               <p style="margin:0; font-size:13px; line-height:1.5; color:#94a3b8; font-family:'Rubik', Arial, Helvetica, sans-serif;">
-                {{ company_name }} · Correo automatico del sistema
+                {% blocktranslate with company=company_name %}{{ company }} · Correo automatico del sistema{% endblocktranslate %}
               </p>
             </td>
           </tr>

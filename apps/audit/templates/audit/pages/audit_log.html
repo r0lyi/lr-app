@@ -1,9 +1,9 @@
 {% extends "layouts/dashboard/base.html" %}
-{% load static %}
+{% load i18n static %}
 
-{% block title %}Historial de Actividad{% endblock %}
+{% block title %}{% translate "Historial de Actividad" %}{% endblock %}
 
-{% block dashboard_header_title %}Portal de auditoría{% endblock %}
+{% block dashboard_header_title %}{% translate "Portal de auditoría" %}{% endblock %}
 
 {% block dashboard_content_class %}dash-content--wide audit-log-content{% endblock %}
 

@@ -1,7 +1,7 @@
 {% extends "layouts/dashboard/base.html" %}
-{% load static %}
+{% load i18n static %}
 
-{% block title %}Revisar solicitud{% endblock %}
+{% block title %}{% translate "Revisar solicitud" %}{% endblock %}
 
 {% block dashboard_css %}
   {{ block.super }}

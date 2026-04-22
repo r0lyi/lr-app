@@ -5,6 +5,8 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.utils.translation import gettext as _
+
 from apps.core.utils.client_ip import _client_ip
 from apps.core.utils.decorators import anonymous_required
 from apps.core.utils.responses_toast import toast_response as _toast_response
@@ -35,7 +37,7 @@ def request_activation_view(request):
         ):
             return _rate_limit_response(
                 request,
-                "Demasiados intentos. Intentalo de nuevo mas tarde.",
+                _("Demasiados intentos. Intentalo de nuevo mas tarde."),
             )
 
         if form.is_valid():
@@ -52,7 +54,7 @@ def request_activation_view(request):
                 return _toast_response(
                     request=request,
                     variant="info",
-                    title="Notificacion enviada",
+                    title=_("Notificacion enviada"),
                     message=notification_message,
                     duration=5000,
                 )
@@ -60,12 +62,12 @@ def request_activation_view(request):
             messages.info(request, notification_message)
             form = RequestActivationForm()
         else:
-            validation_message = "Debes introducir tu DNI."
+            validation_message = _("Debes introducir tu DNI.")
             if request.headers.get("HX-Request"):
                 return _toast_response(
                     request=request,
                     variant="error",
-                    title="Error de validacion",
+                    title=_("Error de validacion"),
                     message=validation_message,
                     duration=4500,
                 )
@@ -88,14 +90,16 @@ def set_password_view(request, token):
     if request.method == "POST":
         if form.is_valid():
             set_password(user, form.cleaned_data["password1"])
-            messages.success(request, "Tu contraseña se actualizo correctamente.")
+            messages.success(request, _("Tu contraseña se actualizo correctamente."))
             return redirect("auth:login")
 
         form_error = form.non_field_errors()
         if form_error:
             messages.error(request, form_error[0])
         else:
-            messages.error(request, "Completa los campos obligatorios del formulario.")
+            messages.error(
+                request, _("Completa los campos obligatorios del formulario.")
+            )
 
     return render(
         request,
@@ -120,7 +124,7 @@ def login_view(request):
         ):
             return _rate_limit_response(
                 request,
-                "Demasiados intentos. Intentalo de nuevo mas tarde.",
+                _("Demasiados intentos. Intentalo de nuevo mas tarde."),
             )
 
         if form.is_valid():
@@ -150,20 +154,20 @@ def login_view(request):
                 identifier=form.cleaned_data["dni"],
                 window_seconds=settings.LOGIN_RATE_LIMIT_WINDOW,
             )
-            form.add_error(None, "DNI o contraseña incorrectos.")
+            form.add_error(None, _("DNI o contraseña incorrectos."))
         else:
             dni_errors = form.errors.get("dni")
             if dni_errors:
                 form.add_error(None, dni_errors[0])
             else:
-                form.add_error(None, "Debes completar DNI y contraseña.")
+                form.add_error(None, _("Debes completar DNI y contraseña."))
 
         error_message = form.non_field_errors()[0]
         if request.headers.get("HX-Request"):
             return _toast_response(
                 request=request,
                 variant="error",
-                title="Error de acceso",
+                title=_("Error de acceso"),
                 message=error_message,
                 duration=4500,
             )

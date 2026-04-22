@@ -5,6 +5,8 @@ from __future__ import annotations
 import hashlib
 import re
 
+from django.utils.translation import gettext_lazy as _
+
 from apps.employees.models import Employee
 
 AVATAR_THEMES = (
@@ -35,7 +37,7 @@ def get_dashboard_display_name(user):
     email = (user.email or "").strip()
     if "@" in email:
         return email.split("@", 1)[0]
-    return email or "Usuario"
+    return email or _("Usuario")
 
 
 def get_dashboard_display_initials(user):

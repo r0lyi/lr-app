@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <div
   class="ui-toast ui-toast--{{ variant|default:'info' }}"
   data-ui-toast
@@ -40,7 +42,7 @@
     </div>
   </div>
 
-  <button type="button" class="ui-toast__close" data-toast-close aria-label="Cerrar notificacion">
+  <button type="button" class="ui-toast__close" data-toast-close aria-label="{% translate 'Cerrar notificacion' %}">
     <svg viewBox="0 0 14 14" fill="none" aria-hidden="true">
       <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
     </svg>

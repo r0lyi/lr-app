@@ -3,6 +3,7 @@
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404
+from django.utils.translation import gettext as _
 
 from apps.core.utils.decorators import role_required
 from apps.users.models import Role, User
@@ -29,7 +30,7 @@ def admin_user_primary_role_update_view(request, user_id):
     new_role = Role.objects.filter(pk=role_id).first()
 
     if new_role is None:
-        messages.error(request, "Selecciona un rol valido antes de guardar.")
+        messages.error(request, _("Selecciona un rol valido antes de guardar."))
         return redirect_to_admin_users_target(request)
 
     try:
@@ -43,7 +44,10 @@ def admin_user_primary_role_update_view(request, user_id):
     else:
         messages.success(
             request,
-            f"El rol principal de {target_user.email} se ha actualizado a {new_role.name}.",
+            _(
+                "El rol principal de %(email)s se ha actualizado a %(role_name)s."
+            )
+            % {"email": target_user.email, "role_name": new_role.name},
         )
 
     return redirect_to_admin_users_target(request)
@@ -62,7 +66,7 @@ def admin_user_active_state_update_view(request, user_id):
     )
     desired_state = parse_boolean_post_value(request.POST.get("is_active"))
     if desired_state is None:
-        messages.error(request, "Selecciona un estado de acceso valido.")
+        messages.error(request, _("Selecciona un estado de acceso valido."))
         return redirect_to_admin_users_target(request)
 
     try:
@@ -77,12 +81,14 @@ def admin_user_active_state_update_view(request, user_id):
         if desired_state:
             messages.success(
                 request,
-                f"La cuenta de {target_user.email} ha quedado activada.",
+                _("La cuenta de %(email)s ha quedado activada.")
+                % {"email": target_user.email},
             )
         else:
             messages.success(
                 request,
-                f"La cuenta de {target_user.email} ha quedado desactivada.",
+                _("La cuenta de %(email)s ha quedado desactivada.")
+                % {"email": target_user.email},
             )
 
     return redirect_to_admin_users_target(request)

@@ -1,3 +1,9 @@
+{% load i18n %}
+{% translate "Empleado" as employee_label %}
+{% translate "Buscar por nombre..." as employee_placeholder %}
+{% translate "Fecha inicio" as start_date_label %}
+{% translate "Fecha final" as end_date_label %}
+
 {% if filter_form.non_field_errors %}
   <div class="rrhh-home-filter-errors">
     {% for error in filter_form.non_field_errors %}
@@ -7,14 +13,14 @@
 {% endif %}
 
 <form method="get" id="rrhh-requests-filters-form" class="rrhh-filters-form">
-  {% include "components/ui/text_input.html" with label="Empleado" name=filter_form.search.name id=filter_form.search.id_for_label value=filter_form.search.value placeholder="Buscar por nombre..." left_icon_name="search" error=filter_form.search.errors.0 %}
+  {% include "components/ui/text_input.html" with label=employee_label name=filter_form.search.name id=filter_form.search.id_for_label value=filter_form.search.value placeholder=employee_placeholder left_icon_name="search" error=filter_form.search.errors.0 %}
 
-  {% include "components/ui/date_input.html" with label="Fecha inicio" name=filter_form.start_date.name id=filter_form.start_date.id_for_label value=filter_form.start_date.value error=filter_form.start_date.errors.0 %}
+  {% include "components/ui/date_input.html" with label=start_date_label name=filter_form.start_date.name id=filter_form.start_date.id_for_label value=filter_form.start_date.value error=filter_form.start_date.errors.0 %}
 
-  {% include "components/ui/date_input.html" with label="Fecha final" name=filter_form.end_date.name id=filter_form.end_date.id_for_label value=filter_form.end_date.value error=filter_form.end_date.errors.0 %}
+  {% include "components/ui/date_input.html" with label=end_date_label name=filter_form.end_date.name id=filter_form.end_date.id_for_label value=filter_form.end_date.value error=filter_form.end_date.errors.0 %}
 
   <div class="ui-field ui-field--full rrhh-status-field">
-    <label class="ui-field__label" for="{{ filter_form.status.id_for_label }}">Estado</label>
+    <label class="ui-field__label" for="{{ filter_form.status.id_for_label }}">{% translate "Estado" %}</label>
     <div class="ui-field__control">
       <select
         class="ui-select{% if filter_form.status.errors %} ui-select--error{% endif %} rrhh-status-field__select"

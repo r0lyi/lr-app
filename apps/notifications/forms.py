@@ -1,29 +1,30 @@
 """Formularios del dominio notifications."""
 
 from django import forms
+from django.utils.translation import gettext_lazy as _
 
 
 class AdminPersonalNotificationForm(forms.Form):
     """Recoge un mensaje personal que un admin quiere enviar a un usuario."""
 
     title = forms.CharField(
-        label="Asunto",
+        label=_("Asunto"),
         max_length=140,
-        error_messages={"required": "Este campo es obligatorio."},
+        error_messages={"required": _("Este campo es obligatorio.")},
         widget=forms.TextInput(
             attrs={
                 "class": "ui-input",
-                "placeholder": "Ej. Recordatorio importante",
+                "placeholder": _("Ej. Recordatorio importante"),
             }
         ),
     )
     message = forms.CharField(
-        label="Mensaje",
-        error_messages={"required": "Este campo es obligatorio."},
+        label=_("Mensaje"),
+        error_messages={"required": _("Este campo es obligatorio.")},
         widget=forms.Textarea(
             attrs={
                 "class": "ui-input ui-input--textarea",
-                "placeholder": "Escribe aqui el mensaje que recibira el usuario.",
+                "placeholder": _("Escribe aqui el mensaje que recibira el usuario."),
                 "rows": 5,
             }
         ),
@@ -44,23 +45,25 @@ class AdminBroadcastNotificationForm(forms.Form):
     """Recoge un aviso general que el admin enviará a todos los usuarios."""
 
     title = forms.CharField(
-        label="Asunto general",
+        label=_("Asunto general"),
         max_length=140,
-        error_messages={"required": "Este campo es obligatorio."},
+        error_messages={"required": _("Este campo es obligatorio.")},
         widget=forms.TextInput(
             attrs={
                 "class": "ui-input",
-                "placeholder": "Ej. Aviso general para toda la plantilla",
+                "placeholder": _("Ej. Aviso general para toda la plantilla"),
             }
         ),
     )
     message = forms.CharField(
-        label="Mensaje general",
-        error_messages={"required": "Este campo es obligatorio."},
+        label=_("Mensaje general"),
+        error_messages={"required": _("Este campo es obligatorio.")},
         widget=forms.Textarea(
             attrs={
                 "class": "ui-input ui-input--textarea",
-                "placeholder": "Escribe aqui el aviso que recibirán todos los usuarios.",
+                "placeholder": _(
+                    "Escribe aqui el aviso que recibirán todos los usuarios."
+                ),
                 "rows": 5,
             }
         ),

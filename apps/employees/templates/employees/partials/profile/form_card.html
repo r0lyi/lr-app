@@ -1,3 +1,12 @@
+{% load i18n %}
+{% translate "Nombre/s" as first_name_label %}
+{% translate "Apellidos" as last_name_label %}
+{% translate "Correo electrónico" as email_label %}
+{% translate "Teléfono" as phone_label %}
+{% translate "Fecha de ingreso" as hire_date_label %}
+{% translate "Cambiar contrasena" as change_password_label %}
+{% translate "Guardar cambios" as save_changes_label %}
+
 <section class="profile-main-card dash-card">
   <form class="profile-form" method="post" novalidate>
     {% csrf_token %}
@@ -5,8 +14,8 @@
 
     <div class="profile-main-card__header">
       <div>
-        <p class="profile-main-card__eyebrow">Perfil</p>
-        <h2 class="profile-main-card__title">Editar datos del empleado</h2>
+        <p class="profile-main-card__eyebrow">{% translate "Perfil" %}</p>
+        <h2 class="profile-main-card__title">{% translate "Editar datos del empleado" %}</h2>
       </div>
    
     </div>
@@ -20,16 +29,16 @@
     {% endif %}
 
     <div class="profile-fields">
-      {% include "components/ui/text_input.html" with label="Nombre/s" name="first_name" id=employee_form.first_name.id_for_label value=employee_form.first_name.value|default_if_none:'' autocomplete="given-name" error=employee_form.first_name.errors.0 wrapper_class="profile-field" %}
-      {% include "components/ui/text_input.html" with label="Apellidos" name="last_name" id=employee_form.last_name.id_for_label value=employee_form.last_name.value|default_if_none:'' autocomplete="family-name" error=employee_form.last_name.errors.0 wrapper_class="profile-field" %}
-      {% include "components/ui/text_input.html" with label="Correo electrónico" name="email_display" id="profile-email-display" type="email" value=request.user.email wrapper_class="profile-field profile-field--full" disabled=True %}
-      {% include "components/ui/phone_input.html" with label="Teléfono" name="phone" id=employee_form.phone.id_for_label value=employee_form.phone.value|default_if_none:'' autocomplete="tel" error=employee_form.phone.errors.0 wrapper_class="profile-field" %}
-      {% include "components/ui/date_input.html" with label="Fecha de ingreso" name="hire_date_display" id="profile-hire-date-display" value=employee_profile.hire_date|date:"Y-m-d" wrapper_class="profile-field" disabled=True %}
+      {% include "components/ui/text_input.html" with label=first_name_label name="first_name" id=employee_form.first_name.id_for_label value=employee_form.first_name.value|default_if_none:'' autocomplete="given-name" error=employee_form.first_name.errors.0 wrapper_class="profile-field" %}
+      {% include "components/ui/text_input.html" with label=last_name_label name="last_name" id=employee_form.last_name.id_for_label value=employee_form.last_name.value|default_if_none:'' autocomplete="family-name" error=employee_form.last_name.errors.0 wrapper_class="profile-field" %}
+      {% include "components/ui/text_input.html" with label=email_label name="email_display" id="profile-email-display" type="email" value=request.user.email wrapper_class="profile-field profile-field--full" disabled=True %}
+      {% include "components/ui/phone_input.html" with label=phone_label name="phone" id=employee_form.phone.id_for_label value=employee_form.phone.value|default_if_none:'' autocomplete="tel" error=employee_form.phone.errors.0 wrapper_class="profile-field" %}
+      {% include "components/ui/date_input.html" with label=hire_date_label name="hire_date_display" id="profile-hire-date-display" value=employee_profile.hire_date|date:"Y-m-d" wrapper_class="profile-field" disabled=True %}
     </div>
 
   <div class="profile-actions">
-      {% include "components/ui/button_secondari.html" with label="Cambiar contrasena" type="button" size="md" class_name="profile-open-password" id="open-password-modal" %}
-      {% include "components/ui/button_principal.html" with label="Guardar cambios" type="submit" size="md" class_name="profile-submit-btn" %}
+      {% include "components/ui/button_secondari.html" with label=change_password_label type="button" size="md" class_name="profile-open-password" id="open-password-modal" %}
+      {% include "components/ui/button_principal.html" with label=save_changes_label type="submit" size="md" class_name="profile-submit-btn" %}
   </div>
 </form>
 </section>

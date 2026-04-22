@@ -1,20 +1,25 @@
+{% load i18n %}
+{% translate "Sin detalle disponible." as no_detail_label %}
+{% translate "actividades" as audit_item_label %}
+{% translate "Paginación del historial de actividad" as audit_pagination_label %}
+
 <div class="audit-log-table">
   {% if audit_logs %}
     <table class="data-table">
       <thead>
         <tr>
-          <th>Fecha</th>
-          <th>Tipo de cambio</th>
-          <th>Realizado por</th>
-          <th>Qué sucedió</th>
-          <th>Acciones</th>
+          <th>{% translate "Fecha" %}</th>
+          <th>{% translate "Tipo de cambio" %}</th>
+          <th>{% translate "Realizado por" %}</th>
+          <th>{% translate "Qué sucedió" %}</th>
+          <th>{% translate "Acciones" %}</th>
         </tr>
       </thead>
       <tbody>
         {% for audit_item in audit_logs %}
           <tr>
-            <td data-label="Fecha">{{ audit_item.created_at|date:"d-m-Y H:i" }}</td>
-            <td data-label="Tipo de cambio">
+            <td data-label="{% translate 'Fecha' %}">{{ audit_item.created_at|date:"d-m-Y H:i" }}</td>
+            <td data-label="{% translate 'Tipo de cambio' %}">
               <span class="
                 audit-log-table__badge
                 {% if audit_item.action == 'user_access_state_changed' or audit_item.action == 'user_account_activated' %}
@@ -30,16 +35,16 @@
                 {{ audit_item.action_label }}
               </span>
             </td>
-            <td data-label="Realizado por">{{ audit_item.user.email }}</td>
-            <td data-label="Qué sucedió">{{ audit_item.description|default:"Sin detalle disponible." }}</td>
-            <td data-label="Acciones">
+            <td data-label="{% translate 'Realizado por' %}">{{ audit_item.user.email }}</td>
+            <td data-label="{% translate 'Qué sucedió' %}">{{ audit_item.description|default:no_detail_label }}</td>
+            <td data-label="{% translate 'Acciones' %}">
               <div class="audit-log-table__actions">
                 {% if audit_item.resource_type == audit_resource_type_user %}
                   <a
                     class="audit-log-table__view-link"
                     href="{% url 'dashboard:admin-user-edit' audit_item.resource_id %}"
-                    aria-label="Ver usuario relacionado"
-                    title="Ver usuario relacionado"
+                    aria-label="{% translate 'Ver usuario relacionado' %}"
+                    title="{% translate 'Ver usuario relacionado' %}"
                   >
                     {% include "components/ui/icon.html" with name="eye" %}
                   </a>
@@ -47,8 +52,8 @@
                   <a
                     class="audit-log-table__view-link"
                     href="{% url 'vacations:review-request' audit_item.resource_id %}"
-                    aria-label="Ver solicitud relacionada"
-                    title="Ver solicitud relacionada"
+                    aria-label="{% translate 'Ver solicitud relacionada' %}"
+                    title="{% translate 'Ver solicitud relacionada' %}"
                   >
                     {% include "components/ui/icon.html" with name="eye" %}
                   </a>
@@ -65,9 +70,9 @@
     </table>
   {% else %}
     <p class="audit-log-table__empty">
-      No hay actividad que coincida con los filtros aplicados.
+      {% translate "No hay actividad que coincida con los filtros aplicados." %}
     </p>
   {% endif %}
 </div>
 
-{% include "components/ui/table_footer.html" with total_count=audit_logs_count item_label_plural="actividades" aria_label="Paginación del historial de actividad" %}
+{% include "components/ui/table_footer.html" with total_count=audit_logs_count item_label_plural=audit_item_label aria_label=audit_pagination_label %}

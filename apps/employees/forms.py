@@ -2,6 +2,7 @@
 
 from django import forms
 from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 
 from apps.employees.models import Employee
 from apps.users.models import User
@@ -12,32 +13,32 @@ class EmployeeOnboardingForm(forms.Form):
 
     first_name = forms.CharField(
         max_length=100,
-        label="Nombre",
+        label=_("Nombre"),
         widget=forms.TextInput(
             attrs={
                 "class": "ui-input",
-                "placeholder": "Introduce tu nombre",
+                "placeholder": _("Introduce tu nombre"),
                 "autocomplete": "given-name",
             }
         ),
     )
     last_name = forms.CharField(
         max_length=100,
-        label="Apellidos",
+        label=_("Apellidos"),
         widget=forms.TextInput(
             attrs={
                 "class": "ui-input",
-                "placeholder": "Introduce tus apellidos",
+                "placeholder": _("Introduce tus apellidos"),
                 "autocomplete": "family-name",
             }
         ),
     )
     email = forms.EmailField(
-        label="Correo electrónico",
+        label=_("Correo electrónico"),
         widget=forms.EmailInput(
             attrs={
                 "class": "ui-input",
-                "placeholder": "Introduce tu correo",
+                "placeholder": _("Introduce tu correo"),
                 "autocomplete": "email",
             }
         ),
@@ -45,17 +46,17 @@ class EmployeeOnboardingForm(forms.Form):
     phone = forms.CharField(
         max_length=20,
         required=False,
-        label="Teléfono",
+        label=_("Teléfono"),
         widget=forms.TextInput(
             attrs={
                 "class": "ui-input",
-                "placeholder": "Introduce tu teléfono",
+                "placeholder": _("Introduce tu teléfono"),
                 "autocomplete": "tel",
             }
         ),
     )
     hire_date = forms.DateField(
-        label="Fecha de ingreso",
+        label=_("Fecha de ingreso"),
         widget=forms.DateInput(
             attrs={
                 "class": "ui-input",
@@ -78,7 +79,7 @@ class EmployeeOnboardingForm(forms.Form):
         if self.user:
             qs = qs.exclude(pk=self.user.pk)
         if qs.exists():
-            raise ValidationError("Este correo ya está en uso.")
+            raise ValidationError(_("Este correo ya está en uso."))
         return email
 
 
@@ -99,9 +100,9 @@ class EmployeeProfileUpdateForm(forms.ModelForm):
             "phone",
         )
         labels = {
-            "first_name": "Nombre",
-            "last_name": "Apellidos",
-            "phone": "Teléfono",
+            "first_name": _("Nombre"),
+            "last_name": _("Apellidos"),
+            "phone": _("Teléfono"),
         }
         widgets = {
             "first_name": forms.TextInput(

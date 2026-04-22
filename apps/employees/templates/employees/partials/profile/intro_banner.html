@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <section class="profile-hero" aria-labelledby="profile-hero-title">
   <div class="profile-hero__icon" aria-hidden="true">
     <svg viewBox="0 0 24 24" fill="none">
@@ -8,11 +10,13 @@
 
   <div class="profile-hero__copy">
     <h1 class="profile-hero__title" id="profile-hero-title">
-      ¿Necesitas actualizar tus datos?
+      {% translate "¿Necesitas actualizar tus datos?" %}
     </h1>
     <p class="profile-hero__text">
-    Mantén tu información personal al día para asegurar el correcto funcionamiento del sistema. 
-    Puedes modificar tu nombre, apellidos y teléfono cuando lo necesites.
+      {% blocktranslate trimmed %}
+        Mantén tu información personal al día para asegurar el correcto funcionamiento del sistema.
+        Puedes modificar tu nombre, apellidos y teléfono cuando lo necesites.
+      {% endblocktranslate %}
     </p>
   </div>
 </section>

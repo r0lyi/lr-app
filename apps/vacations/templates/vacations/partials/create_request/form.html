@@ -1,8 +1,12 @@
+{% load i18n %}
+{% translate "Escribe una nota opcional para RRHH si necesitas dar contexto a la solicitud." as employee_comment_placeholder %}
+{% translate "Enviar solicitud" as submit_request_label %}
+
 <section class="vac-request-panel">
   <div class="vac-request-panel__header">
     <div>
-      <p class="vac-request-panel__eyebrow">Solicitar vacaciones</p>
-      <h1 class="vac-request-panel__title">Selecciona tu periodo</h1>
+      <p class="vac-request-panel__eyebrow">{% translate "Solicitar vacaciones" %}</p>
+      <h1 class="vac-request-panel__title">{% translate "Selecciona tu periodo" %}</h1>
     </div>
   </div>
 
@@ -41,39 +45,39 @@
         >
           <div class="vac-calendar__header">
             <div class="vac-calendar__header-copy">
-              <p class="vac-calendar__eyebrow">Inicio</p>
-              <h3 class="vac-calendar__title">Fecha de inicio</h3>
+              <p class="vac-calendar__eyebrow">{% translate "Inicio" %}</p>
+              <h3 class="vac-calendar__title">{% translate "Fecha de inicio" %}</h3>
             </div>
-            <span class="vac-calendar__selected" data-calendar-selection aria-live="polite">Sin seleccionar</span>
+            <span class="vac-calendar__selected" data-calendar-selection aria-live="polite">{% translate "Sin seleccionar" %}</span>
           </div>
 
           <p class="vac-calendar__note">
-            Disponible desde {{ min_request_start_date|date:"d/m/Y" }}.
+            {% blocktranslate with date=min_request_start_date|date:"d/m/Y" %}Disponible desde {{ date }}.{% endblocktranslate %}
           </p>
 
           <div class="vac-calendar__toolbar">
-            <button class="vac-calendar__arrow" type="button" data-calendar-prev aria-label="Mes anterior">
+            <button class="vac-calendar__arrow" type="button" data-calendar-prev aria-label="{% translate 'Mes anterior' %}">
               <span aria-hidden="true">&#8249;</span>
             </button>
 
             <div class="vac-calendar__selectors">
-              <select class="vac-calendar__select" data-calendar-month aria-label="Mes"></select>
-              <select class="vac-calendar__select" data-calendar-year aria-label="Ano"></select>
+              <select class="vac-calendar__select" data-calendar-month aria-label="{% translate 'Mes' %}"></select>
+              <select class="vac-calendar__select" data-calendar-year aria-label="{% translate 'Ano' %}"></select>
             </div>
 
-            <button class="vac-calendar__arrow" type="button" data-calendar-next aria-label="Mes siguiente">
+            <button class="vac-calendar__arrow" type="button" data-calendar-next aria-label="{% translate 'Mes siguiente' %}">
               <span aria-hidden="true">&#8250;</span>
             </button>
           </div>
 
           <div class="vac-calendar__weekdays" aria-hidden="true">
-            <span>L</span>
-            <span>M</span>
-            <span>X</span>
-            <span>J</span>
-            <span>V</span>
-            <span>S</span>
-            <span>D</span>
+            <span>{% translate "L" %}</span>
+            <span>{% translate "M" %}</span>
+            <span>{% translate "X" %}</span>
+            <span>{% translate "J" %}</span>
+            <span>{% translate "V" %}</span>
+            <span>{% translate "S" %}</span>
+            <span>{% translate "D" %}</span>
           </div>
 
           <div class="vac-calendar__days" data-calendar-days></div>
@@ -92,39 +96,39 @@
         >
           <div class="vac-calendar__header">
             <div class="vac-calendar__header-copy">
-              <p class="vac-calendar__eyebrow">Fin</p>
-              <h3 class="vac-calendar__title">Fecha de fin</h3>
+              <p class="vac-calendar__eyebrow">{% translate "Fin" %}</p>
+              <h3 class="vac-calendar__title">{% translate "Fecha de fin" %}</h3>
             </div>
-            <span class="vac-calendar__selected" data-calendar-selection aria-live="polite">Sin seleccionar</span>
+            <span class="vac-calendar__selected" data-calendar-selection aria-live="polite">{% translate "Sin seleccionar" %}</span>
           </div>
 
           <p class="vac-calendar__note">
-            El calendario de fin nunca permitirá una fecha anterior al inicio.
+            {% translate "El calendario de fin nunca permitirá una fecha anterior al inicio." %}
           </p>
 
           <div class="vac-calendar__toolbar">
-            <button class="vac-calendar__arrow" type="button" data-calendar-prev aria-label="Mes anterior">
+            <button class="vac-calendar__arrow" type="button" data-calendar-prev aria-label="{% translate 'Mes anterior' %}">
               <span aria-hidden="true">&#8249;</span>
             </button>
 
             <div class="vac-calendar__selectors">
-              <select class="vac-calendar__select" data-calendar-month aria-label="Mes"></select>
-              <select class="vac-calendar__select" data-calendar-year aria-label="Ano"></select>
+              <select class="vac-calendar__select" data-calendar-month aria-label="{% translate 'Mes' %}"></select>
+              <select class="vac-calendar__select" data-calendar-year aria-label="{% translate 'Ano' %}"></select>
             </div>
 
-            <button class="vac-calendar__arrow" type="button" data-calendar-next aria-label="Mes siguiente">
+            <button class="vac-calendar__arrow" type="button" data-calendar-next aria-label="{% translate 'Mes siguiente' %}">
               <span aria-hidden="true">&#8250;</span>
             </button>
           </div>
 
           <div class="vac-calendar__weekdays" aria-hidden="true">
-            <span>L</span>
-            <span>M</span>
-            <span>X</span>
-            <span>J</span>
-            <span>V</span>
-            <span>S</span>
-            <span>D</span>
+            <span>{% translate "L" %}</span>
+            <span>{% translate "M" %}</span>
+            <span>{% translate "X" %}</span>
+            <span>{% translate "J" %}</span>
+            <span>{% translate "V" %}</span>
+            <span>{% translate "S" %}</span>
+            <span>{% translate "D" %}</span>
           </div>
 
           <div class="vac-calendar__days" data-calendar-days></div>
@@ -139,47 +143,47 @@
     <div class="vac-request-bottom-grid">
       <section class="vac-request-notes-panel">
         <div class="vac-request-notes-panel__header">
-          <p class="vac-request-notes-panel__eyebrow">Información adicional</p>
-          <h2 class="vac-request-notes-panel__title">Añade contexto si lo necesitas</h2>
+          <p class="vac-request-notes-panel__eyebrow">{% translate "Información adicional" %}</p>
+          <h2 class="vac-request-notes-panel__title">{% translate "Añade contexto si lo necesitas" %}</h2>
         </div>
 
-        {% include "components/ui/textarea_input.html" with label=form.employee_comment.label name=form.employee_comment.name id=form.employee_comment.id_for_label value=form.employee_comment.value|default_if_none:'' error=form.employee_comment.errors|join:', ' rows="4" placeholder="Escribe una nota opcional para RRHH si necesitas dar contexto a la solicitud." wrapper_class="vac-request-notes-panel__field" %}
+        {% include "components/ui/textarea_input.html" with label=form.employee_comment.label name=form.employee_comment.name id=form.employee_comment.id_for_label value=form.employee_comment.value|default_if_none:'' error=form.employee_comment.errors|join:', ' rows="4" placeholder=employee_comment_placeholder wrapper_class="vac-request-notes-panel__field" %}
       </section>
 
       <aside class="vac-request-summary-panel" aria-labelledby="vac-request-summary-title">
         <div class="vac-request-summary-panel__header">
-          <p class="vac-request-summary-panel__eyebrow">Resumen</p>
+          <p class="vac-request-summary-panel__eyebrow">{% translate "Resumen" %}</p>
           <h2 class="vac-request-summary-panel__title" id="vac-request-summary-title">
-            Revisa tu solicitud
+            {% translate "Revisa tu solicitud" %}
           </h2>
         </div>
 
         <div class="vac-request-summary-panel__items">
           <div class="vac-request-summary-panel__item">
-            <span>Inicio</span>
-            <strong id="selected-start-summary" aria-live="polite">Sin seleccionar</strong>
+            <span>{% translate "Inicio" %}</span>
+            <strong id="selected-start-summary" aria-live="polite">{% translate "Sin seleccionar" %}</strong>
           </div>
 
           <div class="vac-request-summary-panel__item">
-            <span>Fin</span>
-            <strong id="selected-end-summary" aria-live="polite">Sin seleccionar</strong>
+            <span>{% translate "Fin" %}</span>
+            <strong id="selected-end-summary" aria-live="polite">{% translate "Sin seleccionar" %}</strong>
           </div>
 
           <div class="vac-request-summary-panel__item vac-request-summary-panel__item--total">
-            <span>Total</span>
-            <strong><span id="selected-days-counter" aria-live="polite">0</span> días</strong>
+            <span>{% translate "Total" %}</span>
+            <strong>{% blocktranslate %}<span id="selected-days-counter" aria-live="polite">0</span> días{% endblocktranslate %}</strong>
           </div>
         </div>
 
         <p class="vac-request-summary-panel__range" id="selected-range-summary" aria-live="polite">
-          Selecciona ambas fechas en el calendario.
+          {% translate "Selecciona ambas fechas en el calendario." %}
         </p>
 
         <p class="vac-request-summary-panel__note">
-          Tu solicitud se enviará a RRHH para revisión.
+          {% translate "Tu solicitud se enviará a RRHH para revisión." %}
         </p>
 
-        {% include "components/ui/button_principal.html" with label="Enviar solicitud" type="submit" size="md" id="submit-request-button" disabled=True full_width=True class_name="vac-request-submit" %}
+        {% include "components/ui/button_principal.html" with label=submit_request_label type="submit" size="md" id="submit-request-button" disabled=True full_width=True class_name="vac-request-submit" %}
       </aside>
     </div>
   </form>

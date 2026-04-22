@@ -1,6 +1,8 @@
+{% load i18n %}
+
 <section class="profile-empty-card">
-  <p class="profile-empty-card__eyebrow">Perfil</p>
-  <h1 class="profile-empty-card__title">No existe una ficha de empleado asociada a este usuario.</h1>
-  <p class="profile-empty-card__text"><strong>Correo electrónico:</strong> {{ request.user.email }}</p>
-  <p class="profile-empty-card__text"><strong>Rol actual:</strong> {{ role_label }}</p>
+  <p class="profile-empty-card__eyebrow">{% translate "Perfil" %}</p>
+  <h1 class="profile-empty-card__title">{% translate "No existe una ficha de empleado asociada a este usuario." %}</h1>
+  <p class="profile-empty-card__text"><strong>{% translate "Correo electrónico:" %}</strong> {{ request.user.email }}</p>
+  <p class="profile-empty-card__text"><strong>{% translate "Rol actual:" %}</strong> {{ role_label }}</p>
 </section>

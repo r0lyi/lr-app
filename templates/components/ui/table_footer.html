@@ -1,9 +1,13 @@
+{% load i18n %}
+{% translate "registros" as default_item_label_plural %}
+{% firstof item_label_plural default_item_label_plural as resolved_item_label_plural %}
+
 <div class="ui-table-footer {{ class_name|default:'' }}">
   <p class="ui-table-footer__count">
     {% if total_count %}
-      Mostrando {{ page_obj.start_index }}-{{ page_obj.end_index }} de {{ total_count }} {{ item_label_plural|default:"registros" }}
+      {% blocktranslate with start=page_obj.start_index end=page_obj.end_index total=total_count item_label=resolved_item_label_plural %}Mostrando {{ start }}-{{ end }} de {{ total }} {{ item_label }}{% endblocktranslate %}
     {% else %}
-      Mostrando 0 {{ item_label_plural|default:"registros" }}
+      {% blocktranslate with item_label=resolved_item_label_plural %}Mostrando 0 {{ item_label }}{% endblocktranslate %}
     {% endif %}
   </p>
 

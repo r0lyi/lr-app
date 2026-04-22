@@ -1,3 +1,6 @@
+{% load i18n %}
+{% translate "Usuario" as default_user_label %}
+
 <div
   class="dash-help"
   id="dash-help-panel"
@@ -18,10 +21,10 @@
   >
     <header class="dash-help__header">
       <div class="dash-help__heading">
-        <span class="dash-help__eyebrow">Centro de ayuda</span>
-        <h2 class="dash-help__title" id="dash-help-title">Ayuda rápida</h2>
+        <span class="dash-help__eyebrow">{% translate "Centro de ayuda" %}</span>
+        <h2 class="dash-help__title" id="dash-help-title">{% translate "Ayuda rápida" %}</h2>
       </div>
-      <button class="dash-help__close" type="button" data-help-close aria-label="Cerrar ayuda">
+      <button class="dash-help__close" type="button" data-help-close aria-label="{% translate 'Cerrar ayuda' %}">
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
       </button>
@@ -33,10 +36,10 @@
           {% include "components/ui/icon.html" with name="info" %}
         </span>
         <div>
-          <p class="dash-help__role">{{ role_label|default:"Usuario" }}</p>
-          <h3 class="dash-help__intro-title" id="dash-help-intro-title">Soporte interno</h3>
+          <p class="dash-help__role">{{ role_label|default:default_user_label }}</p>
+          <h3 class="dash-help__intro-title" id="dash-help-intro-title">{% translate "Soporte interno" %}</h3>
           <p class="dash-help__intro-text" id="dash-help-description">
-            Encuentra accesos clave y canales de contacto sin abandonar tu trabajo actual.
+            {% translate "Encuentra accesos clave y canales de contacto sin abandonar tu trabajo actual." %}
           </p>
         </div>
       </section>
@@ -44,7 +47,7 @@
       {% if nav_items %}
         <section class="dash-help__section" aria-labelledby="dash-help-shortcuts-title">
           <div class="dash-help__section-header">
-            <h3 class="dash-help__section-title" id="dash-help-shortcuts-title">Accesos frecuentes</h3>
+            <h3 class="dash-help__section-title" id="dash-help-shortcuts-title">{% translate "Accesos frecuentes" %}</h3>
             <span class="dash-help__section-count">{{ nav_items|length }}</span>
           </div>
           <div class="dash-help__links">
@@ -53,7 +56,7 @@
                 <span class="dash-help-link__marker" aria-hidden="true"></span>
                 <span class="dash-help-link__copy">
                   <strong>{{ item.label }}</strong>
-                  <small>Ir a {{ item.label|lower }}</small>
+                  <small>{% blocktranslate with label=item.label|lower %}Ir a {{ label }}{% endblocktranslate %}</small>
                 </span>
                 <span class="dash-help-link__arrow" aria-hidden="true">
                   {% include "components/ui/icon.html" with name="chevron-right" %}
@@ -66,26 +69,26 @@
 
       <section class="dash-help__section" aria-labelledby="dash-help-topics-title">
         <div class="dash-help__section-header">
-          <h3 class="dash-help__section-title" id="dash-help-topics-title">Temas comunes</h3>
+          <h3 class="dash-help__section-title" id="dash-help-topics-title">{% translate "Temas comunes" %}</h3>
         </div>
         <div class="dash-help__topic-grid">
           <article class="dash-help-topic dash-help-topic--vacations">
-            <span class="dash-help-topic__label">Vacaciones</span>
-            <strong>Solicitudes, días y estados</strong>
+            <span class="dash-help-topic__label">{% translate "Vacaciones" %}</span>
+            <strong>{% translate "Solicitudes, días y estados" %}</strong>
           </article>
           <article class="dash-help-topic dash-help-topic--profile">
-            <span class="dash-help-topic__label">Perfil</span>
-            <strong>Datos personales y acceso</strong>
+            <span class="dash-help-topic__label">{% translate "Perfil" %}</span>
+            <strong>{% translate "Datos personales y acceso" %}</strong>
           </article>
-          {% if role_label == "RRHH" %}
+          {% if role_name == "rrhh" %}
             <article class="dash-help-topic dash-help-topic--exports">
-              <span class="dash-help-topic__label">RRHH</span>
-              <strong>Revisión y exportaciones</strong>
+              <span class="dash-help-topic__label">{% translate "RRHH" %}</span>
+              <strong>{% translate "Revisión y exportaciones" %}</strong>
             </article>
-          {% elif role_label == "Administrador" %}
+          {% elif role_name == "admin" %}
             <article class="dash-help-topic dash-help-topic--admin">
-              <span class="dash-help-topic__label">Admin</span>
-              <strong>Usuarios, roles y actividad</strong>
+              <span class="dash-help-topic__label">{% translate "Admin" %}</span>
+              <strong>{% translate "Usuarios, roles y actividad" %}</strong>
             </article>
           {% endif %}
         </div>
@@ -93,11 +96,11 @@
 
       <section class="dash-help__contact" aria-labelledby="dash-help-contact-title">
         <div>
-          <span class="dash-help__contact-kicker">Canal recomendado</span>
-          <h3 class="dash-help__contact-title" id="dash-help-contact-title">RRHH o administración</h3>
-          <p>Para incidencias urgentes, usa el canal interno habitual de tu equipo.</p>
+          <span class="dash-help__contact-kicker">{% translate "Canal recomendado" %}</span>
+          <h3 class="dash-help__contact-title" id="dash-help-contact-title">{% translate "RRHH o administración" %}</h3>
+          <p>{% translate "Para incidencias urgentes, usa el canal interno habitual de tu equipo." %}</p>
         </div>
-        <span class="dash-help__status">Activo</span>
+        <span class="dash-help__status">{% translate "Activo" %}</span>
       </section>
     </div>
   </aside>
