@@ -27,6 +27,7 @@ def root_redirect(request):
     return redirect("auth:login")
 
 urlpatterns = [
+    path('i18n/', include('django.conf.urls.i18n')),
     path("", root_redirect, name="root"),
     path('admin/', admin.site.urls),
     path('auth/', include('apps.users.urls', namespace='auth')),
