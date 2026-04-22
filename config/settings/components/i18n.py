@@ -9,6 +9,7 @@ LANGUAGE_CODE = "es"
 LANGUAGES = [
     ('es', 'Español'),
     ('en', 'English'),
+    ('cat', 'Català'),
 ]
 LOCALE_PATHS = [
     BASE_DIR / 'locale',
