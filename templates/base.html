@@ -1,7 +1,8 @@
 {% load i18n static %}
+{% get_current_language as LANGUAGE_CODE %}
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang="{% if LANGUAGE_CODE == 'cat' %}ca{% else %}{{ LANGUAGE_CODE|default:'es' }}{% endif %}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />

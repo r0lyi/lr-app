@@ -19,7 +19,7 @@ from .components.email import (
     FRONTEND_URL,
     RESEND_API_KEY,
 )
-from .components.i18n import LANGUAGE_CODE, TIME_ZONE, USE_I18N, USE_TZ
+from .components.i18n import LANGUAGE_CODE, LANGUAGES, LOCALE_PATHS, TIME_ZONE, USE_I18N, USE_TZ
 from .components.middleware import MIDDLEWARE
 from .components.shared import BASE_DIR, SECRET_KEY, env
 from .components.static import STATICFILES_DIRS, STATIC_URL
