@@ -1,0 +1,17 @@
+{% extends "layouts/dashboard/base.html" %}
+{% load i18n static %}
+
+{% block title %}{% translate "Panel de administrador" %}{% endblock %}
+
+{% block dashboard_header_title %}{% translate "Portal de administración" %}{% endblock %}
+
+{% block dashboard_content_class %}dash-content--wide{% endblock %}
+
+{% block dashboard_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'dashboard/css/pages/admin_home.css' %}">
+{% endblock %}
+
+{% block dashboard_content %}
+  {% include "dashboard/partials/admin/home_content.html" %}
+{% endblock %}

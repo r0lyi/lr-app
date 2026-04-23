@@ -1,0 +1,67 @@
+{% load i18n %}
+{% translate "DNI" as dni_label %}
+{% translate "Correo electrónico" as email_label %}
+{% translate "Cancelar" as cancel_label %}
+{% translate "Crear usuario" as create_user_label %}
+{% translate "12345678Z" as dni_placeholder %}
+{% translate "nombre@empresa.com" as email_placeholder %}
+
+<div
+  class="ui-modal{% if create_user_form.errors %} is-open{% endif %} admin-user-create-modal"
+  id="admin-user-create-modal"
+  aria-hidden="{% if create_user_form.errors %}false{% else %}true{% endif %}"
+>
+  <a
+    class="ui-modal__overlay admin-user-create-modal__overlay"
+    href="{{ create_user_close_url }}"
+    aria-label="{% translate 'Cerrar modal' %}"
+    data-admin-user-create-close
+  ></a>
+  <div class="ui-modal__content" role="dialog" aria-modal="true" aria-labelledby="admin-user-create-title">
+    <div class="ui-modal__header admin-user-create-modal__header">
+      <div>
+        <p class="admin-user-create-modal__eyebrow">{% translate "Alta rápida" %}</p>
+        <h2 class="ui-modal__title" id="admin-user-create-title">{% translate "Nuevo usuario" %}</h2>
+        <p class="admin-user-create-modal__subtitle">
+          {% translate "Crea una cuenta pendiente de activación con DNI y correo electrónico. El usuario recibirá el enlace de acceso por email." %}
+        </p>
+      </div>
+      <a
+        class="ui-modal__close"
+        href="{{ create_user_close_url }}"
+        data-admin-user-create-close
+        aria-label="{% translate 'Cerrar modal' %}"
+      >
+        ×
+      </a>
+    </div>
+
+    <div class="ui-modal__body admin-user-create-modal__body">
+      <form class="admin-user-create-modal__form" method="post" action="{{ create_user_action }}" novalidate>
+        {% csrf_token %}
+
+        {% if create_user_form.non_field_errors %}
+          <div class="admin-user-create-modal__errors">
+            {% for error in create_user_form.non_field_errors %}
+              <p>{{ error }}</p>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        <div class="admin-user-create-modal__fields">
+          {% include "components/ui/text_input.html" with label=dni_label name="dni" id=create_user_form.dni.id_for_label type="text" placeholder=dni_placeholder left_icon_name="id-card" value=create_user_form.dni.value error=create_user_form.dni.errors.0 %}
+          {% include "components/ui/text_input.html" with label=email_label name="email" id=create_user_form.email.id_for_label type="email" placeholder=email_placeholder left_icon_name="mail" value=create_user_form.email.value error=create_user_form.email.errors.0 %}
+        </div>
+
+        <p class="admin-user-create-modal__note">
+          {% translate "Se enviará un enlace de activación al correo indicado una vez se cree la cuenta." %}
+        </p>
+
+        <div class="admin-user-create-modal__footer">
+          {% include "components/ui/button_secondari.html" with label=cancel_label type="button" size="md" class_name="admin-user-create-modal-cancel" %}
+          {% include "components/ui/button_principal.html" with label=create_user_label type="submit" size="md" left_icon_name="user-plus" %}
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,18 @@
+{% extends "layouts/dashboard/base.html" %}
+{% load i18n static %}
+
+{% block title %}{% translate "Historial de Actividad" %}{% endblock %}
+
+{% block dashboard_header_title %}{% translate "Portal de auditoría" %}{% endblock %}
+
+{% block dashboard_content_class %}dash-content--wide audit-log-content{% endblock %}
+
+{% block dashboard_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/components/data_table.css' %}">
+  <link rel="stylesheet" href="{% static 'audit/css/pages/audit_log.css' %}">
+{% endblock %}
+
+{% block dashboard_content %}
+  {% include "audit/partials/audit_log/content.html" %}
+{% endblock %}

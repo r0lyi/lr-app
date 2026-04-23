@@ -1,0 +1,11 @@
+<a
+  class="dash-nav-link{% if active %} active{% endif %}"
+  href="{% url url_name %}"
+>
+  <span class="dash-nav-icon" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none">
+      <path d="M12 2.5c-3.6 4-7.2 8.3-7.2 12.3A7.2 7.2 0 0 0 12 22a7.2 7.2 0 0 0 7.2-7.2C19.2 10.8 15.6 6.5 12 2.5Z" fill="currentColor"/>
+    </svg>
+  </span>
+  <span class="dash-nav-label">{{ label }}</span>
+</a>

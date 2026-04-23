@@ -14,9 +14,27 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
-from django.urls import path
+from django.shortcuts import redirect
+from django.urls import include, path
+
+from config.error_views import page_not_found_view
+
+def root_redirect(request):
+    if request.user.is_authenticated:
+        return redirect("dashboard:home")
+    return redirect("auth:login")
 
 urlpatterns = [
+    path('i18n/', include('django.conf.urls.i18n')),
+    path("", root_redirect, name="root"),
     path('admin/', admin.site.urls),
+    path('auth/', include('apps.users.urls', namespace='auth')),
+    path('audit/', include('apps.audit.urls', namespace='audit')),
+    path('employees/', include('apps.employees.urls', namespace='employees')),
+    path('notifications/', include('apps.notifications.urls', namespace='notifications')),
+    path('dashboard/', include('apps.dashboard.urls', namespace='dashboard')),
+    path('vacations/', include('apps.vacations.urls', namespace='vacations')),
+    path("<path:unknown_path>", page_not_found_view, name="not-found"),
 ]

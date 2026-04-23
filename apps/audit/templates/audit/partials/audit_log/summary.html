@@ -1,0 +1,16 @@
+<section class="audit-log-summary">
+  {% for card in audit_summary_cards %}
+    <article class="audit-log-summary__card audit-log-summary__card--{{ card.tone }}">
+      <div class="audit-log-summary__top">
+        <span class="audit-log-summary__icon" aria-hidden="true">
+          {% include "components/ui/icon.html" with name=card.icon %}
+        </span>
+        {% if card.meta %}
+          <span class="audit-log-summary__meta">{{ card.meta }}</span>
+        {% endif %}
+      </div>
+      <span class="audit-log-summary__label">{{ card.label }}</span>
+      <strong class="audit-log-summary__value">{{ card.value }}</strong>
+    </article>
+  {% endfor %}
+</section>

@@ -1,0 +1,18 @@
+{% extends "layouts/dashboard/base.html" %}
+{% load i18n static %}
+
+{% block title %}{% translate "Historial de exportaciones" %}{% endblock %}
+
+{% block dashboard_header_title %}{% translate "Portal de auditoría" %}{% endblock %}
+
+{% block dashboard_content_class %}dash-content--wide export-history-content{% endblock %}
+
+{% block dashboard_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/components/data_table.css' %}">
+  <link rel="stylesheet" href="{% static 'audit/css/pages/export_history.css' %}">
+{% endblock %}
+
+{% block dashboard_content %}
+  {% include "audit/partials/export_history/content.html" %}
+{% endblock %}

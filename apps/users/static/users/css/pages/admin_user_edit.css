@@ -1,0 +1,344 @@
+.admin-user-edit-page {
+  position: relative;
+  min-height: 420px;
+}
+
+.admin-user-edit-modal {
+  display: flex;
+}
+
+.admin-user-edit-modal__overlay {
+  text-decoration: none;
+}
+
+.admin-user-edit-modal .ui-modal__content {
+  width: min(1040px, calc(100% - 32px));
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.admin-user-edit-modal__header {
+  padding: 24px 26px 18px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbfd 100%);
+}
+
+.admin-user-edit-modal__eyebrow {
+  margin: 0 0 8px;
+  color: #149adf;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.admin-user-edit-modal__subtitle {
+  margin: 10px 0 0;
+  max-width: 720px;
+  color: #64748b;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.admin-user-edit-modal__body {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 22px 26px 28px;
+}
+
+.admin-user-edit-summary {
+  display: grid;
+  grid-template-columns: minmax(260px, 1.3fr) repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.admin-user-edit-summary__identity,
+.admin-user-edit-summary__card {
+  padding: 16px 18px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 16px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+}
+
+.admin-user-edit-summary__identity {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
+
+.admin-user-edit-summary__name {
+  margin: 0;
+  color: #0f172a;
+  font-size: 21px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.admin-user-edit-summary__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.admin-user-edit-summary__label {
+  margin: 0 0 8px;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.admin-user-edit-summary__value {
+  margin: 0;
+  color: #334155;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.admin-user-edit-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.admin-user-edit-card {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 22px 24px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 20px;
+  background: #ffffff;
+}
+
+.admin-user-edit-card--wide {
+  grid-column: 1 / -1;
+}
+
+.admin-user-edit-card--account {
+  grid-column: 1 / -1;
+}
+
+.admin-user-edit-card__heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.admin-user-edit-card__title {
+  margin: 0;
+  color: #334155;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.admin-user-edit-card__description {
+  margin: 8px 0 0;
+  color: #64748b;
+  line-height: 1.6;
+}
+
+.admin-user-edit-card__badges {
+  flex-shrink: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.admin-user-edit-card__badge {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.admin-user-edit-card__badge--active {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.admin-user-edit-card__note {
+  margin: 0;
+  color: #64748b;
+  line-height: 1.6;
+}
+
+.admin-user-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.admin-user-edit-form--stacked {
+  align-items: stretch;
+}
+
+.admin-user-edit-form__fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.admin-user-edit-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.admin-user-edit-form__label {
+  color: #475569;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.admin-user-edit-form__select {
+  min-width: 300px;
+}
+
+.admin-user-edit-form__field .admin-user-edit-form__select {
+  min-width: 0;
+}
+
+.admin-user-edit-form__submit {
+  min-width: 200px;
+}
+
+.admin-user-edit-access {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.8fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.admin-user-edit-access__details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.admin-user-edit-access__detail {
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: #f8fafc;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.admin-user-edit-access__label {
+  display: block;
+  margin-bottom: 8px;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.admin-user-edit-access__value {
+  color: #334155;
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.admin-user-edit-access__actions,
+.admin-user-edit-access__form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.admin-user-edit-access__button {
+  min-width: 220px;
+}
+
+@media (max-width: 1080px) {
+  .admin-user-edit-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 920px) {
+  .admin-user-edit-modal .ui-modal__content {
+    width: min(100%, calc(100% - 16px));
+  }
+
+  .admin-user-edit-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-user-edit-access {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .admin-user-edit-modal {
+    padding: 16px;
+  }
+
+  .admin-user-edit-modal .ui-modal__content {
+    max-height: calc(100vh - 24px);
+    border-radius: 18px;
+  }
+
+  .admin-user-edit-modal__header,
+  .admin-user-edit-modal__body {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .admin-user-edit-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-user-edit-card__heading {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .admin-user-edit-card__badges {
+    justify-content: flex-start;
+  }
+
+  .admin-user-edit-form__fields {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-user-edit-access__details {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+@media (max-width: 560px) {
+  .admin-user-edit-form,
+  .admin-user-edit-access__form {
+    width: 100%;
+    align-items: stretch;
+  }
+
+  .admin-user-edit-form__select,
+  .admin-user-edit-form__submit,
+  .admin-user-edit-access__button {
+    width: 100%;
+    min-width: 0;
+  }
+}

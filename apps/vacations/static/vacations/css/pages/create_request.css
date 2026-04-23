@@ -1,0 +1,1484 @@
+.vac-request-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.vac-request-top {
+  display: grid;
+  grid-template-columns: minmax(240px, 280px) minmax(0, 1fr);
+  gap: 22px;
+  align-items: stretch;
+}
+
+.vac-request-info.ui-info-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 100%;
+  padding: 28px 30px 26px;
+  border-color: rgba(148, 163, 184, 0.16);
+  border-radius: 18px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.06);
+}
+
+.vac-request-info .ui-info-panel__eyebrow {
+  margin-bottom: 0;
+}
+
+.vac-request-info .ui-info-panel__title {
+  margin-bottom: 2px;
+  color: #111827;
+  font-size: 19px;
+  line-height: 1.2;
+}
+
+.vac-request-info .ui-info-panel__text,
+.vac-request-info .ui-info-panel__note,
+.vac-request-info .ui-info-panel__list {
+  color: #64748b;
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.vac-request-info .ui-info-panel__text + .ui-info-panel__list,
+.vac-request-info .ui-info-panel__list + .ui-info-panel__note,
+.vac-request-info .ui-info-panel__text + .ui-info-panel__note {
+  margin-top: 12px;
+}
+
+.vac-request-info .ui-info-panel__list {
+  padding-left: 18px;
+}
+
+.vac-request-info .ui-info-panel__list li + li {
+  margin-top: 6px;
+}
+
+.vac-request-summary-value {
+  color: #1ba4e3;
+}
+
+.vac-request-summary-value--warning {
+  color: #ef4444;
+}
+
+.vac-request-card {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 28px 30px 30px;
+}
+
+.vac-request-card-heading {
+  display: flex;
+  justify-content: flex-start;
+  gap: 16px;
+  align-items: flex-end;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+}
+
+.vac-request-card-heading .dash-card-title {
+  margin-bottom: 0;
+}
+
+.vac-request-card__description {
+  max-width: 760px;
+  margin-top: 8px;
+  color: #64748b;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.vac-request-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.vac-request-errors {
+  padding: 14px 16px;
+  border: 1px solid rgba(239, 68, 68, 0.22);
+  border-radius: 14px;
+  background: rgba(254, 242, 242, 0.94);
+  color: #b91c1c;
+}
+
+.vac-request-errors p + p {
+  margin-top: 6px;
+}
+
+.vac-request-selection-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px 22px;
+  border: 1px solid rgba(14, 165, 233, 0.14);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(251, 254, 255, 0.98) 0%, rgba(242, 248, 253, 0.96) 100%);
+  box-shadow: 0 10px 24px rgba(15, 118, 168, 0.08);
+}
+
+.vac-request-selection-summary__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.vac-request-selection-summary__eyebrow {
+  margin-bottom: 4px;
+  color: #0f87c7;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.vac-request-selection-summary__title {
+  color: #0f2f44;
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.vac-request-selection-summary__count {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 148px;
+  padding: 11px 13px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(14, 165, 233, 0.14);
+  color: #0f5f88;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  white-space: nowrap;
+}
+
+.vac-request-selection-summary__count strong {
+  font-size: 28px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.vac-request-selection-summary__count span {
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.vac-request-selection-summary__range {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: #476173;
+  line-height: 1.6;
+}
+
+.vac-request-selection-summary__label {
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+#selected-range-summary {
+  color: #1f3f5f;
+  font-weight: 700;
+}
+
+#selected-range-summary.is-invalid {
+  color: #c2410c;
+}
+
+.vac-request-calendars {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  justify-content: stretch;
+}
+
+.vac-calendar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: none;
+  padding: 20px 20px 18px;
+  border-radius: 22px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 16px 32px rgba(15, 23, 42, 0.08);
+}
+
+.vac-calendar--start {
+  background: linear-gradient(180deg, #8edaf3 0%, #62c7ec 100%);
+}
+
+.vac-calendar--end {
+  background: linear-gradient(180deg, #8be1d0 0%, #59c6b8 100%);
+}
+
+.vac-calendar__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.vac-calendar__header-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.vac-calendar__eyebrow {
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.vac-calendar__title {
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.vac-calendar__subtitle {
+  max-width: 320px;
+  color: rgba(255, 255, 255, 0.94);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.vac-calendar__selected {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 138px;
+  min-height: 38px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.82);
+  color: #0f5f88;
+  font-size: 13px;
+  font-weight: 800;
+  text-align: center;
+  box-shadow: 0 8px 16px rgba(15, 95, 136, 0.12);
+  white-space: nowrap;
+}
+
+.vac-calendar__note {
+  margin: 0;
+  padding: 11px 13px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.94);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.vac-calendar__toolbar,
+.vac-calendar__weekdays,
+.vac-calendar__days {
+  padding-left: 14px;
+  padding-right: 14px;
+}
+
+.vac-calendar__toolbar {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+}
+
+.vac-calendar__selectors {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(90px, 108px);
+  gap: 10px;
+}
+
+.vac-calendar__select {
+  min-height: 42px;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.88);
+  color: #0f3e57;
+  font-family: "Rubik", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+  outline: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(15, 62, 87, 0.08);
+}
+
+.vac-calendar__select:focus {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.26);
+}
+
+.vac-calendar__arrow {
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.vac-calendar__arrow:hover {
+  background: rgba(255, 255, 255, 0.28);
+  box-shadow: 0 8px 16px rgba(15, 62, 87, 0.12);
+  transform: translateY(-1px);
+}
+
+.vac-calendar__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  padding-top: 8px;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 11px;
+  font-weight: 800;
+  text-align: center;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.vac-calendar__days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.vac-calendar__day,
+.vac-calendar__day--empty {
+  min-height: 40px;
+}
+
+.vac-calendar__day {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #0f3e57;
+  font-family: "Rubik", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  transition:
+    transform 0.15s ease,
+    background-color 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.vac-calendar__day:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.34);
+  transform: translateY(-1px);
+}
+
+.vac-calendar__day--today {
+  box-shadow:
+    inset 0 0 0 1.5px rgba(15, 62, 87, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.vac-calendar--start .vac-calendar__day--selected {
+  background: #ffffff;
+  color: #0f5f88;
+  box-shadow: 0 8px 18px rgba(15, 95, 136, 0.18);
+}
+
+.vac-calendar--end .vac-calendar__day--selected {
+  background: #ffffff;
+  color: #0d7a6d;
+  box-shadow: 0 8px 18px rgba(13, 122, 109, 0.18);
+}
+
+.vac-calendar__day--disabled {
+  opacity: 0.32;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.vac-calendar__day--selected.vac-calendar__day--disabled {
+  opacity: 1;
+}
+
+.vac-calendar__day--disabled:not(.vac-calendar__day--selected) {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.vac-calendar__day--empty {
+  display: block;
+}
+
+.vac-calendar__error {
+  padding: 8px 12px 0;
+  color: #fff1f2;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.vac-request-additional {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 22px;
+  align-items: end;
+  padding-top: 6px;
+}
+
+.vac-request-additional__field {
+  margin: 0;
+}
+
+.vac-request-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: end;
+}
+
+.vac-request-submit {
+  min-width: 156px;
+}
+
+.vac-request-submit:disabled {
+  opacity: 0.72;
+  cursor: not-allowed;
+}
+
+@media (max-width: 1180px) {
+  .vac-request-top {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 980px) {
+  .vac-request-calendars {
+    grid-template-columns: 1fr;
+    justify-content: stretch;
+  }
+
+  .vac-calendar {
+    max-width: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .vac-request-card {
+    padding: 20px 18px;
+  }
+
+  .vac-request-info.ui-info-panel {
+    padding: 22px 20px;
+  }
+
+  .vac-request-selection-summary__header {
+    flex-direction: column;
+  }
+
+  .vac-request-selection-summary__count {
+    width: 100%;
+    min-width: 0;
+    justify-content: flex-start;
+  }
+
+  .vac-request-additional {
+    grid-template-columns: 1fr;
+  }
+
+  .vac-request-actions {
+    justify-content: flex-start;
+  }
+
+  .vac-request-actions .ui-btn {
+    width: 100%;
+  }
+
+  .vac-calendar__header {
+    flex-direction: column;
+  }
+
+  .vac-calendar__selected {
+    min-width: 0;
+    width: fit-content;
+  }
+}
+
+@media (max-width: 576px) {
+  .vac-request-page {
+    gap: 16px;
+  }
+
+  .vac-request-top {
+    gap: 16px;
+  }
+
+  .vac-request-card {
+    padding: 18px 14px;
+    gap: 20px;
+  }
+
+  .vac-request-info.ui-info-panel {
+    padding: 18px 16px;
+  }
+
+  .vac-request-selection-summary {
+    padding: 16px;
+  }
+
+  .vac-request-selection-summary__title {
+    font-size: 17px;
+  }
+
+  .vac-request-selection-summary__count strong {
+    font-size: 24px;
+  }
+
+  .vac-calendar__toolbar {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .vac-calendar__selectors {
+    grid-template-columns: 1fr;
+  }
+
+  .vac-calendar__arrow {
+    width: 100%;
+    height: 34px;
+  }
+
+  .vac-request-balance-card__meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .vac-calendar__subtitle {
+    max-width: none;
+  }
+
+  .vac-calendar__selected {
+    align-self: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .dash-content.vac-request-content .vac-request-balance-card {
+    padding: 22px 18px 18px;
+    gap: 14px;
+  }
+
+  .dash-content.vac-request-content .vac-request-balance-card__title {
+    gap: 8px;
+    font-size: clamp(1.7rem, 10vw, 2.15rem);
+  }
+
+  .dash-content.vac-request-content .vac-request-balance-card__subtitle,
+  .dash-content.vac-request-content .vac-request-panel__description {
+    font-size: 14px;
+  }
+
+  .dash-content.vac-request-content .vac-request-panel {
+    gap: 18px;
+  }
+
+  .dash-content.vac-request-content .vac-request-calendar-panel {
+    padding: 16px 14px 14px;
+    gap: 14px;
+  }
+
+  .dash-content.vac-request-content .vac-request-calendars {
+    gap: 14px;
+  }
+
+  .dash-content.vac-request-content .vac-calendar {
+    padding: 14px 12px 12px;
+    gap: 12px;
+  }
+
+  .dash-content.vac-request-content .vac-calendar__header {
+    gap: 10px;
+  }
+
+  .dash-content.vac-request-content .vac-calendar__title {
+    font-size: 18px;
+  }
+
+  .dash-content.vac-request-content .vac-calendar__selected {
+    min-height: 34px;
+    width: fit-content;
+  }
+
+  .dash-content.vac-request-content .vac-calendar__toolbar {
+    padding: 8px 10px;
+  }
+
+  .dash-content.vac-request-content .vac-calendar__select {
+    min-height: 38px;
+    font-size: 13px;
+  }
+
+  .dash-content.vac-request-content .vac-calendar__days,
+  .dash-content.vac-request-content .vac-calendar__weekdays {
+    gap: 6px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .dash-content.vac-request-content .vac-calendar__weekdays {
+    font-size: 10px;
+  }
+
+  .dash-content.vac-request-content .vac-calendar__day,
+  .dash-content.vac-request-content .vac-calendar__day--empty {
+    min-height: 34px;
+  }
+
+  .dash-content.vac-request-content .vac-request-notes-panel,
+  .dash-content.vac-request-content .vac-request-summary-panel {
+    padding: 16px 14px 16px;
+    gap: 14px;
+  }
+
+  .dash-content.vac-request-content .vac-request-summary-panel__item {
+    padding: 12px 13px;
+  }
+
+  .dash-content.vac-request-content .vac-request-summary-panel__item--total strong {
+    font-size: 16px;
+  }
+
+  .dash-content.vac-request-content #selected-days-counter {
+    font-size: 32px;
+  }
+
+  .dash-content.vac-request-content .vac-request-guide {
+    padding: 18px 16px 16px;
+  }
+
+  .dash-content.vac-request-content .vac-request-guide__step {
+    gap: 10px;
+    padding: 12px 12px 12px 10px;
+  }
+
+  .dash-content.vac-request-content .vac-request-guide__rule {
+    padding: 14px 14px 13px;
+  }
+}
+
+.dash-content.vac-request-content.dash-content--wide {
+  width: 100%;
+  max-width: none;
+}
+
+.dash-content.vac-request-content .vac-request-page {
+  gap: 22px;
+}
+
+.dash-content.vac-request-content .vac-request-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 380px);
+  gap: 22px;
+  align-items: stretch;
+}
+
+.dash-content.vac-request-content .vac-request-layout__main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+.dash-content.vac-request-content .vac-request-balance-card {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 28px 30px 24px;
+  border-radius: 26px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background:
+    radial-gradient(circle at top right, rgba(255, 255, 255, 0.16), transparent 34%),
+    linear-gradient(135deg, #1ca4ea 0%, #0d8fd1 46%, #0b6ea9 100%);
+  color: #ffffff;
+  box-shadow: 0 18px 34px rgba(13, 111, 169, 0.18);
+}
+
+.dash-content.vac-request-content .vac-request-balance-card::after {
+  content: "";
+  position: absolute;
+  inset: auto -40px -48px auto;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  filter: blur(4px);
+}
+
+.dash-content.vac-request-content .vac-request-balance-card__copy {
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
+}
+
+.dash-content.vac-request-content .vac-request-balance-card__eyebrow {
+  margin-bottom: 8px;
+  color: rgba(255, 255, 255, 0.84);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.dash-content.vac-request-content .vac-request-balance-card__title {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+  color: #ffffff;
+  font-size: clamp(2rem, 3vw, 3rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.dash-content.vac-request-content .vac-request-balance-card__title strong {
+  font-size: inherit;
+  font-weight: 900;
+}
+
+.dash-content.vac-request-content .vac-request-balance-card__title span {
+  font-size: clamp(1rem, 1.2vw, 1.15rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.dash-content.vac-request-content .vac-request-balance-card__subtitle {
+  margin-top: 8px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.dash-content.vac-request-content .vac-request-balance-card__progress {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.dash-content.vac-request-content .vac-request-balance-card__progress-bar {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #ffffff 0%, rgba(255, 255, 255, 0.72) 100%);
+}
+
+.dash-content.vac-request-content .vac-request-balance-card__meta {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.dash-content.vac-request-content .vac-request-guide-jump {
+  position: relative;
+  z-index: 1;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: fit-content;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 800;
+  text-decoration: none;
+  backdrop-filter: blur(10px);
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.dash-content.vac-request-content .vac-request-guide-jump:hover {
+  border-color: rgba(255, 255, 255, 0.56);
+  background: rgba(255, 255, 255, 0.24);
+  transform: translateY(-1px);
+}
+
+.dash-content.vac-request-content .vac-request-guide-jump svg {
+  width: 16px;
+  height: 16px;
+}
+
+.dash-content.vac-request-content .vac-request-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.dash-content.vac-request-content .vac-request-panel__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: flex-end;
+}
+
+.dash-content.vac-request-content .vac-request-panel__eyebrow {
+  margin-bottom: 6px;
+  color: #0f84bf;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.dash-content.vac-request-content .vac-request-panel__title {
+  color: #0f172a;
+  font-size: clamp(1.6rem, 2vw, 2.1rem);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+}
+
+.dash-content.vac-request-content .vac-request-panel__description {
+  max-width: 720px;
+  margin-top: 10px;
+  color: #64748b;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.dash-content.vac-request-content .vac-request-form {
+  gap: 22px;
+}
+
+.dash-content.vac-request-content .vac-request-calendar-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 24px 22px 22px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 5px;
+  background: #ffffff;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.05);
+  overflow: hidden;
+}
+
+.dash-content.vac-request-content .vac-request-calendar-panel__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.dash-content.vac-request-content .vac-request-calendar-panel__eyebrow {
+  margin-bottom: 6px;
+  color: #0f84bf;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.dash-content.vac-request-content .vac-request-calendar-panel__title {
+  color: #111827;
+  font-size: 20px;
+  font-weight: 900;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+}
+
+.dash-content.vac-request-content .vac-request-calendar-panel__hint {
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: right;
+}
+
+.dash-content.vac-request-content .vac-request-calendar-panel__header {
+  margin-bottom: 2px;
+}
+
+.dash-content.vac-request-content .vac-request-calendars {
+  gap: 18px;
+}
+
+.dash-content.vac-request-content .vac-calendar {
+  position: relative;
+  gap: 14px;
+  padding: 18px 18px 16px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-top-width: 5px;
+  border-radius: 22px;
+  background: linear-gradient(180deg, #ffffff 0%, #fcfdff 100%);
+  color: #0f172a;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.06);
+  overflow: hidden;
+}
+
+.dash-content.vac-request-content .vac-calendar--start {
+  --vac-calendar-accent: #1b9de2;
+}
+
+.dash-content.vac-request-content .vac-calendar--end {
+  --vac-calendar-accent: #1ba58f;
+}
+
+.dash-content.vac-request-content .vac-calendar--start,
+.dash-content.vac-request-content .vac-calendar--end {
+  border-top-color: var(--vac-calendar-accent);
+}
+
+.dash-content.vac-request-content .vac-calendar__eyebrow {
+  color: var(--vac-calendar-accent);
+  font-size: 12px;
+}
+
+.dash-content.vac-request-content .vac-calendar__title {
+  color: #0f172a;
+  font-size: 20px;
+}
+
+.dash-content.vac-request-content .vac-calendar__subtitle {
+  color: #64748b;
+  font-size: 14px;
+}
+
+.dash-content.vac-request-content .vac-calendar__selected {
+  min-width: 126px;
+  min-height: 38px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  background: #f8fafc;
+  color: #334155;
+  box-shadow: none;
+}
+
+.dash-content.vac-request-content .vac-calendar__note {
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  background: #f8fbff;
+  color: #475569;
+  box-shadow: none;
+}
+
+.dash-content.vac-request-content .vac-calendar__toolbar {
+  padding: 10px 12px;
+  border-radius: 18px;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  background: #f8fafc;
+  backdrop-filter: none;
+}
+
+.dash-content.vac-request-content .vac-calendar__select {
+  min-height: 42px;
+  border: 1px solid #dbe5ef;
+  background: #ffffff;
+  color: #0f172a;
+  box-shadow: none;
+}
+
+.dash-content.vac-request-content .vac-calendar__select:focus {
+  box-shadow: 0 0 0 3px rgba(27, 157, 226, 0.14);
+}
+
+.dash-content.vac-request-content .vac-calendar__arrow {
+  border: 1px solid #dbe5ef;
+  background: #ffffff;
+  color: #1b9de2;
+}
+
+.dash-content.vac-request-content .vac-calendar__arrow:hover {
+  background: #eef8fe;
+  box-shadow: 0 8px 16px rgba(27, 157, 226, 0.1);
+}
+
+.dash-content.vac-request-content .vac-calendar__weekdays {
+  color: #64748b;
+  font-size: 11px;
+}
+
+.dash-content.vac-request-content .vac-calendar__day {
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  color: #334155;
+  box-shadow: none;
+}
+
+.dash-content.vac-request-content .vac-calendar__day:hover:not(:disabled) {
+  background: #f1f8fe;
+  color: #0f84bf;
+  box-shadow: none;
+}
+
+.dash-content.vac-request-content .vac-calendar__day--today {
+  box-shadow: inset 0 0 0 1.5px rgba(27, 157, 226, 0.42);
+}
+
+.dash-content.vac-request-content .vac-calendar--start .vac-calendar__day--selected {
+  background: linear-gradient(180deg, #33aef0 0%, #1b9de2 100%);
+  color: #ffffff;
+  box-shadow: 0 10px 18px rgba(27, 157, 226, 0.22);
+}
+
+.dash-content.vac-request-content .vac-calendar--end .vac-calendar__day--selected {
+  background: linear-gradient(180deg, #2bc7af 0%, #1ba58f 100%);
+  color: #ffffff;
+  box-shadow: 0 10px 18px rgba(27, 165, 143, 0.22);
+}
+
+.dash-content.vac-request-content .vac-calendar__day--disabled {
+  background: #f8fafc;
+  color: #94a3b8;
+  opacity: 1;
+}
+
+.dash-content.vac-request-content .vac-calendar__error {
+  color: #b91c1c;
+  font-size: 13px;
+}
+
+.dash-content.vac-request-content .vac-request-bottom-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 300px);
+  gap: 18px;
+  align-items: start;
+}
+
+.dash-content.vac-request-content .vac-request-notes-panel,
+.dash-content.vac-request-content .vac-request-summary-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 22px 22px 24px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 22px;
+  background: #ffffff;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.05);
+}
+
+.dash-content.vac-request-content .vac-request-notes-panel__eyebrow,
+.dash-content.vac-request-content .vac-request-summary-panel__eyebrow {
+  color: #0f84bf;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.dash-content.vac-request-content .vac-request-notes-panel__title,
+.dash-content.vac-request-content .vac-request-summary-panel__title {
+  color: #0f172a;
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+}
+
+.dash-content.vac-request-content .vac-request-notes-panel__field {
+  margin-top: 4px;
+}
+
+.dash-content.vac-request-content .vac-request-summary-panel__items {
+  display: grid;
+  gap: 12px;
+}
+
+.dash-content.vac-request-content .vac-request-summary-panel__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: #f8fafc;
+}
+
+.dash-content.vac-request-content .vac-request-summary-panel__item > span {
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.dash-content.vac-request-content .vac-request-summary-panel__item strong {
+  color: #0f172a;
+  font-size: 15px;
+  font-weight: 800;
+  text-align: right;
+}
+
+.dash-content.vac-request-content .vac-request-summary-panel__item--total {
+  align-items: center;
+  background: linear-gradient(180deg, #eef8fe 0%, #e3f2fb 100%);
+}
+
+.dash-content.vac-request-content .vac-request-summary-panel__item--total strong {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  color: #1b84c6;
+  font-size: 17px;
+  line-height: 1.1;
+}
+
+.dash-content.vac-request-content #selected-days-counter {
+  color: #0878b8;
+  font-size: 36px;
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+  text-transform: none;
+}
+
+.dash-content.vac-request-content .vac-request-summary-panel__range {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: #334155;
+}
+
+.dash-content.vac-request-content .vac-request-summary-panel__label {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.dash-content.vac-request-content #selected-range-summary {
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.dash-content.vac-request-content #selected-range-summary.is-invalid {
+  color: #c2410c;
+}
+
+.dash-content.vac-request-content .vac-request-summary-panel__note {
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.dash-content.vac-request-content .vac-calendar {
+  border-radius: 5px;
+}
+
+.dash-content.vac-request-content .vac-request-submit {
+  min-width: 0;
+}
+
+.dash-content.vac-request-content .vac-request-guide {
+  position: sticky;
+  top: 20px;
+  align-self: start;
+  scroll-margin-top: 96px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: auto;
+  min-height: clamp(560px, calc(100dvh - 140px), 700px);
+  padding: 24px 22px 22px;
+  border-radius: 24px;
+  background: linear-gradient(180deg, #18a0e5 0%, #118cc9 50%, #0a76b5 100%);
+  color: #ffffff;
+  box-shadow: 0 18px 32px rgba(16, 132, 192, 0.18);
+  overflow: visible;
+}
+
+.dash-content.vac-request-content .vac-request-guide__header {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dash-content.vac-request-content .vac-request-guide::after {
+  content: "";
+  position: absolute;
+  right: -34px;
+  bottom: -34px;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.dash-content.vac-request-content .vac-request-guide__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+}
+
+.dash-content.vac-request-content .vac-request-guide__badge svg {
+  width: 22px;
+  height: 22px;
+}
+
+.dash-content.vac-request-content .vac-request-guide__title {
+  position: relative;
+  z-index: 1;
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 900;
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+}
+
+.dash-content.vac-request-content .vac-request-guide__steps {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 12px;
+}
+
+.dash-content.vac-request-content .vac-request-guide__step {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  align-items: start;
+  padding: 14px 14px 14px 12px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+}
+
+.dash-content.vac-request-content .vac-request-guide__step-index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #148ecf;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.dash-content.vac-request-content .vac-request-guide__step h3 {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.dash-content.vac-request-content .vac-request-guide__step p {
+  margin-top: 4px;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.dash-content.vac-request-content .vac-request-guide__rule {
+  position: relative;
+  z-index: 1;
+  padding: 16px 16px 15px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.dash-content.vac-request-content .vac-request-guide__rule-eyebrow {
+  margin-bottom: 6px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.dash-content.vac-request-content .vac-request-guide__rule p:last-child {
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.dash-content.vac-request-content .vac-request-guide__footer {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: auto;
+  padding-top: 10px;
+}
+
+.dash-content.vac-request-content .vac-request-guide__footer-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.dash-content.vac-request-content .vac-request-guide__footer-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.dash-content.vac-request-content .vac-request-guide__footer-title {
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.dash-content.vac-request-content .vac-request-guide__footer-text {
+  margin-top: 4px;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.dash-content.vac-request-content .vac-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 1180px) {
+  .dash-content.vac-request-content .vac-request-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .dash-content.vac-request-content .vac-request-guide-jump {
+    display: inline-flex;
+  }
+
+  .dash-content.vac-request-content .vac-request-guide {
+    position: static;
+    height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+}
+
+@media (max-width: 980px) {
+  .dash-content.vac-request-content .vac-request-bottom-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .dash-content.vac-request-content .vac-request-calendars {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .dash-content.vac-request-content .vac-request-panel {
+    padding: 22px 18px 24px;
+  }
+
+  .dash-content.vac-request-content .vac-request-panel__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dash-content.vac-request-content .vac-request-calendar-panel {
+    padding: 18px 16px 16px;
+  }
+
+  .dash-content.vac-request-content .vac-request-calendar-panel__header {
+    flex-direction: column;
+  }
+
+  .dash-content.vac-request-content .vac-request-calendar-panel__hint {
+    text-align: left;
+  }
+
+  .dash-content.vac-request-content .vac-calendar {
+    padding: 16px 14px 14px;
+  }
+
+  .dash-content.vac-request-content .vac-request-notes-panel,
+  .dash-content.vac-request-content .vac-request-summary-panel {
+    padding: 18px 16px 18px;
+  }
+
+  .dash-content.vac-request-content .vac-request-guide {
+    padding: 20px 18px 18px;
+  }
+}
+
+/* Restore the previous visual style while keeping the 5px radius preference. */
+.dash-content.vac-request-content .vac-request-balance-card,
+.dash-content.vac-request-content .vac-request-panel,
+.dash-content.vac-request-content .vac-request-calendar-panel,
+.dash-content.vac-request-content .vac-calendar,
+.dash-content.vac-request-content .vac-request-notes-panel,
+.dash-content.vac-request-content .vac-request-summary-panel,
+.dash-content.vac-request-content .vac-request-guide,
+.dash-content.vac-request-content .vac-request-guide__step,
+.dash-content.vac-request-content .vac-request-guide__rule,
+.dash-content.vac-request-content .vac-request-guide__footer-icon,
+.dash-content.vac-request-content .vac-request-guide__badge,
+.dash-content.vac-request-content .vac-request-summary-panel__item,
+.dash-content.vac-request-content .vac-calendar__selected,
+.dash-content.vac-request-content .vac-calendar__note,
+.dash-content.vac-request-content .vac-calendar__toolbar,
+.dash-content.vac-request-content .vac-calendar__select,
+.dash-content.vac-request-content .vac-calendar__arrow,
+.dash-content.vac-request-content .vac-calendar__day,
+.dash-content.vac-request-content .ui-input,
+.dash-content.vac-request-content .ui-select,
+.dash-content.vac-request-content .ui-btn {
+  border-radius: 5px;
+}

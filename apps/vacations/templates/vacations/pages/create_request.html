@@ -1,0 +1,20 @@
+{% extends "layouts/dashboard/base.html" %}
+{% load i18n static %}
+
+{% block title %}{% translate "Solicitar vacaciones" %}{% endblock %}
+
+{% block dashboard_content_class %}vac-request-content dash-content--wide{% endblock %}
+
+{% block dashboard_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'vacations/css/pages/create_request.css' %}">
+{% endblock %}
+
+{% block dashboard_content %}
+  {% include "vacations/partials/create_request/content.html" %}
+{% endblock %}
+
+{% block extra_js %}
+  {{ block.super }}
+  <script src="{% static 'vacations/js/pages/create_request.js' %}"></script>
+{% endblock %}

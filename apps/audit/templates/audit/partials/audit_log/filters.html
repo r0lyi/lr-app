@@ -1,0 +1,43 @@
+{% load i18n %}
+{% translate "Filtrar" as filter_label %}
+
+<form method="get" class="audit-log-filters" novalidate>
+  {% if audit_log_filter_form.non_field_errors %}
+    <div class="audit-log-filters__errors">
+      {% for error in audit_log_filter_form.non_field_errors %}
+        <p>{{ error }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <div class="audit-log-filters__grid">
+    <div class="audit-log-filters__field audit-log-filters__field--search">
+      <label class="audit-log-filters__label" for="{{ audit_log_filter_form.search.id_for_label }}">{% translate "Buscar actividad" %}</label>
+      <div class="audit-log-filters__search-shell">
+        <span class="audit-log-filters__search-icon" aria-hidden="true">
+          {% include "components/ui/icon.html" with name="search" %}
+        </span>
+        {{ audit_log_filter_form.search }}
+      </div>
+    </div>
+    <div class="audit-log-filters__field">
+      <label class="audit-log-filters__label" for="{{ audit_log_filter_form.action.id_for_label }}">{% translate "Tipo de cambio" %}</label>
+      {{ audit_log_filter_form.action }}
+    </div>
+    <div class="audit-log-filters__field">
+      <label class="audit-log-filters__label" for="{{ audit_log_filter_form.start_date.id_for_label }}">{% translate "Fecha inicio" %}</label>
+      {{ audit_log_filter_form.start_date }}
+    </div>
+    <div class="audit-log-filters__field">
+      <label class="audit-log-filters__label" for="{{ audit_log_filter_form.end_date.id_for_label }}">{% translate "Fecha final" %}</label>
+      {{ audit_log_filter_form.end_date }}
+    </div>
+  </div>
+
+  <div class="audit-log-filters__actions">
+    {% include "components/ui/button_principal.html" with label=filter_label type="submit" size="md" left_icon_name="filter" class_name="audit-log-filters__submit" %}
+    <a href="{% url 'audit:activity-log' %}" class="ui-btn ui-btn--secondary ui-btn--md audit-log-filters__reset">
+      {% translate "Limpiar" %}
+    </a>
+  </div>
+</form>

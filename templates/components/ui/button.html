@@ -1,0 +1,53 @@
+{% if href %}
+  <a
+    class="ui-btn ui-btn--{{ variant|default:'primary' }} ui-btn--{{ size|default:'md' }}{% if full_width %} ui-btn--full{% endif %}{% if class_name %} {{ class_name }}{% endif %}"
+    href="{{ href }}"
+    {% if id %}id="{{ id }}"{% endif %}
+    {% if name %}name="{{ name }}"{% endif %}
+    {% if value %}value="{{ value }}"{% endif %}
+    {% if form_id %}form="{{ form_id }}"{% endif %}
+    {% if aria_label %}aria-label="{{ aria_label }}"{% endif %}
+    {% if title %}title="{{ title }}"{% endif %}
+    {% if download_name %}download="{{ download_name }}"{% elif download %}download{% endif %}
+    {% if disabled %}aria-disabled="true" tabindex="-1"{% endif %}
+  >
+{% else %}
+  <button
+    type="{{ type|default:'button' }}"
+    class="ui-btn ui-btn--{{ variant|default:'primary' }} ui-btn--{{ size|default:'md' }}{% if full_width %} ui-btn--full{% endif %}{% if class_name %} {{ class_name }}{% endif %}"
+    {% if id %}id="{{ id }}"{% endif %}
+    {% if name %}name="{{ name }}"{% endif %}
+    {% if value %}value="{{ value }}"{% endif %}
+    {% if form_id %}form="{{ form_id }}"{% endif %}
+    {% if aria_label %}aria-label="{{ aria_label }}"{% endif %}
+    {% if title %}title="{{ title }}"{% endif %}
+    {% if disabled %}disabled{% endif %}
+  >
+{% endif %}
+  {% if htmx_indicator %}
+    <span class="ui-spinner{% if spinner_dark %} ui-spinner--dark{% endif %} htmx-indicator" aria-hidden="true"></span>
+  {% endif %}
+  {% if left_icon_name or left_icon_html %}
+    <span class="ui-btn__icon ui-btn__icon--left" aria-hidden="true">
+      {% if left_icon_html %}
+        {{ left_icon_html|safe }}
+      {% else %}
+        {% include "components/ui/icon.html" with name=left_icon_name %}
+      {% endif %}
+    </span>
+  {% endif %}
+  <span>{{ label }}</span>
+  {% if right_icon_name or right_icon_html %}
+    <span class="ui-btn__icon ui-btn__icon--right" aria-hidden="true">
+      {% if right_icon_html %}
+        {{ right_icon_html|safe }}
+      {% else %}
+        {% include "components/ui/icon.html" with name=right_icon_name %}
+      {% endif %}
+    </span>
+  {% endif %}
+{% if href %}
+  </a>
+{% else %}
+  </button>
+{% endif %}

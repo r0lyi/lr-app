@@ -1,0 +1,30 @@
+{% load i18n %}
+{% translate "Filtrar" as filter_label %}
+{% translate "Limpiar filtros" as reset_filters_label %}
+
+<form method="get" class="admin-users-filters" novalidate>
+  <div class="admin-users-filters__grid">
+    <div class="admin-users-filters__field admin-users-filters__field--search">
+      <label class="admin-users-filters__label" for="{{ filter_form.search.id_for_label }}">{% translate "Buscar usuario" %}</label>
+      <div class="admin-users-filters__search-shell">
+        <span class="admin-users-filters__search-icon" aria-hidden="true">
+          {% include "components/ui/icon.html" with name="search" %}
+        </span>
+        {{ filter_form.search }}
+      </div>
+    </div>
+    <div class="admin-users-filters__field">
+      <label class="admin-users-filters__label" for="{{ filter_form.primary_role.id_for_label }}">{% translate "Rol" %}</label>
+      {{ filter_form.primary_role }}
+    </div>
+    <div class="admin-users-filters__field">
+      <label class="admin-users-filters__label" for="{{ filter_form.access_state.id_for_label }}">{% translate "Acceso" %}</label>
+      {{ filter_form.access_state }}
+    </div>
+  </div>
+
+  <div class="admin-users-filters__actions">
+    {% include "components/ui/button_principal.html" with label=filter_label type="submit" size="md" class_name="admin-users-filters__submit" %}
+    {% include "components/ui/button_secondari.html" with label=reset_filters_label href=request.path size="md" class_name="admin-users-filters__reset" %}
+  </div>
+</form>

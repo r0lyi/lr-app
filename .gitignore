@@ -6,16 +6,34 @@ env/
 # Python cache
 __pycache__/
 *.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
 
 # Variables de entorno
 .env
+.env.*
+!.env.example
 
 # Base de datos local
 db.sqlite3
+db.sqlite3-journal
+*.sqlite3
+*.sqlite3-journal
 
 # Archivos estáticos y media (generados en local)
 media/
 staticfiles/
+generated_exports/
+
+# Archivos locales de herramientas
+.codex
+
+# Exportaciones locales de dependencias
+/requirements.txt
 
 # Logs
 *.log

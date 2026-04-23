@@ -1,0 +1,18 @@
+{% extends "layouts/dashboard/base.html" %}
+{% load i18n static %}
+
+{% block title %}{% translate "Revisar solicitud" %}{% endblock %}
+
+{% block dashboard_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'vacations/css/pages/review_request.css' %}">
+{% endblock %}
+
+{% block dashboard_content %}
+  {% include "vacations/partials/review_request/content.html" %}
+{% endblock %}
+
+{% block extra_js %}
+  {{ block.super }}
+  <script src="{% static 'vacations/js/pages/review_request.js' %}"></script>
+{% endblock %}

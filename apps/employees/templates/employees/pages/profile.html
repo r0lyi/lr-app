@@ -1,0 +1,22 @@
+{% extends "layouts/dashboard/base.html" %}
+{% load i18n static %}
+
+{% block title %}{% translate "Perfil" %}{% endblock %}
+
+{% block dashboard_header_title %}{% translate "Portal de empleado" %}{% endblock %}
+
+{% block dashboard_content_class %}profile-view dash-content--wide{% endblock %}
+
+{% block dashboard_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'employees/css/pages/profile.css' %}">
+{% endblock %}
+
+{% block dashboard_content %}
+  {% include "employees/partials/profile/content.html" %}
+{% endblock %}
+
+{% block extra_js %}
+  {{ block.super }}
+  <script src="{% static 'employees/js/pages/profile.js' %}"></script>
+{% endblock %}

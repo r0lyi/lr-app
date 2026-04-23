@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block title %}{% translate "Iniciar sesión — LR Clean & Service" %}{% endblock %}
+
+{% block extra_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'users/css/pages/login.css' %}">
+{% endblock %}
+
+{% block extra_js %}
+  {{ block.super }}
+  <script src="{% static 'users/js/pages/login.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+{% include "components/auth/split_screen.html" with class_name="auth-login" media_partial="users/partials/auth/login_hero.html" panel_partial="users/partials/auth/login_panel.html" %}
+{% endblock %}

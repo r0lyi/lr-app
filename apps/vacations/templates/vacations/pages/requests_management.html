@@ -1,0 +1,24 @@
+{% extends "layouts/dashboard/base.html" %}
+{% load i18n static %}
+
+{% block title %}{% translate "Solicitudes" as default_requests_title %}{% firstof requests_page_title default_requests_title %}{% endblock %}
+
+{% block dashboard_header_title %}
+  {% if role_name == "admin" %}
+    {% translate "Portal de administración" %}
+  {% else %}
+    {% translate "Portal RRHH" %}
+  {% endif %}
+{% endblock %}
+
+{% block dashboard_content_class %}dash-content--wide rrhh-requests-content{% endblock %}
+
+{% block dashboard_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/components/data_table.css' %}">
+  <link rel="stylesheet" href="{% static 'vacations/css/pages/requests_management.css' %}">
+{% endblock %}
+
+{% block dashboard_content %}
+  {% include "vacations/partials/requests_management/content.html" %}
+{% endblock %}

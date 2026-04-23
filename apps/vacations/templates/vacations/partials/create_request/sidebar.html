@@ -1,0 +1,69 @@
+{% load i18n %}
+
+<aside class="vac-request-guide" id="vac-request-guide" aria-labelledby="vac-request-guide-title">
+  <div class="vac-request-guide__header">
+    <div class="vac-request-guide__badge" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8"></circle>
+        <path d="M12 7.5v1.2M12 11v5.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+      </svg>
+    </div>
+
+    <h2 class="vac-request-guide__title" id="vac-request-guide-title">{% translate "Guía de Solicitud" %}</h2>
+  </div>
+
+  <div class="vac-request-guide__steps">
+    <article class="vac-request-guide__step">
+      <span class="vac-request-guide__step-index">1</span>
+      <div>
+        <h3>{% translate "Selecciona las fechas" %}</h3>
+        <p>{% translate "Define un inicio y un fin continuos en los calendarios." %}</p>
+      </div>
+    </article>
+
+    <article class="vac-request-guide__step">
+      <span class="vac-request-guide__step-index">2</span>
+      <div>
+        <h3>{% translate "Revisa el resumen" %}</h3>
+        <p>{% translate "Comprueba el total de días y confirma que el rango sea correcto." %}</p>
+      </div>
+    </article>
+
+    <article class="vac-request-guide__step">
+      <span class="vac-request-guide__step-index">3</span>
+      <div>
+        <h3>{% translate "Envía la solicitud" %}</h3>
+        <p>{% translate "El sistema enviará la petición a RRHH para su validación." %}</p>
+      </div>
+    </article>
+  </div>
+
+  <div class="vac-request-guide__rule">
+    <p class="vac-request-guide__rule-eyebrow">{% translate "Regla importante" %}</p>
+    <p>
+      {% blocktranslate with days=min_advance_notice_days date=min_request_start_date|date:"d/m/Y" trimmed %}
+        Debes solicitar las vacaciones con al menos {{ days }}
+        días de antelación. La primera fecha disponible es
+        {{ date }}.
+      {% endblocktranslate %}
+    </p>
+  </div>
+
+  <div class="vac-request-guide__footer">
+    <div class="vac-request-guide__footer-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M12 3l7 3v5c0 4.5-3 8.8-7 10-4-1.2-7-5.5-7-10V6l7-3z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+        <path d="M9.3 12.2l1.9 1.9 3.6-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+    </div>
+    <div class="vac-request-guide__footer-copy vac-sr-only">
+      <p class="vac-request-guide__footer-title">{% translate "Validación automática" %}</p>
+      <p class="vac-request-guide__footer-text">
+        {% blocktranslate trimmed %}
+          El sistema revisa el rango y el saldo antes de que la solicitud llegue a
+          RRHH.
+        {% endblocktranslate %}
+      </p>
+    </div>
+  </div>
+</aside>

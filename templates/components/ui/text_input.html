@@ -1,0 +1,56 @@
+<div class="ui-field{% if full_width == False %}{% else %} ui-field--full{% endif %}{% if wrapper_class %} {{ wrapper_class }}{% endif %}">
+  {% if label %}
+    <label class="ui-field__label" for="{{ id|default:name }}">{{ label }}</label>
+  {% endif %}
+
+  <div class="ui-field__control">
+    {% if left_icon_name %}
+      <span class="ui-field__icon ui-field__icon--left" aria-hidden="true">
+        {% include "components/ui/icon.html" with name=left_icon_name %}
+      </span>
+    {% elif left_icon_html %}
+      <span class="ui-field__icon ui-field__icon--left" aria-hidden="true">{{ left_icon_html|safe }}</span>
+    {% endif %}
+
+    <input
+      class="ui-input{% if error %} ui-input--error{% endif %}{% if left_icon_name or left_icon_html %} ui-input--has-left-icon{% endif %}{% if right_icon_name or right_icon_html %} ui-input--has-right-icon{% endif %}{% if class_name %} {{ class_name }}{% endif %}"
+      type="{{ type|default:'text' }}"
+      id="{{ id|default:name }}"
+      name="{{ name }}"
+      {% if placeholder %}placeholder="{{ placeholder }}"{% endif %}
+      {% if autocomplete %}autocomplete="{{ autocomplete }}"{% endif %}
+      {% if value or value == '' %}value="{{ value }}"{% endif %}
+      {% if required %}required{% endif %}
+      {% if disabled %}disabled{% endif %}
+      {% if readonly %}readonly{% endif %}
+      {% if autofocus %}autofocus{% endif %}
+      {% if maxlength %}maxlength="{{ maxlength }}"{% endif %}
+      {% if minlength %}minlength="{{ minlength }}"{% endif %}
+      {% if pattern %}pattern="{{ pattern }}"{% endif %}
+      {% if inputmode %}inputmode="{{ inputmode }}"{% endif %}
+      {% if step %}step="{{ step }}"{% endif %}
+      {% if min %}min="{{ min }}"{% endif %}
+      {% if max %}max="{{ max }}"{% endif %}
+    />
+
+    {% if right_icon_name %}
+      <span class="ui-field__icon ui-field__icon--right" aria-hidden="true">
+        {% include "components/ui/icon.html" with name=right_icon_name %}
+      </span>
+    {% elif right_icon_html %}
+      <span class="ui-field__icon ui-field__icon--right" aria-hidden="true">{{ right_icon_html|safe }}</span>
+    {% endif %}
+  </div>
+
+  {% if error %}
+    <p class="ui-field__feedback ui-field__feedback--error">
+      <svg class="ui-field__feedback-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"></circle>
+        <path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+      </svg>
+      {{ error }}
+    </p>
+  {% elif hint %}
+    <p class="ui-field__feedback ui-field__feedback--hint">{{ hint }}</p>
+  {% endif %}
+</div>

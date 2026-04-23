@@ -1,0 +1,25 @@
+{% load i18n %}
+
+<section class="audit-log-page">
+  <header class="audit-log-hero">
+    <div class="audit-log-hero__copy">
+      <h1 class="audit-log-hero__title">{% translate "Historial de Actividad" %}</h1>
+      <p class="audit-log-hero__description">
+        {% blocktranslate trimmed %}
+          Monitorea cambios de usuarios, altas de cuentas y revisiones de
+          solicitudes para mantener seguridad y transparencia.
+        {% endblocktranslate %}
+      </p>
+    </div>
+  </header>
+
+  {% include "audit/partials/audit_log/summary.html" %}
+
+  <section class="audit-log-card audit-log-card--filters">
+    {% include "audit/partials/audit_log/filters.html" %}
+  </section>
+
+  <section class="audit-log-card audit-log-card--table">
+    {% include "audit/partials/audit_log/table.html" %}
+  </section>
+</section>

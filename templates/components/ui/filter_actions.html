@@ -1,0 +1,11 @@
+{% load i18n %}
+{% translate "Filtrar" as default_submit_label %}
+{% translate "Limpiar" as default_reset_label %}
+
+<div class="filter-actions{% if class_name %} {{ class_name }}{% endif %}">
+  {% include "components/ui/button_principal.html" with label=submit_label|default:default_submit_label type="submit" form_id=form_id size=size|default:"md" class_name="filter-actions__submit" left_icon_name=submit_icon|default:"filter" %}
+
+  {% if reset_url %}
+    {% include "components/ui/button_secondari.html" with label=reset_label|default:default_reset_label href=reset_url size=size|default:"md" class_name="filter-actions__reset" %}
+  {% endif %}
+</div>

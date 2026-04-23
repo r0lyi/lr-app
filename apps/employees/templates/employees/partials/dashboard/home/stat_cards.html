@@ -1,0 +1,87 @@
+{% load i18n %}
+
+<div class="employee-home-summary">
+  <article class="employee-home-summary-card employee-home-summary-card--blue">
+    <div class="employee-home-summary-card__top">
+      <div>
+        <p class="employee-home-summary-card__label">{% translate "Vacaciones disponibles" %}</p>
+      </div>
+      <span class="employee-home-summary-card__icon employee-home-summary-card__icon--blue" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <rect x="4" y="5" width="16" height="15" rx="3" stroke="currentColor" stroke-width="1.8"></rect>
+          <path d="M8 3.5v3M16 3.5v3M4 9h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+        </svg>
+      </span>
+    </div>
+
+    <div class="employee-home-summary-card__value-row">
+      <strong class="employee-home-summary-card__value">{{ annual_vacation_remaining_days_count|floatformat:0 }}</strong>
+      <span class="employee-home-summary-card__unit">{% translate "días" %}</span>
+    </div>
+
+    <div class="employee-home-summary-card__bar" aria-hidden="true">
+      <span style="width: {{ annual_vacation_progress_percent|floatformat:"2u" }}%"></span>
+    </div>
+
+    <p class="employee-home-summary-card__note">
+      {% blocktranslate with year=annual_vacation_reference_year days=annual_vacation_reserved_days_count|floatformat:"2u" %}Derecho anual {{ year }} · {{ days }} días solicitados{% endblocktranslate %}
+    </p>
+  </article>
+
+  <article class="employee-home-summary-card employee-home-summary-card--amber">
+    <div class="employee-home-summary-card__top">
+      <div>
+        <p class="employee-home-summary-card__label">{% translate "Solicitudes Pendientes" %}</p>
+      </div>
+      <span class="employee-home-summary-card__icon employee-home-summary-card__icon--amber" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <rect x="5" y="6" width="14" height="12" rx="3" stroke="currentColor" stroke-width="1.8"></rect>
+          <path d="M9 4.5v3M15 4.5v3M8 11h8M8 14h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+        </svg>
+      </span>
+    </div>
+
+    <div class="employee-home-summary-card__value-row">
+      <strong class="employee-home-summary-card__value">{{ pending_requests_count }}</strong>
+      <span class="employee-home-summary-card__unit">{% translate "en espera" %}</span>
+    </div>
+
+    <p class="employee-home-summary-card__note">
+      {% blocktranslate count counter=employee_requests_count %}{{ counter }} solicitud registrada{% plural %}{{ counter }} solicitudes registradas{% endblocktranslate %}{% if latest_request %} · {% blocktranslate with date=latest_request.request_date|date:"d M Y" %}Última {{ date }}{% endblocktranslate %}{% endif %}
+    </p>
+  </article>
+
+  <article class="employee-home-summary-card employee-home-summary-card--green">
+    <div class="employee-home-summary-card__top">
+      <div>
+        <p class="employee-home-summary-card__label">{% translate "Ultima Resolucion" %}</p>
+      </div>
+      <span class="employee-home-summary-card__icon employee-home-summary-card__icon--green" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M12 3.5 19 7v5.2c0 4-2.7 7.7-7 8.8-4.3-1.1-7-4.8-7-8.8V7l7-3.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+          <path d="m9 12.5 2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </span>
+    </div>
+
+    {% if latest_resolution %}
+      <div class="employee-home-summary-card__status-row">
+        <span class="employee-home-summary-card__status-badge employee-home-summary-card__status-badge--{{ latest_resolution.status.name }}">
+          {{ latest_resolution.status }}
+        </span>
+      </div>
+      <p class="employee-home-summary-card__note">
+        {{ latest_resolution_summary }}{% if latest_resolution.resolution_date %} · {{ latest_resolution.resolution_date|date:"d M Y" }}{% endif %}
+      </p>
+    {% else %}
+      <div class="employee-home-summary-card__status-row">
+        <span class="employee-home-summary-card__status-badge employee-home-summary-card__status-badge--neutral">
+          {% translate "Sin resoluciones" %}
+        </span>
+      </div>
+      <p class="employee-home-summary-card__note">
+        {% translate "Todavía no hay solicitudes resueltas para mostrar." %}
+      </p>
+    {% endif %}
+  </article>
+</div>

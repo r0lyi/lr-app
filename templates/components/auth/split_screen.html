@@ -1,0 +1,13 @@
+<div class="auth-shell{% if class_name %} {{ class_name }}{% endif %}">
+  <section class="auth-shell__media{% if media_class %} {{ media_class }}{% endif %}">
+    <div class="auth-shell__media-content{% if media_content_class %} {{ media_content_class }}{% endif %}">
+      {% include media_partial %}
+    </div>
+  </section>
+
+  <section class="auth-shell__panel{% if panel_class %} {{ panel_class }}{% endif %}">
+    <div class="auth-shell__panel-content{% if panel_content_class %} {{ panel_content_class }}{% endif %}">
+      {% include panel_partial %}
+    </div>
+  </section>
+</div>

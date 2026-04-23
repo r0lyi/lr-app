@@ -1,0 +1,73 @@
+.dash {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  align-items: start;
+  background: var(--bg);
+}
+
+.dash-main {
+  min-height: 100vh;
+  --dash-main-inline-start: 20px;
+  --dash-main-inline-end: 20px;
+  padding: 22px var(--dash-main-inline-end) 34px var(--dash-main-inline-start);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  position: relative;
+  background: var(--bg);
+}
+
+.dash-content {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.dash-content--wide {
+  width: min(1440px, 100%);
+}
+
+.dash-card {
+  padding: 24px 26px;
+  border-radius: 20px;
+  background: #ffffff;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+}
+
+.dash-card-title {
+  margin-bottom: 14px;
+  color: #111827;
+  font-size: clamp(1.25rem, 1.4vw, 1.55rem);
+  font-weight: 900;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+}
+
+.dash-hamburger {
+  display: none;
+}
+
+.dash-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.dash-overlay--visible {
+  display: block;
+  opacity: 1;
+}
+
+.no-scroll {
+  overflow: hidden;
+}

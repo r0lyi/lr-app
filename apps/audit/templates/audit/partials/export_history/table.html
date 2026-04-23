@@ -1,0 +1,75 @@
+{% load i18n %}
+{% translate "Descargar" as default_download_label %}
+{% translate "exportaciones" as exports_item_label %}
+{% translate "Paginación de exportaciones" as exports_pagination_label %}
+
+<div class="export-history-table-card__table-wrapper">
+  <div class="export-history-table">
+    {% if export_histories %}
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>{% translate "Fecha" %}</th>
+            <th>{% translate "Usuario" %}</th>
+            <th>{% translate "Archivo" %}</th>
+            <th>{% translate "Cantidad de solicitudes" %}</th>
+            <th>{% translate "Acciones" %}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for export_item in export_histories %}
+            <tr>
+              <td data-label="{% translate 'Fecha' %}">{{ export_item.created_at|date:"d-m-Y H:i" }}</td>
+              <td data-label="{% translate 'Usuario' %}">
+                {% if export_item.user %}
+                  <span class="export-history-table__user">{{ export_item.user.email }}</span>
+                {% else %}
+                  <span class="export-history-table__muted">{% translate "Usuario eliminado" %}</span>
+                {% endif %}
+              </td>
+              <td data-label="{% translate 'Archivo' %}">
+                {% if export_item.rows_snapshot_json is not None %}
+                  <a class="export-history-table__file-link" href="{% url 'audit:download-export' export_item.pk %}">
+                    <span class="export-history-table__file-name">
+                      {{ export_item.file_name|default:default_download_label }}
+                    </span>
+                    <span class="export-history-table__file-icon" aria-hidden="true">
+                      {% include "components/ui/icon.html" with name="download" %}
+                    </span>
+                  </a>
+                {% else %}
+                  <span class="export-history-table__muted">{% translate "Sin archivo" %}</span>
+                {% endif %}
+              </td>
+              <td data-label="{% translate 'Cantidad de solicitudes' %}">
+                <span class="export-history-table__requests-count">
+                  {{ export_item.total_records|default:"-" }}
+                </span>
+              </td>
+              <td data-label="{% translate 'Acciones' %}">
+                {% if export_item.rows_snapshot_json is not None %}
+                  <a class="export-history-table__preview-link" href="{% url 'audit:preview-export' export_item.pk %}">
+                    <span class="export-history-table__preview-icon" aria-hidden="true">
+                      {% include "components/ui/icon.html" with name="eye" %}
+                    </span>
+                    <span>{% translate "Vista previa" %}</span>
+                  </a>
+                {% else %}
+                  <span class="export-history-table__muted">{% translate "No disponible" %}</span>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p class="export-history-table__empty">
+        {% translate "No se ha registrado ninguna exportacion con los filtros actuales." %}
+      </p>
+    {% endif %}
+  </div>
+</div>
+
+<div class="export-history-table-card__footer">
+  {% include "components/ui/table_footer.html" with total_count=filtered_exports_count item_label_plural=exports_item_label aria_label=exports_pagination_label %}
+</div>

@@ -1,0 +1,57 @@
+{% load i18n %}
+{% translate "solicitudes" as requests_item_label %}
+{% translate "Paginación de solicitudes" as requests_pagination_label %}
+
+<section class="rrhh-table-card dash-card" id="rrhh-home-table">
+  <div class="rrhh-table-card__table-wrapper">
+    {% if vacation_requests %}
+      <table class="rrhh-table">
+        <thead>
+          <tr>
+            <th>{% translate "Apellidos" %}</th>
+            <th>{% translate "Nombre" %}</th>
+            <th>{% translate "Fecha alta" %}</th>
+            <th>{% translate "Fecha inicio" %}</th>
+            <th>{% translate "Fecha final" %}</th>
+            <th>{% translate "Días" %}</th>
+            <th>{% translate "Estado" %}</th>
+            <th>{% translate "Acciones" %}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for vacation_request in vacation_requests %}
+            <tr>
+              <td data-label="{% translate 'Apellidos' %}">{{ vacation_request.employee.last_name }}</td>
+              <td data-label="{% translate 'Nombre' %}">{{ vacation_request.employee.first_name }}</td>
+              <td data-label="{% translate 'Fecha alta' %}">{{ vacation_request.employee.hire_date|date:"d-m-Y" }}</td>
+              <td data-label="{% translate 'Fecha inicio' %}">{{ vacation_request.start_date|date:"d-m-Y" }}</td>
+              <td data-label="{% translate 'Fecha final' %}">{{ vacation_request.end_date|date:"d-m-Y" }}</td>
+              <td data-label="{% translate 'Días' %}">{{ vacation_request.requested_days|floatformat:"2u" }}</td>
+              <td data-label="{% translate 'Estado' %}">
+                <span class="rrhh-table__status{% if vacation_request.status.name == 'approved' %} rrhh-table__status--approved{% elif vacation_request.status.name == 'rejected' %} rrhh-table__status--rejected{% else %} rrhh-table__status--pending{% endif %}">
+                  {{ vacation_request.status }}
+                </span>
+              </td>
+              <td data-label="{% translate 'Acciones' %}">
+                <a
+                  class="rrhh-table__action"
+                  href="{% url 'vacations:review-request' vacation_request.pk %}"
+                  aria-label="{% blocktranslate with first_name=vacation_request.employee.first_name last_name=vacation_request.employee.last_name %}Gestionar solicitud de {{ first_name }} {{ last_name }}{% endblocktranslate %}"
+                  title="{% translate 'Gestionar solicitud' %}"
+                >
+                  {% include "components/ui/icon.html" with name="pencil" %}
+                </a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p class="rrhh-table__empty">{% translate "No hay solicitudes registradas con los filtros actuales." %}</p>
+    {% endif %}
+  </div>
+
+  <div class="rrhh-table-card__footer">
+    {% include "components/ui/table_footer.html" with total_count=filtered_requests_count item_label_plural=requests_item_label aria_label=requests_pagination_label %}
+  </div>
+</section>

@@ -1,0 +1,100 @@
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% translate "Cambiar idioma" as language_switcher_label %}
+{% translate "Seleccionar idioma" as language_menu_label %}
+{% translate "Idioma seleccionado" as selected_language_label %}
+
+<details class="language-switcher{% if variant %} language-switcher--{{ variant }}{% endif %}">
+  <summary class="language-switcher__trigger" aria-label="{{ language_switcher_label }}" title="{{ language_switcher_label }}">
+    <span
+      class="language-switcher__flag language-switcher__flag--{% if LANGUAGE_CODE == 'cat' %}cat{% elif LANGUAGE_CODE == 'en' %}en{% else %}es{% endif %}"
+      aria-hidden="true"
+    ></span>
+    <span class="language-switcher__current">
+      {% if LANGUAGE_CODE == "en" %}
+        <span class="language-switcher__label">English</span>
+        <span class="language-switcher__code">EN</span>
+      {% elif LANGUAGE_CODE == "cat" %}
+        <span class="language-switcher__label">Català</span>
+        <span class="language-switcher__code">CAT</span>
+      {% else %}
+        <span class="language-switcher__label">Español</span>
+        <span class="language-switcher__code">ES</span>
+      {% endif %}
+    </span>
+    <span class="language-switcher__chevron" aria-hidden="true">
+      {% include "components/ui/icon.html" with name="chevron-down" %}
+    </span>
+  </summary>
+
+  <div class="language-switcher__menu" role="menu" aria-label="{{ language_menu_label }}">
+    <form class="language-switcher__option-form" action="{% url 'set_language' %}" method="post" role="none">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ request.get_full_path }}">
+      <button
+        class="language-switcher__option{% if LANGUAGE_CODE == 'es' %} is-active{% endif %}"
+        type="submit"
+        name="language"
+        value="es"
+        role="menuitem"
+        {% if LANGUAGE_CODE == "es" %}aria-current="true"{% endif %}
+      >
+        <span class="language-switcher__flag language-switcher__flag--es" aria-hidden="true"></span>
+        <span class="language-switcher__option-copy">
+          <span class="language-switcher__option-name">Español</span>
+          <span class="language-switcher__option-code">ES</span>
+        </span>
+        {% if LANGUAGE_CODE == "es" %}
+          <span class="language-switcher__selected" aria-hidden="true"></span>
+          <span class="language-switcher__selected-label">{{ selected_language_label }}</span>
+        {% endif %}
+      </button>
+    </form>
+
+    <form class="language-switcher__option-form" action="{% url 'set_language' %}" method="post" role="none">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ request.get_full_path }}">
+      <button
+        class="language-switcher__option{% if LANGUAGE_CODE == 'en' %} is-active{% endif %}"
+        type="submit"
+        name="language"
+        value="en"
+        role="menuitem"
+        {% if LANGUAGE_CODE == "en" %}aria-current="true"{% endif %}
+      >
+        <span class="language-switcher__flag language-switcher__flag--en" aria-hidden="true"></span>
+        <span class="language-switcher__option-copy">
+          <span class="language-switcher__option-name">English</span>
+          <span class="language-switcher__option-code">EN</span>
+        </span>
+        {% if LANGUAGE_CODE == "en" %}
+          <span class="language-switcher__selected" aria-hidden="true"></span>
+          <span class="language-switcher__selected-label">{{ selected_language_label }}</span>
+        {% endif %}
+      </button>
+    </form>
+
+    <form class="language-switcher__option-form" action="{% url 'set_language' %}" method="post" role="none">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ request.get_full_path }}">
+      <button
+        class="language-switcher__option{% if LANGUAGE_CODE == 'cat' %} is-active{% endif %}"
+        type="submit"
+        name="language"
+        value="cat"
+        role="menuitem"
+        {% if LANGUAGE_CODE == "cat" %}aria-current="true"{% endif %}
+      >
+        <span class="language-switcher__flag language-switcher__flag--cat" aria-hidden="true"></span>
+        <span class="language-switcher__option-copy">
+          <span class="language-switcher__option-name">Català</span>
+          <span class="language-switcher__option-code">CAT</span>
+        </span>
+        {% if LANGUAGE_CODE == "cat" %}
+          <span class="language-switcher__selected" aria-hidden="true"></span>
+          <span class="language-switcher__selected-label">{{ selected_language_label }}</span>
+        {% endif %}
+      </button>
+    </form>
+  </div>
+</details>

@@ -1,0 +1,73 @@
+{% load i18n %}
+{% translate "Enviar aviso general" as send_broadcast_label %}
+
+<section class="admin-home-broadcast-card">
+  <div class="admin-home-broadcast-card__header">
+    <div class="admin-home-broadcast-card__heading">
+      <h2 class="admin-home-broadcast-card__title">{% translate "Aviso general" %}</h2>
+      <p class="admin-home-broadcast-card__recipients">
+        <span class="admin-home-broadcast-card__recipients-icon" aria-hidden="true">
+          {% include "components/ui/icon.html" with name="users" %}
+        </span>
+        <span>{% blocktranslate count counter=broadcast_recipients_count %}{{ counter }} destinatario{% plural %}{{ counter }} destinatarios{% endblocktranslate %}</span>
+      </p>
+    </div>
+    <a
+      class="admin-home-broadcast-card__action"
+      href="{% url 'dashboard:admin-users' %}"
+      aria-label="{% translate 'Ver usuarios' %}"
+      title="{% translate 'Ver usuarios' %}"
+    >
+      {% include "components/ui/icon.html" with name="users-settings" %}
+    </a>
+  </div>
+
+  <p class="admin-home-broadcast-card__description">
+    {% blocktranslate trimmed %}
+      Envía una notificación interna a todos los usuarios activos registrados en el sistema.
+      Asegúrate de que el mensaje sea claro y pertinente para toda la organización.
+    {% endblocktranslate %}
+  </p>
+
+  <form method="post" class="admin-home-broadcast-form" novalidate>
+    {% csrf_token %}
+
+    {% if broadcast_notification_form.non_field_errors %}
+      <div class="admin-home-broadcast-form__errors">
+        {% for error in broadcast_notification_form.non_field_errors %}
+          <p>{{ error }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="admin-home-broadcast-form__grid">
+      <div class="admin-home-broadcast-form__field">
+        <label class="admin-home-broadcast-form__label" for="{{ broadcast_notification_form.title.id_for_label }}">
+          {{ broadcast_notification_form.title.label }}
+        </label>
+        {{ broadcast_notification_form.title }}
+        {% if broadcast_notification_form.title.errors %}
+          {% for error in broadcast_notification_form.title.errors %}
+            <p class="admin-home-broadcast-form__feedback">{{ error }}</p>
+          {% endfor %}
+        {% endif %}
+      </div>
+
+      <div class="admin-home-broadcast-form__field">
+        <label class="admin-home-broadcast-form__label" for="{{ broadcast_notification_form.message.id_for_label }}">
+          {{ broadcast_notification_form.message.label }}
+        </label>
+        {{ broadcast_notification_form.message }}
+        {% if broadcast_notification_form.message.errors %}
+          {% for error in broadcast_notification_form.message.errors %}
+            <p class="admin-home-broadcast-form__feedback">{{ error }}</p>
+          {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="admin-home-broadcast-form__footer">
+      {% include "components/ui/button_principal.html" with label=send_broadcast_label type="submit" size="md" right_icon_name="arrow-right" class_name="admin-home-broadcast-form__submit" %}
+    </div>
+  </form>
+</section>

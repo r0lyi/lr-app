@@ -1,0 +1,42 @@
+{% load i18n %}
+
+<section
+  class="vac-request-balance-card"
+  data-vacation-annual-counter
+  data-annual-days-total="{{ annual_vacation_remaining_days_count|floatformat:"2u" }}"
+>
+  <div class="vac-request-balance-card__copy">
+    <p class="vac-request-balance-card__eyebrow">{% translate "Tu saldo disponible" %}</p>
+    <h1 class="vac-request-balance-card__title">
+      <strong id="annual-vacation-remaining-days" aria-live="polite">
+        {{ annual_vacation_remaining_days_count|floatformat:0 }}
+      </strong>
+      <span>{% translate "días disponibles" %}</span>
+    </h1>
+    <p class="vac-request-balance-card__subtitle">
+      {% blocktranslate with year=annual_vacation_reference_year days=annual_vacation_days_count|floatformat:0 trimmed %}
+        Periodo {{ year }} · derecho anual de {{ days }} días.
+      {% endblocktranslate %}
+    </p>
+  </div>
+
+  <div class="vac-request-balance-card__progress" aria-hidden="true">
+    <span
+      class="vac-request-balance-card__progress-bar"
+      style="width: {{ annual_vacation_balance_percentage|floatformat:"2u" }}%;"
+    ></span>
+  </div>
+
+  <div class="vac-request-balance-card__meta">
+    <span>{% translate "Actualizado para el periodo activo" %}</span>
+    <span>
+      {{ annual_vacation_remaining_days_count|floatformat:0 }} /
+      {{ annual_vacation_days_count|floatformat:0 }}
+    </span>
+  </div>
+
+  <a class="vac-request-guide-jump" href="#vac-request-guide">
+    {% translate "Ver guía de solicitud" %}
+    {% include "components/ui/icon.html" with name="arrow-right" %}
+  </a>
+</section>

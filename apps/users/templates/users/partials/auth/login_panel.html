@@ -1,0 +1,44 @@
+{% load i18n %}
+{% translate "DNI" as dni_label %}
+{% translate "Introduce tu DNI" as dni_placeholder %}
+{% translate "Contraseña" as password_label %}
+{% translate "Introduce tu contraseña" as password_placeholder %}
+{% translate "Entrar" as login_button_label %}
+{% translate "Crear o cambiar contraseña" as request_activation_label %}
+
+<div class="login-panel">
+  {% url 'auth:request-activation' as request_activation_url %}
+  <div class="login-panel__language">
+    {% include "components/ui/language_switcher.html" with variant="auth" %}
+  </div>
+
+  <header class="login-panel__header">
+    <h2 class="login-panel__title">{% translate "Bienvenido de nuevo" %}</h2>
+    <p class="login-panel__subtitle">{% translate "Ingresa tus credenciales para continuar." %}</p>
+  </header>
+
+  <form
+    class="login-panel__form"
+    method="post"
+    action="{% url 'auth:login' %}"
+    hx-post="{% url 'auth:login' %}"
+    hx-target="#ui-toast-root"
+    hx-swap="innerHTML"
+    hx-indicator="#login-btn"
+  >
+    {% csrf_token %}
+
+    <div class="login-panel__fields">
+      {% include "components/ui/text_input.html" with label=dni_label left_icon_name="id-card" type="text" id="id_dni" name="dni" placeholder=dni_placeholder autocomplete="username" autofocus=True required=True value=form.dni.value|default:'' error=form.dni.errors.0 full_width=True %}
+
+      {% include "components/ui/password_input.html" with label=password_label left_icon_name="lock" id="id_password" name="password" placeholder=password_placeholder autocomplete="current-password" required=True error=form.password.errors.0 full_width=True %}
+    </div>
+
+
+    {% include "components/ui/button_principal.html" with label=login_button_label type="submit" size="md" full_width=True id="login-btn" htmx_indicator=True right_icon_name="arrow-right" class_name="login-panel__submit" %}
+  </form>
+
+  <div class="login-panel__secondary-action">
+    {% include "components/ui/button_secondari.html" with label=request_activation_label href=request_activation_url size="md" right_icon_name="arrow-right" class_name="login-panel__secondary-link" %}
+  </div>
+</div>

@@ -1,0 +1,35 @@
+{% load i18n static %}
+{% get_current_language as LANGUAGE_CODE %}
+
+<!DOCTYPE html>
+<html lang="{% if LANGUAGE_CODE == 'cat' %}ca{% else %}{{ LANGUAGE_CODE|default:'es' }}{% endif %}" 
+translate="no" class="notranslate">
+<head>
+  <meta name="google" content="notranslate">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="{% static 'images/brand/favicon.svg' %}">
+  
+  <title>{% block title %}{% translate "Sistema de Vacaciones" %}{% endblock %}</title>
+
+  <!-- HTMX -->
+  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+
+  <!-- TOASTS -->
+{% include "components/feedback/toasts.html" %}
+  <!-- CONTENIDO -->
+  {% block content %}{% endblock %}
+
+  <!-- JS GLOBAL -->
+  <script src="{% static 'js/core/toast.js' %}"></script>
+
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

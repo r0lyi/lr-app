@@ -1,0 +1,15 @@
+{% load i18n %}
+
+<section class="admin-home-stats" aria-label="{% translate 'Resumen general del sistema' %}">
+  {% for card in admin_summary_cards %}
+    <article class="admin-home-stat-card admin-home-stat-card--{{ card.tone }}">
+      <div class="admin-home-stat-card__header">
+        <span class="admin-home-stat-card__label">{{ card.label }}</span>
+        <span class="admin-home-stat-card__icon admin-home-stat-card__icon--{{ card.tone }}" aria-hidden="true">
+          {% include "components/ui/icon.html" with name=card.icon %}
+        </span>
+      </div>
+      <strong class="admin-home-stat-card__value">{{ card.value }}</strong>
+    </article>
+  {% endfor %}
+</section>

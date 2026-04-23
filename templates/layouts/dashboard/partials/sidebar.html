@@ -1,0 +1,75 @@
+{% load i18n static %}
+{% static "images/brand/logo500x200.svg" as sidebar_logo %}
+
+<aside class="dash-sidebar{% if role_name == 'employee' %} dash-sidebar--employee-theme{% endif %}" id="dash-sidebar">
+  <div class="dash-sidebar-top">
+    <div class="dash-brand">
+      <img src="{{ sidebar_logo }}" alt="{% translate 'Clean & Service' %}" />
+    </div>
+
+    <button
+      class="dash-sidebar-close"
+      id="dash-sidebar-close"
+      type="button"
+      aria-label="{% translate 'Cerrar menú' %}"
+    >
+      <span></span><span></span>
+    </button>
+  </div>
+
+  <nav class="dash-nav" aria-label="{% translate 'Menu principal' %}">
+    {% if nav_items %}
+      {% for item in nav_items %}
+        {% include "components/ui/dashboard_nav_button.html" with url_name=item.url_name label=item.label icon=item.icon active=item.active %}
+      {% endfor %}
+    {% else %}
+      {% block dashboard_nav %}{% endblock %}
+    {% endif %}
+  </nav>
+
+  <div class="dash-sidebar-footer">
+    <button
+      class="dash-sidebar-action dash-sidebar-action--help"
+      type="button"
+      aria-controls="dash-help-panel"
+      aria-expanded="false"
+      aria-haspopup="dialog"
+      data-help-toggle
+    >
+      <span class="dash-sidebar-action__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"></circle>
+          <path
+            d="M9.5 9.4c0-1.4 1.1-2.4 2.5-2.4s2.5 1 2.5 2.4c0 1.1-.8 1.7-1.6 2.3-.8.5-1.4 1-1.4 2.1v.4"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          ></path>
+          <path d="M12 17.2h.01" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"></path>
+        </svg>
+      </span>
+      <span class="dash-sidebar-action__label">{% translate "Ayuda" %}</span>
+    </button>
+
+    <form class="dash-sidebar-action-form" method="post" action="{% url 'auth:logout' %}">
+      {% csrf_token %}
+      <button class="dash-sidebar-action dash-sidebar-action--logout" type="submit">
+        <span class="dash-sidebar-action__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M10 7V5.6A1.6 1.6 0 0 1 11.6 4h5.8A1.6 1.6 0 0 1 19 5.6v12.8A1.6 1.6 0 0 1 17.4 20h-5.8A1.6 1.6 0 0 1 10 18.4V17"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></path>
+            <path d="M4 12h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+            <path d="M9 8.5 4 12l5 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </span>
+        <span class="dash-sidebar-action__label">{% translate "Cerrar Sesión" %}</span>
+      </button>
+    </form>
+  </div>
+</aside>

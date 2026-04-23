@@ -1,0 +1,17 @@
+{% load i18n %}{% translate "Hola," %}
+
+{% translate "Para entrar en el sistema por primera vez, primero debe crear su contraseña." %}
+
+{% translate "Que tiene que hacer ahora:" %}
+{% translate "1. Pulse el boton del enlace." %}
+{% translate "2. Escriba su nueva contraseña." %}
+{% translate "3. Guarde la contraseña y despues podra entrar con su DNI." %}
+
+{% translate "Abra este enlace:" %}
+{{ activation_url }}
+
+{% blocktranslate with hours=expires_in_hours %}Este enlace caduca en {{ hours }} horas.{% endblocktranslate %}
+
+{% translate "Si usted no ha solicitado este acceso, puede ignorar este mensaje." %}
+
+{{ company_name }}

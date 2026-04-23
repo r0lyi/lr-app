@@ -1,0 +1,9 @@
+{% load i18n %}
+{% translate "Información de ayuda" as help_eyebrow %}
+{% translate "¿Dónde encuentro la fecha de ingreso?" as help_title %}
+{% blocktranslate asvar help_text_html trimmed %}Puedes consultar la fecha de ingreso en tu <strong>Informe de Vida Laboral</strong> o en tu contrato de alta.{% endblocktranslate %}
+{% translate "Si tienes dudas, revisa la fecha en la que empezaste a trabajar." as help_line_1 %}
+{% translate "RRHH puede ayudarte a confirmar el dato antes de enviarlo." as help_line_2 %}
+{% translate "Solo necesitamos esta información para completar correctamente tu expediente." as help_note %}
+
+{% include "components/ui/info_panel.html" with class_name="onboarding-help" eyebrow=help_eyebrow title=help_title text_html=help_text_html line_1=help_line_1 line_2=help_line_2 note=help_note %}

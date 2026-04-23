@@ -1,0 +1,28 @@
+{% load i18n %}
+
+<section class="review-request-page">
+  <div class="ui-modal is-open review-request-modal" aria-hidden="false">
+    <a
+      class="ui-modal__overlay review-request-modal__overlay"
+      href="{{ requests_return_url }}"
+      aria-label="{% translate 'Cerrar y volver al panel de solicitudes' %}"
+    ></a>
+
+    <div class="ui-modal__content" role="dialog" aria-modal="true" aria-labelledby="review-request-title">
+      <div class="ui-modal__header">
+        <div>
+          <h1 class="ui-modal__title" id="review-request-title">{% translate "Revisar solicitud" %}</h1>
+          <p class="review-request-modal__subtitle">
+            {% translate "Ajusta el estado y las fechas de la solicitud si necesitas reorganizar el periodo desde RRHH." %}
+          </p>
+        </div>
+        <a class="ui-modal__close" href="{{ requests_return_url }}" aria-label="{% translate 'Cerrar modal' %}">×</a>
+      </div>
+
+      <div class="ui-modal__body">
+        {% include "vacations/partials/review_request/summary.html" %}
+        {% include "vacations/partials/review_request/form.html" %}
+      </div>
+    </div>
+  </div>
+</section>

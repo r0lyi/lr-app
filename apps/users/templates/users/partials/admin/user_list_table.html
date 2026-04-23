@@ -1,0 +1,83 @@
+{% load i18n %}
+{% translate "usuarios" as users_item_label %}
+{% translate "Paginación de usuarios" as users_pagination_label %}
+
+<div class="admin-users-table">
+  {% if managed_users %}
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>{% translate "Usuario" %}</th>
+          <th>{% translate "Rol principal" %}</th>
+          <th>{% translate "Estado" %}</th>
+          <th>{% translate "Acciones" %}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user_row in managed_users %}
+          <tr>
+            <td data-label="{% translate 'Usuario' %}">
+              <div class="admin-users-table__identity">
+                <strong class="admin-users-table__name">{{ user_row.display_name }}</strong>
+                <span class="admin-users-table__meta">{{ user_row.user.email }}</span>
+                <span class="admin-users-table__meta">{% blocktranslate with dni=user_row.user.dni %}DNI: {{ dni }}{% endblocktranslate %}</span>
+                <span class="admin-users-table__meta">
+                  {% translate "Ficha de empleado:" %} {% if user_row.has_employee_profile %}{% translate "Si" %}{% else %}{% translate "No" %}{% endif %}
+                </span>
+              </div>
+            </td>
+            <td data-label="{% translate 'Rol principal' %}">
+              <span class="admin-users-table__role">
+                {{ user_row.primary_role_label }}
+              </span>
+            </td>
+            <td data-label="{% translate 'Estado' %}">
+              <div class="admin-users-table__access">
+                <span class="admin-users-table__status{% if user_row.user.is_active %} admin-users-table__status--active{% endif %}">
+                  {{ user_row.access_status_label }}
+                </span>
+                <span class="admin-users-table__meta">
+                  {% translate "Ultimo acceso:" %}
+                  {% if user_row.user.last_login %}
+                    {{ user_row.user.last_login|date:"d-m-Y H:i" }}
+                  {% else %}
+                    {% translate "Nunca" %}
+                  {% endif %}
+                </span>
+                <span class="admin-users-table__meta">
+                  {% translate "Contrasena:" %}
+                  {% if user_row.has_usable_password %}{% translate "Configurada" %}{% else %}{% translate "Sin configurar" %}{% endif %}
+                </span>
+                <span class="admin-users-table__meta">
+                  {% translate "Registro:" %}
+                  {% if user_row.user.registered_at %}
+                    {{ user_row.user.registered_at|date:"d-m-Y H:i" }}
+                  {% else %}
+                    {% translate "Sin completar" %}
+                  {% endif %}
+                </span>
+              </div>
+            </td>
+            <td data-label="{% translate 'Acciones' %}">
+              <div class="admin-users-table__actions">
+                <a
+                  href="{% url 'dashboard:admin-user-edit' user_row.user.pk %}"
+                  class="admin-users-table__edit-link"
+                >
+                  {% include "components/ui/icon.html" with name="pencil" %}
+                  <span>{% translate "Editar usuario" %}</span>
+                </a>
+              </div>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p class="admin-users-table__empty">
+      {% translate "No hay usuarios que coincidan con los filtros aplicados." %}
+    </p>
+  {% endif %}
+</div>
+
+{% include "components/ui/table_footer.html" with total_count=managed_users_count item_label_plural=users_item_label aria_label=users_pagination_label %}

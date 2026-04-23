@@ -1,0 +1,27 @@
+{% load i18n %}
+{% translate "Nuevo Usuario" as new_user_label %}
+
+<section class="admin-users-page">
+  <header class="admin-users-hero">
+    <div class="admin-users-hero__copy">
+      <p class="admin-users-hero__eyebrow">{% translate "Panel de administración" %}</p>
+      <h1 class="admin-users-hero__title">{% translate "Gestión de Usuarios" %}</h1>
+      <p class="admin-users-hero__description">
+        {% translate "Administra los accesos, roles y permisos de los empleados del sistema." %}
+      </p>
+    </div>
+    {% include "components/ui/button_principal.html" with label=new_user_label size="md" left_icon_name="user-plus" id="open-admin-user-create-modal" class_name="admin-users-hero__cta" type="button" %}
+  </header>
+
+  {% include "users/partials/admin/user_list_summary.html" %}
+
+  <section class="admin-users-card admin-users-card--filters">
+    {% include "users/partials/admin/user_list_filters.html" %}
+  </section>
+
+  <section class="admin-users-card admin-users-card--table">
+    {% include "users/partials/admin/user_list_table.html" %}
+  </section>
+
+  {% include "users/partials/admin/user_create_modal.html" %}
+</section>

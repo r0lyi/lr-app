@@ -1,0 +1,439 @@
+.dash-help {
+  position: fixed;
+  inset: 0;
+  z-index: 2200;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 430px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease;
+}
+
+.dash-help--open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.dash-help__scrim {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  border: 0;
+  background: rgba(15, 23, 42, 0.42);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  cursor: pointer;
+}
+
+.dash-help__dialog {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+  width: min(430px, 100vw);
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #ffffff;
+  color: #1f2937;
+  box-shadow: -20px 0 44px rgba(15, 23, 42, 0.22);
+  transform: translateX(18px);
+  transition: transform 0.22s ease;
+}
+
+.dash-help--open .dash-help__dialog {
+  transform: translateX(0);
+}
+
+.dash-help__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px 24px 18px;
+  border-bottom: 1px solid #e5edf5;
+  background: #ffffff;
+}
+
+.dash-help__heading {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.dash-help__eyebrow,
+.dash-help__role,
+.dash-help__contact-kicker {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.dash-help__title {
+  margin: 0;
+  color: #111827;
+  font-size: 24px;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.dash-help__close {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  flex: 0 0 auto;
+  border: 1px solid #dbe5ef;
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #475569;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.dash-help__close:hover,
+.dash-help__close:focus-visible {
+  border-color: #b8d7ec;
+  background: #eef7fc;
+  color: #0f84bf;
+}
+
+.dash-help__close span {
+  position: absolute;
+  width: 16px;
+  height: 2px;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.dash-help__close span:first-child {
+  transform: rotate(45deg);
+}
+
+.dash-help__close span:last-child {
+  transform: rotate(-45deg);
+}
+
+.dash-help__body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 18px;
+  min-height: 0;
+  padding: 20px 24px 28px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.38) transparent;
+}
+
+.dash-help__body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dash-help__body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dash-help__body::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.32);
+  border-radius: 999px;
+}
+
+.dash-help__intro {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid #d9e9f4;
+  border-radius: 8px;
+  background: #f7fbfe;
+}
+
+.dash-help__intro-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  background: #e3f3fb;
+  color: #0f84bf;
+}
+
+.dash-help__intro-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.dash-help__role,
+.dash-help__intro-title,
+.dash-help__intro-text,
+.dash-help__section-title,
+.dash-help__contact-title,
+.dash-help__contact p {
+  margin: 0;
+}
+
+.dash-help__intro-title {
+  margin-top: 4px;
+  color: #0f172a;
+  font-size: 19px;
+  font-weight: 900;
+  line-height: 1.18;
+}
+
+.dash-help__intro-text {
+  margin-top: 8px;
+  color: #526173;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.dash-help__section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dash-help__section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.dash-help__section-title {
+  color: #1f2937;
+  font-size: 15px;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.dash-help__section-count,
+.dash-help__status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 26px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #e8f7ef;
+  color: #168452;
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.dash-help__links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dash-help-link {
+  display: grid;
+  grid-template-columns: 12px minmax(0, 1fr) 24px;
+  align-items: center;
+  gap: 12px;
+  min-height: 62px;
+  padding: 12px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #1f2937;
+  text-decoration: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.dash-help-link:hover,
+.dash-help-link:focus-visible {
+  border-color: #b8d7ec;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+  transform: translateY(-1px);
+}
+
+.dash-help-link__marker {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #1ba3e8;
+  box-shadow: 0 0 0 4px rgba(27, 163, 232, 0.12);
+}
+
+.dash-help-link:nth-child(2n) .dash-help-link__marker {
+  background: #22a06b;
+  box-shadow: 0 0 0 4px rgba(34, 160, 107, 0.12);
+}
+
+.dash-help-link:nth-child(3n) .dash-help-link__marker {
+  background: #d9852b;
+  box-shadow: 0 0 0 4px rgba(217, 133, 43, 0.14);
+}
+
+.dash-help-link__copy {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.dash-help-link__copy strong,
+.dash-help-topic strong {
+  overflow-wrap: anywhere;
+}
+
+.dash-help-link__copy strong {
+  color: #111827;
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.dash-help-link__copy small {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.dash-help-link__arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  color: #94a3b8;
+}
+
+.dash-help-link__arrow svg {
+  width: 18px;
+  height: 18px;
+}
+
+.dash-help__topic-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.dash-help-topic {
+  min-height: 92px;
+  padding: 14px;
+  border: 1px solid #e2e8f0;
+  border-left: 4px solid #1ba3e8;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.dash-help-topic--profile {
+  border-left-color: #22a06b;
+}
+
+.dash-help-topic--exports,
+.dash-help-topic--admin {
+  border-left-color: #d9852b;
+}
+
+.dash-help-topic__label {
+  display: block;
+  margin-bottom: 8px;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.dash-help-topic strong {
+  display: block;
+  color: #111827;
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1.3;
+}
+
+.dash-help__contact {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: auto;
+  padding: 18px;
+  border: 1px solid #e4d6f4;
+  border-radius: 8px;
+  background: #fbf9ff;
+}
+
+.dash-help__contact-title {
+  margin-top: 5px;
+  color: #1f2937;
+  font-size: 17px;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.dash-help__contact p {
+  margin-top: 8px;
+  color: #526173;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+body.dash-help-open {
+  overflow: hidden;
+}
+
+@media (max-width: 820px) {
+  .dash-help {
+    grid-template-columns: 1fr;
+    align-items: end;
+  }
+
+  .dash-help__dialog {
+    grid-column: 1;
+    width: 100%;
+    height: min(86vh, 720px);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    transform: translateY(18px);
+  }
+
+  .dash-help--open .dash-help__dialog {
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 520px) {
+  .dash-help__header {
+    padding: 20px 18px 16px;
+  }
+
+  .dash-help__body {
+    padding: 18px;
+  }
+
+  .dash-help__intro {
+    grid-template-columns: 42px minmax(0, 1fr);
+    padding: 15px;
+  }
+
+  .dash-help__intro-icon {
+    width: 42px;
+    height: 42px;
+  }
+
+  .dash-help__topic-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dash-help__contact {
+    flex-direction: column;
+  }
+}

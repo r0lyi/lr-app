@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block title %}{% translate "Enlace invalido — Sistema de Vacaciones" %}{% endblock %}
+
+{% block extra_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'users/css/pages/auth.css' %}">
+{% endblock %}
+
+{% block content %}
+{% translate "Solicitar nuevo enlace" as request_new_link_label %}
+<div class="auth-page">
+  <div class="auth-card">
+    <section class="auth-side auth-side-left">
+      <div class="auth-side-body">
+        <img
+          src="{% static 'images/brand/logo500x200.svg' %}"
+          alt="{% translate 'LR Clean & Service' %}"
+          class="auth-brand-logo"
+        />
+
+        <h1 class="auth-system-title">{% translate "Sistema de Gestion de Vacaciones" %}</h1>
+        <p class="auth-system-subtitle">{% translate "Gestiona tus solicitudes de manera rapida y eficiente" %}</p>
+
+        <div class="auth-help-card">
+          <h3>{% translate "Recuperar acceso" %}</h3>
+          <p>{% translate "Solicita un nuevo enlace para establecer tu contraseña y volver a ingresar al sistema." %}</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="auth-side auth-side-right">
+      <div class="auth-side-body auth-side-body--center">
+        <h2 class="auth-heading auth-heading-small">{% translate "Enlace invalido o expirado" %}</h2>
+        <p class="auth-subheading">
+          {% translate "Este enlace ya no es valido. Puede haber expirado (24h) o ya fue utilizado." %}
+        </p>
+
+        <form method="get" action="{% url 'auth:request-activation' %}">
+          {% include "components/ui/button_principal.html" with label=request_new_link_label type="submit" size="md" full_width=True %}
+        </form>
+
+        <p class="auth-footer-note">{% translate "LR Clean & Service 2026" %}</p>
+      </div>
+    </section>
+  </div>
+</div>
+{% endblock %}

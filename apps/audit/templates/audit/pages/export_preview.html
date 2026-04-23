@@ -1,0 +1,70 @@
+{% extends "layouts/dashboard/base.html" %}
+{% load i18n static %}
+
+{% block title %}{% translate "Vista previa de exportación" %}{% endblock %}
+
+{% block dashboard_header_title %}{% translate "Portal de auditoría" %}{% endblock %}
+
+{% block dashboard_content_class %}dash-content--wide export-history-content{% endblock %}
+
+{% block dashboard_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/components/data_table.css' %}">
+  <link rel="stylesheet" href="{% static 'audit/css/pages/export_history.css' %}">
+{% endblock %}
+
+{% block dashboard_content %}
+  {% translate "Archivo exportado" as default_export_file_name %}
+  {% translate "Volver" as back_label %}
+  {% translate "Descargar" as download_label %}
+  {% url 'audit:export-history' as export_history_url %}
+  {% url 'audit:download-export' export_history.pk as export_history_download_url %}
+  <section class="export-history-page">
+    <header class="export-history-hero">
+      <div class="export-history-hero__copy">
+        <h1 class="export-history-hero__title">{% translate "Vista previa de exportación" %}</h1>
+        <p class="export-history-hero__description">
+          {% blocktranslate with file_name=export_history.file_name|default:default_export_file_name total=snapshot_preview_count %}{{ file_name }} · {{ total }} solicitudes{% endblocktranslate %}
+        </p>
+      </div>
+
+      <div class="export-history-preview__actions">
+        {% include "components/ui/button_secondari.html" with label=back_label href=export_history_url size="md" left_icon_name="chevron-left" %}
+        {% include "components/ui/button_principal.html" with label=download_label href=export_history_download_url size="md" left_icon_name="download" download=True %}
+      </div>
+    </header>
+
+    <section class="export-history-table-card dash-card">
+      <div class="export-history-table-card__table-wrapper">
+        <div class="export-history-table export-history-preview-table">
+          <table class="data-table">
+            <thead>
+              <tr>
+                {% for _key, label in export_columns %}
+                  <th>{{ label }}</th>
+                {% endfor %}
+              </tr>
+            </thead>
+            <tbody>
+              {% for snapshot_row in snapshot_rows %}
+                <tr>
+                  <td data-label="{% translate 'Numero empleado' %}">{{ snapshot_row.employee_number }}</td>
+                  <td data-label="{% translate 'Apellidos' %}">{{ snapshot_row.last_name }}</td>
+                  <td data-label="{% translate 'Nombre' %}">{{ snapshot_row.first_name }}</td>
+                  <td data-label="{% translate 'Fecha inicio' %}">{{ snapshot_row.start_date }}</td>
+                  <td data-label="{% translate 'Fecha final' %}">{{ snapshot_row.end_date }}</td>
+                  <td data-label="{% translate 'Telefono' %}">{{ snapshot_row.phone }}</td>
+                  <td data-label="{% translate 'Dias solicitados' %}">{{ snapshot_row.requested_days }}</td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="7" class="export-history-table__empty">{% translate "No hay filas en esta exportación." %}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </section>
+{% endblock %}

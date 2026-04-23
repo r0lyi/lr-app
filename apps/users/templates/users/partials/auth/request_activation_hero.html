@@ -1,0 +1,50 @@
+{% load i18n static %}
+
+<div class="set-password-hero">
+  <div class="set-password-hero__overlay" aria-hidden="true"></div>
+
+  <img
+    src="{% static 'images/brand/logo500x200.png' %}"
+    alt="{% translate 'LR Clean & Service' %}"
+    class="set-password-hero__logo"
+  >
+
+  <div class="set-password-hero__content">
+    <div class="set-password-hero__card">
+      <h2 class="set-password-hero__card-title">{% translate "Proceso de Activación" %}</h2>
+
+      <ol class="set-password-hero__steps">
+        <li class="set-password-hero__step">
+          <span class="set-password-hero__step-badge">1</span>
+          <div class="set-password-hero__step-copy">
+            <strong>{% translate "Introduce tu DNI" %}</strong>
+            <span>{% translate "Usaremos tu identificación para localizar tu cuenta." %}</span>
+          </div>
+        </li>
+        <li class="set-password-hero__step">
+          <span class="set-password-hero__step-badge">2</span>
+          <div class="set-password-hero__step-copy">
+            <strong>{% translate "Revisa tu correo" %}</strong>
+            <span>{% translate "Te enviaremos un enlace seguro para continuar." %}</span>
+          </div>
+        </li>
+        <li class="set-password-hero__step">
+          <span class="set-password-hero__step-badge">3</span>
+          <div class="set-password-hero__step-copy">
+            <strong>{% translate "Crea tu contraseña" %}</strong>
+            <span>{% translate "Completa la activación y entra al sistema." %}</span>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </div>
+
+  <img
+    src="{% static 'images/oficina.jpg' %}"
+    alt="{% translate 'Oficina de LR Clean & Service' %}"
+    class="set-password-hero__image"
+    loading="eager"
+    fetchpriority="high"
+    decoding="async"
+  >
+</div>

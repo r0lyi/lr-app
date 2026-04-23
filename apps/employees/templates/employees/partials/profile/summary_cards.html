@@ -1,0 +1,36 @@
+{% load i18n %}
+
+<div class="profile-summary-stack">
+  <article class="profile-summary-card profile-summary-card--annual">
+    <div class="profile-summary-card__header">
+      <span class="profile-summary-card__icon profile-summary-card__icon--soft" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <rect x="4.5" y="5.5" width="15" height="14" rx="2.5" stroke="currentColor" stroke-width="1.8"></rect>
+          <path d="M8.5 3.8v3.4M15.5 3.8v3.4M4.5 10h15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+          <path d="m9 14 2 2 4-4.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </span>
+      <span class="profile-summary-card__badge">{% translate "Disponibles" %}</span>
+    </div>
+    <div class="profile-summary-card__metric">
+      <strong>{{ annual_vacation_remaining_days_count|floatformat:0 }}</strong>
+      <span>{% translate "Días disponibles" %}</span>
+    </div>
+  </article>
+
+  <article class="profile-summary-card profile-summary-card--taken">
+    <div class="profile-summary-card__header">
+      <span class="profile-summary-card__icon profile-summary-card__icon--pending" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.8"></circle>
+          <path d="M12 7.8v4.6l3 1.9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </span>
+      <span class="profile-summary-card__badge profile-summary-card__badge--pending">{% translate "Pendientes" %}</span>
+    </div>
+    <div class="profile-summary-card__metric">
+      <strong>{{ pending_requests_count }}</strong>
+      <span>{% translate "Solicitudes pendientes" %}</span>
+    </div>
+  </article>
+</div>

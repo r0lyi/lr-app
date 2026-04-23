@@ -1,0 +1,116 @@
+{% load i18n %}
+
+<section class="rrhh-info-banner" aria-label="{% translate 'Alertas e información de solicitudes' %}">
+  <div class="rrhh-info-banner__header">
+    <div class="rrhh-info-banner__title-block">
+      <span class="rrhh-info-banner__icon" aria-hidden="true">
+        {% include "components/ui/icon.html" with name="info" %}
+      </span>
+      <div>
+        <h2 class="rrhh-info-banner__title">{% translate "Alertas e información" %}</h2>
+        <p class="rrhh-info-banner__text">
+          {% blocktranslate count counter=filtered_requests_count %}{{ counter }} solicitud revisada con los filtros actuales.{% plural %}{{ counter }} solicitudes revisadas con los filtros actuales.{% endblocktranslate %}
+        </p>
+      </div>
+    </div>
+
+    <a class="rrhh-info-banner__link" href="#rrhh-home-table">
+      <span>{% translate "Ver detalles" %}</span>
+      {% include "components/ui/icon.html" with name="arrow-right" %}
+    </a>
+  </div>
+
+  <div class="rrhh-info-banner__grid">
+    <article class="rrhh-info-banner__item rrhh-info-banner__item--blue">
+      <span class="rrhh-info-banner__item-icon" aria-hidden="true">
+        {% include "components/ui/icon.html" with name="users" %}
+      </span>
+      <div>
+        <strong class="rrhh-info-banner__item-value">{{ export_review_summary.department_overlap_requests_count|default:0 }}</strong>
+        <p class="rrhh-info-banner__item-title">{% translate "Solapamientos de fechas" %}</p>
+        <p class="rrhh-info-banner__item-description">{% translate "Solicitudes que se cruzan con vacaciones activas de otros compañeros." %}</p>
+      </div>
+    </article>
+
+    <article class="rrhh-info-banner__item rrhh-info-banner__item--amber">
+      <span class="rrhh-info-banner__item-icon" aria-hidden="true">
+        {% include "components/ui/icon.html" with name="calendar" %}
+      </span>
+      <div>
+        <strong class="rrhh-info-banner__item-value">{{ export_review_summary.long_duration_requests_count|default:0 }}</strong>
+        <p class="rrhh-info-banner__item-title">{% translate "Solicitudes de larga duración" %}</p>
+        <p class="rrhh-info-banner__item-description">{% translate "Peticiones de 30 días que requieren una revisión más cuidadosa." %}</p>
+      </div>
+    </article>
+  </div>
+
+  {% with visible_alerts=export_review_summary.visible_alert_entries %}
+    <details class="rrhh-alert-log"{% if visible_alerts %} open{% endif %}>
+      <summary class="rrhh-alert-log__summary">
+        <div>
+          <h3 class="rrhh-alert-log__title">{% translate "Registro detallado" %}</h3>
+          <p class="rrhh-alert-log__description">
+            {% translate "Solapamientos de fechas y solicitudes de larga duración detectadas automáticamente." %}
+          </p>
+        </div>
+        <span class="rrhh-alert-log__summary-actions">
+          <span class="rrhh-alert-log__badge">
+            {% blocktranslate count counter=visible_alerts|length %}{{ counter }} evento{% plural %}{{ counter }} eventos{% endblocktranslate %}
+          </span>
+          <span class="rrhh-alert-log__toggle" aria-hidden="true">
+            {% include "components/ui/icon.html" with name="chevron-down" %}
+          </span>
+        </span>
+      </summary>
+
+      <div class="rrhh-alert-log__content">
+        {% if visible_alerts %}
+          <div class="rrhh-alert-log__list">
+            {% for alert in visible_alerts %}
+              <article class="rrhh-alert-log__entry rrhh-alert-log__entry--{{ alert.type }}">
+                <div class="rrhh-alert-log__entry-main">
+                  <span class="rrhh-alert-log__entry-dot" aria-hidden="true"></span>
+                  <div class="rrhh-alert-log__entry-copy">
+                    <div class="rrhh-alert-log__entry-top">
+                      <strong class="rrhh-alert-log__entry-label">{{ alert.label }}</strong>
+                      <span class="rrhh-alert-log__entry-range">
+                        {{ alert.start_date|date:"d-m-Y" }} - {{ alert.end_date|date:"d-m-Y" }}
+                      </span>
+                    </div>
+                    <p class="rrhh-alert-log__entry-text">
+                      <span class="rrhh-alert-log__entry-person">{{ alert.employee_name }}</span>
+                      {% if alert.type == "overlap" %}
+                        {% blocktranslate with days=alert.requested_days|floatformat:"2u" %}solicita {{ days }} días y coincide con:{% endblocktranslate %}
+                      {% elif alert.type == "long_duration" %}
+                        {% blocktranslate with days=alert.requested_days|floatformat:"2u" %}solicita {{ days }} días consecutivos. Requiere revisión adicional por duración.{% endblocktranslate %}
+                      {% endif %}
+                    </p>
+
+                    {% if alert.details %}
+                      <ul class="rrhh-alert-log__matches">
+                        {% for detail in alert.details %}
+                          <li>
+                            <span class="rrhh-alert-log__match-name">{{ detail.name }}</span>
+                            {% for request_detail in detail.requests %}
+                              <span class="rrhh-alert-log__match-range">
+                                {{ request_detail.start_date|date:"d-m-Y" }} - {{ request_detail.end_date|date:"d-m-Y" }} · {{ request_detail.status }}
+                              </span>
+                            {% endfor %}
+                          </li>
+                        {% endfor %}
+                      </ul>
+                    {% endif %}
+                  </div>
+                </div>
+              </article>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p class="rrhh-alert-log__empty">
+            {% translate "No hay solapamientos ni solicitudes de larga duración con los filtros actuales." %}
+          </p>
+        {% endif %}
+      </div>
+    </details>
+  {% endwith %}
+</section>

@@ -1,0 +1,34 @@
+{% load i18n %}
+{% translate "Paginación" as default_pagination_label %}
+
+{% if page_obj and page_obj.paginator.num_pages > 1 %}
+  <nav class="ui-pagination {{ pagination_class_name|default:'' }}" aria-label="{{ aria_label|default:default_pagination_label }}">
+    {% if page_obj.has_previous %}
+      <a class="ui-pagination__control" href="{{ pagination_context.previous_url }}" aria-label="{% translate 'Página anterior' %}">
+        {% include "components/ui/icon.html" with name="chevron-left" %}
+      </a>
+    {% else %}
+      <span class="ui-pagination__control ui-pagination__control--disabled" aria-hidden="true">
+        {% include "components/ui/icon.html" with name="chevron-left" %}
+      </span>
+    {% endif %}
+
+    {% for page_link in pagination_context.pages %}
+      {% if page_link.current %}
+        <span class="ui-pagination__page ui-pagination__page--current">{{ page_link.number }}</span>
+      {% else %}
+        <a class="ui-pagination__page" href="{{ page_link.url }}">{{ page_link.number }}</a>
+      {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+      <a class="ui-pagination__control" href="{{ pagination_context.next_url }}" aria-label="{% translate 'Página siguiente' %}">
+        {% include "components/ui/icon.html" with name="chevron-right" %}
+      </a>
+    {% else %}
+      <span class="ui-pagination__control ui-pagination__control--disabled" aria-hidden="true">
+        {% include "components/ui/icon.html" with name="chevron-right" %}
+      </span>
+    {% endif %}
+  </nav>
+{% endif %}

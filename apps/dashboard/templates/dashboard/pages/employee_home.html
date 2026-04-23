@@ -1,0 +1,23 @@
+{% extends "layouts/dashboard/base.html" %}
+{% load i18n static %}
+
+{% block title %}{% translate "Panel de empleado" %}{% endblock %}
+
+{% block dashboard_header_title %}{% translate "Portal de empleado" %}{% endblock %}
+
+{% block dashboard_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/components/data_table.css' %}">
+  <link rel="stylesheet" href="{% static 'employees/css/pages/employee_home.css' %}">
+{% endblock %}
+
+{% block dashboard_content_class %}employee-home-content{% endblock %}
+
+{% block dashboard_content %}
+  {% include "employees/partials/dashboard/home/content.html" %}
+{% endblock %}
+
+{% block extra_js %}
+  {{ block.super }}
+  <script src="{% static 'employees/js/pages/employee_home.js' %}"></script>
+{% endblock %}
