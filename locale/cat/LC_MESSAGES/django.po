@@ -3139,3 +3139,6 @@ msgstr "Seleccionar idioma"
 
 msgid "Idioma seleccionado"
 msgstr "Idioma seleccionat"
+
+msgid "Si el DNI corresponde a una cuenta, te hemos enviado un correo con las instrucciones para crear o recuperar tu contraseña. Revisa también la carpeta de spam."
+msgstr "Si el DNI correspon a un compte, t'hem enviat un correu amb les instruccions per crear o recuperar la teua contrasenya. Revisa també la carpeta de correu brossa."

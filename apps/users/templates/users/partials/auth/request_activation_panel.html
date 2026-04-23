@@ -4,14 +4,24 @@
 {% translate "Enviar enlace de activación" as send_activation_label %}
 {% translate "Volver al inicio de sesión" as back_to_login_label %}
 
-<div class="set-password-panel">
+<div id="request-activation-panel" class="set-password-panel"{% if oob_swap %} hx-swap-oob="outerHTML"{% endif %}>
   {% url 'auth:login' as request_login_url %}
+  <div class="set-password-panel__language">
+    {% include "components/ui/language_switcher.html" with variant="auth" %}
+  </div>
+
   <header class="set-password-panel__header">
     <h1 class="set-password-panel__title">{% translate "Crear o Recuperar contraseña" %}</h1>
     <p class="set-password-panel__subtitle">
       {% translate "Introduce tu DNI para recibir el enlace de activación." %}
     </p>
   </header>
+
+  {% if activation_notice %}
+    <div class="set-password-panel__notice set-password-panel__notice--success" role="status">
+      <p>{{ activation_notice }}</p>
+    </div>
+  {% endif %}
 
   {% if form.non_field_errors %}
     <div class="set-password-panel__alert" role="alert">
