@@ -21,11 +21,20 @@ from apps.users.forms import RequestActivationForm, SetPasswordForm, LoginForm
 from apps.users.services.auth_service import request_activation, validate_token, set_password
 
 
+def _activation_notice_message():
+    """Devuelve el aviso neutro mostrado tras pedir el enlace de acceso."""
+
+    return _(
+        "Si el DNI corresponde a una cuenta, te hemos enviado un correo con las instrucciones para crear o recuperar tu contraseña. Revisa también la carpeta de spam."
+    )
+
+
 @anonymous_required
 def request_activation_view(request):
     """Gestiona la solicitud del email de activacion o recuperacion."""
 
     form = RequestActivationForm(request.POST or None)
+    activation_notice = None
 
     if request.method == "POST":
         identifier = request.POST.get("dni", "")
@@ -47,19 +56,24 @@ def request_activation_view(request):
                 identifier=form.cleaned_data["dni"],
                 window_seconds=settings.ACTIVATION_RATE_LIMIT_WINDOW,
             )
-            _, notification_message = request_activation(form.cleaned_data["dni"])
+            request_activation(form.cleaned_data["dni"])
+            activation_notice = _activation_notice_message()
 
-            # HTMX — retorna solo el fragmento HTML
             if request.headers.get("HX-Request"):
-                return _toast_response(
+                return render(
                     request=request,
-                    variant="info",
-                    title=_("Notificacion enviada"),
-                    message=notification_message,
-                    duration=5000,
+                    template_name="users/partials/auth/request_activation_success_response.html",
+                    context={
+                        "form": RequestActivationForm(),
+                        "activation_notice": activation_notice,
+                        "toast_variant": "success",
+                        "toast_title": _("Revisa tu correo"),
+                        "toast_message": activation_notice,
+                        "toast_duration": 5500,
+                    },
                 )
 
-            messages.info(request, notification_message)
+            messages.success(request, activation_notice)
             form = RequestActivationForm()
         else:
             validation_message = _("Debes introducir tu DNI.")
@@ -73,7 +87,14 @@ def request_activation_view(request):
                 )
             messages.error(request, validation_message)
 
-    return render(request, "users/pages/request_activation.html", {"form": form})
+    return render(
+        request,
+        "users/pages/request_activation.html",
+        {
+            "form": form,
+            "activation_notice": activation_notice,
+        },
+    )
 
 
 @anonymous_required

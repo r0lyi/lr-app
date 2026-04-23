@@ -48,6 +48,12 @@
   text-align: center;
 }
 
+.auth-side-topbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 28px;
+}
+
 .auth-brand-logo {
   display: block;
   width: 165px;
@@ -215,6 +221,10 @@
   .auth-form {
     gap: 12px;
   }
+
+  .auth-side-topbar {
+    margin-bottom: 22px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -238,6 +248,10 @@
 
   .auth-side-left .auth-help-card h3 {
     text-align: left;
+  }
+
+  .auth-side-topbar {
+    margin-bottom: 18px;
   }
 }
 

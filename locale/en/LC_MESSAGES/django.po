@@ -2689,3 +2689,6 @@ msgstr "Select language"
 
 msgid "Idioma seleccionado"
 msgstr "Selected language"
+
+msgid "Si el DNI corresponde a una cuenta, te hemos enviado un correo con las instrucciones para crear o recuperar tu contraseña. Revisa también la carpeta de spam."
+msgstr "If the ID number matches an account, we have sent you an email with instructions to create or recover your password. Please also check your spam folder."

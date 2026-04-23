@@ -32,6 +32,10 @@
 
     <section class="auth-side auth-side-right">
       <div class="auth-side-body auth-side-body--center">
+        <div class="auth-side-topbar">
+          {% include "components/ui/language_switcher.html" with variant="auth" %}
+        </div>
+
         <h2 class="auth-heading auth-heading-small">{% translate "Enlace invalido o expirado" %}</h2>
         <p class="auth-subheading">
           {% translate "Este enlace ya no es valido. Puede haber expirado (24h) o ya fue utilizado." %}
