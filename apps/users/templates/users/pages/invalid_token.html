@@ -36,10 +36,20 @@
           {% include "components/ui/language_switcher.html" with variant="auth" %}
         </div>
 
-        <h2 class="auth-heading auth-heading-small">{% translate "Enlace invalido o expirado" %}</h2>
-        <p class="auth-subheading">
-          {% translate "Este enlace ya no es valido. Puede haber expirado (24h) o ya fue utilizado." %}
-        </p>
+        {% if token_status == "expired" %}
+          <h2 class="auth-heading auth-heading-small">{% translate "Enlace expirado" %}</h2>
+          <p class="auth-subheading">
+            {% translate "Este enlace ha caducado. Solicita uno nuevo para crear o recuperar tu contraseña." %}
+          </p>
+        {% else %}
+          <h2 class="auth-heading auth-heading-small">{% translate "Enlace invalido o ya no disponible" %}</h2>
+          <p class="auth-subheading">
+            {% translate "Este enlace ya no es valido. Puede que ya se haya usado o que hayas pedido un correo mas reciente." %}
+          </p>
+          <p class="auth-subheading">
+            {% translate "Si has solicitado varios enlaces, utiliza solo el ultimo que hayas recibido." %}
+          </p>
+        {% endif %}
 
         <form method="get" action="{% url 'auth:request-activation' %}">
           {% include "components/ui/button_principal.html" with label=request_new_link_label type="submit" size="md" full_width=True %}

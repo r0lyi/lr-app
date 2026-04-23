@@ -12,6 +12,8 @@
 
 {% blocktranslate with hours=expires_in_hours %}Este enlace caduca en {{ hours }} horas.{% endblocktranslate %}
 
+{% translate "Si solicita otro enlace mas tarde, solo funcionara el ultimo correo enviado." %}
+
 {% translate "Si usted no ha solicitado este acceso, puede ignorar este mensaje." %}
 
 {{ company_name }}
