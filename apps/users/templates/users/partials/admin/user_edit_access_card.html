@@ -1,9 +1,11 @@
+{% load i18n %}
+
 <article class="admin-user-edit-card admin-user-edit-card--wide">
   <div class="admin-user-edit-card__heading">
     <div>
-      <h2 class="admin-user-edit-card__title">Acceso al sistema</h2>
+      <h2 class="admin-user-edit-card__title">{% translate "Acceso al sistema" %}</h2>
       <p class="admin-user-edit-card__description">
-        Consulta informacion util antes de activar, desactivar o revisar una cuenta.
+        {% translate "Consulta informacion util antes de activar, desactivar o revisar una cuenta." %}
       </p>
     </div>
     <span class="admin-user-edit-card__badge{% if managed_user.user.is_active %} admin-user-edit-card__badge--active{% endif %}">
@@ -13,35 +15,35 @@
 
   <div class="admin-user-edit-access__details">
     <article class="admin-user-edit-access__detail">
-      <span class="admin-user-edit-access__label">Ultimo acceso</span>
+      <span class="admin-user-edit-access__label">{% translate "Ultimo acceso" %}</span>
       <strong class="admin-user-edit-access__value">
         {% if managed_user.user.last_login %}
           {{ managed_user.user.last_login|date:"d-m-Y H:i" }}
         {% else %}
-          Nunca
+          {% translate "Nunca" %}
         {% endif %}
       </strong>
     </article>
     <article class="admin-user-edit-access__detail">
-      <span class="admin-user-edit-access__label">Contrasena</span>
+      <span class="admin-user-edit-access__label">{% translate "Contrasena" %}</span>
       <strong class="admin-user-edit-access__value">
-        {{ managed_user.has_usable_password|yesno:"Configurada,Sin configurar" }}
+        {% if managed_user.has_usable_password %}{% translate "Configurada" %}{% else %}{% translate "Sin configurar" %}{% endif %}
       </strong>
     </article>
     <article class="admin-user-edit-access__detail">
-      <span class="admin-user-edit-access__label">Registro</span>
+      <span class="admin-user-edit-access__label">{% translate "Registro" %}</span>
       <strong class="admin-user-edit-access__value">
         {% if managed_user.user.registered_at %}
           {{ managed_user.user.registered_at|date:"d-m-Y H:i" }}
         {% else %}
-          Sin completar
+          {% translate "Sin completar" %}
         {% endif %}
       </strong>
     </article>
     <article class="admin-user-edit-access__detail">
-      <span class="admin-user-edit-access__label">Ficha de empleado</span>
+      <span class="admin-user-edit-access__label">{% translate "Ficha de empleado" %}</span>
       <strong class="admin-user-edit-access__value">
-        {{ managed_user.has_employee_profile|yesno:"Si,No" }}
+        {% if managed_user.has_employee_profile %}{% translate "Si" %}{% else %}{% translate "No" %}{% endif %}
       </strong>
     </article>
   </div>

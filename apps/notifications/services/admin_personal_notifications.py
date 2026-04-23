@@ -1,6 +1,7 @@
 """Servicios para notificaciones personales enviadas por administradores."""
 
 from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 
 from apps.notifications.models import Notification
 
@@ -16,10 +17,10 @@ def create_admin_personal_notification(*, sender, recipient, title, message):
     normalized_message = (message or "").strip()
 
     if not normalized_title:
-        raise ValidationError("El asunto de la notificación es obligatorio.")
+        raise ValidationError(_("El asunto de la notificación es obligatorio."))
 
     if not normalized_message:
-        raise ValidationError("El mensaje de la notificación es obligatorio.")
+        raise ValidationError(_("El mensaje de la notificación es obligatorio."))
 
     return Notification.objects.create(
         user=recipient,

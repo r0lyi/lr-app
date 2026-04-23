@@ -1,6 +1,7 @@
 """Formulario basico para crear solicitudes de vacaciones del empleado."""
 
 from django import forms
+from django.utils.translation import gettext_lazy as _
 
 
 class VacationRequestForm(forms.Form):
@@ -16,15 +17,15 @@ class VacationRequestForm(forms.Form):
     """
 
     start_date = forms.DateField(
-        label="Fecha de inicio",
+        label=_("Fecha de inicio"),
         widget=forms.HiddenInput(),
     )
     end_date = forms.DateField(
-        label="Fecha de fin",
+        label=_("Fecha de fin"),
         widget=forms.HiddenInput(),
     )
     employee_comment = forms.CharField(
-        label="Información adicional",
+        label=_("Información adicional"),
         required=False,
         widget=forms.Textarea(attrs={"rows": 4}),
     )
@@ -37,7 +38,7 @@ class VacationRequestForm(forms.Form):
 
         if start_date and end_date and end_date < start_date:
             raise forms.ValidationError(
-                "La fecha de fin no puede ser anterior a la fecha de inicio."
+                _("La fecha de fin no puede ser anterior a la fecha de inicio.")
             )
 
         return cleaned_data

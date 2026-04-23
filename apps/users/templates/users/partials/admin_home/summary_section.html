@@ -1,4 +1,6 @@
-<section class="admin-home-stats" aria-label="Resumen general del sistema">
+{% load i18n %}
+
+<section class="admin-home-stats" aria-label="{% translate 'Resumen general del sistema' %}">
   {% for card in admin_summary_cards %}
     <article class="admin-home-stat-card admin-home-stat-card--{{ card.tone }}">
       <div class="admin-home-stat-card__header">

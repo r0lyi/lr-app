@@ -1,0 +1,2692 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-04-22 16:11+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
+"1 : 2;\n"
+
+#: apps/audit/admin.py:42
+msgid "Detalle"
+msgstr ""
+
+#: apps/audit/admin.py:46
+msgid "Sin detalle"
+msgstr ""
+
+#: apps/audit/forms/audit_log_filters.py:19
+#: apps/vacations/forms/employee_request_filters.py:54
+msgid "Todos"
+msgstr ""
+
+#: apps/audit/forms/audit_log_filters.py:20
+msgid "Usuario creado"
+msgstr ""
+
+#: apps/audit/forms/audit_log_filters.py:21
+msgid "Cambio de rol"
+msgstr ""
+
+#: apps/audit/forms/audit_log_filters.py:22
+msgid "Cambio de acceso"
+msgstr ""
+
+#: apps/audit/forms/audit_log_filters.py:23
+msgid "Datos de usuario"
+msgstr ""
+
+#: apps/audit/forms/audit_log_filters.py:24
+msgid "Contraseña actualizada"
+msgstr ""
+
+#: apps/audit/forms/audit_log_filters.py:25
+msgid "Cuenta activada"
+msgstr ""
+
+#: apps/audit/forms/audit_log_filters.py:26
+msgid "Solicitud editada"
+msgstr ""
+
+#: apps/audit/forms/audit_log_filters.py:44
+#: apps/audit/templates/audit/partials/audit_log/filters.html:15
+msgid "Buscar actividad"
+msgstr ""
+
+#: apps/audit/forms/audit_log_filters.py:48
+msgid "Ej. usuario, solicitud o cambio..."
+msgstr ""
+
+#: apps/audit/forms/audit_log_filters.py:54
+#: apps/audit/templates/audit/partials/audit_log/filters.html:24
+#: apps/audit/templates/audit/partials/audit_log/table.html:12
+#: apps/audit/templates/audit/partials/audit_log/table.html:22
+msgid "Tipo de cambio"
+msgstr ""
+
+#: apps/audit/forms/audit_log_filters.py:60
+#: apps/audit/forms/export_history_filters.py:12
+#: apps/audit/templates/audit/pages/export_preview.html:54
+#: apps/audit/templates/audit/partials/audit_log/filters.html:28
+#: apps/audit/templates/audit/partials/export_history/filters.html:2
+#: apps/vacations/forms/employee_request_filters.py:22
+#: apps/vacations/forms/review_request.py:29
+#: apps/vacations/forms/rrhh_request_filters.py:31
+#: apps/vacations/services/export/excel.py:25
+#: apps/vacations/templates/vacations/partials/requests_management/filters.html:4
+#: apps/vacations/templates/vacations/partials/requests_management/table.html:14
+#: apps/vacations/templates/vacations/partials/requests_management/table.html:27
+#: apps/vacations/templates/vacations/partials/review_request/form.html:28
+msgid "Fecha inicio"
+msgstr ""
+
+#: apps/audit/forms/audit_log_filters.py:70
+#: apps/audit/forms/export_history_filters.py:22
+#: apps/audit/templates/audit/pages/export_preview.html:55
+#: apps/audit/templates/audit/partials/audit_log/filters.html:32
+#: apps/audit/templates/audit/partials/export_history/filters.html:3
+#: apps/vacations/forms/employee_request_filters.py:32
+#: apps/vacations/forms/review_request.py:38
+#: apps/vacations/forms/rrhh_request_filters.py:41
+#: apps/vacations/services/export/excel.py:26
+#: apps/vacations/templates/vacations/partials/requests_management/filters.html:5
+#: apps/vacations/templates/vacations/partials/requests_management/table.html:15
+#: apps/vacations/templates/vacations/partials/requests_management/table.html:28
+#: apps/vacations/templates/vacations/partials/review_request/form.html:38
+msgid "Fecha final"
+msgstr ""
+
+#: apps/audit/forms/audit_log_filters.py:87
+msgid "Selecciona un tipo de actividad válido."
+msgstr ""
+
+#: apps/audit/forms/audit_log_filters.py:99
+#: apps/audit/forms/export_history_filters.py:40
+msgid "La fecha final no puede ser anterior a la fecha inicial."
+msgstr ""
+
+#: apps/audit/templates/audit/pages/audit_log.html:4
+#: apps/audit/templates/audit/partials/audit_log/content.html:6
+msgid "Historial de Actividad"
+msgstr ""
+
+#: apps/audit/templates/audit/pages/audit_log.html:6
+#: apps/audit/templates/audit/pages/export_history.html:6
+#: apps/audit/templates/audit/pages/export_preview.html:6
+msgid "Portal de auditoría"
+msgstr ""
+
+#: apps/audit/templates/audit/pages/export_history.html:4
+#: apps/audit/templates/audit/partials/export_history/content.html:7
+msgid "Historial de exportaciones"
+msgstr ""
+
+#: apps/audit/templates/audit/pages/export_preview.html:4
+#: apps/audit/templates/audit/pages/export_preview.html:25
+msgid "Vista previa de exportación"
+msgstr ""
+
+#: apps/audit/templates/audit/pages/export_preview.html:17
+msgid "Archivo exportado"
+msgstr ""
+
+#: apps/audit/templates/audit/pages/export_preview.html:18
+msgid "Volver"
+msgstr ""
+
+#: apps/audit/templates/audit/pages/export_preview.html:19
+#: apps/audit/templates/audit/partials/export_history/table.html:2
+msgid "Descargar"
+msgstr ""
+
+#: apps/audit/templates/audit/pages/export_preview.html:27
+#, python-format
+msgid "%(file_name)s · %(total)s solicitudes"
+msgstr ""
+
+#: apps/audit/templates/audit/pages/export_preview.html:51
+#: apps/vacations/services/export/excel.py:22
+msgid "Numero empleado"
+msgstr ""
+
+#: apps/audit/templates/audit/pages/export_preview.html:52
+#: apps/employees/forms.py:27 apps/employees/forms.py:104
+#: apps/employees/templates/employees/partials/onboarding/form.html:4
+#: apps/employees/templates/employees/partials/profile/form_card.html:3
+#: apps/vacations/services/export/excel.py:23
+#: apps/vacations/templates/vacations/partials/requests_management/table.html:11
+#: apps/vacations/templates/vacations/partials/requests_management/table.html:24
+msgid "Apellidos"
+msgstr ""
+
+#: apps/audit/templates/audit/pages/export_preview.html:53
+#: apps/employees/forms.py:16 apps/employees/forms.py:103
+#: apps/employees/templates/employees/partials/onboarding/form.html:2
+#: apps/vacations/services/export/excel.py:24
+#: apps/vacations/templates/vacations/partials/requests_management/table.html:12
+#: apps/vacations/templates/vacations/partials/requests_management/table.html:25
+msgid "Nombre"
+msgstr ""
+
+#: apps/audit/templates/audit/pages/export_preview.html:56
+#: apps/vacations/services/export/excel.py:27
+msgid "Telefono"
+msgstr ""
+
+#: apps/audit/templates/audit/pages/export_preview.html:57
+#: apps/vacations/services/export/excel.py:28
+msgid "Dias solicitados"
+msgstr ""
+
+#: apps/audit/templates/audit/pages/export_preview.html:61
+msgid "No hay filas en esta exportación."
+msgstr ""
+
+#: apps/audit/templates/audit/partials/audit_log/content.html:8
+msgid ""
+"Monitorea cambios de usuarios, altas de cuentas y revisiones de solicitudes "
+"para mantener seguridad y transparencia."
+msgstr ""
+
+#: apps/audit/templates/audit/partials/audit_log/filters.html:2
+#: apps/users/templates/users/partials/admin/user_list_filters.html:2
+#: templates/components/ui/filter_actions.html:2
+msgid "Filtrar"
+msgstr ""
+
+#: apps/audit/templates/audit/partials/audit_log/filters.html:40
+#: templates/components/ui/filter_actions.html:3
+msgid "Limpiar"
+msgstr ""
+
+#: apps/audit/templates/audit/partials/audit_log/table.html:2
+msgid "Sin detalle disponible."
+msgstr ""
+
+#: apps/audit/templates/audit/partials/audit_log/table.html:3
+msgid "actividades"
+msgstr ""
+
+#: apps/audit/templates/audit/partials/audit_log/table.html:4
+msgid "Paginación del historial de actividad"
+msgstr ""
+
+#: apps/audit/templates/audit/partials/audit_log/table.html:11
+#: apps/audit/templates/audit/partials/audit_log/table.html:21
+#: apps/audit/templates/audit/partials/export_history/table.html:12
+#: apps/audit/templates/audit/partials/export_history/table.html:22
+msgid "Fecha"
+msgstr ""
+
+#: apps/audit/templates/audit/partials/audit_log/table.html:13
+#: apps/audit/templates/audit/partials/audit_log/table.html:38
+msgid "Realizado por"
+msgstr ""
+
+#: apps/audit/templates/audit/partials/audit_log/table.html:14
+#: apps/audit/templates/audit/partials/audit_log/table.html:39
+msgid "Qué sucedió"
+msgstr ""
+
+#: apps/audit/templates/audit/partials/audit_log/table.html:15
+#: apps/audit/templates/audit/partials/audit_log/table.html:40
+#: apps/audit/templates/audit/partials/export_history/table.html:16
+#: apps/audit/templates/audit/partials/export_history/table.html:49
+#: apps/employees/templates/employees/partials/dashboard/home/table.html:14
+#: apps/employees/templates/employees/partials/dashboard/home/table.html:31
+#: apps/users/templates/users/partials/admin/user_list_table.html:13
+#: apps/users/templates/users/partials/admin/user_list_table.html:61
+#: apps/vacations/templates/vacations/partials/requests_management/table.html:18
+#: apps/vacations/templates/vacations/partials/requests_management/table.html:35
+msgid "Acciones"
+msgstr ""
+
+#: apps/audit/templates/audit/partials/audit_log/table.html:46
+#: apps/audit/templates/audit/partials/audit_log/table.html:47
+msgid "Ver usuario relacionado"
+msgstr ""
+
+#: apps/audit/templates/audit/partials/audit_log/table.html:55
+#: apps/audit/templates/audit/partials/audit_log/table.html:56
+msgid "Ver solicitud relacionada"
+msgstr ""
+
+#: apps/audit/templates/audit/partials/audit_log/table.html:73
+msgid "No hay actividad que coincida con los filtros aplicados."
+msgstr ""
+
+#: apps/audit/templates/audit/partials/export_history/content.html:2
+msgid "Archivo registrado"
+msgstr ""
+
+#: apps/audit/templates/audit/partials/export_history/content.html:9
+msgid ""
+"Consulta las exportaciones generadas por RRHH, revisa sus fechas y vuelve a "
+"descargar cada archivo cuando sea necesario."
+msgstr ""
+
+#: apps/audit/templates/audit/partials/export_history/content.html:17
+msgid "Resumen de exportaciones"
+msgstr ""
+
+#: apps/audit/templates/audit/partials/export_history/content.html:20
+msgid "Total exportaciones"
+msgstr ""
+
+#: apps/audit/templates/audit/partials/export_history/content.html:26
+msgid ""
+"Exportaciones generadas por usuarios. Descargar un histórico no suma aquí."
+msgstr ""
+
+#: apps/audit/templates/audit/partials/export_history/content.html:31
+msgid "Última exportación"
+msgstr ""
+
+#: apps/audit/templates/audit/partials/export_history/content.html:42
+msgid "Sin registros"
+msgstr ""
+
+#: apps/audit/templates/audit/partials/export_history/content.html:43
+msgid "Todavía no hay descargas guardadas."
+msgstr ""
+
+#: apps/audit/templates/audit/partials/export_history/content.html:48
+#: apps/employees/templates/employees/partials/dashboard/home/table.html:11
+#: apps/employees/templates/employees/partials/dashboard/home/table.html:22
+msgid "Rango de fechas"
+msgstr ""
+
+#: apps/audit/templates/audit/partials/export_history/content.html:52
+msgid "Información del historial"
+msgstr ""
+
+#: apps/audit/templates/audit/partials/export_history/content.html:57
+msgid ""
+"<strong>Control de exportaciones:</strong> usa este historial para revisar o "
+"descargar exportaciones previas desde los datos guardados."
+msgstr ""
+
+#: apps/audit/templates/audit/partials/export_history/table.html:3
+msgid "exportaciones"
+msgstr ""
+
+#: apps/audit/templates/audit/partials/export_history/table.html:4
+msgid "Paginación de exportaciones"
+msgstr ""
+
+#: apps/audit/templates/audit/partials/export_history/table.html:13
+#: apps/audit/templates/audit/partials/export_history/table.html:23
+#: apps/core/presentation/dashboard/display.py:40
+#: apps/core/presentation/dashboard/navigation.py:103
+#: apps/users/selectors/admin_users.py:65
+#: apps/users/templates/users/partials/admin/user_list_table.html:10
+#: apps/users/templates/users/partials/admin/user_list_table.html:19
+#: templates/layouts/dashboard/partials/help_panel.html:2
+msgid "Usuario"
+msgstr ""
+
+#: apps/audit/templates/audit/partials/export_history/table.html:14
+#: apps/audit/templates/audit/partials/export_history/table.html:30
+msgid "Archivo"
+msgstr ""
+
+#: apps/audit/templates/audit/partials/export_history/table.html:15
+#: apps/audit/templates/audit/partials/export_history/table.html:44
+msgid "Cantidad de solicitudes"
+msgstr ""
+
+#: apps/audit/templates/audit/partials/export_history/table.html:27
+msgid "Usuario eliminado"
+msgstr ""
+
+#: apps/audit/templates/audit/partials/export_history/table.html:41
+msgid "Sin archivo"
+msgstr ""
+
+#: apps/audit/templates/audit/partials/export_history/table.html:55
+msgid "Vista previa"
+msgstr ""
+
+#: apps/audit/templates/audit/partials/export_history/table.html:58
+msgid "No disponible"
+msgstr ""
+
+#: apps/audit/templates/audit/partials/export_history/table.html:67
+msgid "No se ha registrado ninguna exportacion con los filtros actuales."
+msgstr ""
+
+#: apps/audit/views/view_audit_log.py:33
+msgid "Total Actividades"
+msgstr ""
+
+#: apps/audit/views/view_audit_log.py:37
+msgid "En tiempo real"
+msgstr ""
+
+#: apps/audit/views/view_audit_log.py:40
+msgid "Usuarios Creados"
+msgstr ""
+
+#: apps/audit/views/view_audit_log.py:46
+msgid "Cambios de Usuario"
+msgstr ""
+
+#: apps/audit/views/view_audit_log.py:52
+msgid "Solicitudes Editadas"
+msgstr ""
+
+#: apps/audit/views/view_export_history.py:80
+#: apps/audit/views/view_export_history.py:111
+msgid "Esta exportacion no tiene snapshot disponible."
+msgstr ""
+
+#: apps/core/admin.py:7
+msgid "LR Clean & Service | Administración"
+msgstr ""
+
+#: apps/core/admin.py:8 apps/users/services/email_service.py:58
+#: apps/users/templates/users/pages/invalid_token.html:19
+#: apps/users/templates/users/partials/auth/login_hero.html:8
+#: apps/users/templates/users/partials/auth/request_activation_hero.html:8
+#: apps/users/templates/users/partials/auth/set_password_hero.html:8
+msgid "LR Clean & Service"
+msgstr ""
+
+#: apps/core/admin.py:9
+msgid "Gestión interna del sistema"
+msgstr ""
+
+#: apps/core/presentation/dashboard/navigation.py:7 apps/employees/admin.py:139
+#: apps/users/admin.py:266 apps/users/forms.py:114
+#: apps/users/selectors/admin_users.py:19
+#: apps/users/services/admin/management.py:17
+#: apps/vacations/forms/rrhh_request_filters.py:20
+#: apps/vacations/templates/vacations/partials/requests_management/filters.html:2
+#: apps/vacations/templates/vacations/partials/review_request/summary.html:5
+msgid "Empleado"
+msgstr ""
+
+#: apps/core/presentation/dashboard/navigation.py:8 apps/users/forms.py:115
+#: apps/users/selectors/admin_users.py:20
+#: apps/users/services/admin/management.py:18
+#: templates/layouts/dashboard/partials/help_panel.html:85
+msgid "RRHH"
+msgstr ""
+
+#: apps/core/presentation/dashboard/navigation.py:9 apps/users/forms.py:116
+#: apps/users/selectors/admin_users.py:21
+#: apps/users/services/admin/management.py:19
+msgid "Administrador"
+msgstr ""
+
+#: apps/core/presentation/dashboard/navigation.py:17
+#: apps/core/presentation/dashboard/navigation.py:37
+#: apps/core/presentation/dashboard/navigation.py:63
+#: apps/vacations/templates/vacations/partials/create_request/form.html:48
+#: apps/vacations/templates/vacations/partials/create_request/form.html:163
+msgid "Inicio"
+msgstr ""
+
+#: apps/core/presentation/dashboard/navigation.py:23
+#: apps/core/presentation/dashboard/navigation.py:43
+#: apps/core/presentation/dashboard/navigation.py:69
+msgid "Solicitar"
+msgstr ""
+
+#: apps/core/presentation/dashboard/navigation.py:29
+#: apps/core/presentation/dashboard/navigation.py:55
+#: apps/core/presentation/dashboard/navigation.py:93
+#: apps/employees/templates/employees/pages/profile.html:4
+#: apps/employees/templates/employees/partials/profile/form_card.html:17
+#: apps/employees/templates/employees/partials/profile/no_employee_state.html:4
+#: templates/layouts/dashboard/partials/help_panel.html:80
+msgid "Perfil"
+msgstr ""
+
+#: apps/core/presentation/dashboard/navigation.py:49
+msgid "Historial"
+msgstr ""
+
+#: apps/core/presentation/dashboard/navigation.py:75
+#: apps/employees/admin.py:157 apps/vacations/admin.py:30
+#: apps/vacations/services/export/excel.py:80
+#: apps/vacations/templates/vacations/pages/requests_management.html:4
+#: apps/vacations/views/rrhh/requests_management.py:145
+#: apps/vacations/views/rrhh/requests_management.py:153
+msgid "Solicitudes"
+msgstr ""
+
+#: apps/core/presentation/dashboard/navigation.py:81 apps/users/admin.py:140
+msgid "Usuarios"
+msgstr ""
+
+#: apps/core/presentation/dashboard/navigation.py:87
+msgid "Actividad"
+msgstr ""
+
+#: apps/core/templates/core/partials/errors/error_404_content.html:2
+#: apps/dashboard/templates/dashboard/partials/errors/error_400_content.html:2
+msgid "Cerrar sesion"
+msgstr ""
+
+#: apps/core/templates/core/partials/errors/error_404_content.html:22
+msgid "Pagina no encontrada"
+msgstr ""
+
+#: apps/core/templates/core/partials/errors/error_404_content.html:24
+msgid ""
+"La direccion que has escrito no existe dentro del sistema o no esta bien "
+"formada. Revisa la URL e intentalo de nuevo desde el inicio."
+msgstr ""
+
+#: apps/core/templates/core/partials/errors/error_404_content.html:32
+#: apps/dashboard/templates/dashboard/partials/errors/error_400_content.html:32
+#: templates/layouts/dashboard/partials/sidebar.html:7
+msgid "Clean & Service"
+msgstr ""
+
+#: apps/core/templates/core/partials/errors/error_404_content.html:33
+#: apps/dashboard/templates/dashboard/partials/errors/error_400_content.html:33
+msgid "Logistica de Recursos del Agua"
+msgstr ""
+
+#: apps/core/templates/core/partials/errors/error_404_content.html:37
+#: apps/dashboard/templates/dashboard/partials/errors/error_400_content.html:37
+msgid "Volver al inicio"
+msgstr ""
+
+#: apps/core/utils/responses_toast.py:32
+msgid "Demasiados intentos"
+msgstr ""
+
+#: apps/dashboard/templates/dashboard/pages/admin_home.html:4
+msgid "Panel de administrador"
+msgstr ""
+
+#: apps/dashboard/templates/dashboard/pages/admin_home.html:6
+#: apps/users/templates/users/pages/admin/user_edit.html:6
+#: apps/users/templates/users/pages/admin/user_list.html:6
+#: apps/vacations/templates/vacations/pages/requests_management.html:8
+msgid "Portal de administración"
+msgstr ""
+
+#: apps/dashboard/templates/dashboard/pages/employee_home.html:4
+msgid "Panel de empleado"
+msgstr ""
+
+#: apps/dashboard/templates/dashboard/pages/employee_home.html:6
+#: apps/employees/templates/employees/pages/profile.html:6
+msgid "Portal de empleado"
+msgstr ""
+
+#: apps/dashboard/templates/dashboard/pages/error_400.html:4
+msgid "Error 400"
+msgstr ""
+
+#: apps/dashboard/templates/dashboard/partials/admin/right_column.html:7
+msgid "Comunicación Directa"
+msgstr ""
+
+#: apps/dashboard/templates/dashboard/partials/admin/right_column.html:9
+msgid ""
+"Mantén a tu equipo informado en tiempo real con notificaciones push y "
+"alertas en el panel de usuario."
+msgstr ""
+
+#: apps/dashboard/templates/dashboard/partials/admin/right_column.html:22
+msgid "Consejo Profesional"
+msgstr ""
+
+#: apps/dashboard/templates/dashboard/partials/admin/right_column.html:24
+msgid ""
+"Los avisos con asuntos directos y menos de 200 palabras tienen una tasa de "
+"lectura inmediata más alta entre los empleados."
+msgstr ""
+
+#: apps/dashboard/templates/dashboard/partials/errors/error_400_content.html:22
+msgid "Error de Solicitud Incorrecta"
+msgstr ""
+
+#: apps/dashboard/templates/dashboard/partials/errors/error_400_content.html:24
+msgid ""
+"La cuenta autenticada no tiene una configuracion de rol valida para abrir "
+"este panel. Revisa el rol asignado y vuelve a intentarlo."
+msgstr ""
+
+#: apps/dashboard/views/view_admin.py:37
+#, python-format
+msgid "Se ha enviado un aviso general a %(count)s usuario(s)."
+msgstr ""
+
+#: apps/dashboard/views/view_admin.py:45
+msgid "Total usuarios"
+msgstr ""
+
+#: apps/dashboard/views/view_admin.py:51
+msgid "Usuarios empleados"
+msgstr ""
+
+#: apps/dashboard/views/view_admin.py:57
+msgid "Usuarios RRHH"
+msgstr ""
+
+#: apps/dashboard/views/view_admin.py:63
+msgid "Admins"
+msgstr ""
+
+#: apps/employees/admin.py:36
+msgid "Empleados"
+msgstr ""
+
+#: apps/employees/admin.py:103
+msgid "Identidad"
+msgstr ""
+
+#: apps/employees/admin.py:114
+msgid "Organización"
+msgstr ""
+
+#: apps/employees/admin.py:123
+#: templates/layouts/dashboard/partials/help_panel.html:76
+msgid "Vacaciones"
+msgstr ""
+
+#: apps/employees/admin.py:131 apps/vacations/admin.py:143
+msgid "Auditoría"
+msgstr ""
+
+#: apps/employees/admin.py:145
+msgid "Correo"
+msgstr ""
+
+#: apps/employees/admin.py:151 apps/users/forms.py:64 apps/users/forms.py:138
+#: apps/users/templates/users/partials/admin/user_create_modal.html:2
+#: apps/users/templates/users/partials/auth/login_panel.html:2
+#: apps/users/templates/users/partials/auth/request_activation_panel.html:2
+msgid "DNI"
+msgstr ""
+
+#: apps/employees/forms.py:20
+msgid "Introduce tu nombre"
+msgstr ""
+
+#: apps/employees/forms.py:31
+msgid "Introduce tus apellidos"
+msgstr ""
+
+#: apps/employees/forms.py:37
+#: apps/employees/templates/employees/partials/onboarding/form.html:6
+#: apps/employees/templates/employees/partials/profile/form_card.html:4
+#: apps/users/forms.py:149
+#: apps/users/templates/users/partials/admin/user_create_modal.html:3
+msgid "Correo electrónico"
+msgstr ""
+
+#: apps/employees/forms.py:41
+msgid "Introduce tu correo"
+msgstr ""
+
+#: apps/employees/forms.py:49 apps/employees/forms.py:105
+#: apps/employees/templates/employees/partials/onboarding/form.html:8
+#: apps/employees/templates/employees/partials/profile/form_card.html:5
+msgid "Teléfono"
+msgstr ""
+
+#: apps/employees/forms.py:53
+#: apps/employees/templates/employees/partials/onboarding/form.html:9
+msgid "Introduce tu teléfono"
+msgstr ""
+
+#: apps/employees/forms.py:59
+#: apps/employees/templates/employees/partials/onboarding/form.html:10
+#: apps/employees/templates/employees/partials/profile/form_card.html:6
+msgid "Fecha de ingreso"
+msgstr ""
+
+#: apps/employees/forms.py:82
+msgid "Este correo ya está en uso."
+msgstr ""
+
+#: apps/employees/services/employee_dashboard.py:114
+msgid "Todavía no tienes solicitudes resueltas."
+msgstr ""
+
+#: apps/employees/services/employee_dashboard.py:116
+msgid "Tu última solicitud fue aprobada por RRHH."
+msgstr ""
+
+#: apps/employees/services/employee_dashboard.py:118
+msgid "Tu última solicitud fue rechazada por RRHH."
+msgstr ""
+
+#: apps/employees/templates/employees/pages/onboarding.html:4
+#: apps/employees/templates/employees/partials/onboarding/content.html:7
+msgid "Completa tu perfil"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/dashboard/home/content.html:6
+#, python-format
+msgid "¡ %(name)s, ya puedes gestionar tus vacaciones !"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/dashboard/home/content.html:16
+msgid "Historial de solicitudes"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/dashboard/home/content.html:18
+msgid ""
+"Revisa tus solicitudes registradas y utiliza los filtros para acotar por "
+"fechas o por estado."
+msgstr ""
+
+#: apps/employees/templates/employees/partials/dashboard/home/delete_modal.html:2
+msgid "No, mantener"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/dashboard/home/delete_modal.html:3
+msgid "Sí, eliminar"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/dashboard/home/delete_modal.html:25
+#: apps/employees/templates/employees/partials/dashboard/home/table.html:37
+msgid "Eliminar solicitud"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/dashboard/home/delete_modal.html:27
+msgid ""
+"Esta accion quitara la solicitud pendiente de tu historial y liberara esos "
+"dias."
+msgstr ""
+
+#: apps/employees/templates/employees/partials/dashboard/home/delete_modal.html:31
+#: apps/employees/templates/employees/partials/profile/password_modal.html:20
+#: apps/users/templates/users/partials/admin/user_create_modal.html:17
+#: apps/users/templates/users/partials/admin/user_create_modal.html:33
+#: apps/users/templates/users/partials/admin/user_edit_content.html:20
+#: apps/vacations/templates/vacations/partials/review_request/content.html:19
+msgid "Cerrar modal"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/dashboard/home/delete_modal.html:36
+msgid "Periodo seleccionado"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/dashboard/home/delete_modal.html:39
+msgid "<span data-delete-request-days>--</span> días solicitados"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/dashboard/home/delete_modal.html:44
+msgid "¿Seguro que quieres eliminar esta solicitud?"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/dashboard/home/filters.html:5
+msgid "Desde"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/dashboard/home/filters.html:11
+msgid "Hasta"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/dashboard/home/filters.html:17
+#: apps/employees/templates/employees/partials/dashboard/home/table.html:13
+#: apps/employees/templates/employees/partials/dashboard/home/table.html:26
+#: apps/users/templates/users/partials/admin/user_edit_summary.html:18
+#: apps/users/templates/users/partials/admin/user_list_table.html:12
+#: apps/users/templates/users/partials/admin/user_list_table.html:34
+#: apps/vacations/forms/employee_request_filters.py:42
+#: apps/vacations/forms/review_request.py:19
+#: apps/vacations/forms/rrhh_request_filters.py:51
+#: apps/vacations/templates/vacations/partials/requests_management/filters.html:23
+#: apps/vacations/templates/vacations/partials/requests_management/table.html:17
+#: apps/vacations/templates/vacations/partials/requests_management/table.html:30
+#: apps/vacations/templates/vacations/partials/review_request/form.html:18
+msgid "Estado"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/dashboard/home/stat_cards.html:7
+msgid "Vacaciones disponibles"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/dashboard/home/stat_cards.html:19
+msgid "días"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/dashboard/home/stat_cards.html:27
+#, python-format
+msgid "Derecho anual %(year)s · %(days)s días solicitados"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/dashboard/home/stat_cards.html:34
+msgid "Solicitudes Pendientes"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/dashboard/home/stat_cards.html:46
+msgid "en espera"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/dashboard/home/stat_cards.html:50
+#, python-format
+msgid "%(counter)s solicitud registrada"
+msgid_plural "%(counter)s solicitudes registradas"
+msgstr[0] ""
+msgstr[1] ""
+
+#: apps/employees/templates/employees/partials/dashboard/home/stat_cards.html:50
+#, python-format
+msgid "Última %(date)s"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/dashboard/home/stat_cards.html:57
+msgid "Ultima Resolucion"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/dashboard/home/stat_cards.html:79
+msgid "Sin resoluciones"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/dashboard/home/stat_cards.html:83
+msgid "Todavía no hay solicitudes resueltas para mostrar."
+msgstr ""
+
+#: apps/employees/templates/employees/partials/dashboard/home/table.html:2
+#: apps/vacations/templates/vacations/partials/requests_management/table.html:2
+msgid "solicitudes"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/dashboard/home/table.html:3
+msgid "Paginación de solicitudes del empleado"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/dashboard/home/table.html:9
+#: apps/employees/templates/employees/partials/dashboard/home/table.html:20
+msgid "Nro"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/dashboard/home/table.html:10
+#: apps/employees/templates/employees/partials/dashboard/home/table.html:21
+msgid "Fecha solicitud"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/dashboard/home/table.html:12
+#: apps/employees/templates/employees/partials/dashboard/home/table.html:25
+msgid "Total días"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/dashboard/home/table.html:36
+#, python-format
+msgid "Eliminar solicitud pendiente del %(start)s al %(end)s"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/dashboard/home/table.html:48
+#: apps/employees/templates/employees/partials/dashboard/home/table.html:49
+msgid "Solo se pueden eliminar solicitudes pendientes"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/dashboard/home/table.html:58
+msgid "No hay solicitudes registradas con estos filtros."
+msgstr ""
+
+#: apps/employees/templates/employees/partials/onboarding/content.html:6
+msgid "Formulario interno"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/onboarding/content.html:9
+msgid ""
+"Rellena estos datos una sola vez para dejar listo tu expediente, tus "
+"vacaciones y tu acceso a la plataforma."
+msgstr ""
+
+#: apps/employees/templates/employees/partials/onboarding/content.html:19
+msgid "Datos personales"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/onboarding/content.html:20
+msgid "Información básica de empleado"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/onboarding/content.html:22
+msgid "Los campos marcados son necesarios para completar tu ficha interna."
+msgstr ""
+
+#: apps/employees/templates/employees/partials/onboarding/content.html:29
+msgid "Ayuda y contexto del formulario"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/onboarding/form.html:3
+msgid "Ej. Juan"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/onboarding/form.html:5
+msgid "Ej. García"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/onboarding/form.html:7
+msgid "Ej. nombre@empresa.com"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/onboarding/form.html:11
+msgid "Enviar"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/onboarding/sidebar.html:2
+msgid "Información de ayuda"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/onboarding/sidebar.html:3
+msgid "¿Dónde encuentro la fecha de ingreso?"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/onboarding/sidebar.html:4
+msgid ""
+"Puedes consultar la fecha de ingreso en tu <strong>Informe de Vida Laboral</"
+"strong> o en tu contrato de alta."
+msgstr ""
+
+#: apps/employees/templates/employees/partials/onboarding/sidebar.html:5
+msgid "Si tienes dudas, revisa la fecha en la que empezaste a trabajar."
+msgstr ""
+
+#: apps/employees/templates/employees/partials/onboarding/sidebar.html:6
+msgid "RRHH puede ayudarte a confirmar el dato antes de enviarlo."
+msgstr ""
+
+#: apps/employees/templates/employees/partials/onboarding/sidebar.html:7
+msgid ""
+"Solo necesitamos esta información para completar correctamente tu expediente."
+msgstr ""
+
+#: apps/employees/templates/employees/partials/profile/content.html:10
+msgid "Resumen del perfil"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/profile/form_card.html:2
+msgid "Nombre/s"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/profile/form_card.html:7
+#: apps/employees/templates/employees/partials/profile/password_modal.html:17
+msgid "Cambiar contrasena"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/profile/form_card.html:8
+#: apps/users/templates/users/partials/admin/user_edit_role_card.html:2
+msgid "Guardar cambios"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/profile/form_card.html:18
+msgid "Editar datos del empleado"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/profile/intro_banner.html:13
+msgid "¿Necesitas actualizar tus datos?"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/profile/intro_banner.html:16
+msgid ""
+"Mantén tu información personal al día para asegurar el correcto "
+"funcionamiento del sistema. Puedes modificar tu nombre, apellidos y teléfono "
+"cuando lo necesites."
+msgstr ""
+
+#: apps/employees/templates/employees/partials/profile/no_employee_state.html:5
+msgid "No existe una ficha de empleado asociada a este usuario."
+msgstr ""
+
+#: apps/employees/templates/employees/partials/profile/no_employee_state.html:6
+msgid "Correo electrónico:"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/profile/no_employee_state.html:7
+msgid "Rol actual:"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/profile/password_modal.html:2
+msgid "Contrasena actual"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/profile/password_modal.html:3
+msgid "Nueva contrasena"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/profile/password_modal.html:4
+msgid "Confirmar nueva contrasena"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/profile/password_modal.html:5
+#: apps/users/templates/users/partials/admin/user_create_modal.html:4
+#: apps/vacations/templates/vacations/partials/review_request/form.html:2
+msgid "Cancelar"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/profile/password_modal.html:6
+msgid "Actualizar contrasena"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/profile/password_modal.html:18
+msgid "Actualiza tu acceso desde un formulario seguro y sin salir del perfil."
+msgstr ""
+
+#: apps/employees/templates/employees/partials/profile/summary_cards.html:13
+msgid "Disponibles"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/profile/summary_cards.html:17
+msgid "Días disponibles"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/profile/summary_cards.html:29
+msgid "Pendientes"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/profile/summary_cards.html:33
+msgid "Solicitudes pendientes"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/profile/visual_card.html:3
+#: apps/employees/templates/employees/partials/profile/visual_card.html:5
+msgid "Próximos pasos"
+msgstr ""
+
+#: apps/employees/templates/employees/partials/profile/visual_card.html:7
+msgid ""
+"Consulta tus días disponibles y realiza solicitudes de vacaciones de forma "
+"rápida desde el sistema."
+msgstr ""
+
+#: apps/employees/views/onboarding.py:72
+msgid "Tu perfil de empleado se ha guardado correctamente."
+msgstr ""
+
+#: apps/employees/views/view_profile.py:86
+msgid "Tus datos de empleado se han actualizado correctamente."
+msgstr ""
+
+#: apps/employees/views/view_profile.py:104
+msgid "Tu contrasena se ha actualizado correctamente."
+msgstr ""
+
+#: apps/notifications/admin.py:47
+msgid "Destino"
+msgstr ""
+
+#: apps/notifications/admin.py:58
+msgid "Contenido"
+msgstr ""
+
+#: apps/notifications/admin.py:67
+msgid "Contexto"
+msgstr ""
+
+#: apps/notifications/admin.py:75
+msgid "Fechas"
+msgstr ""
+
+#: apps/notifications/admin.py:87
+msgid "Título"
+msgstr ""
+
+#: apps/notifications/admin.py:93
+msgid "Marcar como leídas"
+msgstr ""
+
+#: apps/notifications/admin.py:100
+#, python-format
+msgid "%(updated)s notificación(es) marcada(s) como leídas."
+msgstr ""
+
+#: apps/notifications/admin.py:105
+msgid "Marcar como no leídas"
+msgstr ""
+
+#: apps/notifications/admin.py:112
+#, python-format
+msgid "%(updated)s notificación(es) marcada(s) como no leídas."
+msgstr ""
+
+#: apps/notifications/forms.py:11
+msgid "Asunto"
+msgstr ""
+
+#: apps/notifications/forms.py:13 apps/notifications/forms.py:23
+#: apps/notifications/forms.py:50 apps/notifications/forms.py:60
+msgid "Este campo es obligatorio."
+msgstr ""
+
+#: apps/notifications/forms.py:17
+msgid "Ej. Recordatorio importante"
+msgstr ""
+
+#: apps/notifications/forms.py:22
+msgid "Mensaje"
+msgstr ""
+
+#: apps/notifications/forms.py:27
+msgid "Escribe aqui el mensaje que recibira el usuario."
+msgstr ""
+
+#: apps/notifications/forms.py:48
+msgid "Asunto general"
+msgstr ""
+
+#: apps/notifications/forms.py:54
+msgid "Ej. Aviso general para toda la plantilla"
+msgstr ""
+
+#: apps/notifications/forms.py:59
+msgid "Mensaje general"
+msgstr ""
+
+#: apps/notifications/forms.py:65
+msgid "Escribe aqui el aviso que recibirán todos los usuarios."
+msgstr ""
+
+#: apps/notifications/services/admin_broadcast_notifications.py:17
+msgid "El asunto del aviso general es obligatorio."
+msgstr ""
+
+#: apps/notifications/services/admin_broadcast_notifications.py:20
+msgid "El mensaje del aviso general es obligatorio."
+msgstr ""
+
+#: apps/notifications/services/admin_personal_notifications.py:20
+msgid "El asunto de la notificación es obligatorio."
+msgstr ""
+
+#: apps/notifications/services/admin_personal_notifications.py:23
+msgid "El mensaje de la notificación es obligatorio."
+msgstr ""
+
+#: apps/notifications/templates/notifications/partials/admin_home/broadcast_card.html:2
+msgid "Enviar aviso general"
+msgstr ""
+
+#: apps/notifications/templates/notifications/partials/admin_home/broadcast_card.html:7
+msgid "Aviso general"
+msgstr ""
+
+#: apps/notifications/templates/notifications/partials/admin_home/broadcast_card.html:12
+#, python-format
+msgid "%(counter)s destinatario"
+msgid_plural "%(counter)s destinatarios"
+msgstr[0] ""
+msgstr[1] ""
+
+#: apps/notifications/templates/notifications/partials/admin_home/broadcast_card.html:18
+#: apps/notifications/templates/notifications/partials/admin_home/broadcast_card.html:19
+msgid "Ver usuarios"
+msgstr ""
+
+#: apps/notifications/templates/notifications/partials/admin_home/broadcast_card.html:26
+msgid ""
+"Envía una notificación interna a todos los usuarios activos registrados en "
+"el sistema. Asegúrate de que el mensaje sea claro y pertinente para toda la "
+"organización."
+msgstr ""
+
+#: apps/users/admin.py:19 apps/users/admin.py:66
+#: apps/users/templates/users/partials/admin/user_edit_access_card.html:28
+msgid "Contrasena"
+msgstr ""
+
+#: apps/users/admin.py:24
+msgid "Confirmar contrasena"
+msgstr ""
+
+#: apps/users/admin.py:30 apps/users/admin.py:69
+#: apps/users/templates/users/partials/admin/user_list_table.html:11
+#: apps/users/templates/users/partials/admin/user_list_table.html:29
+msgid "Rol principal"
+msgstr ""
+
+#: apps/users/admin.py:50
+msgid "Las contrasenas no coinciden."
+msgstr ""
+
+#: apps/users/admin.py:190 apps/users/forms.py:122
+#: apps/users/templates/users/partials/admin/user_list_filters.html:21
+msgid "Acceso"
+msgstr ""
+
+#: apps/users/admin.py:196
+#: apps/users/templates/users/partials/admin/user_edit_role_card.html:7
+msgid "Rol y estado"
+msgstr ""
+
+#: apps/users/admin.py:207
+msgid "Permisos de Django"
+msgstr ""
+
+#: apps/users/admin.py:213
+msgid "Datos de activacion"
+msgstr ""
+
+#: apps/users/admin.py:223
+msgid "Auditoria"
+msgstr ""
+
+#: apps/users/admin.py:261 apps/users/selectors/admin_users.py:151
+msgid "Sin rol"
+msgstr ""
+
+#: apps/users/admin.py:263 apps/users/forms.py:111
+#: apps/users/templates/users/partials/admin/user_list_filters.html:17
+msgid "Rol"
+msgstr ""
+
+#: apps/users/admin.py:274
+msgid "Sin ficha"
+msgstr ""
+
+#: apps/users/admin.py:276
+msgid "Activar usuarios seleccionados"
+msgstr ""
+
+#: apps/users/admin.py:293
+#, python-format
+msgid ""
+"%(updated)s usuario(s) activado(s). %(skipped)s omitido(s) por no tener "
+"contraseña configurada."
+msgstr ""
+
+#: apps/users/admin.py:299
+msgid "Desactivar usuarios seleccionados"
+msgstr ""
+
+#: apps/users/admin.py:307
+#, python-format
+msgid ""
+"%(updated)s usuario(s) desactivado(s). Los superusuarios se han omitido."
+msgstr ""
+
+#: apps/users/admin.py:312
+msgid "Limpiar tokens de activación"
+msgstr ""
+
+#: apps/users/admin.py:319
+#, python-format
+msgid "Tokens de activación limpiados en %(updated)s usuario(s)."
+msgstr ""
+
+#: apps/users/forms.py:20
+#: apps/users/templates/users/partials/auth/login_panel.html:3
+#: apps/users/templates/users/partials/auth/request_activation_hero.html:20
+#: apps/users/templates/users/partials/auth/request_activation_panel.html:3
+msgid "Introduce tu DNI"
+msgstr ""
+
+#: apps/users/forms.py:36
+#: apps/users/templates/users/partials/auth/set_password_panel.html:2
+msgid "Nueva contraseña"
+msgstr ""
+
+#: apps/users/forms.py:41
+msgid "Confirmar contraseña"
+msgstr ""
+
+#: apps/users/forms.py:53
+msgid "Las contraseñas no coinciden."
+msgstr ""
+
+#: apps/users/forms.py:68
+#: apps/users/templates/users/partials/auth/login_panel.html:4
+msgid "Contraseña"
+msgstr ""
+
+#: apps/users/forms.py:81
+msgid "La letra del DNI debe escribirse en mayúsculas."
+msgstr ""
+
+#: apps/users/forms.py:101
+#: apps/users/templates/users/partials/admin/user_list_filters.html:8
+msgid "Buscar usuario"
+msgstr ""
+
+#: apps/users/forms.py:105
+msgid "Buscar por nombre, email o ID..."
+msgstr ""
+
+#: apps/users/forms.py:113
+msgid "Todos los roles"
+msgstr ""
+
+#: apps/users/forms.py:124 apps/vacations/forms/rrhh_request_filters.py:64
+msgid "Todos los estados"
+msgstr ""
+
+#: apps/users/forms.py:125 apps/users/selectors/admin_users.py:72
+msgid "Acceso activo"
+msgstr ""
+
+#: apps/users/forms.py:126 apps/users/selectors/admin_users.py:75
+msgid "Acceso desactivado"
+msgstr ""
+
+#: apps/users/forms.py:127 apps/users/selectors/admin_users.py:74
+msgid "Pendiente de activar"
+msgstr ""
+
+#: apps/users/forms.py:177 apps/users/services/admin/management.py:188
+msgid "Ya existe un usuario con este DNI."
+msgstr ""
+
+#: apps/users/forms.py:181 apps/users/services/admin/management.py:192
+msgid "Ya existe un usuario con este correo electrónico."
+msgstr ""
+
+#: apps/users/services/admin/management.py:46
+#: apps/users/services/admin/management.py:92
+msgid "Los superusuarios se gestionan desde Django admin."
+msgstr ""
+
+#: apps/users/services/admin/management.py:57
+msgid "No puedes quitar el rol admin al ultimo administrador del sistema."
+msgstr ""
+
+#: apps/users/services/admin/management.py:109
+msgid "No puedes desactivar al ultimo administrador activo del sistema."
+msgstr ""
+
+#: apps/users/services/admin/management.py:116
+msgid ""
+"Esta cuenta aun no tiene una contrasena configurada. Primero debe completar "
+"su acceso desde el enlace de activacion."
+msgstr ""
+
+#: apps/users/services/admin/management.py:149
+msgid ""
+"Este usuario aun no tiene ficha de empleado. Primero debe completar su "
+"registro interno."
+msgstr ""
+
+#: apps/users/services/admin/management.py:203
+msgid "No se pudo generar el enlace de activacion para el nuevo usuario."
+msgstr ""
+
+#: apps/users/services/auth_service.py:21
+#: apps/users/services/auth_service.py:31
+msgid "Si el DNI es correcto, recibirás un email."
+msgstr ""
+
+#: apps/users/services/email_service.py:57
+#: apps/users/templates/users/pages/invalid_token.html:23
+msgid "Sistema de Gestion de Vacaciones"
+msgstr ""
+
+#: apps/users/services/email_service.py:64
+msgid "Cree su contraseña para entrar en el sistema"
+msgstr ""
+
+#: apps/users/services/validators.py:25
+msgid "El DNI es obligatorio."
+msgstr ""
+
+#: apps/users/services/validators.py:29
+msgid "El DNI debe tener 8 numeros y una letra."
+msgstr ""
+
+#: apps/users/services/validators.py:34
+msgid "El DNI no es valido."
+msgstr ""
+
+#: apps/users/templates/users/pages/admin/user_edit.html:4
+#: apps/users/templates/users/partials/admin/user_edit_content.html:15
+#: apps/users/templates/users/partials/admin/user_list_table.html:68
+msgid "Editar usuario"
+msgstr ""
+
+#: apps/users/templates/users/pages/admin/user_list.html:4
+#: apps/users/templates/users/partials/admin/user_list_content.html:8
+msgid "Gestión de Usuarios"
+msgstr ""
+
+#: apps/users/templates/users/pages/invalid_token.html:4
+msgid "Enlace invalido — Sistema de Vacaciones"
+msgstr ""
+
+#: apps/users/templates/users/pages/invalid_token.html:12
+msgid "Solicitar nuevo enlace"
+msgstr ""
+
+#: apps/users/templates/users/pages/invalid_token.html:24
+msgid "Gestiona tus solicitudes de manera rapida y eficiente"
+msgstr ""
+
+#: apps/users/templates/users/pages/invalid_token.html:27
+msgid "Recuperar acceso"
+msgstr ""
+
+#: apps/users/templates/users/pages/invalid_token.html:28
+msgid ""
+"Solicita un nuevo enlace para establecer tu contraseña y volver a ingresar "
+"al sistema."
+msgstr ""
+
+#: apps/users/templates/users/pages/invalid_token.html:35
+msgid "Enlace invalido o expirado"
+msgstr ""
+
+#: apps/users/templates/users/pages/invalid_token.html:37
+msgid ""
+"Este enlace ya no es valido. Puede haber expirado (24h) o ya fue utilizado."
+msgstr ""
+
+#: apps/users/templates/users/pages/invalid_token.html:44
+msgid "LR Clean & Service 2026"
+msgstr ""
+
+#: apps/users/templates/users/pages/login.html:4
+msgid "Iniciar sesión — LR Clean & Service"
+msgstr ""
+
+#: apps/users/templates/users/pages/request_activation.html:4
+#: apps/users/templates/users/pages/set_password.html:4
+msgid "Crear o recuperar contraseña — LR Clean & Service"
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_create_modal.html:5
+msgid "Crear usuario"
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_create_modal.html:6
+msgid "12345678Z"
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_create_modal.html:7
+msgid "nombre@empresa.com"
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_create_modal.html:23
+msgid "Alta rápida"
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_create_modal.html:24
+msgid "Nuevo usuario"
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_create_modal.html:26
+msgid ""
+"Crea una cuenta pendiente de activación con DNI y correo electrónico. El "
+"usuario recibirá el enlace de acceso por email."
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_create_modal.html:57
+msgid ""
+"Se enviará un enlace de activación al correo indicado una vez se cree la "
+"cuenta."
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_edit_access_card.html:6
+msgid "Acceso al sistema"
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_edit_access_card.html:8
+msgid ""
+"Consulta informacion util antes de activar, desactivar o revisar una cuenta."
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_edit_access_card.html:18
+msgid "Ultimo acceso"
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_edit_access_card.html:23
+#: apps/users/templates/users/partials/admin/user_list_table.html:44
+msgid "Nunca"
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_edit_access_card.html:30
+#: apps/users/templates/users/partials/admin/user_list_table.html:49
+msgid "Configurada"
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_edit_access_card.html:30
+#: apps/users/templates/users/partials/admin/user_list_table.html:49
+msgid "Sin configurar"
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_edit_access_card.html:34
+msgid "Registro"
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_edit_access_card.html:39
+#: apps/users/templates/users/partials/admin/user_list_table.html:56
+msgid "Sin completar"
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_edit_access_card.html:44
+msgid "Ficha de empleado"
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_edit_access_card.html:46
+#: apps/users/templates/users/partials/admin/user_list_table.html:25
+msgid "Si"
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_edit_access_card.html:46
+#: apps/users/templates/users/partials/admin/user_list_table.html:25
+msgid "No"
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_edit_content.html:8
+msgid "Cerrar y volver al listado de usuarios"
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_edit_content.html:14
+msgid "Gestion administrativa"
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_edit_content.html:17
+msgid ""
+"Centraliza aqui los cambios mas habituales de la cuenta para que la gestion "
+"diaria sea clara y ordenada."
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_edit_role_card.html:9
+msgid "Actualiza el rol operativo y si la cuenta puede acceder al sistema."
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_edit_role_card.html:30
+msgid "Nuevo rol principal"
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_edit_role_card.html:48
+msgid "Estado de la cuenta"
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_edit_role_card.html:54
+msgid "Activa"
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_edit_role_card.html:55
+msgid "Inactiva"
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_edit_role_card.html:62
+msgid ""
+"Para activar esta cuenta, primero debe configurar una contrasena desde el "
+"enlace inicial."
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_edit_role_card.html:68
+msgid "Este usuario se gestiona desde Django admin."
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_edit_summary.html:8
+#: apps/users/templates/users/partials/admin/user_list_table.html:23
+#, python-format
+msgid "DNI: %(dni)s"
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_edit_summary.html:13
+msgid "Rol actual"
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_list_content.html:2
+msgid "Nuevo Usuario"
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_list_content.html:7
+msgid "Panel de administración"
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_list_content.html:10
+msgid "Administra los accesos, roles y permisos de los empleados del sistema."
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_list_filters.html:3
+msgid "Limpiar filtros"
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_list_summary.html:9
+msgid "Total Usuarios"
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_list_summary.html:18
+msgid "Cuentas Activas"
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_list_summary.html:27
+msgid "Cuentas Inactivas"
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_list_summary.html:36
+msgid "Fichas de Empleado"
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_list_table.html:2
+msgid "usuarios"
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_list_table.html:3
+msgid "Paginación de usuarios"
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_list_table.html:25
+msgid "Ficha de empleado:"
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_list_table.html:40
+msgid "Ultimo acceso:"
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_list_table.html:48
+msgid "Contrasena:"
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_list_table.html:52
+msgid "Registro:"
+msgstr ""
+
+#: apps/users/templates/users/partials/admin/user_list_table.html:78
+msgid "No hay usuarios que coincidan con los filtros aplicados."
+msgstr ""
+
+#: apps/users/templates/users/partials/admin_home/summary_section.html:3
+msgid "Resumen general del sistema"
+msgstr ""
+
+#: apps/users/templates/users/partials/auth/login_hero.html:13
+#: templates/base.html:10
+msgid "Sistema de Vacaciones"
+msgstr ""
+
+#: apps/users/templates/users/partials/auth/login_hero.html:15
+msgid ""
+"Solicita, gestiona y aprueba días libres en segundos. Todo en una plataforma "
+"simple, transparente y eficiente."
+msgstr ""
+
+#: apps/users/templates/users/partials/auth/login_hero.html:21
+#: apps/users/templates/users/partials/auth/request_activation_hero.html:44
+#: apps/users/templates/users/partials/auth/set_password_hero.html:44
+msgid "Oficina de LR Clean & Service"
+msgstr ""
+
+#: apps/users/templates/users/partials/auth/login_panel.html:5
+msgid "Introduce tu contraseña"
+msgstr ""
+
+#: apps/users/templates/users/partials/auth/login_panel.html:6
+msgid "Entrar"
+msgstr ""
+
+#: apps/users/templates/users/partials/auth/login_panel.html:7
+msgid "Crear o cambiar contraseña"
+msgstr ""
+
+#: apps/users/templates/users/partials/auth/login_panel.html:12
+msgid "Bienvenido de nuevo"
+msgstr ""
+
+#: apps/users/templates/users/partials/auth/login_panel.html:13
+msgid "Ingresa tus credenciales para continuar."
+msgstr ""
+
+#: apps/users/templates/users/partials/auth/request_activation_hero.html:14
+#: apps/users/templates/users/partials/auth/set_password_hero.html:14
+msgid "Proceso de Activación"
+msgstr ""
+
+#: apps/users/templates/users/partials/auth/request_activation_hero.html:21
+msgid "Usaremos tu identificación para localizar tu cuenta."
+msgstr ""
+
+#: apps/users/templates/users/partials/auth/request_activation_hero.html:27
+msgid "Revisa tu correo"
+msgstr ""
+
+#: apps/users/templates/users/partials/auth/request_activation_hero.html:28
+msgid "Te enviaremos un enlace seguro para continuar."
+msgstr ""
+
+#: apps/users/templates/users/partials/auth/request_activation_hero.html:34
+msgid "Crea tu contraseña"
+msgstr ""
+
+#: apps/users/templates/users/partials/auth/request_activation_hero.html:35
+msgid "Completa la activación y entra al sistema."
+msgstr ""
+
+#: apps/users/templates/users/partials/auth/request_activation_panel.html:4
+msgid "Enviar enlace de activación"
+msgstr ""
+
+#: apps/users/templates/users/partials/auth/request_activation_panel.html:5
+#: apps/users/templates/users/partials/auth/set_password_panel.html:7
+msgid "Volver al inicio de sesión"
+msgstr ""
+
+#: apps/users/templates/users/partials/auth/request_activation_panel.html:10
+#: apps/users/templates/users/partials/auth/set_password_panel.html:12
+msgid "Crear o Recuperar contraseña"
+msgstr ""
+
+#: apps/users/templates/users/partials/auth/request_activation_panel.html:12
+msgid "Introduce tu DNI para recibir el enlace de activación."
+msgstr ""
+
+#: apps/users/templates/users/partials/auth/set_password_hero.html:20
+#: apps/users/templates/users/partials/auth/set_password_panel.html:3
+msgid "Introduce tu nueva contraseña"
+msgstr ""
+
+#: apps/users/templates/users/partials/auth/set_password_hero.html:21
+msgid "Asegúrate de que sea robusta y segura."
+msgstr ""
+
+#: apps/users/templates/users/partials/auth/set_password_hero.html:27
+msgid "Confirma para activar tu cuenta"
+msgstr ""
+
+#: apps/users/templates/users/partials/auth/set_password_hero.html:28
+msgid "Verifica la exactitud de los datos ingresados."
+msgstr ""
+
+#: apps/users/templates/users/partials/auth/set_password_hero.html:34
+msgid "Accede al sistema"
+msgstr ""
+
+#: apps/users/templates/users/partials/auth/set_password_hero.html:35
+msgid "Gestiona tus vacaciones de forma inmediata."
+msgstr ""
+
+#: apps/users/templates/users/partials/auth/set_password_panel.html:4
+msgid "Confirmar nueva contraseña"
+msgstr ""
+
+#: apps/users/templates/users/partials/auth/set_password_panel.html:5
+msgid "Vuelve a introducir la contraseña"
+msgstr ""
+
+#: apps/users/templates/users/partials/auth/set_password_panel.html:6
+msgid "Confirmar"
+msgstr ""
+
+#: apps/users/templates/users/partials/auth/set_password_panel.html:14
+msgid "Actualiza tus credenciales para acceder a la plataforma."
+msgstr ""
+
+#: apps/users/templates/users/partials/emails/activation_email.html:27
+#: templates/emails/activation_email.txt:1
+msgid "Hola,"
+msgstr ""
+
+#: apps/users/templates/users/partials/emails/activation_email.html:31
+#: templates/emails/activation_email.txt:3
+msgid ""
+"Para entrar en el sistema por primera vez, primero debe crear su contraseña."
+msgstr ""
+
+#: apps/users/templates/users/partials/emails/activation_email.html:37
+msgid "Que tiene que hacer ahora"
+msgstr ""
+
+#: apps/users/templates/users/partials/emails/activation_email.html:38
+msgid "1. Pulse el boton azul de abajo."
+msgstr ""
+
+#: apps/users/templates/users/partials/emails/activation_email.html:39
+#: templates/emails/activation_email.txt:7
+msgid "2. Escriba su nueva contraseña."
+msgstr ""
+
+#: apps/users/templates/users/partials/emails/activation_email.html:40
+#: templates/emails/activation_email.txt:8
+msgid "3. Guarde la contraseña y despues podra entrar con su DNI."
+msgstr ""
+
+#: apps/users/templates/users/partials/emails/activation_email.html:49
+msgid "Crear mi contraseña"
+msgstr ""
+
+#: apps/users/templates/users/partials/emails/activation_email.html:56
+#: templates/emails/activation_email.txt:13
+#, python-format
+msgid "Este enlace caduca en %(hours)s horas."
+msgstr ""
+
+#: apps/users/templates/users/partials/emails/activation_email.html:60
+msgid "Si el botón no funciona, copie y pegue este enlace en su navegador:"
+msgstr ""
+
+#: apps/users/templates/users/partials/emails/activation_email.html:68
+#: templates/emails/activation_email.txt:15
+msgid "Si usted no ha solicitado este acceso, puede ignorar este mensaje."
+msgstr ""
+
+#: apps/users/templates/users/partials/emails/activation_email.html:76
+#, python-format
+msgid "%(company)s · Correo automatico del sistema"
+msgstr ""
+
+#: apps/users/views/admin/actions.py:33 apps/users/views/admin/edit.py:56
+msgid "Selecciona un rol valido antes de guardar."
+msgstr ""
+
+#: apps/users/views/admin/actions.py:48
+#, python-format
+msgid "El rol principal de %(email)s se ha actualizado a %(role_name)s."
+msgstr ""
+
+#: apps/users/views/admin/actions.py:69 apps/users/views/admin/edit.py:60
+msgid "Selecciona un estado de acceso valido."
+msgstr ""
+
+#: apps/users/views/admin/actions.py:84
+#, python-format
+msgid "La cuenta de %(email)s ha quedado activada."
+msgstr ""
+
+#: apps/users/views/admin/actions.py:90
+#, python-format
+msgid "La cuenta de %(email)s ha quedado desactivada."
+msgstr ""
+
+#: apps/users/views/admin/edit.py:29 apps/users/views/admin/edit.py:50
+msgid "Usuario no encontrado."
+msgstr ""
+
+#: apps/users/views/admin/edit.py:80
+#, python-format
+msgid "Los datos de acceso de %(email)s se han actualizado."
+msgstr ""
+
+#: apps/users/views/admin/list.py:79
+msgid ""
+"No se ha podido crear el usuario. Revisa los datos e inténtalo de nuevo."
+msgstr ""
+
+#: apps/users/views/admin/list.py:86
+#, python-format
+msgid ""
+"Se ha creado la cuenta de %(email)s y se ha enviado su enlace de activación."
+msgstr ""
+
+#: apps/users/views/auth_views.py:40 apps/users/views/auth_views.py:127
+msgid "Demasiados intentos. Intentalo de nuevo mas tarde."
+msgstr ""
+
+#: apps/users/views/auth_views.py:57
+msgid "Notificacion enviada"
+msgstr ""
+
+#: apps/users/views/auth_views.py:65
+msgid "Debes introducir tu DNI."
+msgstr ""
+
+#: apps/users/views/auth_views.py:70
+msgid "Error de validacion"
+msgstr ""
+
+#: apps/users/views/auth_views.py:93
+msgid "Tu contraseña se actualizo correctamente."
+msgstr ""
+
+#: apps/users/views/auth_views.py:101
+msgid "Completa los campos obligatorios del formulario."
+msgstr ""
+
+#: apps/users/views/auth_views.py:157
+msgid "DNI o contraseña incorrectos."
+msgstr ""
+
+#: apps/users/views/auth_views.py:163
+msgid "Debes completar DNI y contraseña."
+msgstr ""
+
+#: apps/users/views/auth_views.py:170
+msgid "Error de acceso"
+msgstr ""
+
+#: apps/vacations/admin.py:24
+msgid "Etiqueta"
+msgstr ""
+
+#: apps/vacations/admin.py:112
+msgid "Empleado y estado"
+msgstr ""
+
+#: apps/vacations/admin.py:123
+msgid "Periodo solicitado"
+msgstr ""
+
+#: apps/vacations/admin.py:134
+msgid "Comentarios"
+msgstr ""
+
+#: apps/vacations/admin.py:195
+msgid "Marcar como aprobadas"
+msgstr ""
+
+#: apps/vacations/admin.py:201
+msgid "Marcar como rechazadas"
+msgstr ""
+
+#: apps/vacations/admin.py:207
+msgid "Devolver a pendiente"
+msgstr ""
+
+#: apps/vacations/admin.py:220
+#, python-format
+msgid "No existe el estado interno '%(status_name)s'."
+msgstr ""
+
+#: apps/vacations/admin.py:258
+#, python-format
+msgid "%(updated_count)s solicitud(es) actualizada(s)."
+msgstr ""
+
+#: apps/vacations/forms/employee_request_filters.py:70
+#: apps/vacations/forms/rrhh_request_filters.py:81
+msgid "La fecha final del filtro no puede ser anterior a la fecha de inicio."
+msgstr ""
+
+#: apps/vacations/forms/request_vacation.py:20
+#: apps/vacations/templates/vacations/partials/create_request/form.html:49
+msgid "Fecha de inicio"
+msgstr ""
+
+#: apps/vacations/forms/request_vacation.py:24
+#: apps/vacations/templates/vacations/partials/create_request/form.html:100
+msgid "Fecha de fin"
+msgstr ""
+
+#: apps/vacations/forms/request_vacation.py:28
+#: apps/vacations/templates/vacations/partials/create_request/form.html:146
+msgid "Información adicional"
+msgstr ""
+
+#: apps/vacations/forms/request_vacation.py:41
+#: apps/vacations/services/requests/validators.py:71
+msgid "La fecha de fin no puede ser anterior a la fecha de inicio."
+msgstr ""
+
+#: apps/vacations/forms/review_request.py:47
+#: apps/vacations/templates/vacations/partials/review_request/form.html:48
+msgid "Comentario RRHH"
+msgstr ""
+
+#: apps/vacations/forms/review_request.py:54
+msgid ""
+"Escribe una observacion interna si necesitas dejar contexto sobre el cambio "
+"realizado."
+msgstr ""
+
+#: apps/vacations/forms/review_request.py:69
+#: apps/vacations/services/requests/review.py:56
+msgid "La fecha final no puede ser anterior a la fecha de inicio."
+msgstr ""
+
+#: apps/vacations/forms/rrhh_request_filters.py:25
+#: apps/vacations/templates/vacations/partials/requests_management/filters.html:3
+msgid "Buscar por nombre..."
+msgstr ""
+
+#: apps/vacations/services/export/review.py:187
+msgid "Solapamiento de fechas"
+msgstr ""
+
+#: apps/vacations/services/export/review.py:200
+msgid "Solicitud de larga duración"
+msgstr ""
+
+#: apps/vacations/services/export/review.py:213
+msgid "Periodo de alta carga"
+msgstr ""
+
+#: apps/vacations/services/export/review.py:229
+msgid "Orden aplicado por antigüedad"
+msgstr ""
+
+#: apps/vacations/services/requests/delete.py:15
+msgid "Solo puedes eliminar solicitudes que sigan en estado pendiente."
+msgstr ""
+
+#: apps/vacations/services/requests/review.py:50
+#: apps/vacations/views/rrhh/review_request.py:38
+msgid ""
+"No puedes revisar tu propia solicitud de vacaciones. Debe gestionarla otro "
+"usuario de RRHH."
+msgstr ""
+
+#: apps/vacations/services/requests/review.py:69
+msgid ""
+"Ya existe otra solicitud activa del empleado que se solapa con ese periodo."
+msgstr ""
+
+#: apps/vacations/services/requests/validators.py:76
+msgid "El modo de conteo de dias configurado no esta soportado todavia."
+msgstr ""
+
+#: apps/vacations/services/requests/validators.py:81
+msgid "La fecha de inicio no puede estar en el pasado."
+msgstr ""
+
+#: apps/vacations/services/requests/validators.py:85
+msgid ""
+"La fecha de inicio debe solicitarse con al menos 30 dias naturales de "
+"antelacion."
+msgstr ""
+
+#: apps/vacations/services/requests/validators.py:98
+msgid "La solicitud debe incluir entre 3 y 30 dias naturales."
+msgstr ""
+
+#: apps/vacations/services/requests/validators.py:107
+#, python-format
+msgid "Los dias solicitados superan el derecho anual disponible para %(year)s."
+msgstr ""
+
+#: apps/vacations/services/requests/validators.py:119
+msgid ""
+"Ya existe una solicitud pendiente o aprobada que se solapa con ese periodo."
+msgstr ""
+
+#: apps/vacations/templates/vacations/pages/create_request.html:4
+#: apps/vacations/templates/vacations/partials/create_request/form.html:8
+msgid "Solicitar vacaciones"
+msgstr ""
+
+#: apps/vacations/templates/vacations/pages/requests_management.html:10
+#: templates/layouts/dashboard/partials/header.html:8
+msgid "Portal RRHH"
+msgstr ""
+
+#: apps/vacations/templates/vacations/pages/review_request.html:4
+#: apps/vacations/templates/vacations/partials/review_request/content.html:14
+msgid "Revisar solicitud"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/form.html:2
+msgid ""
+"Escribe una nota opcional para RRHH si necesitas dar contexto a la solicitud."
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/form.html:3
+msgid "Enviar solicitud"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/form.html:9
+msgid "Selecciona tu periodo"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/form.html:51
+#: apps/vacations/templates/vacations/partials/create_request/form.html:102
+#: apps/vacations/templates/vacations/partials/create_request/form.html:164
+#: apps/vacations/templates/vacations/partials/create_request/form.html:169
+msgid "Sin seleccionar"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/form.html:55
+#, python-format
+msgid "Disponible desde %(date)s."
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/form.html:59
+#: apps/vacations/templates/vacations/partials/create_request/form.html:110
+msgid "Mes anterior"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/form.html:64
+#: apps/vacations/templates/vacations/partials/create_request/form.html:115
+msgid "Mes"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/form.html:65
+#: apps/vacations/templates/vacations/partials/create_request/form.html:116
+msgid "Ano"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/form.html:68
+#: apps/vacations/templates/vacations/partials/create_request/form.html:119
+msgid "Mes siguiente"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/form.html:74
+#: apps/vacations/templates/vacations/partials/create_request/form.html:125
+msgid "L"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/form.html:75
+#: apps/vacations/templates/vacations/partials/create_request/form.html:126
+msgid "M"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/form.html:76
+#: apps/vacations/templates/vacations/partials/create_request/form.html:127
+msgid "X"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/form.html:77
+#: apps/vacations/templates/vacations/partials/create_request/form.html:128
+msgid "J"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/form.html:78
+#: apps/vacations/templates/vacations/partials/create_request/form.html:129
+msgid "V"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/form.html:79
+#: apps/vacations/templates/vacations/partials/create_request/form.html:130
+msgid "S"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/form.html:80
+#: apps/vacations/templates/vacations/partials/create_request/form.html:131
+msgid "D"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/form.html:99
+#: apps/vacations/templates/vacations/partials/create_request/form.html:168
+msgid "Fin"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/form.html:106
+msgid "El calendario de fin nunca permitirá una fecha anterior al inicio."
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/form.html:147
+msgid "Añade contexto si lo necesitas"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/form.html:155
+msgid "Resumen"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/form.html:157
+msgid "Revisa tu solicitud"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/form.html:173
+msgid "Total"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/form.html:174
+msgid "<span id=\"selected-days-counter\" aria-live=\"polite\">0</span> días"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/form.html:179
+msgid "Selecciona ambas fechas en el calendario."
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/form.html:183
+msgid "Tu solicitud se enviará a RRHH para revisión."
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/sidebar.html:12
+msgid "Guía de Solicitud"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/sidebar.html:19
+msgid "Selecciona las fechas"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/sidebar.html:20
+msgid "Define un inicio y un fin continuos en los calendarios."
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/sidebar.html:27
+msgid "Revisa el resumen"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/sidebar.html:28
+msgid "Comprueba el total de días y confirma que el rango sea correcto."
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/sidebar.html:35
+msgid "Envía la solicitud"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/sidebar.html:36
+msgid "El sistema enviará la petición a RRHH para su validación."
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/sidebar.html:42
+msgid "Regla importante"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/sidebar.html:44
+#, python-format
+msgid ""
+"Debes solicitar las vacaciones con al menos %(days)s días de antelación. La "
+"primera fecha disponible es %(date)s."
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/sidebar.html:60
+msgid "Validación automática"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/sidebar.html:62
+msgid ""
+"El sistema revisa el rango y el saldo antes de que la solicitud llegue a "
+"RRHH."
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/top.html:9
+msgid "Tu saldo disponible"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/top.html:14
+msgid "días disponibles"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/top.html:17
+#, python-format
+msgid "Periodo %(year)s · derecho anual de %(days)s días."
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/top.html:31
+msgid "Actualizado para el periodo activo"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/create_request/top.html:39
+msgid "Ver guía de solicitud"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/requests_management/content.html:6
+msgid "Filtros de solicitudes"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/requests_management/export_review_summary.html:3
+msgid "Alertas e información de solicitudes"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/requests_management/export_review_summary.html:10
+msgid "Alertas e información"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/requests_management/export_review_summary.html:12
+#, python-format
+msgid "%(counter)s solicitud revisada con los filtros actuales."
+msgid_plural "%(counter)s solicitudes revisadas con los filtros actuales."
+msgstr[0] ""
+msgstr[1] ""
+
+#: apps/vacations/templates/vacations/partials/requests_management/export_review_summary.html:18
+msgid "Ver detalles"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/requests_management/export_review_summary.html:30
+msgid "Solapamientos de fechas"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/requests_management/export_review_summary.html:31
+msgid "Solicitudes que se cruzan con vacaciones activas de otros compañeros."
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/requests_management/export_review_summary.html:41
+msgid "Solicitudes de larga duración"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/requests_management/export_review_summary.html:42
+msgid "Peticiones de 30 días que requieren una revisión más cuidadosa."
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/requests_management/export_review_summary.html:51
+msgid "Registro detallado"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/requests_management/export_review_summary.html:53
+msgid ""
+"Solapamientos de fechas y solicitudes de larga duración detectadas "
+"automáticamente."
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/requests_management/export_review_summary.html:58
+#, python-format
+msgid "%(counter)s evento"
+msgid_plural "%(counter)s eventos"
+msgstr[0] ""
+msgstr[1] ""
+
+#: apps/vacations/templates/vacations/partials/requests_management/export_review_summary.html:83
+#, python-format
+msgid "solicita %(days)s días y coincide con:"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/requests_management/export_review_summary.html:85
+#, python-format
+msgid ""
+"solicita %(days)s días consecutivos. Requiere revisión adicional por "
+"duración."
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/requests_management/export_review_summary.html:110
+msgid ""
+"No hay solapamientos ni solicitudes de larga duración con los filtros "
+"actuales."
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/requests_management/heading.html:2
+#: apps/vacations/views/rrhh/requests_management.py:80
+msgid "Gestión de Solicitudes"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/requests_management/heading.html:3
+#: apps/vacations/views/rrhh/requests_management.py:81
+msgid "Control de ausencias y vacaciones del personal."
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/requests_management/heading.html:4
+msgid "Exportar Excel"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/requests_management/metrics.html:3
+msgid "Resumen de solicitudes"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/requests_management/table.html:3
+msgid "Paginación de solicitudes"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/requests_management/table.html:13
+#: apps/vacations/templates/vacations/partials/requests_management/table.html:26
+msgid "Fecha alta"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/requests_management/table.html:16
+#: apps/vacations/templates/vacations/partials/requests_management/table.html:29
+msgid "Días"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/requests_management/table.html:39
+#, python-format
+msgid "Gestionar solicitud de %(first_name)s %(last_name)s"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/requests_management/table.html:40
+msgid "Gestionar solicitud"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/requests_management/table.html:50
+msgid "No hay solicitudes registradas con los filtros actuales."
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/review_request/content.html:8
+msgid "Cerrar y volver al panel de solicitudes"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/review_request/content.html:16
+msgid ""
+"Ajusta el estado y las fechas de la solicitud si necesitas reorganizar el "
+"periodo desde RRHH."
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/review_request/form.html:3
+msgid "Guardar revision"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/review_request/summary.html:11
+msgid "Estado actual"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/review_request/summary.html:19
+msgid "Rango actual"
+msgstr ""
+
+#: apps/vacations/templates/vacations/partials/review_request/summary.html:25
+msgid "Dias actuales"
+msgstr ""
+
+#: apps/vacations/views/employee/create_request.py:61
+msgid "Tu solicitud de vacaciones se ha registrado correctamente."
+msgstr ""
+
+#: apps/vacations/views/employee/delete_request.py:37
+msgid "La solicitud pendiente se ha eliminado correctamente."
+msgstr ""
+
+#: apps/vacations/views/rrhh/export_requests_excel.py:46
+msgid "No se pudo exportar porque los filtros enviados no son validos."
+msgstr ""
+
+#: apps/vacations/views/rrhh/export_requests_excel.py:81
+msgid "No se pudo generar el archivo Excel de las solicitudes."
+msgstr ""
+
+#: apps/vacations/views/rrhh/requests_management.py:19
+msgid "Ene"
+msgstr ""
+
+#: apps/vacations/views/rrhh/requests_management.py:20
+msgid "Feb"
+msgstr ""
+
+#: apps/vacations/views/rrhh/requests_management.py:21
+msgid "Mar"
+msgstr ""
+
+#: apps/vacations/views/rrhh/requests_management.py:22
+msgid "Abr"
+msgstr ""
+
+#: apps/vacations/views/rrhh/requests_management.py:23
+msgid "May"
+msgstr ""
+
+#: apps/vacations/views/rrhh/requests_management.py:24
+msgid "Jun"
+msgstr ""
+
+#: apps/vacations/views/rrhh/requests_management.py:25
+msgid "Jul"
+msgstr ""
+
+#: apps/vacations/views/rrhh/requests_management.py:26
+msgid "Ago"
+msgstr ""
+
+#: apps/vacations/views/rrhh/requests_management.py:27
+msgid "Sep"
+msgstr ""
+
+#: apps/vacations/views/rrhh/requests_management.py:28
+msgid "Oct"
+msgstr ""
+
+#: apps/vacations/views/rrhh/requests_management.py:29
+msgid "Nov"
+msgstr ""
+
+#: apps/vacations/views/rrhh/requests_management.py:30
+msgid "Dic"
+msgstr ""
+
+#: apps/vacations/views/rrhh/requests_management.py:127
+#, python-format
+msgid "+%(percent)s%% vs mes anterior"
+msgstr ""
+
+#: apps/vacations/views/rrhh/requests_management.py:129
+#, python-format
+msgid "-%(percent)s%% vs mes anterior"
+msgstr ""
+
+#: apps/vacations/views/rrhh/requests_management.py:131
+msgid "Sin variación vs mes anterior"
+msgstr ""
+
+#: apps/vacations/views/rrhh/requests_management.py:133
+msgid "Sin referencia del mes anterior"
+msgstr ""
+
+#: apps/vacations/views/rrhh/requests_management.py:143
+msgid "Total este mes"
+msgstr ""
+
+#: apps/vacations/views/rrhh/requests_management.py:151
+msgid "Pendientes de revisión"
+msgstr ""
+
+#: apps/vacations/views/rrhh/requests_management.py:154
+msgid "Requieren atención"
+msgstr ""
+
+#: apps/vacations/views/rrhh/requests_management.py:156
+msgid "Sin pendientes"
+msgstr ""
+
+#: apps/vacations/views/rrhh/review_request.py:60
+msgid "La solicitud se ha actualizado correctamente desde RRHH."
+msgstr ""
+
+#: templates/components/feedback/toast_card.html:45
+msgid "Cerrar notificacion"
+msgstr ""
+
+#: templates/components/feedback/toasts.html:2
+msgid "Error"
+msgstr ""
+
+#: templates/components/feedback/toasts.html:3
+msgid "Operacion completada"
+msgstr ""
+
+#: templates/components/feedback/toasts.html:4
+msgid "Aviso"
+msgstr ""
+
+#: templates/components/feedback/toasts.html:5
+msgid "Notificacion"
+msgstr ""
+
+#: templates/components/ui/notification_dropdown.html:7
+msgid "Abrir notificaciones"
+msgstr ""
+
+#: templates/components/ui/notification_dropdown.html:26
+msgid "Panel de notificaciones"
+msgstr ""
+
+#: templates/components/ui/notification_dropdown.html:31
+msgid "Notificaciones"
+msgstr ""
+
+#: templates/components/ui/notification_dropdown.html:34
+#, python-format
+msgid "%(counter)s sin leer"
+msgid_plural "%(counter)s sin leer"
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/components/ui/notification_dropdown.html:36
+msgid "Todo al dia"
+msgstr ""
+
+#: templates/components/ui/notification_dropdown.html:46
+msgid "Marcar todas"
+msgstr ""
+
+#: templates/components/ui/notification_dropdown.html:53
+msgid "Cerrar notificaciones"
+msgstr ""
+
+#: templates/components/ui/notification_dropdown.html:81
+#, python-format
+msgid "Enviado por %(email)s"
+msgstr ""
+
+#: templates/components/ui/notification_dropdown.html:94
+msgid "Marcar como leida"
+msgstr ""
+
+#: templates/components/ui/notification_dropdown.html:98
+msgid "Leida"
+msgstr ""
+
+#: templates/components/ui/notification_dropdown.html:106
+msgid "No tienes notificaciones"
+msgstr ""
+
+#: templates/components/ui/notification_dropdown.html:107
+msgid ""
+"Cuando haya cambios importantes en solicitudes o revisiones, apareceran aqui."
+msgstr ""
+
+#: templates/components/ui/notification_dropdown.html:115
+#, python-format
+msgid "Pagina %(page)s de %(pages)s"
+msgstr ""
+
+#: templates/components/ui/notification_dropdown.html:120
+msgid "Anterior"
+msgstr ""
+
+#: templates/components/ui/notification_dropdown.html:125
+msgid "Siguiente"
+msgstr ""
+
+#: templates/components/ui/pagination.html:2
+msgid "Paginación"
+msgstr ""
+
+#: templates/components/ui/pagination.html:7
+msgid "Página anterior"
+msgstr ""
+
+#: templates/components/ui/pagination.html:25
+msgid "Página siguiente"
+msgstr ""
+
+#: templates/components/ui/password_input.html:2
+msgid "Mostrar contraseña"
+msgstr ""
+
+#: templates/components/ui/password_input.html:3
+msgid "Ocultar contraseña"
+msgstr ""
+
+#: templates/components/ui/table_footer.html:2
+msgid "registros"
+msgstr ""
+
+#: templates/components/ui/table_footer.html:8
+#, python-format
+msgid "Mostrando %(start)s-%(end)s de %(total)s %(item_label)s"
+msgstr ""
+
+#: templates/components/ui/table_footer.html:10
+#, python-format
+msgid "Mostrando 0 %(item_label)s"
+msgstr ""
+
+#: templates/emails/activation_email.txt:5
+msgid "Que tiene que hacer ahora:"
+msgstr ""
+
+#: templates/emails/activation_email.txt:6
+msgid "1. Pulse el boton del enlace."
+msgstr ""
+
+#: templates/emails/activation_email.txt:10
+msgid "Abra este enlace:"
+msgstr ""
+
+#: templates/errors/error_404.html:4
+msgid "Error 404"
+msgstr ""
+
+#: templates/layouts/dashboard/partials/header.html:10
+#, python-format
+msgid "Portal de %(role)s"
+msgstr ""
+
+#: templates/layouts/dashboard/partials/header.html:12
+msgid "Portal"
+msgstr ""
+
+#: templates/layouts/dashboard/partials/header.html:19
+msgid "Usuario conectado"
+msgstr ""
+
+#: templates/layouts/dashboard/partials/header.html:37
+msgid "Abrir menú"
+msgstr ""
+
+#: templates/layouts/dashboard/partials/help_panel.html:24
+msgid "Centro de ayuda"
+msgstr ""
+
+#: templates/layouts/dashboard/partials/help_panel.html:25
+msgid "Ayuda rápida"
+msgstr ""
+
+#: templates/layouts/dashboard/partials/help_panel.html:27
+msgid "Cerrar ayuda"
+msgstr ""
+
+#: templates/layouts/dashboard/partials/help_panel.html:40
+msgid "Soporte interno"
+msgstr ""
+
+#: templates/layouts/dashboard/partials/help_panel.html:42
+msgid ""
+"Encuentra accesos clave y canales de contacto sin abandonar tu trabajo "
+"actual."
+msgstr ""
+
+#: templates/layouts/dashboard/partials/help_panel.html:50
+msgid "Accesos frecuentes"
+msgstr ""
+
+#: templates/layouts/dashboard/partials/help_panel.html:59
+#, python-format
+msgid "Ir a %(label)s"
+msgstr ""
+
+#: templates/layouts/dashboard/partials/help_panel.html:72
+msgid "Temas comunes"
+msgstr ""
+
+#: templates/layouts/dashboard/partials/help_panel.html:77
+msgid "Solicitudes, días y estados"
+msgstr ""
+
+#: templates/layouts/dashboard/partials/help_panel.html:81
+msgid "Datos personales y acceso"
+msgstr ""
+
+#: templates/layouts/dashboard/partials/help_panel.html:86
+msgid "Revisión y exportaciones"
+msgstr ""
+
+#: templates/layouts/dashboard/partials/help_panel.html:90
+msgid "Admin"
+msgstr ""
+
+#: templates/layouts/dashboard/partials/help_panel.html:91
+msgid "Usuarios, roles y actividad"
+msgstr ""
+
+#: templates/layouts/dashboard/partials/help_panel.html:99
+msgid "Canal recomendado"
+msgstr ""
+
+#: templates/layouts/dashboard/partials/help_panel.html:100
+msgid "RRHH o administración"
+msgstr ""
+
+#: templates/layouts/dashboard/partials/help_panel.html:101
+msgid "Para incidencias urgentes, usa el canal interno habitual de tu equipo."
+msgstr ""
+
+#: templates/layouts/dashboard/partials/help_panel.html:103
+msgid "Activo"
+msgstr ""
+
+#: templates/layouts/dashboard/partials/sidebar.html:14
+msgid "Cerrar menú"
+msgstr ""
+
+#: templates/layouts/dashboard/partials/sidebar.html:20
+msgid "Menu principal"
+msgstr ""
+
+#: templates/layouts/dashboard/partials/sidebar.html:52
+msgid "Ayuda"
+msgstr ""
+
+#: templates/layouts/dashboard/partials/sidebar.html:71
+msgid "Cerrar Sesión"
+msgstr ""
+
+msgid "Cambiar idioma"
+msgstr "Cambiar idioma"
+
+msgid "Seleccionar idioma"
+msgstr "Seleccionar idioma"
+
+msgid "Idioma seleccionado"
+msgstr "Idioma seleccionado"

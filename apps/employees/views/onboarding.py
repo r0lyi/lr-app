@@ -3,6 +3,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
+from django.utils.translation import gettext as _
 
 from apps.employees.forms import EmployeeOnboardingForm
 from apps.employees.models import Employee
@@ -67,7 +68,9 @@ def onboarding_view(request):
                 ],
             )
 
-            messages.success(request, "Tu perfil de empleado se ha guardado correctamente.")
+            messages.success(
+                request, _("Tu perfil de empleado se ha guardado correctamente.")
+            )
             # El dispatcher del dashboard decide el destino final una vez existe la ficha.
             return redirect("dashboard:home")
     else:

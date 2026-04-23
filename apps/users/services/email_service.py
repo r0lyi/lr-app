@@ -7,6 +7,7 @@ from pathlib import Path
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives, get_connection
 from django.template.loader import render_to_string
+from django.utils.translation import gettext as _
 
 logger = logging.getLogger(__name__)
 
@@ -53,14 +54,14 @@ def build_activation_email_message(token):
     activation_url = f"{frontend_url}/auth/set-password/{token}/"
     logo_url = f"cid:{INLINE_LOGO_CID}"
     context = {
-        "app_name": "Sistema de Gestion de Vacaciones",
-        "company_name": "LR Clean & Service",
+        "app_name": _("Sistema de Gestion de Vacaciones"),
+        "company_name": _("LR Clean & Service"),
         "activation_url": activation_url,
         "logo_url": logo_url,
         "expires_in_hours": 24,
     }
     return {
-        "subject": "Cree su contraseña para entrar en el sistema",
+        "subject": _("Cree su contraseña para entrar en el sistema"),
         "html": render_to_string("emails/activation_email.html", context),
         "text": render_to_string("emails/activation_email.txt", context),
     }

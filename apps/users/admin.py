@@ -4,6 +4,8 @@ from django import forms
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy
 
 from apps.employees.models import Employee
 from apps.users.models import Role, User, UserRole
@@ -14,18 +16,18 @@ class UserAdminCreationForm(forms.ModelForm):
     """Formulario de alta en admin con un unico rol funcional por usuario."""
 
     password1 = forms.CharField(
-        label="Contrasena",
+        label=gettext_lazy("Contrasena"),
         strip=False,
         widget=forms.PasswordInput,
     )
     password2 = forms.CharField(
-        label="Confirmar contrasena",
+        label=gettext_lazy("Confirmar contrasena"),
         strip=False,
         widget=forms.PasswordInput,
     )
     primary_role = forms.ModelChoiceField(
         queryset=Role.objects.order_by("name"),
-        label="Rol principal",
+        label=gettext_lazy("Rol principal"),
         required=True,
     )
 
@@ -45,7 +47,7 @@ class UserAdminCreationForm(forms.ModelForm):
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
         if password1 and password2 and password1 != password2:
-            raise forms.ValidationError("Las contrasenas no coinciden.")
+            raise forms.ValidationError(gettext_lazy("Las contrasenas no coinciden."))
         return password2
 
     def save(self, commit=True):
@@ -61,10 +63,10 @@ class UserAdminCreationForm(forms.ModelForm):
 class UserAdminChangeForm(forms.ModelForm):
     """Formulario de edicion que deja visible el rol principal del usuario."""
 
-    password = ReadOnlyPasswordHashField(label="Contrasena")
+    password = ReadOnlyPasswordHashField(label=gettext_lazy("Contrasena"))
     primary_role = forms.ModelChoiceField(
         queryset=Role.objects.order_by("name"),
-        label="Rol principal",
+        label=gettext_lazy("Rol principal"),
         required=True,
     )
 
@@ -135,7 +137,7 @@ class RoleAdmin(admin.ModelAdmin):
         """Muestra cuantos usuarios tienen asociado cada rol."""
         return obj.users.count()
 
-    users_count.short_description = "Usuarios"
+    users_count.short_description = gettext_lazy("Usuarios")
 
 
 @admin.register(UserRole)
@@ -185,13 +187,13 @@ class UserAdmin(DjangoUserAdmin):
 
     fieldsets = (
         (
-            "Acceso",
+            gettext_lazy("Acceso"),
             {
                 "fields": ("email", "dni", "password"),
             },
         ),
         (
-            "Rol y estado",
+            gettext_lazy("Rol y estado"),
             {
                 "fields": (
                     "primary_role",
@@ -202,13 +204,13 @@ class UserAdmin(DjangoUserAdmin):
             },
         ),
         (
-            "Permisos de Django",
+            gettext_lazy("Permisos de Django"),
             {
                 "fields": ("groups", "user_permissions"),
             },
         ),
         (
-            "Datos de activacion",
+            gettext_lazy("Datos de activacion"),
             {
                 "fields": (
                     "activation_token",
@@ -218,7 +220,7 @@ class UserAdmin(DjangoUserAdmin):
             },
         ),
         (
-            "Auditoria",
+            gettext_lazy("Auditoria"),
             {
                 "fields": ("last_login", "created_at", "updated_at"),
             },
@@ -256,20 +258,22 @@ class UserAdmin(DjangoUserAdmin):
 
     def primary_role_display(self, obj):
         """Resume en listado el rol funcional que ve el sistema."""
-        return get_primary_role(obj) or "Sin rol"
+        return get_primary_role(obj) or _("Sin rol")
 
-    primary_role_display.short_description = "Rol"
+    primary_role_display.short_description = gettext_lazy("Rol")
 
-    @admin.display(description="Empleado", ordering="employee_profile__last_name")
+    @admin.display(
+        description=gettext_lazy("Empleado"), ordering="employee_profile__last_name"
+    )
     def employee_name(self, obj):
         """Muestra el nombre de la ficha Employee si existe."""
 
         try:
             return str(obj.employee_profile)
         except Employee.DoesNotExist:
-            return "Sin ficha"
+            return _("Sin ficha")
 
-    @admin.action(description="Activar usuarios seleccionados")
+    @admin.action(description=gettext_lazy("Activar usuarios seleccionados"))
     def activate_users(self, request, queryset):
         """Activa cuentas seleccionadas solo si ya tienen contrasena usable."""
 
@@ -285,28 +289,33 @@ class UserAdmin(DjangoUserAdmin):
                 updated += 1
         self.message_user(
             request,
-            (
-                f"{updated} usuario(s) activado(s). "
-                f"{skipped} omitido(s) por no tener contraseña configurada."
-            ),
+            _(
+                "%(updated)s usuario(s) activado(s). %(skipped)s omitido(s) "
+                "por no tener contraseña configurada."
+            )
+            % {"updated": updated, "skipped": skipped},
         )
 
-    @admin.action(description="Desactivar usuarios seleccionados")
+    @admin.action(description=gettext_lazy("Desactivar usuarios seleccionados"))
     def deactivate_users(self, request, queryset):
         """Desactiva cuentas sin tocar superusuarios."""
 
         updated = queryset.exclude(is_superuser=True).update(is_active=False)
         self.message_user(
             request,
-            f"{updated} usuario(s) desactivado(s). Los superusuarios se han omitido.",
+            _(
+                "%(updated)s usuario(s) desactivado(s). Los superusuarios se han omitido."
+            )
+            % {"updated": updated},
         )
 
-    @admin.action(description="Limpiar tokens de activación")
+    @admin.action(description=gettext_lazy("Limpiar tokens de activación"))
     def clear_activation_data(self, request, queryset):
         """Elimina tokens caducados o reenviados manualmente."""
 
         updated = queryset.update(activation_token=None, token_expires_at=None)
         self.message_user(
             request,
-            f"Tokens de activación limpiados en {updated} usuario(s).",
+            _("Tokens de activación limpiados en %(updated)s usuario(s).")
+            % {"updated": updated},
         )

@@ -13,18 +13,19 @@ from xml.sax.saxutils import escape
 from zipfile import ZIP_DEFLATED, ZipFile
 
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 
 RRHH_EXCEL_COLUMN_WIDTHS = (18, 30, 22, 16, 16, 18, 18)
 RRHH_EXPORT_COLUMNS_VERSION = "rrhh_vacation_requests_v1"
 RRHH_EXPORT_COLUMNS = (
-    ("employee_number", "Numero empleado"),
-    ("last_name", "Apellidos"),
-    ("first_name", "Nombre"),
-    ("start_date", "Fecha inicio"),
-    ("end_date", "Fecha final"),
-    ("phone", "Telefono"),
-    ("requested_days", "Dias solicitados"),
+    ("employee_number", _("Numero empleado")),
+    ("last_name", _("Apellidos")),
+    ("first_name", _("Nombre")),
+    ("start_date", _("Fecha inicio")),
+    ("end_date", _("Fecha final")),
+    ("phone", _("Telefono")),
+    ("requested_days", _("Dias solicitados")),
 )
 
 
@@ -76,7 +77,7 @@ def build_rrhh_vacation_requests_excel_from_snapshot(snapshot_rows):
         rows.append([snapshot_row.get(key, "") for key, _label in RRHH_EXPORT_COLUMNS])
 
     return _build_minimal_xlsx(
-        sheet_name="Solicitudes",
+        sheet_name=_("Solicitudes"),
         rows=rows,
         column_widths=RRHH_EXCEL_COLUMN_WIDTHS,
     )
@@ -156,7 +157,7 @@ def _build_core_xml():
 
 
 def _build_workbook_xml(sheet_name):
-    escaped_sheet_name = escape(sheet_name)
+    escaped_sheet_name = escape(str(sheet_name))
     return f"""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"
           xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">

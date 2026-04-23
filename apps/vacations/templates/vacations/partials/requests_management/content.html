@@ -1,7 +1,9 @@
+{% load i18n %}
+
 <section class="rrhh-home-page">
   {% include "vacations/partials/requests_management/heading.html" %}
 
-  <section class="rrhh-filters-card" aria-label="Filtros de solicitudes">
+  <section class="rrhh-filters-card" aria-label="{% translate 'Filtros de solicitudes' %}">
     {% include "vacations/partials/requests_management/filters.html" %}
   </section>
 

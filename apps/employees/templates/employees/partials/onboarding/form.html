@@ -1,3 +1,15 @@
+{% load i18n %}
+{% translate "Nombre" as first_name_label %}
+{% translate "Ej. Juan" as first_name_placeholder %}
+{% translate "Apellidos" as last_name_label %}
+{% translate "Ej. García" as last_name_placeholder %}
+{% translate "Correo electrónico" as email_label %}
+{% translate "Ej. nombre@empresa.com" as email_placeholder %}
+{% translate "Teléfono" as phone_label %}
+{% translate "Introduce tu teléfono" as phone_placeholder %}
+{% translate "Fecha de ingreso" as hire_date_label %}
+{% translate "Enviar" as submit_label %}
+
 {% if form.non_field_errors %}
   <div class="onboarding-errors" role="alert">
     <ul>
@@ -13,18 +25,18 @@
 
   <div class="onboarding-fields">
     <div class="onboarding-fields__grid">
-      {% include "components/ui/text_input.html" with label="Nombre" name="first_name" value=form.first_name.value|default:'' placeholder="Ej. Juan" autocomplete="given-name" required=True error=form.first_name.errors.0 %}
-      {% include "components/ui/text_input.html" with label="Apellidos" name="last_name" value=form.last_name.value|default:'' placeholder="Ej. García" autocomplete="family-name" required=True error=form.last_name.errors.0 %}
-      {% include "components/ui/text_input.html" with label="Correo electrónico" name="email" type="email" value=form.email.value|default:'' placeholder="Ej. nombre@empresa.com" autocomplete="email" required=True error=form.email.errors.0 %}
-      {% include "components/ui/phone_input.html" with label="Teléfono" name="phone" value=form.phone.value|default:'' placeholder="Introduce tu teléfono" autocomplete="tel" error=form.phone.errors.0 prefix="+34" %}
+      {% include "components/ui/text_input.html" with label=first_name_label name="first_name" value=form.first_name.value|default:'' placeholder=first_name_placeholder autocomplete="given-name" required=True error=form.first_name.errors.0 %}
+      {% include "components/ui/text_input.html" with label=last_name_label name="last_name" value=form.last_name.value|default:'' placeholder=last_name_placeholder autocomplete="family-name" required=True error=form.last_name.errors.0 %}
+      {% include "components/ui/text_input.html" with label=email_label name="email" type="email" value=form.email.value|default:'' placeholder=email_placeholder autocomplete="email" required=True error=form.email.errors.0 %}
+      {% include "components/ui/phone_input.html" with label=phone_label name="phone" value=form.phone.value|default:'' placeholder=phone_placeholder autocomplete="tel" error=form.phone.errors.0 prefix="+34" %}
 
       <div class="onboarding-field onboarding-field--full">
-        {% include "components/ui/date_input.html" with label="Fecha de ingreso" name="hire_date" value=form.hire_date.value|default:'' required=True error=form.hire_date.errors.0 %}
+        {% include "components/ui/date_input.html" with label=hire_date_label name="hire_date" value=form.hire_date.value|default:'' required=True error=form.hire_date.errors.0 %}
       </div>
     </div>
 
     <div class="onboarding-form__actions">
-      {% include "components/ui/button_principal.html" with label="Enviar" type="submit" size="md" class_name="onboarding-submit" %}
+      {% include "components/ui/button_principal.html" with label=submit_label type="submit" size="md" class_name="onboarding-submit" %}
     </div>
   </div>
 </form>

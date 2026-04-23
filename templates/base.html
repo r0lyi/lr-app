@@ -1,13 +1,16 @@
-{% load static %}
+{% load i18n static %}
+{% get_current_language as LANGUAGE_CODE %}
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang="{% if LANGUAGE_CODE == 'cat' %}ca{% else %}{{ LANGUAGE_CODE|default:'es' }}{% endif %}" 
+translate="no" class="notranslate">
 <head>
+  <meta name="google" content="notranslate">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="{% static 'images/brand/favicon.svg' %}">
   
-  <title>{% block title %}Sistema de Vacaciones{% endblock %}</title>
+  <title>{% block title %}{% translate "Sistema de Vacaciones" %}{% endblock %}</title>
 
   <!-- HTMX -->
   <script src="https://unpkg.com/htmx.org@1.9.12"></script>

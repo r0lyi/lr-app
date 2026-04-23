@@ -3,6 +3,7 @@
 from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import redirect
+from django.utils.translation import gettext as _
 
 from apps.audit.services import (
     EXPORT_TYPE_RRHH_VACATION_REQUESTS,
@@ -42,7 +43,7 @@ def export_rrhh_requests_excel_view(request):
     if not filter_form.is_valid():
         messages.error(
             request,
-            "No se pudo exportar porque los filtros enviados no son validos.",
+            _("No se pudo exportar porque los filtros enviados no son validos."),
         )
         return redirect(return_url_name)
 
@@ -77,7 +78,7 @@ def export_rrhh_requests_excel_view(request):
         mark_export_failed(export_history=export_history)
         messages.error(
             request,
-            "No se pudo generar el archivo Excel de las solicitudes.",
+            _("No se pudo generar el archivo Excel de las solicitudes."),
         )
         return redirect(return_url_name)
 

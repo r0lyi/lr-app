@@ -1,14 +1,20 @@
+{% load i18n %}
+{% translate "Error" as error_toast_title %}
+{% translate "Operacion completada" as success_toast_title %}
+{% translate "Aviso" as warning_toast_title %}
+{% translate "Notificacion" as info_toast_title %}
+
 <div id="ui-toast-root" class="ui-toast-root" aria-live="polite" aria-atomic="true">
   {% if messages %}
     {% for message in messages %}
       {% if "error" in message.tags %}
-        {% include "components/feedback/toast_card.html" with variant="error" title="Error" message=message duration=5000 %}
+        {% include "components/feedback/toast_card.html" with variant="error" title=error_toast_title message=message duration=5000 %}
       {% elif "success" in message.tags %}
-        {% include "components/feedback/toast_card.html" with variant="success" title="Operacion completada" message=message duration=4500 %}
+        {% include "components/feedback/toast_card.html" with variant="success" title=success_toast_title message=message duration=4500 %}
       {% elif "warning" in message.tags %}
-        {% include "components/feedback/toast_card.html" with variant="info" title="Aviso" message=message duration=5000 %}
+        {% include "components/feedback/toast_card.html" with variant="info" title=warning_toast_title message=message duration=5000 %}
       {% else %}
-        {% include "components/feedback/toast_card.html" with variant="info" title="Notificacion" message=message duration=5000 %}
+        {% include "components/feedback/toast_card.html" with variant="info" title=info_toast_title message=message duration=5000 %}
       {% endif %}
     {% endfor %}
   {% endif %}

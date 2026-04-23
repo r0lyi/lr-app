@@ -1,12 +1,14 @@
+{% load i18n %}
+
 <div class="review-request-summary">
   <article class="review-request-summary__card">
-    <p class="review-request-summary__label">Empleado</p>
+    <p class="review-request-summary__label">{% translate "Empleado" %}</p>
     <p class="review-request-summary__value">
       {{ vacation_request.employee.first_name }} {{ vacation_request.employee.last_name }}
     </p>
   </article>
   <article class="review-request-summary__card">
-    <p class="review-request-summary__label">Estado actual</p>
+    <p class="review-request-summary__label">{% translate "Estado actual" %}</p>
     <p class="review-request-summary__value">
       <span class="review-request-status-chip{% if vacation_request.status.name == 'approved' %} review-request-status-chip--approved{% elif vacation_request.status.name == 'rejected' %} review-request-status-chip--rejected{% endif %}">
         {{ vacation_request.status }}
@@ -14,13 +16,13 @@
     </p>
   </article>
   <article class="review-request-summary__card">
-    <p class="review-request-summary__label">Rango actual</p>
+    <p class="review-request-summary__label">{% translate "Rango actual" %}</p>
     <p class="review-request-summary__value">
       {{ vacation_request.start_date|date:"d-m-Y" }} - {{ vacation_request.end_date|date:"d-m-Y" }}
     </p>
   </article>
   <article class="review-request-summary__card">
-    <p class="review-request-summary__label">Dias actuales</p>
-    <p class="review-request-summary__value">{{ vacation_request.requested_days }}</p>
+    <p class="review-request-summary__label">{% translate "Dias actuales" %}</p>
+    <p class="review-request-summary__value">{{ vacation_request.requested_days|floatformat:"2u" }}</p>
   </article>
 </div>
