@@ -174,7 +174,7 @@ def change_user_department(*, acting_user, target_user, new_department):
     return target_user
 
 
-def create_admin_user(*, acting_user, email, dni):
+def create_admin_user(*, acting_user, email, dni, activation_url_base=None):
     """Crea una cuenta pendiente de activacion con DNI y correo electronico.
 
     El usuario queda inactivo y recibe automaticamente un enlace de activacion
@@ -197,7 +197,10 @@ def create_admin_user(*, acting_user, email, dni):
             email=normalized_email,
             dni=normalized_dni,
         )
-        sent, _ = request_activation(user.dni)
+        sent, _ = request_activation(
+            user.dni,
+            activation_url_base=activation_url_base,
+        )
         if not sent:
             raise ValidationError(
                 _("No se pudo generar el enlace de activacion para el nuevo usuario.")

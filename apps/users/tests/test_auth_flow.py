@@ -111,6 +111,62 @@ class AuthFlowTests(TestCase):
         self.assertContains(response, 'hx-swap-oob="outerHTML"', html=False)
         self.assertContains(response, "Revisa tu correo")
 
+    @override_settings(FRONTEND_URL="http://configurada.example")
+    def test_request_activation_email_uses_current_request_host(self):
+        """El correo debe usar el host real de la peticion publica."""
+
+        response = self.client.post(
+            reverse("auth:request-activation"),
+            {"dni": "12345678Z"},
+            secure=True,
+            HTTP_HOST="portal.example.com",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertIn(
+            "https://portal.example.com/auth/set-password/",
+            mail.outbox[0].body,
+        )
+
+    def test_only_latest_activation_link_remains_valid(self):
+        """Pedir un nuevo enlace invalida el anterior y mantiene vivo el ultimo."""
+
+        self.client.post(
+            reverse("auth:request-activation"),
+            {"dni": "12345678Z"},
+        )
+        self.user.refresh_from_db()
+        first_token = self.user.activation_token
+
+        self.client.post(
+            reverse("auth:request-activation"),
+            {"dni": "12345678Z"},
+        )
+        self.user.refresh_from_db()
+        second_token = self.user.activation_token
+
+        self.assertNotEqual(first_token, second_token)
+
+        expired_response = self.client.get(
+            reverse("auth:set-password", args=[first_token]),
+        )
+        self.assertEqual(expired_response.status_code, 200)
+        self.assertContains(
+            expired_response,
+            "Si has solicitado varios enlaces, utiliza solo el ultimo que hayas recibido.",
+        )
+
+        response = self.client.post(
+            reverse("auth:set-password", args=[second_token]),
+            {
+                "password1": "PruebaSegura123!",
+                "password2": "PruebaSegura123!",
+            },
+        )
+
+        self.assertRedirects(response, reverse("auth:login"))
+
     def test_public_auth_pages_include_language_switcher(self):
         """Las pantallas publicas del flujo auth deben permitir cambiar idioma."""
 
