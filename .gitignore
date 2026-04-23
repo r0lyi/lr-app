@@ -32,8 +32,6 @@ generated_exports/
 # Archivos locales de herramientas
 .codex
 
-# Exportaciones locales de dependencias
-/requirements.txt
 
 # Logs
 *.log
