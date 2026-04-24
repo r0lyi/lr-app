@@ -8,6 +8,21 @@ from apps.employees.models import Employee
 from apps.users.models import User
 
 
+EMPLOYEE_REQUIRED_FIELDS_MESSAGE = _(
+    "Debes completar todos los campos obligatorios de la ficha de empleado."
+)
+
+
+def _has_missing_required_fields(form):
+    """Indica si el formulario tiene errores por campos obligatorios vacíos."""
+
+    return any(
+        any(error.code == "required" for error in errors)
+        for field_name, errors in form.errors.as_data().items()
+        if field_name != "__all__"
+    )
+
+
 class EmployeeOnboardingForm(forms.Form):
     """Captura los datos minimos para crear o completar la ficha `Employee`."""
 
@@ -45,7 +60,6 @@ class EmployeeOnboardingForm(forms.Form):
     )
     phone = forms.CharField(
         max_length=20,
-        required=False,
         label=_("Teléfono"),
         widget=forms.TextInput(
             attrs={
@@ -82,6 +96,14 @@ class EmployeeOnboardingForm(forms.Form):
             raise ValidationError(_("Este correo ya está en uso."))
         return email
 
+    def clean(self):
+        """Añade un aviso global cuando faltan campos obligatorios."""
+
+        cleaned_data = super().clean()
+        if _has_missing_required_fields(self):
+            raise ValidationError(EMPLOYEE_REQUIRED_FIELDS_MESSAGE)
+        return cleaned_data
+
 
 class EmployeeProfileUpdateForm(forms.ModelForm):
     """Permite editar la ficha del empleado sin tocar correo ni fecha de ingreso.
@@ -91,6 +113,18 @@ class EmployeeProfileUpdateForm(forms.ModelForm):
     modelo `Employee` se muestran en modo lectura para evitar que datos de RRHH
     o acumulados internos se alteren desde esta pantalla.
     """
+
+    phone = forms.CharField(
+        max_length=20,
+        required=True,
+        label=_("Teléfono"),
+        widget=forms.TextInput(
+            attrs={
+                "class": "ui-input",
+                "autocomplete": "tel",
+            }
+        ),
+    )
 
     class Meta:
         model = Employee
@@ -124,3 +158,11 @@ class EmployeeProfileUpdateForm(forms.ModelForm):
                 }
             ),
         }
+
+    def clean(self):
+        """Añade un aviso global cuando faltan campos obligatorios."""
+
+        cleaned_data = super().clean()
+        if _has_missing_required_fields(self):
+            raise ValidationError(EMPLOYEE_REQUIRED_FIELDS_MESSAGE)
+        return cleaned_data
