@@ -28,7 +28,7 @@
       {% include "components/ui/text_input.html" with label=first_name_label name="first_name" value=form.first_name.value|default:'' placeholder=first_name_placeholder autocomplete="given-name" required=True error=form.first_name.errors.0 %}
       {% include "components/ui/text_input.html" with label=last_name_label name="last_name" value=form.last_name.value|default:'' placeholder=last_name_placeholder autocomplete="family-name" required=True error=form.last_name.errors.0 %}
       {% include "components/ui/text_input.html" with label=email_label name="email" type="email" value=form.email.value|default:'' placeholder=email_placeholder autocomplete="email" required=True error=form.email.errors.0 %}
-      {% include "components/ui/phone_input.html" with label=phone_label name="phone" value=form.phone.value|default:'' placeholder=phone_placeholder autocomplete="tel" error=form.phone.errors.0 prefix="+34" %}
+      {% include "components/ui/phone_input.html" with label=phone_label name="phone" value=form.phone.value|default:'' placeholder=phone_placeholder autocomplete="tel" required=True error=form.phone.errors.0 prefix="+34" %}
 
       <div class="onboarding-field onboarding-field--full">
         {% include "components/ui/date_input.html" with label=hire_date_label name="hire_date" value=form.hire_date.value|default:'' required=True error=form.hire_date.errors.0 %}
