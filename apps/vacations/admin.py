@@ -2,6 +2,8 @@
 
 from django.contrib import admin, messages
 from django.utils import timezone
+from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy
 
 from apps.vacations.models import (
     VacationRequest,
@@ -19,13 +21,13 @@ class VacationStatusAdmin(admin.ModelAdmin):
     search_fields = ("name",)
     ordering = ("name",)
 
-    @admin.display(description="Etiqueta")
+    @admin.display(description=gettext_lazy("Etiqueta"))
     def display_label(self, obj):
         """Muestra la etiqueta traducida usada por el sistema."""
 
         return str(obj)
 
-    @admin.display(description="Solicitudes")
+    @admin.display(description=gettext_lazy("Solicitudes"))
     def requests_count(self, obj):
         """Cantidad de solicitudes en ese estado."""
 
@@ -107,7 +109,7 @@ class VacationRequestAdmin(admin.ModelAdmin):
     )
     fieldsets = (
         (
-            "Empleado y estado",
+            gettext_lazy("Empleado y estado"),
             {
                 "fields": (
                     "employee",
@@ -118,7 +120,7 @@ class VacationRequestAdmin(admin.ModelAdmin):
             },
         ),
         (
-            "Periodo solicitado",
+            gettext_lazy("Periodo solicitado"),
             {
                 "fields": (
                     "start_date",
@@ -129,7 +131,7 @@ class VacationRequestAdmin(admin.ModelAdmin):
             },
         ),
         (
-            "Comentarios",
+            gettext_lazy("Comentarios"),
             {
                 "fields": (
                     "employee_comment",
@@ -138,7 +140,7 @@ class VacationRequestAdmin(admin.ModelAdmin):
                 )
             },
         ),
-        ("Auditoría", {"fields": ("created_at", "updated_at")}),
+        (gettext_lazy("Auditoría"), {"fields": ("created_at", "updated_at")}),
     )
 
     def get_queryset(self, request):
@@ -190,19 +192,19 @@ class VacationRequestAdmin(admin.ModelAdmin):
                 comment="Cambio guardado desde Django Admin.",
             )
 
-    @admin.action(description="Marcar como aprobadas")
+    @admin.action(description=gettext_lazy("Marcar como aprobadas"))
     def mark_as_approved(self, request, queryset):
         """Accion masiva para aprobar solicitudes seleccionadas."""
 
         self._mark_with_status(request, queryset, "approved")
 
-    @admin.action(description="Marcar como rechazadas")
+    @admin.action(description=gettext_lazy("Marcar como rechazadas"))
     def mark_as_rejected(self, request, queryset):
         """Accion masiva para rechazar solicitudes seleccionadas."""
 
         self._mark_with_status(request, queryset, "rejected")
 
-    @admin.action(description="Devolver a pendiente")
+    @admin.action(description=gettext_lazy("Devolver a pendiente"))
     def mark_as_pending(self, request, queryset):
         """Accion masiva para devolver solicitudes a revision."""
 
@@ -215,7 +217,8 @@ class VacationRequestAdmin(admin.ModelAdmin):
         if status is None:
             self.message_user(
                 request,
-                f"No existe el estado interno '{status_name}'.",
+                _("No existe el estado interno '%(status_name)s'.")
+                % {"status_name": status_name},
                 level=messages.ERROR,
             )
             return
@@ -252,7 +255,8 @@ class VacationRequestAdmin(admin.ModelAdmin):
 
         self.message_user(
             request,
-            f"{updated_count} solicitud(es) actualizada(s).",
+            _("%(updated_count)s solicitud(es) actualizada(s).")
+            % {"updated_count": updated_count},
             level=messages.SUCCESS,
         )
 

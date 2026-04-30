@@ -1,8 +1,10 @@
+{% load i18n %}
+
 <div class="employee-home-summary">
   <article class="employee-home-summary-card employee-home-summary-card--blue">
     <div class="employee-home-summary-card__top">
       <div>
-        <p class="employee-home-summary-card__label">Vacaciones disponibles</p>
+        <p class="employee-home-summary-card__label">{% translate "Vacaciones disponibles" %}</p>
       </div>
       <span class="employee-home-summary-card__icon employee-home-summary-card__icon--blue" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none">
@@ -14,22 +16,22 @@
 
     <div class="employee-home-summary-card__value-row">
       <strong class="employee-home-summary-card__value">{{ annual_vacation_remaining_days_count|floatformat:0 }}</strong>
-      <span class="employee-home-summary-card__unit">días</span>
+      <span class="employee-home-summary-card__unit">{% translate "días" %}</span>
     </div>
 
     <div class="employee-home-summary-card__bar" aria-hidden="true">
-      <span style="width: {{ annual_vacation_progress_percent }}%"></span>
+      <span style="width: {{ annual_vacation_progress_percent|floatformat:"2u" }}%"></span>
     </div>
 
     <p class="employee-home-summary-card__note">
-      Derecho anual {{ annual_vacation_reference_year }} · {{ annual_vacation_reserved_days_count|floatformat:2 }} días solicitados
+      {% blocktranslate with year=annual_vacation_reference_year days=annual_vacation_reserved_days_count|floatformat:"2u" %}Derecho anual {{ year }} · {{ days }} días solicitados{% endblocktranslate %}
     </p>
   </article>
 
   <article class="employee-home-summary-card employee-home-summary-card--amber">
     <div class="employee-home-summary-card__top">
       <div>
-        <p class="employee-home-summary-card__label">Solicitudes Pendientes</p>
+        <p class="employee-home-summary-card__label">{% translate "Solicitudes Pendientes" %}</p>
       </div>
       <span class="employee-home-summary-card__icon employee-home-summary-card__icon--amber" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none">
@@ -41,18 +43,18 @@
 
     <div class="employee-home-summary-card__value-row">
       <strong class="employee-home-summary-card__value">{{ pending_requests_count }}</strong>
-      <span class="employee-home-summary-card__unit">en espera</span>
+      <span class="employee-home-summary-card__unit">{% translate "en espera" %}</span>
     </div>
 
     <p class="employee-home-summary-card__note">
-      {{ employee_requests_count }} solicitudes registradas{% if latest_request %} · Última {{ latest_request.request_date|date:"d M Y" }}{% endif %}
+      {% blocktranslate count counter=employee_requests_count %}{{ counter }} solicitud registrada{% plural %}{{ counter }} solicitudes registradas{% endblocktranslate %}{% if latest_request %} · {% blocktranslate with date=latest_request.request_date|date:"d M Y" %}Última {{ date }}{% endblocktranslate %}{% endif %}
     </p>
   </article>
 
   <article class="employee-home-summary-card employee-home-summary-card--green">
     <div class="employee-home-summary-card__top">
       <div>
-        <p class="employee-home-summary-card__label">Ultima Resolucion</p>
+        <p class="employee-home-summary-card__label">{% translate "Ultima Resolucion" %}</p>
       </div>
       <span class="employee-home-summary-card__icon employee-home-summary-card__icon--green" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none">
@@ -74,11 +76,11 @@
     {% else %}
       <div class="employee-home-summary-card__status-row">
         <span class="employee-home-summary-card__status-badge employee-home-summary-card__status-badge--neutral">
-          Sin resoluciones
+          {% translate "Sin resoluciones" %}
         </span>
       </div>
       <p class="employee-home-summary-card__note">
-        Todavía no hay solicitudes resueltas para mostrar.
+        {% translate "Todavía no hay solicitudes resueltas para mostrar." %}
       </p>
     {% endif %}
   </article>

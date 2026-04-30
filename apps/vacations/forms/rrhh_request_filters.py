@@ -1,6 +1,7 @@
 """Formulario GET para filtrar la tabla basica del panel de RRHH."""
 
 from django import forms
+from django.utils.translation import gettext_lazy as _
 
 from apps.vacations.models import VacationStatus
 
@@ -16,18 +17,18 @@ class RrhhVacationRequestFilterForm(forms.Form):
     """
 
     search = forms.CharField(
-        label="Empleado",
+        label=_("Empleado"),
         required=False,
         widget=forms.TextInput(
             attrs={
                 "class": "ui-input",
-                "placeholder": "Buscar por nombre...",
+                "placeholder": _("Buscar por nombre..."),
                 "autocomplete": "off",
             }
         ),
     )
     start_date = forms.DateField(
-        label="Fecha inicio",
+        label=_("Fecha inicio"),
         required=False,
         widget=forms.DateInput(
             attrs={
@@ -37,7 +38,7 @@ class RrhhVacationRequestFilterForm(forms.Form):
         ),
     )
     end_date = forms.DateField(
-        label="Fecha final",
+        label=_("Fecha final"),
         required=False,
         widget=forms.DateInput(
             attrs={
@@ -47,7 +48,7 @@ class RrhhVacationRequestFilterForm(forms.Form):
         ),
     )
     status = forms.ChoiceField(
-        label="Estado",
+        label=_("Estado"),
         required=False,
         widget=forms.Select(
             attrs={
@@ -60,7 +61,7 @@ class RrhhVacationRequestFilterForm(forms.Form):
         """Carga los estados reales de BD para no hardcodear el filtro."""
 
         super().__init__(*args, **kwargs)
-        status_choices = [("", "Todos los estados")]
+        status_choices = [("", _("Todos los estados"))]
         status_choices.extend(
             (status.name, str(status))
             for status in VacationStatus.objects.order_by("name")
@@ -76,7 +77,9 @@ class RrhhVacationRequestFilterForm(forms.Form):
 
         if start_date and end_date and end_date < start_date:
             raise forms.ValidationError(
-                "La fecha final del filtro no puede ser anterior a la fecha de inicio."
+                _(
+                    "La fecha final del filtro no puede ser anterior a la fecha de inicio."
+                )
             )
 
         return cleaned_data

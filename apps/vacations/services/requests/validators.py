@@ -4,6 +4,7 @@ from decimal import Decimal, ROUND_HALF_UP
 
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 from apps.vacations.selectors.request_queries import (
     get_overlapping_active_requests,
@@ -67,20 +68,22 @@ def validate_employee_vacation_request(
 
     if end_date < start_date:
         validation_errors.append(
-            "La fecha de fin no puede ser anterior a la fecha de inicio."
+            _("La fecha de fin no puede ser anterior a la fecha de inicio.")
         )
 
     if VACATION_DAY_COUNT_MODE != "natural":
         validation_errors.append(
-            "El modo de conteo de dias configurado no esta soportado todavia."
+            _("El modo de conteo de dias configurado no esta soportado todavia.")
         )
 
     today = timezone.localdate()
     if start_date < today:
-        validation_errors.append("La fecha de inicio no puede estar en el pasado.")
+        validation_errors.append(_("La fecha de inicio no puede estar en el pasado."))
     elif (start_date - today).days < MIN_ADVANCE_NOTICE_DAYS:
         validation_errors.append(
-            "La fecha de inicio debe solicitarse con al menos 30 dias naturales de antelacion."
+            _(
+                "La fecha de inicio debe solicitarse con al menos 30 dias naturales de antelacion."
+            )
         )
 
     if validation_errors:
@@ -92,7 +95,7 @@ def validate_employee_vacation_request(
         or requested_days > MAX_REQUESTED_VACATION_DAYS
     ):
         validation_errors.append(
-            "La solicitud debe incluir entre 3 y 30 dias naturales."
+            _("La solicitud debe incluir entre 3 y 30 dias naturales.")
         )
 
     annual_balance = get_request_annual_balance(
@@ -101,7 +104,8 @@ def validate_employee_vacation_request(
     )
     if requested_days > annual_balance:
         validation_errors.append(
-            f"Los dias solicitados superan el derecho anual disponible para {start_date.year}."
+            _("Los dias solicitados superan el derecho anual disponible para %(year)s.")
+            % {"year": start_date.year}
         )
 
     overlapping_requests = get_overlapping_active_requests(
@@ -111,7 +115,9 @@ def validate_employee_vacation_request(
     )
     if overlapping_requests.exists():
         validation_errors.append(
-            "Ya existe una solicitud pendiente o aprobada que se solapa con ese periodo."
+            _(
+                "Ya existe una solicitud pendiente o aprobada que se solapa con ese periodo."
+            )
         )
 
     if validation_errors:

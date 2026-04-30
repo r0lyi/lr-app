@@ -1,6 +1,7 @@
 """Formulario GET para filtrar las solicitudes visibles en el home del empleado."""
 
 from django import forms
+from django.utils.translation import gettext_lazy as _
 
 from apps.vacations.models import VacationStatus
 
@@ -18,7 +19,7 @@ class EmployeeVacationRequestFilterForm(forms.Form):
     """
 
     start_date = forms.DateField(
-        label="Fecha inicio",
+        label=_("Fecha inicio"),
         required=False,
         widget=forms.DateInput(
             attrs={
@@ -28,7 +29,7 @@ class EmployeeVacationRequestFilterForm(forms.Form):
         ),
     )
     end_date = forms.DateField(
-        label="Fecha final",
+        label=_("Fecha final"),
         required=False,
         widget=forms.DateInput(
             attrs={
@@ -38,7 +39,7 @@ class EmployeeVacationRequestFilterForm(forms.Form):
         ),
     )
     status = forms.ChoiceField(
-        label="Estado",
+        label=_("Estado"),
         required=False,
         widget=forms.Select(
             attrs={
@@ -50,7 +51,7 @@ class EmployeeVacationRequestFilterForm(forms.Form):
     def __init__(self, *args, **kwargs):
         """Carga los estados reales de BD para que el filtro no quede hardcodeado."""
         super().__init__(*args, **kwargs)
-        status_choices = [("", "Todos")]
+        status_choices = [("", _("Todos"))]
         status_choices.extend(
             (status.name, str(status))
             for status in VacationStatus.objects.order_by("name")
@@ -65,7 +66,9 @@ class EmployeeVacationRequestFilterForm(forms.Form):
 
         if start_date and end_date and end_date < start_date:
             raise forms.ValidationError(
-                "La fecha final del filtro no puede ser anterior a la fecha de inicio."
+                _(
+                    "La fecha final del filtro no puede ser anterior a la fecha de inicio."
+                )
             )
 
         return cleaned_data

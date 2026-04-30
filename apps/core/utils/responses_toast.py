@@ -2,6 +2,7 @@
 
 from django.http import HttpResponse
 from django.template.loader import render_to_string
+from django.utils.translation import gettext as _
 
 
 def toast_response(request, variant, title, message, duration=5000):
@@ -28,7 +29,7 @@ def rate_limit_response(request, message):
         return toast_response(
             request,
             variant="error",
-            title="Demasiados intentos",
+            title=_("Demasiados intentos"),
             message=message,
             duration=4500,
         )

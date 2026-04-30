@@ -5,6 +5,8 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.utils.translation import gettext as _
+
 from apps.core.utils.client_ip import _client_ip
 from apps.core.utils.decorators import anonymous_required
 from apps.core.utils.responses_toast import toast_response as _toast_response
@@ -16,7 +18,25 @@ from apps.core.utils.rate_limits import (
     reset_rate_limit,
 )
 from apps.users.forms import RequestActivationForm, SetPasswordForm, LoginForm
-from apps.users.services.auth_service import request_activation, validate_token, set_password
+from apps.users.services.auth_service import (
+    request_activation,
+    resolve_token,
+    set_password,
+)
+
+
+def _activation_notice_message():
+    """Devuelve el aviso neutro mostrado tras pedir el enlace de acceso."""
+
+    return _(
+        "Si el DNI corresponde a una cuenta, te hemos enviado un correo con las instrucciones para crear o recuperar tu contraseña. Revisa también la carpeta de spam."
+    )
+
+
+def _current_public_base_url(request):
+    """Usa el host real de la peticion para construir enlaces publicos coherentes."""
+
+    return request.build_absolute_uri("/").rstrip("/")
 
 
 @anonymous_required
@@ -24,6 +44,7 @@ def request_activation_view(request):
     """Gestiona la solicitud del email de activacion o recuperacion."""
 
     form = RequestActivationForm(request.POST or None)
+    activation_notice = None
 
     if request.method == "POST":
         identifier = request.POST.get("dni", "")
@@ -35,7 +56,7 @@ def request_activation_view(request):
         ):
             return _rate_limit_response(
                 request,
-                "Demasiados intentos. Intentalo de nuevo mas tarde.",
+                _("Demasiados intentos. Intentalo de nuevo mas tarde."),
             )
 
         if form.is_valid():
@@ -45,57 +66,78 @@ def request_activation_view(request):
                 identifier=form.cleaned_data["dni"],
                 window_seconds=settings.ACTIVATION_RATE_LIMIT_WINDOW,
             )
-            _, notification_message = request_activation(form.cleaned_data["dni"])
+            request_activation(
+                form.cleaned_data["dni"],
+                activation_url_base=_current_public_base_url(request),
+            )
+            activation_notice = _activation_notice_message()
 
-            # HTMX — retorna solo el fragmento HTML
             if request.headers.get("HX-Request"):
-                return _toast_response(
+                return render(
                     request=request,
-                    variant="info",
-                    title="Notificacion enviada",
-                    message=notification_message,
-                    duration=5000,
+                    template_name="users/partials/auth/request_activation_success_response.html",
+                    context={
+                        "form": RequestActivationForm(),
+                        "activation_notice": activation_notice,
+                        "toast_variant": "success",
+                        "toast_title": _("Revisa tu correo"),
+                        "toast_message": activation_notice,
+                        "toast_duration": 5500,
+                    },
                 )
 
-            messages.info(request, notification_message)
+            messages.success(request, activation_notice)
             form = RequestActivationForm()
         else:
-            validation_message = "Debes introducir tu DNI."
+            validation_message = _("Debes introducir tu DNI.")
             if request.headers.get("HX-Request"):
                 return _toast_response(
                     request=request,
                     variant="error",
-                    title="Error de validacion",
+                    title=_("Error de validacion"),
                     message=validation_message,
                     duration=4500,
                 )
             messages.error(request, validation_message)
 
-    return render(request, "users/pages/request_activation.html", {"form": form})
+    return render(
+        request,
+        "users/pages/request_activation.html",
+        {
+            "form": form,
+            "activation_notice": activation_notice,
+        },
+    )
 
 
 @anonymous_required
 def set_password_view(request, token):
     """Valida el token y permite fijar la contraseña inicial o recuperada."""
 
-    user = validate_token(token)
+    user, token_status = resolve_token(token)
 
     if not user:
-        return render(request, "users/pages/invalid_token.html")
+        return render(
+            request,
+            "users/pages/invalid_token.html",
+            {"token_status": token_status},
+        )
 
     form = SetPasswordForm(request.POST or None)
 
     if request.method == "POST":
         if form.is_valid():
             set_password(user, form.cleaned_data["password1"])
-            messages.success(request, "Tu contraseña se actualizo correctamente.")
+            messages.success(request, _("Tu contraseña se actualizo correctamente."))
             return redirect("auth:login")
 
         form_error = form.non_field_errors()
         if form_error:
             messages.error(request, form_error[0])
         else:
-            messages.error(request, "Completa los campos obligatorios del formulario.")
+            messages.error(
+                request, _("Completa los campos obligatorios del formulario.")
+            )
 
     return render(
         request,
@@ -120,7 +162,7 @@ def login_view(request):
         ):
             return _rate_limit_response(
                 request,
-                "Demasiados intentos. Intentalo de nuevo mas tarde.",
+                _("Demasiados intentos. Intentalo de nuevo mas tarde."),
             )
 
         if form.is_valid():
@@ -150,20 +192,20 @@ def login_view(request):
                 identifier=form.cleaned_data["dni"],
                 window_seconds=settings.LOGIN_RATE_LIMIT_WINDOW,
             )
-            form.add_error(None, "DNI o contraseña incorrectos.")
+            form.add_error(None, _("DNI o contraseña incorrectos."))
         else:
             dni_errors = form.errors.get("dni")
             if dni_errors:
                 form.add_error(None, dni_errors[0])
             else:
-                form.add_error(None, "Debes completar DNI y contraseña.")
+                form.add_error(None, _("Debes completar DNI y contraseña."))
 
         error_message = form.non_field_errors()[0]
         if request.headers.get("HX-Request"):
             return _toast_response(
                 request=request,
                 variant="error",
-                title="Error de acceso",
+                title=_("Error de acceso"),
                 message=error_message,
                 duration=4500,
             )

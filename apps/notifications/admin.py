@@ -1,6 +1,8 @@
 """Administracion interna de notificaciones."""
 
 from django.contrib import admin, messages
+from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy
 
 from apps.notifications.models import Notification
 
@@ -42,7 +44,7 @@ class NotificationAdmin(admin.ModelAdmin):
     actions = ("mark_as_read", "mark_as_unread")
     fieldsets = (
         (
-            "Destino",
+            gettext_lazy("Destino"),
             {
                 "fields": (
                     "user",
@@ -53,7 +55,7 @@ class NotificationAdmin(admin.ModelAdmin):
             },
         ),
         (
-            "Contenido",
+            gettext_lazy("Contenido"),
             {
                 "fields": (
                     "title",
@@ -62,7 +64,7 @@ class NotificationAdmin(admin.ModelAdmin):
             },
         ),
         (
-            "Contexto",
+            gettext_lazy("Contexto"),
             {
                 "fields": (
                     "vacation_request",
@@ -70,7 +72,7 @@ class NotificationAdmin(admin.ModelAdmin):
                 )
             },
         ),
-        ("Fechas", {"fields": ("sent_at", "created_at")}),
+        (gettext_lazy("Fechas"), {"fields": ("sent_at", "created_at")}),
     )
 
     def get_queryset(self, request):
@@ -82,30 +84,32 @@ class NotificationAdmin(admin.ModelAdmin):
             .select_related("user", "created_by", "vacation_request")
         )
 
-    @admin.display(description="Título")
+    @admin.display(description=gettext_lazy("Título"))
     def title_display(self, obj):
         """Usa un texto corto incluso si la notificacion no tiene titulo."""
 
         return obj.title or obj.message[:60]
 
-    @admin.action(description="Marcar como leídas")
+    @admin.action(description=gettext_lazy("Marcar como leídas"))
     def mark_as_read(self, request, queryset):
         """Accion masiva para limpiar avisos del inbox."""
 
         updated = queryset.update(is_read=True)
         self.message_user(
             request,
-            f"{updated} notificación(es) marcada(s) como leídas.",
+            _("%(updated)s notificación(es) marcada(s) como leídas.")
+            % {"updated": updated},
             level=messages.SUCCESS,
         )
 
-    @admin.action(description="Marcar como no leídas")
+    @admin.action(description=gettext_lazy("Marcar como no leídas"))
     def mark_as_unread(self, request, queryset):
         """Accion masiva para reabrir avisos del inbox."""
 
         updated = queryset.update(is_read=False)
         self.message_user(
             request,
-            f"{updated} notificación(es) marcada(s) como no leídas.",
+            _("%(updated)s notificación(es) marcada(s) como no leídas.")
+            % {"updated": updated},
             level=messages.SUCCESS,
         )

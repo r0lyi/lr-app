@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <aside class="vac-request-guide" id="vac-request-guide" aria-labelledby="vac-request-guide-title">
   <div class="vac-request-guide__header">
     <div class="vac-request-guide__badge" aria-hidden="true">
@@ -7,41 +9,43 @@
       </svg>
     </div>
 
-    <h2 class="vac-request-guide__title" id="vac-request-guide-title">Guía de Solicitud</h2>
+    <h2 class="vac-request-guide__title" id="vac-request-guide-title">{% translate "Guía de Solicitud" %}</h2>
   </div>
 
   <div class="vac-request-guide__steps">
     <article class="vac-request-guide__step">
       <span class="vac-request-guide__step-index">1</span>
       <div>
-        <h3>Selecciona las fechas</h3>
-        <p>Define un inicio y un fin continuos en los calendarios.</p>
+        <h3>{% translate "Selecciona las fechas" %}</h3>
+        <p>{% translate "Define un inicio y un fin continuos en los calendarios." %}</p>
       </div>
     </article>
 
     <article class="vac-request-guide__step">
       <span class="vac-request-guide__step-index">2</span>
       <div>
-        <h3>Revisa el resumen</h3>
-        <p>Comprueba el total de días y confirma que el rango sea correcto.</p>
+        <h3>{% translate "Revisa el resumen" %}</h3>
+        <p>{% translate "Comprueba el total de días y confirma que el rango sea correcto." %}</p>
       </div>
     </article>
 
     <article class="vac-request-guide__step">
       <span class="vac-request-guide__step-index">3</span>
       <div>
-        <h3>Envía la solicitud</h3>
-        <p>El sistema enviará la petición a RRHH para su validación.</p>
+        <h3>{% translate "Envía la solicitud" %}</h3>
+        <p>{% translate "El sistema enviará la petición a RRHH para su validación." %}</p>
       </div>
     </article>
   </div>
 
   <div class="vac-request-guide__rule">
-    <p class="vac-request-guide__rule-eyebrow">Regla importante</p>
+    <p class="vac-request-guide__rule-eyebrow">{% translate "Regla importante" %}</p>
     <p>
-      Debes solicitar las vacaciones con al menos {{ min_advance_notice_days }}
-      días de antelación. La primera fecha disponible es
-      {{ min_request_start_date|date:"d/m/Y" }}.
+      {% blocktranslate with days=min_advance_notice_days date=min_request_start_date|date:"d/m/Y" trimmed %}
+        Debes solicitar las vacaciones con al menos {{ days }}
+        días de antelación. La primera fecha disponible es
+        {{ date }}.
+      {% endblocktranslate %}
     </p>
   </div>
 
@@ -53,10 +57,12 @@
       </svg>
     </div>
     <div class="vac-request-guide__footer-copy vac-sr-only">
-      <p class="vac-request-guide__footer-title">Validación automática</p>
+      <p class="vac-request-guide__footer-title">{% translate "Validación automática" %}</p>
       <p class="vac-request-guide__footer-text">
-        El sistema revisa el rango y el saldo antes de que la solicitud llegue a
-        RRHH.
+        {% blocktranslate trimmed %}
+          El sistema revisa el rango y el saldo antes de que la solicitud llegue a
+          RRHH.
+        {% endblocktranslate %}
       </p>
     </div>
   </div>

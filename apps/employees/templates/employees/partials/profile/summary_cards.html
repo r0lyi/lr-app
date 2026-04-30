@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <div class="profile-summary-stack">
   <article class="profile-summary-card profile-summary-card--annual">
     <div class="profile-summary-card__header">
@@ -8,11 +10,11 @@
           <path d="m9 14 2 2 4-4.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
         </svg>
       </span>
-      <span class="profile-summary-card__badge">Disponibles</span>
+      <span class="profile-summary-card__badge">{% translate "Disponibles" %}</span>
     </div>
     <div class="profile-summary-card__metric">
       <strong>{{ annual_vacation_remaining_days_count|floatformat:0 }}</strong>
-      <span>Días disponibles</span>
+      <span>{% translate "Días disponibles" %}</span>
     </div>
   </article>
 
@@ -24,11 +26,11 @@
           <path d="M12 7.8v4.6l3 1.9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
         </svg>
       </span>
-      <span class="profile-summary-card__badge profile-summary-card__badge--pending">Pendientes</span>
+      <span class="profile-summary-card__badge profile-summary-card__badge--pending">{% translate "Pendientes" %}</span>
     </div>
     <div class="profile-summary-card__metric">
       <strong>{{ pending_requests_count }}</strong>
-      <span>Solicitudes pendientes</span>
+      <span>{% translate "Solicitudes pendientes" %}</span>
     </div>
   </article>
 </div>

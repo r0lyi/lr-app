@@ -1,19 +1,21 @@
+{% load i18n %}
+
 <section class="admin-user-edit-summary">
   <article class="admin-user-edit-summary__identity">
     <p class="admin-user-edit-summary__name">{{ managed_user.display_name }}</p>
     <div class="admin-user-edit-summary__meta">
       <span>{{ managed_user.user.email }}</span>
-      <span>DNI: {{ managed_user.user.dni }}</span>
+      <span>{% blocktranslate with dni=managed_user.user.dni %}DNI: {{ dni }}{% endblocktranslate %}</span>
     </div>
   </article>
 
   <article class="admin-user-edit-summary__card">
-    <p class="admin-user-edit-summary__label">Rol actual</p>
+    <p class="admin-user-edit-summary__label">{% translate "Rol actual" %}</p>
     <p class="admin-user-edit-summary__value">{{ managed_user.primary_role_label }}</p>
   </article>
 
   <article class="admin-user-edit-summary__card">
-    <p class="admin-user-edit-summary__label">Estado</p>
+    <p class="admin-user-edit-summary__label">{% translate "Estado" %}</p>
     <p class="admin-user-edit-summary__value">{{ managed_user.access_status_label }}</p>
   </article>
 </section>

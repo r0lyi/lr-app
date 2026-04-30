@@ -14,6 +14,7 @@ from datetime import date
 from decimal import Decimal, ROUND_HALF_UP
 
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 from apps.vacations.services.requests.policies import FULL_ANNUAL_VACATION_DAYS
 from apps.vacations.selectors import (
@@ -110,11 +111,11 @@ def build_employee_dashboard_summary(employee_profile, *, request_filters=None):
     )
 
     if latest_resolved_request is None:
-        latest_resolution_summary = "Todavía no tienes solicitudes resueltas."
+        latest_resolution_summary = _("Todavía no tienes solicitudes resueltas.")
     elif latest_resolved_request.status.name == "approved":
-        latest_resolution_summary = "Tu última solicitud fue aprobada por RRHH."
+        latest_resolution_summary = _("Tu última solicitud fue aprobada por RRHH.")
     else:
-        latest_resolution_summary = "Tu última solicitud fue rechazada por RRHH."
+        latest_resolution_summary = _("Tu última solicitud fue rechazada por RRHH.")
 
     return {
         "employee_profile": employee_profile,

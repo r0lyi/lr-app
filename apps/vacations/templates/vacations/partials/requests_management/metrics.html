@@ -1,4 +1,6 @@
-<section class="rrhh-summary-grid" aria-label="Resumen de solicitudes">
+{% load i18n %}
+
+<section class="rrhh-summary-grid" aria-label="{% translate 'Resumen de solicitudes' %}">
   {% for metric in requests_metrics %}
     <article class="rrhh-summary-card rrhh-summary-card--{{ metric.theme }}">
       <div class="rrhh-summary-card__top">

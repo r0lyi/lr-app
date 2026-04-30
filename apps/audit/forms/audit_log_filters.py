@@ -1,6 +1,7 @@
 """Formulario GET para encontrar actividad concreta dentro del historial."""
 
 from django import forms
+from django.utils.translation import gettext_lazy as _
 
 from apps.audit.models import AuditLog
 from apps.audit.services import (
@@ -15,14 +16,14 @@ from apps.audit.services import (
 
 
 VISIBLE_AUDIT_ACTION_CHOICES = (
-    ("", "Todos"),
-    (AUDIT_ACTION_USER_CREATED, "Usuario creado"),
-    (AUDIT_ACTION_USER_PRIMARY_ROLE_CHANGED, "Cambio de rol"),
-    (AUDIT_ACTION_USER_ACCESS_STATE_CHANGED, "Cambio de acceso"),
-    (AUDIT_ACTION_USER_PROFILE_UPDATED, "Datos de usuario"),
-    (AUDIT_ACTION_USER_PASSWORD_CHANGED, "Contraseña actualizada"),
-    (AUDIT_ACTION_USER_ACCOUNT_ACTIVATED, "Cuenta activada"),
-    (AUDIT_ACTION_VACATION_REQUEST_REVIEWED, "Solicitud editada"),
+    ("", _("Todos")),
+    (AUDIT_ACTION_USER_CREATED, _("Usuario creado")),
+    (AUDIT_ACTION_USER_PRIMARY_ROLE_CHANGED, _("Cambio de rol")),
+    (AUDIT_ACTION_USER_ACCESS_STATE_CHANGED, _("Cambio de acceso")),
+    (AUDIT_ACTION_USER_PROFILE_UPDATED, _("Datos de usuario")),
+    (AUDIT_ACTION_USER_PASSWORD_CHANGED, _("Contraseña actualizada")),
+    (AUDIT_ACTION_USER_ACCOUNT_ACTIVATED, _("Cuenta activada")),
+    (AUDIT_ACTION_VACATION_REQUEST_REVIEWED, _("Solicitud editada")),
 )
 VISIBLE_AUDIT_ACTIONS = {
     action
@@ -40,23 +41,23 @@ class AuditLogFilterForm(forms.Form):
 
     search = forms.CharField(
         required=False,
-        label="Buscar actividad",
+        label=_("Buscar actividad"),
         widget=forms.TextInput(
             attrs={
                 "class": "ui-input",
-                "placeholder": "Ej. usuario, solicitud o cambio...",
+                "placeholder": _("Ej. usuario, solicitud o cambio..."),
             }
         ),
     )
     action = forms.ChoiceField(
         required=False,
-        label="Tipo de cambio",
+        label=_("Tipo de cambio"),
         choices=VISIBLE_AUDIT_ACTION_CHOICES,
         widget=forms.Select(attrs={"class": "ui-select"}),
     )
     start_date = forms.DateField(
         required=False,
-        label="Fecha inicio",
+        label=_("Fecha inicio"),
         widget=forms.DateInput(
             attrs={
                 "type": "date",
@@ -66,7 +67,7 @@ class AuditLogFilterForm(forms.Form):
     )
     end_date = forms.DateField(
         required=False,
-        label="Fecha final",
+        label=_("Fecha final"),
         widget=forms.DateInput(
             attrs={
                 "type": "date",
@@ -83,7 +84,7 @@ class AuditLogFilterForm(forms.Form):
             action not in AuditLog.ACTION_LABELS
             or action not in VISIBLE_AUDIT_ACTIONS
         ):
-            raise forms.ValidationError("Selecciona un tipo de actividad válido.")
+            raise forms.ValidationError(_("Selecciona un tipo de actividad válido."))
         return action
 
     def clean(self):
@@ -95,7 +96,7 @@ class AuditLogFilterForm(forms.Form):
 
         if start_date and end_date and end_date < start_date:
             raise forms.ValidationError(
-                "La fecha final no puede ser anterior a la fecha inicial."
+                _("La fecha final no puede ser anterior a la fecha inicial.")
             )
 
         return cleaned_data

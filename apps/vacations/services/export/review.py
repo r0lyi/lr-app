@@ -4,6 +4,8 @@ from collections import defaultdict
 from datetime import date
 from decimal import Decimal
 
+from django.utils.translation import gettext_lazy as _
+
 from apps.vacations.models import VacationRequest
 from apps.vacations.services.requests.policies import (
     ACTIVE_REQUEST_STATUS_NAMES,
@@ -182,7 +184,7 @@ def _build_request_alert_entries(
         entries.append(
             {
                 "type": "overlap",
-                "label": "Solapamiento de fechas",
+                "label": _("Solapamiento de fechas"),
                 "employee_name": str(vacation_request.employee),
                 "start_date": vacation_request.start_date,
                 "end_date": vacation_request.end_date,
@@ -195,7 +197,7 @@ def _build_request_alert_entries(
         entries.append(
             {
                 "type": "long_duration",
-                "label": "Solicitud de larga duración",
+                "label": _("Solicitud de larga duración"),
                 "employee_name": str(vacation_request.employee),
                 "start_date": vacation_request.start_date,
                 "end_date": vacation_request.end_date,
@@ -208,7 +210,7 @@ def _build_request_alert_entries(
         entries.append(
             {
                 "type": "high_load",
-                "label": "Periodo de alta carga",
+                "label": _("Periodo de alta carga"),
                 "employee_name": str(vacation_request.employee),
                 "start_date": vacation_request.start_date,
                 "end_date": vacation_request.end_date,
@@ -224,7 +226,7 @@ def _build_request_alert_entries(
 def _build_seniority_alert_entry(vacation_request):
     return {
         "type": "seniority",
-        "label": "Orden aplicado por antigüedad",
+        "label": _("Orden aplicado por antigüedad"),
         "employee_name": str(vacation_request.employee),
         "start_date": vacation_request.start_date,
         "end_date": vacation_request.end_date,

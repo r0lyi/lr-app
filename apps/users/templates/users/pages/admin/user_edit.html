@@ -1,9 +1,9 @@
 {% extends "layouts/dashboard/base.html" %}
-{% load static %}
+{% load i18n static %}
 
-{% block title %}Editar usuario{% endblock %}
+{% block title %}{% translate "Editar usuario" %}{% endblock %}
 
-{% block dashboard_header_title %}Portal de administración{% endblock %}
+{% block dashboard_header_title %}{% translate "Portal de administración" %}{% endblock %}
 
 {% block dashboard_css %}
   {{ block.super }}

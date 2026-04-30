@@ -1,10 +1,12 @@
 """Configuracion del menu lateral y etiquetas del dashboard."""
 
+from django.utils.translation import gettext_lazy as _
+
 
 ROLE_LABELS = {
-    "employee": "Empleado",
-    "rrhh": "RRHH",
-    "admin": "Administrador",
+    "employee": _("Empleado"),
+    "rrhh": _("RRHH"),
+    "admin": _("Administrador"),
 }
 
 ROLE_NAV_CONFIG = {
@@ -12,19 +14,19 @@ ROLE_NAV_CONFIG = {
         {
             "section": "home",
             "url_name": "dashboard:employee-home",
-            "label": "Inicio",
+            "label": _("Inicio"),
             "icon": "drop",
         },
         {
             "section": "request",
             "url_name": "vacations:create-request",
-            "label": "Solicitar",
+            "label": _("Solicitar"),
             "icon": "drop",
         },
         {
             "section": "profile",
             "url_name": "employees:profile",
-            "label": "Perfil",
+            "label": _("Perfil"),
             "icon": "drop",
         },
     ],
@@ -32,25 +34,25 @@ ROLE_NAV_CONFIG = {
         {
             "section": "home",
             "url_name": "dashboard:rrhh-home",
-            "label": "Inicio",
+            "label": _("Inicio"),
             "icon": "drop",
         },
         {
             "section": "request",
             "url_name": "vacations:create-request",
-            "label": "Solicitar",
+            "label": _("Solicitar"),
             "icon": "drop",
         },
         {
             "section": "history",
             "url_name": "audit:export-history",
-            "label": "Historial",
+            "label": _("Historial"),
             "icon": "drop",
         },
         {
             "section": "profile",
             "url_name": "employees:profile",
-            "label": "Perfil",
+            "label": _("Perfil"),
             "icon": "drop",
         },
     ],
@@ -58,37 +60,37 @@ ROLE_NAV_CONFIG = {
         {
             "section": "home",
             "url_name": "dashboard:admin-home",
-            "label": "Inicio",
+            "label": _("Inicio"),
             "icon": "drop",
         },
         {
             "section": "request",
             "url_name": "vacations:create-request",
-            "label": "Solicitar",
+            "label": _("Solicitar"),
             "icon": "drop",
         },
         {
             "section": "requests",
             "url_name": "dashboard:admin-requests",
-            "label": "Solicitudes",
+            "label": _("Solicitudes"),
             "icon": "drop",
         },
         {
             "section": "users",
             "url_name": "dashboard:admin-users",
-            "label": "Usuarios",
+            "label": _("Usuarios"),
             "icon": "drop",
         },
         {
             "section": "activity",
             "url_name": "audit:activity-log",
-            "label": "Actividad",
+            "label": _("Actividad"),
             "icon": "drop",
         },
         {
             "section": "profile",
             "url_name": "employees:profile",
-            "label": "Perfil",
+            "label": _("Perfil"),
             "icon": "drop",
         },
     ],
@@ -98,7 +100,7 @@ ROLE_NAV_CONFIG = {
 def get_role_label(role_name):
     """Traduce el nombre interno del rol a una etiqueta legible."""
 
-    return ROLE_LABELS.get(role_name, "Usuario")
+    return ROLE_LABELS.get(role_name, _("Usuario"))
 
 
 def get_dashboard_nav_items(role_name, *, active_section="home"):

@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django.shortcuts import redirect, render
+from django.utils.translation import gettext as _
 
 from apps.core.presentation.dashboard import build_dashboard_base_context
 from apps.core.presentation.pagination import paginate_dashboard_list
@@ -11,6 +12,12 @@ from apps.core.utils.decorators import role_required
 from apps.users.forms import AdminUserCreateForm, AdminUserFilterForm
 from apps.users.selectors import get_admin_dashboard_summary, get_admin_user_list
 from apps.users.services.admin.management import create_admin_user
+
+
+def _current_public_base_url(request):
+    """Usa el mismo host del panel para construir enlaces de activacion coherentes."""
+
+    return request.build_absolute_uri("/").rstrip("/")
 
 
 def _merge_validation_errors(form, exc):
@@ -68,18 +75,24 @@ def admin_user_list_view(request):
                     acting_user=request.user,
                     email=create_user_form.cleaned_data["email"],
                     dni=create_user_form.cleaned_data["dni"],
+                    activation_url_base=_current_public_base_url(request),
                 )
             except ValidationError as exc:
                 _merge_validation_errors(create_user_form, exc)
             except IntegrityError:
                 create_user_form.add_error(
                     None,
-                    "No se ha podido crear el usuario. Revisa los datos e inténtalo de nuevo.",
+                    _(
+                        "No se ha podido crear el usuario. Revisa los datos e inténtalo de nuevo."
+                    ),
                 )
             else:
                 messages.success(
                     request,
-                    f"Se ha creado la cuenta de {user.email} y se ha enviado su enlace de activación.",
+                    _(
+                        "Se ha creado la cuenta de %(email)s y se ha enviado su enlace de activación."
+                    )
+                    % {"email": user.email},
                 )
                 return redirect(request.get_full_path())
 

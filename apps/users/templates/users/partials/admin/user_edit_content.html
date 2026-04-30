@@ -1,21 +1,23 @@
+{% load i18n %}
+
 <section class="admin-user-edit-page">
   <div class="ui-modal is-open admin-user-edit-modal" aria-hidden="false">
     <a
       class="ui-modal__overlay admin-user-edit-modal__overlay"
       href="{% url 'dashboard:admin-users' %}"
-      aria-label="Cerrar y volver al listado de usuarios"
+      aria-label="{% translate 'Cerrar y volver al listado de usuarios' %}"
     ></a>
 
     <div class="ui-modal__content" role="dialog" aria-modal="true" aria-labelledby="admin-user-edit-title">
       <div class="ui-modal__header admin-user-edit-modal__header">
         <div>
-          <p class="admin-user-edit-modal__eyebrow">Gestion administrativa</p>
-          <h1 class="ui-modal__title" id="admin-user-edit-title">Editar usuario</h1>
+          <p class="admin-user-edit-modal__eyebrow">{% translate "Gestion administrativa" %}</p>
+          <h1 class="ui-modal__title" id="admin-user-edit-title">{% translate "Editar usuario" %}</h1>
           <p class="admin-user-edit-modal__subtitle">
-            Centraliza aqui los cambios mas habituales de la cuenta para que la gestion diaria sea clara y ordenada.
+            {% translate "Centraliza aqui los cambios mas habituales de la cuenta para que la gestion diaria sea clara y ordenada." %}
           </p>
         </div>
-        <a class="ui-modal__close" href="{% url 'dashboard:admin-users' %}" aria-label="Cerrar modal">×</a>
+        <a class="ui-modal__close" href="{% url 'dashboard:admin-users' %}" aria-label="{% translate 'Cerrar modal' %}">×</a>
       </div>
 
       <div class="ui-modal__body admin-user-edit-modal__body">

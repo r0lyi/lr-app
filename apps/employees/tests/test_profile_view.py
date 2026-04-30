@@ -182,6 +182,37 @@ class EmployeeProfileViewTests(TestCase):
         profile.refresh_from_db()
         self.assertEqual(profile.first_name, "Ana")
         self.assertIn("first_name", response.context["employee_form"].errors)
+        self.assertContains(
+            response,
+            "Debes completar todos los campos obligatorios de la ficha de empleado.",
+        )
+
+    def test_profile_view_requires_phone_to_update_employee_data(self):
+        user, profile = self.create_user_with_profile(
+            email="employee-phone-required@example.com",
+            dni="87654321X",
+        )
+
+        self.client.force_login(user)
+
+        response = self.client.post(
+            reverse("employees:profile"),
+            {
+                "profile_action": "employee-update",
+                "first_name": "Ana",
+                "last_name": "Lopez",
+                "phone": "",
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        profile.refresh_from_db()
+        self.assertEqual(profile.phone, "600123123")
+        self.assertIn("phone", response.context["employee_form"].errors)
+        self.assertContains(
+            response,
+            "Debes completar todos los campos obligatorios de la ficha de empleado.",
+        )
 
     def test_profile_view_keeps_form_when_password_change_is_invalid(self):
         user, _profile = self.create_user_with_profile(

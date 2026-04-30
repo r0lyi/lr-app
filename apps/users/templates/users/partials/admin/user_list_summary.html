@@ -1,10 +1,12 @@
+{% load i18n %}
+
 <section class="admin-users-summary">
   <article class="admin-users-summary__card admin-users-summary__card--blue">
     <span class="admin-users-summary__icon" aria-hidden="true">
       {% include "components/ui/icon.html" with name="users" %}
     </span>
     <div class="admin-users-summary__copy">
-      <span class="admin-users-summary__label">Total Usuarios</span>
+      <span class="admin-users-summary__label">{% translate "Total Usuarios" %}</span>
       <strong class="admin-users-summary__value">{{ total_users }}</strong>
     </div>
   </article>
@@ -13,7 +15,7 @@
       {% include "components/ui/icon.html" with name="check-circle" %}
     </span>
     <div class="admin-users-summary__copy">
-      <span class="admin-users-summary__label">Cuentas Activas</span>
+      <span class="admin-users-summary__label">{% translate "Cuentas Activas" %}</span>
       <strong class="admin-users-summary__value">{{ active_users }}</strong>
     </div>
   </article>
@@ -22,7 +24,7 @@
       {% include "components/ui/icon.html" with name="eye-off" %}
     </span>
     <div class="admin-users-summary__copy">
-      <span class="admin-users-summary__label">Cuentas Inactivas</span>
+      <span class="admin-users-summary__label">{% translate "Cuentas Inactivas" %}</span>
       <strong class="admin-users-summary__value">{{ inactive_users }}</strong>
     </div>
   </article>
@@ -31,7 +33,7 @@
       {% include "components/ui/icon.html" with name="id-card" %}
     </span>
     <div class="admin-users-summary__copy">
-      <span class="admin-users-summary__label">Fichas de Empleado</span>
+      <span class="admin-users-summary__label">{% translate "Fichas de Empleado" %}</span>
       <strong class="admin-users-summary__value">{{ total_employee_profiles }}</strong>
     </div>
   </article>

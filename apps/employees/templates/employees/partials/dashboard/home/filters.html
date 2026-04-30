@@ -1,18 +1,20 @@
+{% load i18n %}
+
 <form method="get" class="filters-row employee-filters-form">
   <div class="filter-group">
-    <label class="filter-label" for="{{ filter_form.start_date.id_for_label }}">Desde</label>
+    <label class="filter-label" for="{{ filter_form.start_date.id_for_label }}">{% translate "Desde" %}</label>
     <div class="filter-input-wrap">
       {{ filter_form.start_date }}
     </div>
   </div>
   <div class="filter-group">
-    <label class="filter-label" for="{{ filter_form.end_date.id_for_label }}">Hasta</label>
+    <label class="filter-label" for="{{ filter_form.end_date.id_for_label }}">{% translate "Hasta" %}</label>
     <div class="filter-input-wrap">
       {{ filter_form.end_date }}
     </div>
   </div>
   <div class="filter-group">
-    <label class="filter-label" for="{{ filter_form.status.id_for_label }}">Estado</label>
+    <label class="filter-label" for="{{ filter_form.status.id_for_label }}">{% translate "Estado" %}</label>
     <div class="filter-input-wrap">
       {{ filter_form.status }}
     </div>

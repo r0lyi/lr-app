@@ -1,10 +1,13 @@
 """Tests del flujo feliz de activacion, login y primer acceso autenticado."""
 
 
+from datetime import timedelta
+
 from django.core import mail
 from django.core.cache import cache
 from django.test import TestCase, override_settings
 from django.urls import reverse
+from django.utils import timezone
 
 from apps.users.models import User
 
@@ -34,6 +37,10 @@ class AuthFlowTests(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(mail.outbox), 1)
+        self.assertContains(
+            response,
+            "Si el DNI corresponde a una cuenta, te hemos enviado un correo con las instrucciones para crear o recuperar tu contraseña.",
+        )
 
         self.user.refresh_from_db()
         token = self.user.activation_token
@@ -89,3 +96,93 @@ class AuthFlowTests(TestCase):
             response,
             "La letra del DNI debe escribirse en mayúsculas.",
         )
+
+    def test_request_activation_htmx_updates_panel_with_confirmation_notice(self):
+        """El submit HTMX debe actualizar el panel y mostrar el aviso persistente."""
+
+        response = self.client.post(
+            reverse("auth:request-activation"),
+            {"dni": "12345678Z"},
+            HTTP_HX_REQUEST="true",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'id="request-activation-panel"', html=False)
+        self.assertContains(response, 'hx-swap-oob="outerHTML"', html=False)
+        self.assertContains(response, "Revisa tu correo")
+
+    @override_settings(FRONTEND_URL="http://configurada.example")
+    def test_request_activation_email_uses_current_request_host(self):
+        """El correo debe usar el host real de la peticion publica."""
+
+        response = self.client.post(
+            reverse("auth:request-activation"),
+            {"dni": "12345678Z"},
+            secure=True,
+            HTTP_HOST="portal.example.com",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertIn(
+            "https://portal.example.com/auth/set-password/",
+            mail.outbox[0].body,
+        )
+
+    def test_only_latest_activation_link_remains_valid(self):
+        """Pedir un nuevo enlace invalida el anterior y mantiene vivo el ultimo."""
+
+        self.client.post(
+            reverse("auth:request-activation"),
+            {"dni": "12345678Z"},
+        )
+        self.user.refresh_from_db()
+        first_token = self.user.activation_token
+
+        self.client.post(
+            reverse("auth:request-activation"),
+            {"dni": "12345678Z"},
+        )
+        self.user.refresh_from_db()
+        second_token = self.user.activation_token
+
+        self.assertNotEqual(first_token, second_token)
+
+        expired_response = self.client.get(
+            reverse("auth:set-password", args=[first_token]),
+        )
+        self.assertEqual(expired_response.status_code, 200)
+        self.assertContains(
+            expired_response,
+            "Si has solicitado varios enlaces, utiliza solo el ultimo que hayas recibido.",
+        )
+
+        response = self.client.post(
+            reverse("auth:set-password", args=[second_token]),
+            {
+                "password1": "PruebaSegura123!",
+                "password2": "PruebaSegura123!",
+            },
+        )
+
+        self.assertRedirects(response, reverse("auth:login"))
+
+    def test_public_auth_pages_include_language_switcher(self):
+        """Las pantallas publicas del flujo auth deben permitir cambiar idioma."""
+
+        self.user.activation_token = "token-valido"
+        self.user.token_expires_at = timezone.now() + timedelta(hours=24)
+        self.user.save(update_fields=["activation_token", "token_expires_at"])
+
+        urls = (
+            reverse("auth:login"),
+            reverse("auth:request-activation"),
+            reverse("auth:set-password", args=[self.user.activation_token]),
+            reverse("auth:set-password", args=["token-invalido"]),
+        )
+
+        for url in urls:
+            with self.subTest(url=url):
+                response = self.client.get(url)
+                self.assertEqual(response.status_code, 200)
+                self.assertContains(response, "Cambiar idioma")

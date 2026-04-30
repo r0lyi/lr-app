@@ -1,6 +1,7 @@
 """Vistas para consultar la actividad registrada en auditoria."""
 
 from django.shortcuts import render
+from django.utils.translation import gettext_lazy as _
 
 from apps.audit.forms import AuditLogFilterForm
 from apps.audit.selectors import get_audit_log_summary, get_audit_logs
@@ -29,26 +30,26 @@ def audit_log_view(request):
     summary = get_audit_log_summary(filters=filter_data)
     audit_summary_cards = [
         {
-            "label": "Total Actividades",
+            "label": _("Total Actividades"),
             "value": summary["total_visible_activity"],
             "icon": "chart",
             "tone": "blue",
-            "meta": "En tiempo real",
+            "meta": _("En tiempo real"),
         },
         {
-            "label": "Usuarios Creados",
+            "label": _("Usuarios Creados"),
             "value": summary["visible_user_creations"],
             "icon": "user-plus",
             "tone": "green",
         },
         {
-            "label": "Cambios de Usuario",
+            "label": _("Cambios de Usuario"),
             "value": summary["visible_user_changes"],
             "icon": "users-settings",
             "tone": "orange",
         },
         {
-            "label": "Solicitudes Editadas",
+            "label": _("Solicitudes Editadas"),
             "value": summary["visible_vacation_request_reviews"],
             "icon": "calendar",
             "tone": "slate",

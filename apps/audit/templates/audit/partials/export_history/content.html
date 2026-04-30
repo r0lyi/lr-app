@@ -1,29 +1,34 @@
+{% load i18n %}
+{% translate "Archivo registrado" as default_registered_file_name %}
+
 <section class="export-history-page">
   <header class="export-history-hero">
     <div class="export-history-hero__copy">
-      <h1 class="export-history-hero__title">Historial de exportaciones</h1>
+      <h1 class="export-history-hero__title">{% translate "Historial de exportaciones" %}</h1>
       <p class="export-history-hero__description">
-        Consulta las exportaciones generadas por RRHH, revisa sus fechas y vuelve a
-        descargar cada archivo cuando sea necesario.
+        {% blocktranslate trimmed %}
+          Consulta las exportaciones generadas por RRHH, revisa sus fechas y vuelve a
+          descargar cada archivo cuando sea necesario.
+        {% endblocktranslate %}
       </p>
     </div>
   </header>
 
-  <section class="export-history-summary" aria-label="Resumen de exportaciones">
+  <section class="export-history-summary" aria-label="{% translate 'Resumen de exportaciones' %}">
     <article class="export-history-summary__card export-history-summary__card--blue">
       <div class="export-history-summary__top">
-        <span class="export-history-summary__label">Total exportaciones</span>
+        <span class="export-history-summary__label">{% translate "Total exportaciones" %}</span>
         <span class="export-history-summary__icon" aria-hidden="true">
           {% include "components/ui/icon.html" with name="download" %}
         </span>
       </div>
       <strong class="export-history-summary__value">{{ total_exports_count }}</strong>
-      <p class="export-history-summary__note">Exportaciones generadas por usuarios. Descargar un histórico no suma aquí.</p>
+      <p class="export-history-summary__note">{% translate "Exportaciones generadas por usuarios. Descargar un histórico no suma aquí." %}</p>
     </article>
 
     <article class="export-history-summary__card export-history-summary__card--slate">
       <div class="export-history-summary__top">
-        <span class="export-history-summary__label">Última exportación</span>
+        <span class="export-history-summary__label">{% translate "Última exportación" %}</span>
         <span class="export-history-summary__icon" aria-hidden="true">
           {% include "components/ui/icon.html" with name="clock" %}
         </span>
@@ -32,25 +37,27 @@
         <strong class="export-history-summary__value export-history-summary__value--date">
           {{ latest_export.created_at|date:"d M Y" }}
         </strong>
-        <p class="export-history-summary__note">{{ latest_export.created_at|date:"H:i" }} · {{ latest_export.file_name|default:"Archivo registrado" }}</p>
+        <p class="export-history-summary__note">{{ latest_export.created_at|date:"H:i" }} · {{ latest_export.file_name|default:default_registered_file_name }}</p>
       {% else %}
-        <strong class="export-history-summary__value export-history-summary__value--date">Sin registros</strong>
-        <p class="export-history-summary__note">Todavía no hay descargas guardadas.</p>
+        <strong class="export-history-summary__value export-history-summary__value--date">{% translate "Sin registros" %}</strong>
+        <p class="export-history-summary__note">{% translate "Todavía no hay descargas guardadas." %}</p>
       {% endif %}
     </article>
   </section>
 
-  <section class="export-history-filters-card" aria-label="Rango de fechas">
+  <section class="export-history-filters-card" aria-label="{% translate 'Rango de fechas' %}">
     {% include "audit/partials/export_history/filters.html" %}
   </section>
 
-  <section class="export-history-info-banner" aria-label="Información del historial">
+  <section class="export-history-info-banner" aria-label="{% translate 'Información del historial' %}">
     <span class="export-history-info-banner__icon" aria-hidden="true">
       {% include "components/ui/icon.html" with name="info" %}
     </span>
     <p class="export-history-info-banner__text">
-      <strong>Control de exportaciones:</strong> usa este historial para revisar o
-      descargar exportaciones previas desde los datos guardados.
+      {% blocktranslate trimmed %}
+        <strong>Control de exportaciones:</strong> usa este historial para revisar o
+        descargar exportaciones previas desde los datos guardados.
+      {% endblocktranslate %}
     </p>
   </section>
 

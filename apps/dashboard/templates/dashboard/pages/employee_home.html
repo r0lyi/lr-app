@@ -1,9 +1,9 @@
 {% extends "layouts/dashboard/base.html" %}
-{% load static %}
+{% load i18n static %}
 
-{% block title %}Panel de empleado{% endblock %}
+{% block title %}{% translate "Panel de empleado" %}{% endblock %}
 
-{% block dashboard_header_title %}Portal de empleado{% endblock %}
+{% block dashboard_header_title %}{% translate "Portal de empleado" %}{% endblock %}
 
 {% block dashboard_css %}
   {{ block.super }}

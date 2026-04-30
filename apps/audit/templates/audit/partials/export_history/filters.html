@@ -1,3 +1,7 @@
+{% load i18n %}
+{% translate "Fecha inicio" as start_date_label %}
+{% translate "Fecha final" as end_date_label %}
+
 <form method="get" class="export-history-filters-form" novalidate>
   {% if filter_form.non_field_errors %}
     <div class="export-history-filter-errors">
@@ -8,9 +12,9 @@
   {% endif %}
 
   <div class="export-history-filters-form__grid">
-    {% include "components/ui/date_input.html" with label="Fecha inicio" name=filter_form.start_date.name id=filter_form.start_date.id_for_label value=filter_form.start_date.value error=filter_form.start_date.errors.0 %}
+    {% include "components/ui/date_input.html" with label=start_date_label name=filter_form.start_date.name id=filter_form.start_date.id_for_label value=filter_form.start_date.value error=filter_form.start_date.errors.0 %}
 
-    {% include "components/ui/date_input.html" with label="Fecha final" name=filter_form.end_date.name id=filter_form.end_date.id_for_label value=filter_form.end_date.value error=filter_form.end_date.errors.0 %}
+    {% include "components/ui/date_input.html" with label=end_date_label name=filter_form.end_date.name id=filter_form.end_date.id_for_label value=filter_form.end_date.value error=filter_form.end_date.errors.0 %}
 
     {% include "components/ui/filter_actions.html" with reset_url=request.path class_name="export-history-filters-form__actions" %}
   </div>

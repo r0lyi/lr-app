@@ -1,20 +1,23 @@
+{% load i18n %}
+
 <header class="dash-header">
   <div class="dash-header-inner">
     <div class="dash-header-title">
       {% block dashboard_header_title %}
-        {% if role_label == "RRHH" %}
-          Portal RRHH
+        {% if role_name == "rrhh" %}
+          {% translate "Portal RRHH" %}
         {% elif role_label %}
-          Portal de {{ role_label|lower }}
+          {% blocktranslate with role=role_label|lower %}Portal de {{ role }}{% endblocktranslate %}
         {% else %}
-          Portal
+          {% translate "Portal" %}
         {% endif %}
       {% endblock %}
     </div>
 
     <div class="dash-header-actions">
       {% include "components/ui/notification_dropdown.html" %}
-      <div class="dash-header-user" aria-label="Usuario conectado">
+      {% include "components/ui/language_switcher.html" with variant="header" %}
+      <div class="dash-header-user" aria-label="{% translate 'Usuario conectado' %}">
         <div class="dash-header-user__copy">
           <strong class="dash-header-user__name">{{ display_name }}</strong>
           <span class="dash-header-user__role">{{ role_label }}</span>
@@ -32,7 +35,7 @@
         class="dash-hamburger"
         id="dash-hamburger"
         type="button"
-        aria-label="Abrir menú"
+        aria-label="{% translate 'Abrir menú' %}"
         aria-controls="dash-sidebar"
         aria-expanded="false"
       >

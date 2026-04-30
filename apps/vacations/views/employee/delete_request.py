@@ -3,6 +3,7 @@
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404, redirect
+from django.utils.translation import gettext as _
 
 from apps.core.utils.decorators import role_required
 from apps.employees.selectors import get_employee_profile_for_user
@@ -32,6 +33,8 @@ def delete_vacation_request_view(request, request_id):
     except ValidationError as exc:
         messages.error(request, exc.messages[0])
     else:
-        messages.success(request, "La solicitud pendiente se ha eliminado correctamente.")
+        messages.success(
+            request, _("La solicitud pendiente se ha eliminado correctamente.")
+        )
 
     return redirect("dashboard:employee-home")

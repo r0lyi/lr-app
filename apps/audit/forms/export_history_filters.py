@@ -1,6 +1,7 @@
 """Formulario GET para filtrar el historial de exportaciones."""
 
 from django import forms
+from django.utils.translation import gettext_lazy as _
 
 
 class ExportHistoryFilterForm(forms.Form):
@@ -8,7 +9,7 @@ class ExportHistoryFilterForm(forms.Form):
 
     start_date = forms.DateField(
         required=False,
-        label="Fecha inicio",
+        label=_("Fecha inicio"),
         widget=forms.DateInput(
             attrs={
                 "type": "date",
@@ -18,7 +19,7 @@ class ExportHistoryFilterForm(forms.Form):
     )
     end_date = forms.DateField(
         required=False,
-        label="Fecha final",
+        label=_("Fecha final"),
         widget=forms.DateInput(
             attrs={
                 "type": "date",
@@ -36,7 +37,7 @@ class ExportHistoryFilterForm(forms.Form):
 
         if start_date and end_date and end_date < start_date:
             raise forms.ValidationError(
-                "La fecha final no puede ser anterior a la fecha inicial."
+                _("La fecha final no puede ser anterior a la fecha inicial.")
             )
 
         return cleaned_data

@@ -1,6 +1,7 @@
 """Administracion interna de empleados y departamentos."""
 
 from django.contrib import admin
+from django.utils.translation import gettext_lazy as _
 
 from apps.employees.models import Department, Employee
 from apps.vacations.models import VacationRequest
@@ -32,7 +33,7 @@ class DepartmentAdmin(admin.ModelAdmin):
     inlines = (DepartmentEmployeeInline,)
     list_per_page = 25
 
-    @admin.display(description="Empleados")
+    @admin.display(description=_("Empleados"))
     def employees_count(self, obj):
         """Muestra cuantos empleados pertenecen al departamento."""
 
@@ -99,7 +100,7 @@ class EmployeeAdmin(admin.ModelAdmin):
     inlines = (EmployeeVacationRequestInline,)
     fieldsets = (
         (
-            "Identidad",
+            _("Identidad"),
             {
                 "fields": (
                     "user",
@@ -110,7 +111,7 @@ class EmployeeAdmin(admin.ModelAdmin):
             },
         ),
         (
-            "Organización",
+            _("Organización"),
             {
                 "fields": (
                     "department",
@@ -119,7 +120,7 @@ class EmployeeAdmin(admin.ModelAdmin):
             },
         ),
         (
-            "Vacaciones",
+            _("Vacaciones"),
             {
                 "fields": (
                     "available_days",
@@ -127,7 +128,7 @@ class EmployeeAdmin(admin.ModelAdmin):
                 )
             },
         ),
-        ("Auditoría", {"fields": ("created_at",)}),
+        (_("Auditoría"), {"fields": ("created_at",)}),
     )
 
     def get_queryset(self, request):
@@ -135,25 +136,25 @@ class EmployeeAdmin(admin.ModelAdmin):
 
         return super().get_queryset(request).select_related("user", "department")
 
-    @admin.display(description="Empleado", ordering="last_name")
+    @admin.display(description=_("Empleado"), ordering="last_name")
     def full_name(self, obj):
         """Nombre completo del empleado."""
 
         return str(obj)
 
-    @admin.display(description="Correo", ordering="user__email")
+    @admin.display(description=_("Correo"), ordering="user__email")
     def user_email(self, obj):
         """Correo del usuario asociado."""
 
         return obj.user.email
 
-    @admin.display(description="DNI", ordering="user__dni")
+    @admin.display(description=_("DNI"), ordering="user__dni")
     def user_dni(self, obj):
         """DNI del usuario asociado."""
 
         return obj.user.dni
 
-    @admin.display(description="Solicitudes")
+    @admin.display(description=_("Solicitudes"))
     def vacation_requests_count(self, obj):
         """Total de solicitudes registradas para el empleado."""
 

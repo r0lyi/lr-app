@@ -2,6 +2,7 @@
 
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 from apps.notifications.services import (
     create_vacation_status_changed_notification,
@@ -45,12 +46,14 @@ def review_vacation_request(
         and has_role(acting_user, "rrhh")
     ):
         raise ValidationError(
-            "No puedes revisar tu propia solicitud de vacaciones. Debe gestionarla otro usuario de RRHH."
+            _(
+                "No puedes revisar tu propia solicitud de vacaciones. Debe gestionarla otro usuario de RRHH."
+            )
         )
 
     if end_date < start_date:
         raise ValidationError(
-            "La fecha final no puede ser anterior a la fecha de inicio."
+            _("La fecha final no puede ser anterior a la fecha de inicio.")
         )
 
     if status.name in ACTIVE_REQUEST_STATUS_NAMES:
@@ -62,7 +65,9 @@ def review_vacation_request(
         )
         if overlapping_requests.exists():
             raise ValidationError(
-                "Ya existe otra solicitud activa del empleado que se solapa con ese periodo."
+                _(
+                    "Ya existe otra solicitud activa del empleado que se solapa con ese periodo."
+                )
             )
 
     new_requested_days = calculate_requested_natural_days(

@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.http import Http404
 from django.shortcuts import render
+from django.utils.translation import gettext as _
 
 from apps.core.presentation.dashboard import build_dashboard_base_context
 from apps.core.utils.decorators import role_required
@@ -25,7 +26,7 @@ def admin_user_edit_view(request, user_id):
     try:
         managed_user = get_admin_user_detail(user_id=user_id)
     except User.DoesNotExist as exc:
-        raise Http404("Usuario no encontrado.") from exc
+        raise Http404(_("Usuario no encontrado.")) from exc
 
     context = build_dashboard_base_context(
         request.user,
@@ -46,17 +47,17 @@ def _handle_admin_user_edit_post(request, user_id):
     try:
         target_user = User.objects.prefetch_related("roles").get(pk=user_id)
     except User.DoesNotExist as exc:
-        raise Http404("Usuario no encontrado.") from exc
+        raise Http404(_("Usuario no encontrado.")) from exc
 
     new_role = Role.objects.filter(pk=request.POST.get("primary_role")).first()
     desired_state = parse_boolean_post_value(request.POST.get("is_active"))
 
     if new_role is None:
-        messages.error(request, "Selecciona un rol valido antes de guardar.")
+        messages.error(request, _("Selecciona un rol valido antes de guardar."))
         return redirect_to_admin_users_target(request)
 
     if desired_state is None:
-        messages.error(request, "Selecciona un estado de acceso valido.")
+        messages.error(request, _("Selecciona un estado de acceso valido."))
         return redirect_to_admin_users_target(request)
 
     try:
@@ -76,7 +77,8 @@ def _handle_admin_user_edit_post(request, user_id):
     else:
         messages.success(
             request,
-            f"Los datos de acceso de {target_user.email} se han actualizado.",
+            _("Los datos de acceso de %(email)s se han actualizado.")
+            % {"email": target_user.email},
         )
 
     return redirect_to_admin_users_target(request)

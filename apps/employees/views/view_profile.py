@@ -5,6 +5,7 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
+from django.utils.translation import gettext as _
 
 from apps.core.presentation.dashboard import build_dashboard_base_context
 from apps.employees.forms import EmployeeProfileUpdateForm
@@ -82,7 +83,7 @@ def employee_profile_view(request):
                 )
                 messages.success(
                     request,
-                    "Tus datos de empleado se han actualizado correctamente.",
+                    _("Tus datos de empleado se han actualizado correctamente."),
                 )
                 return redirect("employees:profile")
         else:
@@ -100,7 +101,7 @@ def employee_profile_view(request):
                 )
                 messages.success(
                     request,
-                    "Tu contrasena se ha actualizado correctamente.",
+                    _("Tu contrasena se ha actualizado correctamente."),
                 )
                 return redirect("employees:profile")
 

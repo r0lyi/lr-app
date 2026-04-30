@@ -1,7 +1,9 @@
+{% load i18n %}
+
 <div class="employee-home-page">
   <header class="employee-home-hero">
     <div class="employee-home-hero__copy">
-      <h1 class="employee-home-hero__title">¡ {{ display_name }}, ya puedes gestionar tus vacaciones !</h1>
+      <h1 class="employee-home-hero__title">{% blocktranslate with name=display_name %}¡ {{ name }}, ya puedes gestionar tus vacaciones !{% endblocktranslate %}</h1>
 
     </div>
   </header>
@@ -11,10 +13,12 @@
   <section class="dash-card employee-history-card">
     <div class="employee-history-card__header">
       <div class="employee-history-card__copy">
-        <h2 class="employee-history-card__title">Historial de solicitudes</h2>
+        <h2 class="employee-history-card__title">{% translate "Historial de solicitudes" %}</h2>
         <p class="employee-history-card__description">
-          Revisa tus solicitudes registradas y utiliza los filtros para acotar por
-          fechas o por estado.
+          {% blocktranslate trimmed %}
+            Revisa tus solicitudes registradas y utiliza los filtros para acotar por
+            fechas o por estado.
+          {% endblocktranslate %}
         </p>
       </div>
 

@@ -1,32 +1,62 @@
 (function () {
+  const gettext =
+    typeof window.gettext === "function" ? window.gettext : (message) => message;
+  const interpolate =
+    typeof window.interpolate === "function"
+      ? window.interpolate
+      : function (format, values, named) {
+          if (named) {
+            return format.replace(/%\((\w+)\)s/g, function (match, key) {
+              return Object.prototype.hasOwnProperty.call(values, key)
+                ? values[key]
+                : match;
+            });
+          }
+
+          var index = 0;
+          return format.replace(/%s/g, function (match) {
+            if (!Array.isArray(values) || index >= values.length) {
+              return match;
+            }
+            var value = values[index];
+            index += 1;
+            return value;
+          });
+        };
+  const UNSELECTED_LABEL = gettext("Sin seleccionar");
+  const PENDING_LABEL = gettext("Pendiente");
+  const SELECT_BOTH_DATES_LABEL = gettext("Selecciona ambas fechas en el calendario.");
+  const SELECT_END_DATE_LABEL = gettext("Elige la fecha de fin para completar el periodo.");
+  const SELECT_START_DATE_LABEL = gettext("Elige la fecha de inicio para completar el periodo.");
+  const END_DATE_AFTER_START_LABEL = gettext("La fecha final debe ser igual o posterior a la inicial.");
   const MONTHS = [
-    "Enero",
-    "Febrero",
-    "Marzo",
-    "Abril",
-    "Mayo",
-    "Junio",
-    "Julio",
-    "Agosto",
-    "Septiembre",
-    "Octubre",
-    "Noviembre",
-    "Diciembre",
+    gettext("Enero"),
+    gettext("Febrero"),
+    gettext("Marzo"),
+    gettext("Abril"),
+    gettext("Mayo"),
+    gettext("Junio"),
+    gettext("Julio"),
+    gettext("Agosto"),
+    gettext("Septiembre"),
+    gettext("Octubre"),
+    gettext("Noviembre"),
+    gettext("Diciembre"),
   ];
 
   const SHORT_MONTHS = [
-    "ene",
-    "feb",
-    "mar",
-    "abr",
-    "may",
-    "jun",
-    "jul",
-    "ago",
-    "sep",
-    "oct",
-    "nov",
-    "dic",
+    gettext("ene"),
+    gettext("feb"),
+    gettext("mar"),
+    gettext("abr"),
+    gettext("may"),
+    gettext("jun"),
+    gettext("jul"),
+    gettext("ago"),
+    gettext("sep"),
+    gettext("oct"),
+    gettext("nov"),
+    gettext("dic"),
   ];
 
   function parseIsoDate(value) {
@@ -267,7 +297,7 @@
       if (state.selectionText) {
         state.selectionText.textContent = state.selectedDate
           ? formatBadgeDate(state.selectedDate)
-          : "Sin seleccionar";
+          : UNSELECTED_LABEL;
       }
 
       renderDays();
@@ -375,12 +405,12 @@
     }
 
     selectedRangeSummary.classList.remove("is-invalid");
-    selectedStartSummary.textContent = "Sin seleccionar";
-    selectedEndSummary.textContent = "Sin seleccionar";
+    selectedStartSummary.textContent = UNSELECTED_LABEL;
+    selectedEndSummary.textContent = UNSELECTED_LABEL;
 
     if (!startDate && !endDate) {
       selectedDaysCounter.textContent = "0";
-      selectedRangeSummary.textContent = "Selecciona ambas fechas en el calendario.";
+      selectedRangeSummary.textContent = SELECT_BOTH_DATES_LABEL;
       submitButton.disabled = true;
       updateAnnualDaysCounter(0);
       return;
@@ -389,8 +419,8 @@
     if (startDate && !endDate) {
       selectedDaysCounter.textContent = "0";
       selectedStartSummary.textContent = formatDisplayDate(startDate);
-      selectedEndSummary.textContent = "Pendiente";
-      selectedRangeSummary.textContent = "Elige la fecha de fin para completar el periodo.";
+      selectedEndSummary.textContent = PENDING_LABEL;
+      selectedRangeSummary.textContent = SELECT_END_DATE_LABEL;
       submitButton.disabled = true;
       updateAnnualDaysCounter(0);
       return;
@@ -398,9 +428,9 @@
 
     if (!startDate && endDate) {
       selectedDaysCounter.textContent = "0";
-      selectedStartSummary.textContent = "Pendiente";
+      selectedStartSummary.textContent = PENDING_LABEL;
       selectedEndSummary.textContent = formatDisplayDate(endDate);
-      selectedRangeSummary.textContent = "Elige la fecha de inicio para completar el periodo.";
+      selectedRangeSummary.textContent = SELECT_START_DATE_LABEL;
       submitButton.disabled = true;
       updateAnnualDaysCounter(0);
       return;
@@ -411,7 +441,7 @@
 
     if (endDate < startDate) {
       selectedDaysCounter.textContent = "0";
-      selectedRangeSummary.textContent = "La fecha final debe ser igual o posterior a la inicial.";
+      selectedRangeSummary.textContent = END_DATE_AFTER_START_LABEL;
       selectedRangeSummary.classList.add("is-invalid");
       submitButton.disabled = true;
       updateAnnualDaysCounter(0);
@@ -430,7 +460,11 @@
 
     const remainingDays = annualDaysTotal - totalSelectedDays;
     if (Number.isFinite(annualDaysTotal) && remainingDays < 0) {
-      selectedRangeSummary.textContent = `La selección supera tu saldo disponible en ${formatDayCount(Math.abs(remainingDays))} días.`;
+      selectedRangeSummary.textContent = interpolate(
+        gettext("La selección supera tu saldo disponible en %(days)s días."),
+        { days: formatDayCount(Math.abs(remainingDays)) },
+        true
+      );
       selectedRangeSummary.classList.add("is-invalid");
       submitButton.disabled = true;
       return;

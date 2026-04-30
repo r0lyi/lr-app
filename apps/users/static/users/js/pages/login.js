@@ -1,4 +1,7 @@
 (() => {
+  const gettext =
+    typeof window.gettext === "function" ? window.gettext : (message) => message;
+
   document.addEventListener("click", (event) => {
     const toggle = event.target.closest("[data-password-toggle]");
     if (!toggle) {
@@ -24,7 +27,9 @@
     toggle.setAttribute("aria-pressed", String(isHidden));
     toggle.setAttribute(
       "aria-label",
-      isHidden ? toggle.dataset.labelHide || "Ocultar contraseña" : toggle.dataset.labelShow || "Mostrar contraseña",
+      isHidden
+        ? toggle.dataset.labelHide || gettext("Ocultar contraseña")
+        : toggle.dataset.labelShow || gettext("Mostrar contraseña"),
     );
 
     input.focus({ preventScroll: true });

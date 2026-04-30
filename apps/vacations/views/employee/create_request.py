@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.shortcuts import redirect, render
 from django.utils import timezone
+from django.utils.translation import gettext as _
 
 from apps.core.presentation.dashboard import build_dashboard_base_context
 from apps.core.utils.decorators import role_required
@@ -57,7 +58,7 @@ def create_vacation_request_view(request):
             else:
                 messages.success(
                     request,
-                    "Tu solicitud de vacaciones se ha registrado correctamente.",
+                    _("Tu solicitud de vacaciones se ha registrado correctamente."),
                 )
                 return redirect("vacations:create-request")
     else:

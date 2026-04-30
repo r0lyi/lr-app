@@ -2,6 +2,8 @@
 
 from django.contrib import messages
 from django.shortcuts import redirect, render
+from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy
 
 from apps.core.presentation.dashboard import build_dashboard_base_context
 from apps.core.utils.decorators import role_required
@@ -32,32 +34,33 @@ def admin_home_view(request):
             )
             messages.success(
                 request,
-                f"Se ha enviado un aviso general a {len(notifications)} usuario(s).",
+                _("Se ha enviado un aviso general a %(count)s usuario(s).")
+                % {"count": len(notifications)},
             )
             return redirect("dashboard:admin-home")
 
     recipients_count = get_admin_broadcast_notification_recipients().count()
     summary_cards = [
         {
-            "label": "Total usuarios",
+            "label": gettext_lazy("Total usuarios"),
             "value": summary["total_users"],
             "icon": "users",
             "tone": "blue",
         },
         {
-            "label": "Usuarios empleados",
+            "label": gettext_lazy("Usuarios empleados"),
             "value": summary["total_employee_users"],
             "icon": "id-card",
             "tone": "green",
         },
         {
-            "label": "Usuarios RRHH",
+            "label": gettext_lazy("Usuarios RRHH"),
             "value": summary["total_rrhh_users"],
             "icon": "users",
             "tone": "orange",
         },
         {
-            "label": "Admins",
+            "label": gettext_lazy("Admins"),
             "value": summary["total_admin_users"],
             "icon": "shield",
             "tone": "dark",

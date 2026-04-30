@@ -7,6 +7,7 @@ dashboard solo usa estos datos para pintarlos en pantalla.
 
 from django.contrib.auth.hashers import UNUSABLE_PASSWORD_PREFIX
 from django.db.models import Q
+from django.utils.translation import gettext_lazy as _
 
 from apps.employees.models import Employee
 from apps.users.models import User
@@ -15,9 +16,9 @@ from apps.vacations.models import VacationRequest
 from .roles import PRIMARY_ROLE_PRIORITY
 
 ROLE_LABELS = {
-    "employee": "Empleado",
-    "rrhh": "RRHH",
-    "admin": "Administrador",
+    "employee": _("Empleado"),
+    "rrhh": _("RRHH"),
+    "admin": _("Administrador"),
 }
 
 
@@ -61,17 +62,17 @@ def _get_user_display_name(user):
     email = (user.email or "").strip()
     if "@" in email:
         return email.split("@", 1)[0]
-    return email or "Usuario"
+    return email or _("Usuario")
 
 
 def _get_access_status_label(user):
     """Devuelve un estado de acceso redactado de forma entendible."""
 
     if user.is_active:
-        return "Acceso activo"
+        return _("Acceso activo")
     if not user.has_usable_password():
-        return "Pendiente de activar"
-    return "Acceso desactivado"
+        return _("Pendiente de activar")
+    return _("Acceso desactivado")
 
 
 def get_admin_dashboard_summary():
@@ -147,7 +148,7 @@ def _build_admin_user_row(user):
         "primary_role_name": primary_role_name,
         "primary_role_label": ROLE_LABELS.get(
             primary_role_name,
-            "Sin rol",
+            _("Sin rol"),
         ),
         "has_employee_profile": employee_profile is not None,
         "can_change_primary_role": not user.is_superuser,

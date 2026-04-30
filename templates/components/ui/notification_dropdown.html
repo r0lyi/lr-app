@@ -1,8 +1,10 @@
+{% load i18n %}
+
 <div class="dash-notifications" data-notifications>
   <button
     class="dash-notifications__button"
     type="button"
-    aria-label="Abrir notificaciones"
+    aria-label="{% translate 'Abrir notificaciones' %}"
     aria-expanded="false"
     aria-controls="dash-notifications-panel"
     data-notifications-toggle
@@ -21,17 +23,17 @@
   <section
     class="dash-notifications__panel"
     id="dash-notifications-panel"
-    aria-label="Panel de notificaciones"
+    aria-label="{% translate 'Panel de notificaciones' %}"
     hidden
   >
     <header class="dash-notifications__header">
       <div>
-        <h2 class="dash-notifications__title">Notificaciones</h2>
+        <h2 class="dash-notifications__title">{% translate "Notificaciones" %}</h2>
         <p class="dash-notifications__subtitle">
           {% if unread_notifications_count %}
-            {{ unread_notifications_count }} sin leer
+            {% blocktranslate count counter=unread_notifications_count %}{{ counter }} sin leer{% plural %}{{ counter }} sin leer{% endblocktranslate %}
           {% else %}
-            Todo al dia
+            {% translate "Todo al dia" %}
           {% endif %}
         </p>
       </div>
@@ -41,14 +43,14 @@
             {% csrf_token %}
             <input type="hidden" name="next" value="{{ notifications_return_path }}">
             <button class="dash-notifications__mark-all" type="submit">
-              Marcar todas
+              {% translate "Marcar todas" %}
             </button>
           </form>
         {% endif %}
         <button
           class="dash-notifications__close"
           type="button"
-          aria-label="Cerrar notificaciones"
+          aria-label="{% translate 'Cerrar notificaciones' %}"
           data-notifications-close
         >
           <span></span><span></span>
@@ -76,7 +78,7 @@
                 <p class="dash-notifications__message">{{ notification.message }}</p>
                 {% if notification.created_by %}
                   <p class="dash-notifications__sender">
-                    Enviado por {{ notification.created_by.email }}
+                    {% blocktranslate with email=notification.created_by.email %}Enviado por {{ email }}{% endblocktranslate %}
                   </p>
                 {% endif %}
               </div>
@@ -89,11 +91,11 @@
                     {% csrf_token %}
                     <input type="hidden" name="next" value="{{ notifications_return_path }}">
                     <button class="dash-notifications__mark-read" type="submit">
-                      Marcar como leida
+                      {% translate "Marcar como leida" %}
                     </button>
                   </form>
                 {% else %}
-                  <span class="dash-notifications__read-label">Leida</span>
+                  <span class="dash-notifications__read-label">{% translate "Leida" %}</span>
                 {% endif %}
               </div>
             </li>
@@ -101,8 +103,8 @@
         </ul>
       {% else %}
         <div class="dash-notifications__empty">
-          <strong>No tienes notificaciones</strong>
-          <p>Cuando haya cambios importantes en solicitudes o revisiones, apareceran aqui.</p>
+          <strong>{% translate "No tienes notificaciones" %}</strong>
+          <p>{% translate "Cuando haya cambios importantes en solicitudes o revisiones, apareceran aqui." %}</p>
         </div>
       {% endif %}
     </div>
@@ -110,17 +112,17 @@
     {% if notifications_page_obj and notifications_page_obj.paginator.num_pages > 1 %}
       <footer class="dash-notifications__footer">
         <span class="dash-notifications__page-indicator">
-          Pagina {{ notifications_page_obj.number }} de {{ notifications_page_obj.paginator.num_pages }}
+          {% blocktranslate with page=notifications_page_obj.number pages=notifications_page_obj.paginator.num_pages %}Pagina {{ page }} de {{ pages }}{% endblocktranslate %}
         </span>
         <div class="dash-notifications__pagination">
           {% if notifications_previous_page_url %}
             <a class="dash-notifications__page-link" href="{{ notifications_previous_page_url }}">
-              Anterior
+              {% translate "Anterior" %}
             </a>
           {% endif %}
           {% if notifications_next_page_url %}
             <a class="dash-notifications__page-link" href="{{ notifications_next_page_url }}">
-              Siguiente
+              {% translate "Siguiente" %}
             </a>
           {% endif %}
         </div>

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-{% load static %}
+{% load i18n static %}
 
-{% block title %}Completa tu perfil{% endblock %}
+{% block title %}{% translate "Completa tu perfil" %}{% endblock %}
 
 {% block content %}
   {% include "employees/partials/onboarding/content.html" %}

@@ -3,6 +3,7 @@
 from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.translation import gettext as _
 
 from apps.audit.forms import ExportHistoryFilterForm
 from apps.audit.services import EXPORT_TYPE_RRHH_VACATION_REQUESTS
@@ -76,7 +77,7 @@ def download_export_history_file_view(request, export_history_id):
     )
 
     if export_history.rows_snapshot_json is None:
-        messages.error(request, "Esta exportacion no tiene snapshot disponible.")
+        messages.error(request, _("Esta exportacion no tiene snapshot disponible."))
         return redirect("audit:export-history")
 
     file_bytes = build_rrhh_vacation_requests_excel_from_snapshot(
@@ -107,7 +108,7 @@ def preview_export_history_file_view(request, export_history_id):
     )
 
     if export_history.rows_snapshot_json is None:
-        messages.error(request, "Esta exportacion no tiene snapshot disponible.")
+        messages.error(request, _("Esta exportacion no tiene snapshot disponible."))
         return redirect("audit:export-history")
 
     current_role = get_primary_role(request.user) or "rrhh"
