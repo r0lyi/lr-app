@@ -206,9 +206,9 @@
 
 .employee-history-card__header {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(360px, 640px);
+  grid-template-columns: minmax(220px, 0.34fr) minmax(0, 1fr);
   gap: 20px;
-  align-items: end;
+  align-items: center;
   padding-bottom: 20px;
   border-bottom: 1px solid rgba(148, 163, 184, 0.18);
 }
@@ -239,7 +239,7 @@
 
 .employee-filters-form {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
+  grid-template-columns: repeat(3, minmax(150px, 1fr));
   gap: 12px;
   align-items: end;
 }
@@ -291,7 +291,9 @@
 }
 
 .employee-filters-form__actions {
+  grid-column: 1 / -1;
   justify-content: flex-end;
+  justify-self: end;
 }
 
 .employee-history-table {
@@ -724,7 +726,7 @@
 }
 
 .employee-history-card__header {
-  grid-template-columns: minmax(0, 1fr) minmax(340px, 620px);
+  grid-template-columns: minmax(220px, 0.34fr) minmax(0, 1fr);
   gap: 20px;
   align-items: center;
   padding-bottom: 20px;
@@ -739,7 +741,7 @@
 }
 
 .employee-filters-form {
-  grid-template-columns: repeat(3, minmax(0, 1fr)) auto auto;
+  grid-template-columns: repeat(3, minmax(150px, 1fr));
   gap: 12px 10px;
 }
 

@@ -210,6 +210,10 @@ msgstr "Filter"
 msgid "Limpiar"
 msgstr "Clear"
 
+#: apps/vacations/templates/vacations/partials/create_request/top.html:2
+msgid "Actualizar"
+msgstr "Refresh"
+
 #: apps/audit/templates/audit/partials/audit_log/table.html:2
 msgid "Sin detalle disponible."
 msgstr "No detail available."
@@ -684,12 +688,6 @@ msgstr "%(name)s, you can now manage your holidays!"
 msgid "Historial de solicitudes"
 msgstr "Request history"
 
-#: apps/employees/templates/employees/partials/dashboard/home/content.html:18
-msgid ""
-"Revisa tus solicitudes registradas y utiliza los filtros para acotar por "
-"fechas o por estado."
-msgstr "Review your registered requests and use filters to narrow down by date or status."
-
 #: apps/employees/templates/employees/partials/dashboard/home/delete_modal.html:2
 msgid "No, mantener"
 msgstr "No, keep it"
@@ -868,8 +866,8 @@ msgid "Ej. Juan"
 msgstr "E.g. John"
 
 #: apps/employees/templates/employees/partials/onboarding/form.html:5
-msgid "Ej. García"
-msgstr "E.g. Smith"
+msgid "Ej. García Perez"
+msgstr "E.g. Smith Perez"
 
 #: apps/employees/templates/employees/partials/onboarding/form.html:7
 msgid "Ej. nombre@empresa.com"

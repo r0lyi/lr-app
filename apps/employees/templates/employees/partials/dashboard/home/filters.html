@@ -19,5 +19,5 @@
       {{ filter_form.status }}
     </div>
   </div>
-  {% include "components/ui/filter_actions.html" with reset_url=filter_reset_url class_name="employee-filters-form__actions" %}
+  {% include "components/ui/filter_actions.html" with reset_url=filter_reset_url refresh_url=request.get_full_path class_name="employee-filters-form__actions" %}
 </form>
