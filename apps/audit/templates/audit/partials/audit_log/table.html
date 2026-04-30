@@ -1,4 +1,4 @@
-<div class="audit-log-table">
+<div class="audit-log-table" role="region" aria-label="Historial de actividad" tabindex="0">
   {% if audit_logs %}
     <table class="data-table">
       <thead>
@@ -7,7 +7,6 @@
           <th>Tipo de cambio</th>
           <th>Realizado por</th>
           <th>Qué sucedió</th>
-          <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
@@ -32,33 +31,6 @@
             </td>
             <td data-label="Realizado por">{{ audit_item.user.email }}</td>
             <td data-label="Qué sucedió">{{ audit_item.description|default:"Sin detalle disponible." }}</td>
-            <td data-label="Acciones">
-              <div class="audit-log-table__actions">
-                {% if audit_item.resource_type == audit_resource_type_user %}
-                  <a
-                    class="audit-log-table__view-link"
-                    href="{% url 'dashboard:admin-user-edit' audit_item.resource_id %}"
-                    aria-label="Ver usuario relacionado"
-                    title="Ver usuario relacionado"
-                  >
-                    {% include "components/ui/icon.html" with name="eye" %}
-                  </a>
-                {% elif audit_item.resource_type == audit_resource_type_vacation_request %}
-                  <a
-                    class="audit-log-table__view-link"
-                    href="{% url 'vacations:review-request' audit_item.resource_id %}"
-                    aria-label="Ver solicitud relacionada"
-                    title="Ver solicitud relacionada"
-                  >
-                    {% include "components/ui/icon.html" with name="eye" %}
-                  </a>
-                {% else %}
-                  <span class="audit-log-table__view-link audit-log-table__view-link--disabled" aria-hidden="true">
-                    {% include "components/ui/icon.html" with name="eye" %}
-                  </span>
-                {% endif %}
-              </div>
-            </td>
           </tr>
         {% endfor %}
       </tbody>
@@ -70,4 +42,4 @@
   {% endif %}
 </div>
 
-{% include "components/ui/table_footer.html" with total_count=audit_logs_count item_label_plural="actividades" aria_label="Paginación del historial de actividad" %}
+{% include "components/ui/table_footer.html" with total_count=audit_logs_count item_label_plural="actividades" aria_label="Paginación del historial de actividad" class_name="audit-log-card__footer" %}

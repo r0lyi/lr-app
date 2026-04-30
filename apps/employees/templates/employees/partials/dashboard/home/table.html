@@ -12,19 +12,27 @@
     </thead>
     <tbody>
       {% for request_item in employee_requests %}
-        <tr>
-          <td data-label="Nro">{{ page_obj.start_index|add:forloop.counter0 }}</td>
-          <td data-label="Fecha solicitud">{{ request_item.created_at|date:"d-m-Y" }}</td>
-          <td data-label="Rango de fechas">
-            {{ request_item.start_date|date:"d-m-Y" }} - {{ request_item.end_date|date:"d-m-Y" }}
+        <tr class="employee-history-table__row">
+          <td class="employee-history-table__number" data-label="Nro">
+            {{ page_obj.start_index|add:forloop.counter0 }}
           </td>
-          <td data-label="Total días">{{ request_item.requested_days }}</td>
-          <td data-label="Estado">
+          <td class="employee-history-table__date" data-label="Fecha solicitud">
+            {{ request_item.created_at|date:"d-m-Y" }}
+          </td>
+          <td class="employee-history-table__range" data-label="Rango de fechas">
+            <span class="employee-history-table__range-value">
+              <span>{{ request_item.start_date|date:"d-m-Y" }}</span>
+              <span class="employee-history-table__range-separator" aria-hidden="true">-</span>
+              <span>{{ request_item.end_date|date:"d-m-Y" }}</span>
+            </span>
+          </td>
+          <td class="employee-history-table__days" data-label="Total días">{{ request_item.requested_days }}</td>
+          <td class="employee-history-table__state" data-label="Estado">
             <span class="employee-history-table__status employee-history-table__status--{{ request_item.status.name }}">
               {{ request_item.status }}
             </span>
           </td>
-          <td data-label="Acciones">
+          <td class="employee-history-table__actions" data-label="Acciones">
             {% if request_item.status.name == "pending" %}
               <button
                 class="employee-history-table__delete"
@@ -50,7 +58,7 @@
           </td>
         </tr>
       {% empty %}
-        <tr>
+        <tr class="employee-history-table__empty-row">
           <td class="employee-history-table__empty" colspan="6">No hay solicitudes registradas con estos filtros.</td>
         </tr>
       {% endfor %}
@@ -58,4 +66,4 @@
   </table>
 </div>
 
-{% include "components/ui/table_footer.html" with total_count=filtered_employee_requests_count item_label_plural="solicitudes" aria_label="Paginación de solicitudes del empleado" %}
+{% include "components/ui/table_footer.html" with total_count=filtered_employee_requests_count item_label_plural="solicitudes" aria_label="Paginación de solicitudes del empleado" class_name="employee-history-card__footer" %}

@@ -87,14 +87,14 @@ class AuditLogViewTests(DashboardRoleBaseTestCase):
         self.assertContains(response, "Tipo de cambio")
         self.assertContains(response, "Realizado por")
         self.assertContains(response, "Qué sucedió")
-        self.assertContains(response, "Acciones")
+        self.assertNotContains(response, "Acciones")
         self.assertContains(response, "Total Actividades")
         self.assertContains(response, "Usuarios Creados")
         self.assertContains(response, "Cambios de Usuario")
         self.assertContains(response, "Solicitudes Editadas")
         self.assertNotContains(response, "Cambios de Departamento")
         self.assertNotContains(response, "Cambio de departamento")
-        self.assertContains(
+        self.assertNotContains(
             response,
             reverse("dashboard:admin-user-edit", args=[admin_user.pk]),
         )
@@ -203,7 +203,7 @@ class AuditLogViewTests(DashboardRoleBaseTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Solicitud editada")
         self.assertContains(response, "estado de Pendiente a Aprobada")
-        self.assertContains(
+        self.assertNotContains(
             response,
             reverse("vacations:review-request", args=[vacation_request.pk]),
         )
