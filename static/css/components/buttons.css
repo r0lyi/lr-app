@@ -101,6 +101,27 @@
   background: #dbeafe;
 }
 
+.ui-btn--refresh-action.ui-btn--secondary {
+  border-color: rgba(20, 184, 166, 0.42);
+  background: linear-gradient(180deg, #ffffff 0%, #eefcf9 100%);
+  color: #0f766e;
+  font-weight: 800;
+  box-shadow: 0 10px 22px rgba(15, 118, 110, 0.12);
+}
+
+.ui-btn--refresh-action.ui-btn--secondary:hover:not(:disabled) {
+  border-color: rgba(13, 148, 136, 0.62);
+  background: #e6fffb;
+  color: #0f5f58;
+  transform: translateY(-1px);
+  box-shadow: 0 14px 28px rgba(15, 118, 110, 0.16);
+}
+
+.ui-btn--refresh-action.ui-btn--secondary:active:not(:disabled) {
+  background: #ccfbf1;
+  transform: scale(0.98);
+}
+
 .ui-btn--cancel {
   border-color: #e2e8f0;
   background: #f1f5f9;
@@ -134,28 +155,33 @@
 }
 
 .filter-actions {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(112px, 1fr));
   align-items: end;
-  justify-content: flex-end;
+  justify-content: end;
   gap: 10px;
-  flex-wrap: wrap;
+  width: min(100%, 456px);
 }
 
 .filter-actions .ui-btn {
+  width: 100%;
+  min-width: 0;
   min-height: 54px;
   border-radius: 8px;
   box-shadow: none;
+  text-align: center;
+  white-space: normal;
 }
 
 .filter-actions__submit.ui-btn {
-  min-width: 132px;
+  min-width: 0;
   padding-inline: 22px;
   font-size: 16px;
   font-weight: 800;
 }
 
 .filter-actions__reset.ui-btn {
-  min-width: 112px;
+  min-width: 0;
   border-color: #d7dee8;
   color: #64748b;
   font-size: 16px;
@@ -168,14 +194,18 @@
   color: #334155;
 }
 
+.filter-actions__refresh.ui-btn {
+  min-width: 0;
+  font-size: 16px;
+}
+
 @media (max-width: 760px) {
   .filter-actions {
     width: 100%;
-    justify-content: stretch;
+    grid-template-columns: 1fr;
   }
 
   .filter-actions .ui-btn {
-    width: 100%;
-    min-width: 0;
+    min-height: 50px;
   }
 }

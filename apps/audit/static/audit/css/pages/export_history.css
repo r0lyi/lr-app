@@ -143,7 +143,7 @@
 
 .export-history-filters-form__grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr)) auto;
+  grid-template-columns: repeat(2, minmax(180px, 1fr));
   gap: 16px;
   align-items: end;
 }
@@ -196,7 +196,9 @@
 }
 
 .export-history-filters-form__actions {
+  grid-column: 1 / -1;
   align-self: end;
+  justify-self: end;
 }
 
 .export-history-info-banner {
@@ -424,7 +426,7 @@
 
   .export-history-filters-form__actions {
     grid-column: 1 / -1;
-    justify-content: flex-start;
+    justify-self: end;
   }
 }
 
@@ -456,6 +458,7 @@
 
   .export-history-filters-form__actions {
     grid-column: auto;
+    justify-self: stretch;
   }
 
   .export-history-info-banner {

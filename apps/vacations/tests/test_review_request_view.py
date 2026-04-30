@@ -86,6 +86,9 @@ class VacationRequestReviewViewTests(VacationBaseTestCase):
         self.assertContains(response, "Ana")
         self.assertContains(response, "Lopez")
         self.assertContains(response, "Guardar revision")
+        self.assertNotContains(response, "Rango actual")
+        self.assertContains(response, 'name="start_date" value="2026-07-01"')
+        self.assertContains(response, 'name="end_date" value="2026-07-05"')
 
     def test_rrhh_can_update_status_and_dates(self):
         rrhh_user = self.create_rrhh_user(

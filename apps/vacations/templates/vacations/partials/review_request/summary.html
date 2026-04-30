@@ -16,12 +16,6 @@
     </p>
   </article>
   <article class="review-request-summary__card">
-    <p class="review-request-summary__label">{% translate "Rango actual" %}</p>
-    <p class="review-request-summary__value">
-      {{ vacation_request.start_date|date:"d-m-Y" }} - {{ vacation_request.end_date|date:"d-m-Y" }}
-    </p>
-  </article>
-  <article class="review-request-summary__card">
     <p class="review-request-summary__label">{% translate "Dias actuales" %}</p>
     <p class="review-request-summary__value">{{ vacation_request.requested_days|floatformat:"2u" }}</p>
   </article>
