@@ -1260,3 +1260,153 @@
     gap: 7px;
   }
 }
+
+/* Final overflow guard: only the users table scrolls horizontally. */
+.admin-users-content,
+.admin-users-page,
+.admin-users-hero,
+.admin-users-hero__copy,
+.admin-users-summary,
+.admin-users-summary__card,
+.admin-users-card,
+.admin-users-filters,
+.admin-users-filters__grid,
+.admin-users-filters__field,
+.admin-users-table {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.admin-users-hero__title,
+.admin-users-hero__description,
+.admin-users-summary__label,
+.admin-users-table__name,
+.admin-users-table__meta {
+  overflow-wrap: anywhere;
+}
+
+.admin-users-card--table {
+  overflow: hidden;
+}
+
+.admin-users-table {
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 640px) {
+  .admin-users-card--table {
+    overflow: hidden;
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    background: #ffffff;
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+  }
+
+  .admin-users-table {
+    overflow-x: auto;
+    overflow-y: hidden;
+    border-top: 1px solid #edf2f7;
+  }
+
+  .admin-users-table .data-table {
+    display: table;
+    width: 100%;
+    min-width: 760px;
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 14px;
+  }
+
+  .admin-users-table .data-table thead {
+    display: table-header-group;
+  }
+
+  .admin-users-table .data-table tbody {
+    display: table-row-group;
+    padding: 0;
+  }
+
+  .admin-users-table .data-table tr {
+    display: table-row;
+    width: auto;
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .admin-users-table .data-table th,
+  .admin-users-table .data-table td,
+  .admin-users-table .data-table th:nth-child(n),
+  .admin-users-table .data-table td:nth-child(n) {
+    display: table-cell;
+    width: auto;
+    padding: 12px;
+    border-bottom: 1px solid #edf2f7;
+    text-align: left;
+    vertical-align: middle;
+    white-space: normal;
+  }
+
+  .admin-users-table .data-table td:first-child,
+  .admin-users-table .data-table thead th:first-child,
+  .admin-users-table .data-table tbody td:first-child {
+    position: static;
+    left: auto;
+    z-index: auto;
+    background: #ffffff;
+    box-shadow: none;
+  }
+
+  .admin-users-table .data-table thead th:first-child {
+    background: #f8fafc;
+  }
+
+  .admin-users-table .data-table tbody tr:hover td,
+  .admin-users-table .data-table tbody tr:hover td:first-child {
+    background: #fbfdff;
+  }
+
+  .admin-users-table .data-table td::before,
+  .admin-users-table .data-table td[data-label="Usuario"]::before {
+    content: none;
+    display: none;
+  }
+
+  .admin-users-table .data-table td[data-label="Usuario"] {
+    display: table-cell;
+    padding: 12px;
+    background: #ffffff;
+  }
+
+  .admin-users-table__role,
+  .admin-users-table__status {
+    justify-self: auto;
+    white-space: normal;
+  }
+
+  .admin-users-table__actions {
+    justify-content: flex-start;
+  }
+
+  .admin-users-table__edit-link {
+    width: auto;
+    min-height: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    white-space: normal;
+  }
+
+  .admin-users-card--table .ui-table-footer {
+    margin-top: 0;
+    padding: 12px 14px 14px;
+    border-top: 1px solid #edf2f7;
+    background: #ffffff;
+  }
+}

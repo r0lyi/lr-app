@@ -4,7 +4,9 @@
 
 /* ── Wrapper con scroll horizontal ── */
 .data-table-wrapper {
+  max-width: 100%;
   overflow-x: auto;
+  overflow-y: hidden;
   border-radius: 10px;
   border: 1px solid #e2e8f0;
   -webkit-overflow-scrolling: touch;

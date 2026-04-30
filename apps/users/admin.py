@@ -279,7 +279,6 @@ class UserAdmin(DjangoUserAdmin):
         except Employee.DoesNotExist:
             return _("Sin ficha")
 
-<<<<<<< HEAD
     def get_deleted_objects(self, objs, request):
         """Permite cascada de historiales al borrar usuarios desde este admin.
 
@@ -311,10 +310,7 @@ class UserAdmin(DjangoUserAdmin):
 
         delete_users_with_related_data(queryset)
 
-    @admin.action(description="Activar usuarios seleccionados")
-=======
     @admin.action(description=gettext_lazy("Activar usuarios seleccionados"))
->>>>>>> 14f88e55cd4638b7b4dccdac6ee82c5474aafe23
     def activate_users(self, request, queryset):
         """Activa cuentas seleccionadas solo si ya tienen contrasena usable."""
 

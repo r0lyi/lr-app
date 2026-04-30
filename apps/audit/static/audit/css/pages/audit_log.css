@@ -465,7 +465,7 @@
 }
 
 .audit-log-table .data-table {
-  min-width: 980px;
+  min-width: 1080px;
   table-layout: fixed;
   border-collapse: separate;
   border-spacing: 0;
@@ -491,6 +491,11 @@
   width: auto;
 }
 
+.audit-log-table .data-table th:nth-child(5),
+.audit-log-table .data-table td:nth-child(5) {
+  width: 110px;
+}
+
 .audit-log-table .data-table thead th {
   white-space: nowrap;
 }
@@ -507,6 +512,40 @@
 .audit-log-table__badge {
   text-align: center;
   white-space: normal;
+}
+
+.audit-log-table__actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.audit-log-table__view-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  color: #6b7280;
+  background: #f8fafc;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.audit-log-table__view-link svg {
+  width: 18px;
+  height: 18px;
+}
+
+.audit-log-table__view-link:hover {
+  background: #e0f2fe;
+  color: #0284c7;
+  transform: translateY(-1px);
+}
+
+.audit-log-table__view-link--disabled {
+  opacity: 0.45;
+  pointer-events: none;
 }
 
 .audit-log-card__footer {
@@ -617,7 +656,7 @@
 
   .audit-log-table .data-table {
     display: table;
-    min-width: 820px;
+    min-width: 920px;
   }
 
   .audit-log-table .data-table th:nth-child(1),
@@ -633,6 +672,11 @@
   .audit-log-table .data-table th:nth-child(3),
   .audit-log-table .data-table td:nth-child(3) {
     width: 220px;
+  }
+
+  .audit-log-table .data-table th:nth-child(5),
+  .audit-log-table .data-table td:nth-child(5) {
+    width: 100px;
   }
 }
 
@@ -824,6 +868,10 @@
     justify-self: start;
   }
 
+  .audit-log-table .data-table td[data-label="Acciones"] .audit-log-table__actions {
+    justify-content: flex-start;
+  }
+
   .audit-log-table__badge {
     min-width: 0;
     min-height: 30px;
@@ -872,5 +920,114 @@
   .audit-log-table .data-table td {
     grid-template-columns: 1fr;
     gap: 7px;
+  }
+}
+
+/* Final overflow guard: only the activity table scrolls horizontally. */
+.audit-log-content,
+.audit-log-page,
+.audit-log-hero,
+.audit-log-hero__copy,
+.audit-log-summary,
+.audit-log-summary__card,
+.audit-log-card,
+.audit-log-filters,
+.audit-log-filters__grid,
+.audit-log-filters__field,
+.audit-log-table {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.audit-log-hero__title,
+.audit-log-hero__description,
+.audit-log-summary__label,
+.audit-log-table .data-table tbody td {
+  overflow-wrap: anywhere;
+}
+
+.audit-log-card--table {
+  overflow: hidden;
+}
+
+.audit-log-table {
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 640px) {
+  .audit-log-card--table {
+    overflow: hidden;
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    background: #ffffff;
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+  }
+
+  .audit-log-table {
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .audit-log-table .data-table {
+    display: table;
+    width: 100%;
+    min-width: 840px;
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  .audit-log-table .data-table thead {
+    display: table-header-group;
+  }
+
+  .audit-log-table .data-table tbody {
+    display: table-row-group;
+  }
+
+  .audit-log-table .data-table tr {
+    display: table-row;
+    width: auto;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .audit-log-table .data-table th,
+  .audit-log-table .data-table td,
+  .audit-log-table .data-table th:nth-child(n),
+  .audit-log-table .data-table td:nth-child(n) {
+    display: table-cell;
+    width: auto;
+    padding: 13px 14px;
+    border-bottom: 1px solid #edf2f7;
+    text-align: left;
+    vertical-align: middle;
+    white-space: normal;
+  }
+
+  .audit-log-table .data-table td::before {
+    content: none;
+  }
+
+  .audit-log-table .data-table tbody tr:hover td {
+    background: #fbfdff;
+  }
+
+  .audit-log-table .data-table td[data-label="Tipo de cambio"] .audit-log-table__badge {
+    justify-self: auto;
+  }
+
+  .audit-log-table .data-table td[data-label="Acciones"] .audit-log-table__actions {
+    justify-content: center;
+  }
+
+  .audit-log-card__footer {
+    padding: 12px 14px 14px;
+    background: #ffffff;
   }
 }

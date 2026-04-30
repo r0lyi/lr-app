@@ -1428,3 +1428,39 @@
     justify-self: auto;
   }
 }
+
+/* Final overflow guard: the page never grows wider than the viewport. */
+.dash-content.employee-home-content,
+.employee-home-page,
+.employee-home-hero,
+.employee-home-summary,
+.employee-home-summary-card,
+.employee-history-card,
+.employee-history-card__header,
+.employee-history-card__copy,
+.employee-history-card__filters,
+.employee-filters-form,
+.employee-filters-form .filter-group {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.employee-home-hero__title,
+.employee-home-hero__description,
+.employee-history-card__title,
+.employee-history-card__description,
+.employee-home-summary-card__label,
+.employee-home-summary-card__note {
+  overflow-wrap: anywhere;
+}
+
+.employee-history-table {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-inline: contain;
+}
+
+.employee-history-table .data-table {
+  width: 100%;
+}

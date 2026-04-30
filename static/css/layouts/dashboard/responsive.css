@@ -1,6 +1,7 @@
 @media (max-width: 1240px) {
   .dash {
-    grid-template-columns: 236px minmax(0, 1fr);
+    --dash-sidebar-width: 236px;
+    grid-template-columns: var(--dash-sidebar-width) minmax(0, 1fr);
   }
 
   .dash-main {
@@ -16,7 +17,8 @@
 
 @media (max-width: 1100px) {
   .dash {
-    grid-template-columns: 220px minmax(0, 1fr);
+    --dash-sidebar-width: 220px;
+    grid-template-columns: var(--dash-sidebar-width) minmax(0, 1fr);
   }
 
   .dash-main {
@@ -139,6 +141,7 @@
   }
 
   .dash-main {
+    grid-column: 1;
     min-height: 100vh;
     --dash-main-inline-start: 16px;
     --dash-main-inline-end: 16px;
