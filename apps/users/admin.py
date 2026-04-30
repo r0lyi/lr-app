@@ -7,9 +7,15 @@ from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.utils.translation import gettext as _
 from django.utils.translation import gettext_lazy
 
+from apps.audit.models import AuditLog
 from apps.employees.models import Employee
 from apps.users.models import Role, User, UserRole
 from apps.users.selectors import get_primary_role
+from apps.users.services.admin import (
+    delete_user_with_related_data,
+    delete_users_with_related_data,
+)
+from apps.vacations.models import VacationRequestHistory
 
 
 class UserAdminCreationForm(forms.ModelForm):
@@ -273,7 +279,42 @@ class UserAdmin(DjangoUserAdmin):
         except Employee.DoesNotExist:
             return _("Sin ficha")
 
+<<<<<<< HEAD
+    def get_deleted_objects(self, objs, request):
+        """Permite cascada de historiales al borrar usuarios desde este admin.
+
+        Los paneles propios de auditoria e historial siguen siendo inmutables,
+        pero si se borra un usuario completo desde ``/admin/`` sus registros
+        dependientes deben poder caer con la misma operación.
+        """
+
+        deleted_objects, model_count, perms_needed, protected = (
+            super().get_deleted_objects(
+                objs,
+                request,
+            )
+        )
+        allowed_cascade_names = {
+            AuditLog._meta.verbose_name,
+            VacationRequestHistory._meta.verbose_name,
+        }
+        perms_needed = set(perms_needed) - allowed_cascade_names
+        return deleted_objects, model_count, perms_needed, protected
+
+    def delete_model(self, request, obj):
+        """Borra usuarios desde admin incluyendo relaciones genericas."""
+
+        delete_user_with_related_data(obj)
+
+    def delete_queryset(self, request, queryset):
+        """Borra selecciones masivas usando la misma limpieza que el detalle."""
+
+        delete_users_with_related_data(queryset)
+
+    @admin.action(description="Activar usuarios seleccionados")
+=======
     @admin.action(description=gettext_lazy("Activar usuarios seleccionados"))
+>>>>>>> 14f88e55cd4638b7b4dccdac6ee82c5474aafe23
     def activate_users(self, request, queryset):
         """Activa cuentas seleccionadas solo si ya tienen contrasena usable."""
 

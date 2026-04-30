@@ -22,7 +22,7 @@ class AuditLog(CreatedAtModel):
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         related_name="audit_logs",
     )
     action = models.CharField(max_length=50)

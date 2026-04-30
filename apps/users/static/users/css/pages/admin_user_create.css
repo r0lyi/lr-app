@@ -4,6 +4,7 @@
 
 .admin-user-create-modal .ui-modal__content {
   width: min(640px, calc(100% - 32px));
+  max-height: calc(100dvh - 32px);
   border-radius: 22px;
   overflow: hidden;
 }
@@ -35,6 +36,7 @@
   flex-direction: column;
   gap: 18px;
   padding: 22px 24px 26px;
+  overflow-y: auto;
 }
 
 .admin-user-create-modal__form {
@@ -85,6 +87,7 @@
 
   .admin-user-create-modal .ui-modal__content {
     width: 100%;
+    max-height: calc(100dvh - 28px);
     border-radius: 18px;
   }
 
@@ -100,5 +103,37 @@
 
   .admin-user-create-modal__footer .ui-btn {
     width: 100%;
+  }
+}
+
+@media (max-width: 420px) {
+  .admin-user-create-modal {
+    padding: 10px;
+  }
+
+  .admin-user-create-modal .ui-modal__content {
+    max-height: calc(100dvh - 20px);
+    border-radius: 14px;
+  }
+
+  .admin-user-create-modal__header {
+    padding-top: 18px;
+    padding-bottom: 14px;
+  }
+
+  .admin-user-create-modal__body {
+    gap: 14px;
+    padding-top: 18px;
+    padding-bottom: 20px;
+  }
+
+  .admin-user-create-modal__fields {
+    gap: 12px;
+  }
+
+  .admin-user-create-modal__subtitle,
+  .admin-user-create-modal__note {
+    font-size: 14px;
+    line-height: 1.5;
   }
 }
