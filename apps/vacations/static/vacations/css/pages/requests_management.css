@@ -999,3 +999,121 @@
     gap: 6px;
   }
 }
+
+/* Final overflow guard: only the requests table scrolls horizontally. */
+.dash-content.rrhh-requests-content,
+.rrhh-home-page,
+.rrhh-home-hero,
+.rrhh-home-hero__copy,
+.rrhh-home-actions,
+.rrhh-filters-card,
+.rrhh-filters-form,
+.rrhh-info-banner,
+.rrhh-info-banner__header,
+.rrhh-info-banner__title-block,
+.rrhh-info-banner__grid,
+.rrhh-info-banner__item,
+.rrhh-alert-log,
+.rrhh-alert-log__entry-copy,
+.rrhh-summary-grid,
+.rrhh-summary-card,
+.rrhh-table-card,
+.rrhh-table-card__table-wrapper {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.rrhh-home-hero__title,
+.rrhh-home-hero__description,
+.rrhh-info-banner__title,
+.rrhh-info-banner__text,
+.rrhh-info-banner__item-title,
+.rrhh-info-banner__item-description,
+.rrhh-alert-log__title,
+.rrhh-alert-log__description,
+.rrhh-alert-log__entry-label,
+.rrhh-alert-log__entry-text,
+.rrhh-summary-card__label,
+.rrhh-summary-card__note {
+  overflow-wrap: anywhere;
+}
+
+.rrhh-table-card.dash-card {
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  background: #ffffff;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+}
+
+.rrhh-table-card__table-wrapper {
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.rrhh-table {
+  width: 100%;
+  min-width: 980px;
+}
+
+@media (max-width: 760px) {
+  .rrhh-table-card.dash-card {
+    overflow: hidden;
+    border: 1px solid rgba(148, 163, 184, 0.14);
+    background: #ffffff;
+    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.06);
+  }
+
+  .rrhh-table-card__table-wrapper {
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .rrhh-table {
+    display: table;
+    width: 100%;
+    min-width: 900px;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  .rrhh-table thead {
+    display: table-header-group;
+  }
+
+  .rrhh-table tbody {
+    display: table-row-group;
+  }
+
+  .rrhh-table tr {
+    display: table-row;
+    width: auto;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .rrhh-table th,
+  .rrhh-table td {
+    display: table-cell;
+    width: auto;
+    padding: 13px 14px;
+    border-bottom: 1px solid #edf2f7;
+    text-align: left;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  .rrhh-table td::before {
+    content: none;
+  }
+
+  .rrhh-table td[data-label="Estado"],
+  .rrhh-table td[data-label="Acciones"] {
+    align-items: center;
+    justify-content: flex-start;
+  }
+}

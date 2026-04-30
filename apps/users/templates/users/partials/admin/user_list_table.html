@@ -1,8 +1,9 @@
 {% load i18n %}
+{% translate "Lista de usuarios" as users_table_label %}
 {% translate "usuarios" as users_item_label %}
 {% translate "Paginación de usuarios" as users_pagination_label %}
 
-<div class="admin-users-table">
+<div class="admin-users-table" role="region" aria-label="{{ users_table_label }}" tabindex="0">
   {% if managed_users %}
     <table class="data-table">
       <thead>

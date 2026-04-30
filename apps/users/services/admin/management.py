@@ -214,3 +214,34 @@ def create_admin_user(*, acting_user, email, dni, activation_url_base=None):
         )
 
     return user
+
+
+def delete_users_with_related_data(users):
+    """Elimina usuarios desde admin junto con relaciones no declaradas como FK.
+
+    La mayoria de relaciones caen por cascada normal de Django. Los logs donde
+    el usuario aparece como recurso afectado usan ``resource_type/resource_id``,
+    asi que hay que limpiarlos explicitamente antes de borrar la cuenta.
+    """
+
+    user_ids = list(users.values_list("pk", flat=True))
+    if not user_ids:
+        return (0, {})
+
+    from apps.audit.models import AuditLog
+    from apps.audit.services import AUDIT_RESOURCE_TYPE_USER
+
+    with transaction.atomic():
+        AuditLog.objects.filter(
+            resource_type=AUDIT_RESOURCE_TYPE_USER,
+            resource_id__in=user_ids,
+        ).delete()
+        return users.delete()
+
+
+def delete_user_with_related_data(user):
+    """Elimina un usuario individual aplicando la misma cascada administrativa."""
+
+    return delete_users_with_related_data(
+        User.objects.filter(pk=user.pk),
+    )

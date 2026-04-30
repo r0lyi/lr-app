@@ -29,10 +29,10 @@
     {% endif %}
 
     <div class="profile-fields">
-      {% include "components/ui/text_input.html" with label=first_name_label name="first_name" id=employee_form.first_name.id_for_label value=employee_form.first_name.value|default_if_none:'' autocomplete="given-name" error=employee_form.first_name.errors.0 wrapper_class="profile-field" %}
-      {% include "components/ui/text_input.html" with label=last_name_label name="last_name" id=employee_form.last_name.id_for_label value=employee_form.last_name.value|default_if_none:'' autocomplete="family-name" error=employee_form.last_name.errors.0 wrapper_class="profile-field" %}
+      {% include "components/ui/text_input.html" with label=first_name_label name="first_name" id=employee_form.first_name.id_for_label value=employee_form.first_name.value|default_if_none:'' autocomplete="given-name" required=True error=employee_form.first_name.errors.0 wrapper_class="profile-field" %}
+      {% include "components/ui/text_input.html" with label=last_name_label name="last_name" id=employee_form.last_name.id_for_label value=employee_form.last_name.value|default_if_none:'' autocomplete="family-name" required=True error=employee_form.last_name.errors.0 wrapper_class="profile-field" %}
       {% include "components/ui/text_input.html" with label=email_label name="email_display" id="profile-email-display" type="email" value=request.user.email wrapper_class="profile-field profile-field--full" disabled=True %}
-      {% include "components/ui/phone_input.html" with label=phone_label name="phone" id=employee_form.phone.id_for_label value=employee_form.phone.value|default_if_none:'' autocomplete="tel" error=employee_form.phone.errors.0 wrapper_class="profile-field" %}
+      {% include "components/ui/phone_input.html" with label=phone_label name="phone" id=employee_form.phone.id_for_label value=employee_form.phone.value|default_if_none:'' autocomplete="tel" required=True error=employee_form.phone.errors.0 wrapper_class="profile-field" %}
       {% include "components/ui/date_input.html" with label=hire_date_label name="hire_date_display" id="profile-hire-date-display" value=employee_profile.hire_date|date:"Y-m-d" wrapper_class="profile-field" disabled=True %}
     </div>
 

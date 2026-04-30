@@ -7,8 +7,8 @@ from django.utils.translation import gettext_lazy as _
 class VacationRequestForm(forms.Form):
     """Recoge las fechas y el comentario inicial de la solicitud.
 
-    En esta vista la interfaz usa dos calendarios visuales propios en el
-    frontend. Por eso las fechas se transportan al backend mediante inputs
+    En esta vista la interfaz usa un calendario visual de rango en el frontend.
+    Por eso las fechas se transportan al backend mediante inputs
     ocultos en formato ISO (`YYYY-MM-DD`), aunque internamente Django las siga
     tratando como `DateField`.
 

@@ -591,3 +591,121 @@
     gap: 6px;
   }
 }
+
+/* Final overflow guard: only the exports table scrolls horizontally. */
+.dash-content.export-history-content,
+.export-history-page,
+.export-history-hero,
+.export-history-hero__copy,
+.export-history-summary,
+.export-history-summary__card,
+.export-history-filters-card,
+.export-history-filters-form,
+.export-history-filters-form__grid,
+.export-history-info-banner,
+.export-history-table-card,
+.export-history-table-card__table-wrapper,
+.export-history-table {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.export-history-hero__title,
+.export-history-hero__description,
+.export-history-summary__label,
+.export-history-summary__note,
+.export-history-info-banner__text,
+.export-history-table__user,
+.export-history-table__muted,
+.export-history-table__file-name {
+  overflow-wrap: anywhere;
+}
+
+.export-history-table-card.dash-card {
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  background: #ffffff;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+}
+
+.export-history-table-card__table-wrapper {
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.export-history-table .data-table {
+  width: 100%;
+  min-width: 900px;
+  table-layout: fixed;
+}
+
+.export-history-table .data-table tbody td {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 760px) {
+  .export-history-table-card.dash-card {
+    overflow: hidden;
+    border: 1px solid rgba(148, 163, 184, 0.14);
+    background: #ffffff;
+    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.06);
+  }
+
+  .export-history-table-card__table-wrapper {
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .export-history-table .data-table {
+    display: table;
+    width: 100%;
+    min-width: 840px;
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  .export-history-table .data-table thead {
+    display: table-header-group;
+  }
+
+  .export-history-table .data-table tbody {
+    display: table-row-group;
+  }
+
+  .export-history-table .data-table tr {
+    display: table-row;
+    width: auto;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .export-history-table .data-table th,
+  .export-history-table .data-table td {
+    display: table-cell;
+    width: auto;
+    padding: 13px 14px;
+    border-bottom: 1px solid #edf2f7;
+    text-align: left;
+    vertical-align: middle;
+  }
+
+  .export-history-table .data-table td {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .export-history-table .data-table td::before {
+    content: none;
+  }
+
+  .export-history-table .data-table td[data-label="Archivo"] {
+    align-items: center;
+  }
+}

@@ -976,3 +976,491 @@
     gap: 6px;
   }
 }
+
+/* Responsive profesional para el historial del empleado */
+.employee-home-hero__title,
+.employee-home-summary-card__value,
+.employee-history-card__title {
+  letter-spacing: 0;
+}
+
+.employee-history-card {
+  min-width: 0;
+}
+
+.employee-history-card__header {
+  min-width: 0;
+}
+
+.employee-history-card__copy {
+  min-width: 0;
+}
+
+.employee-history-table {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+  -webkit-overflow-scrolling: touch;
+}
+
+.employee-history-table::-webkit-scrollbar {
+  height: 10px;
+}
+
+.employee-history-table::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.employee-history-table::-webkit-scrollbar-thumb {
+  border: 3px solid #ffffff;
+  border-radius: 999px;
+  background: #cbd5e1;
+}
+
+.employee-history-table .data-table {
+  table-layout: fixed;
+}
+
+.employee-history-table .data-table th,
+.employee-history-table .data-table td {
+  white-space: normal;
+}
+
+.employee-history-table .data-table th:nth-child(1),
+.employee-history-table .data-table td:nth-child(1) {
+  width: 76px;
+}
+
+.employee-history-table .data-table th:nth-child(2),
+.employee-history-table .data-table td:nth-child(2) {
+  width: 160px;
+}
+
+.employee-history-table .data-table th:nth-child(3),
+.employee-history-table .data-table td:nth-child(3) {
+  width: 230px;
+}
+
+.employee-history-table .data-table th:nth-child(4),
+.employee-history-table .data-table td:nth-child(4) {
+  width: 120px;
+}
+
+.employee-history-table .data-table th:nth-child(5),
+.employee-history-table .data-table td:nth-child(5) {
+  width: 150px;
+}
+
+.employee-history-table .data-table th:nth-child(6),
+.employee-history-table .data-table td:nth-child(6) {
+  width: 120px;
+}
+
+.employee-history-table__number,
+.employee-history-table__days {
+  font-variant-numeric: tabular-nums;
+}
+
+.employee-history-table__range-value {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #334155;
+  font-weight: 700;
+}
+
+.employee-history-table__range-separator {
+  color: #94a3b8;
+}
+
+.employee-history-card__footer {
+  padding-top: 2px;
+}
+
+@media (max-width: 1120px) {
+  .employee-history-card__header {
+    align-items: start;
+  }
+
+  .employee-filters-form {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .employee-filters-form__actions {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 900px) {
+  .employee-home-page {
+    gap: 20px;
+  }
+
+  .employee-home-hero__title {
+    font-size: 2.35rem;
+    line-height: 1.12;
+  }
+
+  .employee-history-card {
+    padding: 22px;
+  }
+
+  .employee-history-card__header {
+    gap: 18px;
+  }
+
+  .employee-history-table .data-table {
+    min-width: 760px;
+  }
+}
+
+@media (max-width: 760px) {
+  .dash-content.employee-home-content {
+    gap: 18px;
+  }
+
+  .employee-home-page {
+    gap: 18px;
+  }
+
+  .employee-home-hero {
+    align-items: flex-start;
+  }
+
+  .employee-home-hero__title {
+    font-size: 1.95rem;
+  }
+
+  .employee-history-card {
+    gap: 16px;
+    padding: 18px 16px 20px;
+  }
+
+  .employee-history-card__header {
+    gap: 16px;
+    padding-bottom: 16px;
+  }
+
+  .employee-history-card__title {
+    font-size: 1.45rem;
+    line-height: 1.2;
+  }
+
+  .employee-history-card__description {
+    margin-top: 6px;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  .employee-filters-form {
+    gap: 12px;
+  }
+
+  .employee-filters-form .ui-input,
+  .employee-filters-form .ui-select {
+    min-height: 50px;
+    font-size: 15px;
+  }
+
+  .employee-filters-form__actions {
+    gap: 8px;
+  }
+
+  .employee-history-table {
+    overflow: visible;
+  }
+
+  .employee-history-table .data-table tbody {
+    gap: 14px;
+  }
+
+  .employee-history-table .data-table tr.employee-history-table__row {
+    padding: 0;
+    overflow: hidden;
+    border-color: #dbe5ef;
+    border-radius: 12px;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.07);
+  }
+
+  .employee-history-table .data-table td {
+    display: grid;
+    grid-template-columns: minmax(108px, 38%) minmax(0, 1fr);
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-bottom: 1px solid #edf2f7;
+  }
+
+  .employee-history-table .data-table td::before {
+    align-self: center;
+    color: #7c8797;
+    font-size: 11px;
+    line-height: 1.25;
+  }
+
+  .employee-history-table .data-table td[data-label="Nro"] {
+    grid-template-columns: 1fr auto;
+    padding: 14px;
+    background: #f8fbff;
+    color: #0f172a;
+    font-size: 18px;
+    font-weight: 900;
+  }
+
+  .employee-history-table .data-table td[data-label="Nro"]::before {
+    content: "Solicitud";
+    color: #64748b;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+  }
+
+  .employee-history-table .data-table td[data-label="Rango de fechas"] {
+    align-items: start;
+  }
+
+  .employee-history-table__range-value {
+    justify-self: end;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    text-align: right;
+    line-height: 1.35;
+  }
+
+  .employee-history-table .data-table td[data-label="Total días"] {
+    color: #1b8fca;
+    font-size: 16px;
+    font-weight: 900;
+  }
+
+  .employee-history-table .data-table td[data-label="Estado"] {
+    align-items: center;
+  }
+
+  .employee-history-table .data-table td[data-label="Estado"] .employee-history-table__status,
+  .employee-history-table .data-table td[data-label="Acciones"] .employee-history-table__delete {
+    justify-self: end;
+  }
+
+  .employee-history-table .data-table td[data-label="Acciones"] {
+    background: #fcfdff;
+  }
+
+  .employee-history-table__empty-row {
+    padding: 0 !important;
+  }
+
+  .employee-history-table__empty-row .employee-history-table__empty {
+    display: block;
+    padding: 24px 18px !important;
+    border: 1px dashed #cbd5e1;
+    border-radius: 12px;
+    background: #f8fafc;
+    text-align: center;
+  }
+
+  .employee-history-table__empty-row .employee-history-table__empty::before {
+    content: none;
+  }
+
+  .employee-history-card__footer {
+    gap: 12px;
+    padding-top: 0;
+  }
+
+  .employee-history-card__footer .ui-pagination {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 540px) {
+  .employee-home-hero__title {
+    font-size: 1.7rem;
+  }
+
+  .employee-home-summary-card {
+    min-height: 0;
+    border-radius: 12px;
+  }
+
+  .employee-history-card {
+    padding: 16px 12px 18px;
+    border-radius: 12px;
+  }
+
+  .employee-history-table .data-table td {
+    grid-template-columns: minmax(92px, 34%) minmax(0, 1fr);
+    padding: 11px 12px;
+  }
+
+  .employee-history-table__status {
+    min-height: 30px;
+    min-width: 82px;
+    padding-inline: 10px;
+    font-size: 12px;
+  }
+
+  .employee-history-table__delete {
+    width: 38px;
+    height: 38px;
+  }
+
+  .employee-history-card__footer {
+    align-items: stretch;
+  }
+
+  .employee-history-card__footer .ui-table-footer__count {
+    text-align: center;
+  }
+
+  .employee-history-card__footer .ui-pagination {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 390px) {
+  .employee-history-table .data-table td {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .employee-history-table .data-table td[data-label="Nro"] {
+    grid-template-columns: 1fr auto;
+  }
+
+  .employee-history-table__range-value,
+  .employee-history-table .data-table td[data-label="Estado"] .employee-history-table__status,
+  .employee-history-table .data-table td[data-label="Acciones"] .employee-history-table__delete {
+    justify-self: start;
+    text-align: left;
+  }
+}
+
+/* Tabla con desplazamiento horizontal en el historial del empleado */
+@media (max-width: 760px) {
+  .employee-history-table {
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.06);
+  }
+
+  .employee-history-table .data-table {
+    display: table;
+    width: 100%;
+    min-width: 760px;
+    table-layout: fixed;
+  }
+
+  .employee-history-table .data-table thead {
+    display: table-header-group;
+  }
+
+  .employee-history-table .data-table tbody {
+    display: table-row-group;
+  }
+
+  .employee-history-table .data-table tr,
+  .employee-history-table .data-table tr.employee-history-table__row {
+    display: table-row;
+    width: auto;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .employee-history-table .data-table th,
+  .employee-history-table .data-table td {
+    display: table-cell;
+    width: auto;
+    padding: 14px 16px;
+    border-bottom: 1px solid #edf2f7;
+    text-align: left;
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+
+  .employee-history-table .data-table th {
+    background: #ffffff;
+    color: #8b95a5;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .employee-history-table .data-table td::before {
+    content: none;
+  }
+
+  .employee-history-table .data-table td[data-label="Nro"] {
+    padding: 14px 16px;
+    background: #ffffff;
+    color: #64748b;
+    font-size: 15px;
+    font-weight: 800;
+  }
+
+  .employee-history-table .data-table th:nth-child(4),
+  .employee-history-table .data-table td:nth-child(4) {
+    text-align: center;
+  }
+
+  .employee-history-table .data-table th:last-child,
+  .employee-history-table .data-table td:last-child {
+    text-align: right;
+  }
+
+  .employee-history-table__range-value {
+    justify-content: flex-start;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  .employee-history-table .data-table td[data-label="Estado"] .employee-history-table__status,
+  .employee-history-table .data-table td[data-label="Acciones"] .employee-history-table__delete {
+    justify-self: auto;
+  }
+}
+
+/* Final overflow guard: the page never grows wider than the viewport. */
+.dash-content.employee-home-content,
+.employee-home-page,
+.employee-home-hero,
+.employee-home-summary,
+.employee-home-summary-card,
+.employee-history-card,
+.employee-history-card__header,
+.employee-history-card__copy,
+.employee-history-card__filters,
+.employee-filters-form,
+.employee-filters-form .filter-group {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.employee-home-hero__title,
+.employee-home-hero__description,
+.employee-history-card__title,
+.employee-history-card__description,
+.employee-home-summary-card__label,
+.employee-home-summary-card__note {
+  overflow-wrap: anywhere;
+}
+
+.employee-history-table {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-inline: contain;
+}
+
+.employee-history-table .data-table {
+  width: 100%;
+}

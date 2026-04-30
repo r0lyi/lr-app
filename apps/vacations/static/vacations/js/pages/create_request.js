@@ -23,12 +23,16 @@
             return value;
           });
         };
+
   const UNSELECTED_LABEL = gettext("Sin seleccionar");
   const PENDING_LABEL = gettext("Pendiente");
   const SELECT_BOTH_DATES_LABEL = gettext("Selecciona ambas fechas en el calendario.");
   const SELECT_END_DATE_LABEL = gettext("Elige la fecha de fin para completar el periodo.");
   const SELECT_START_DATE_LABEL = gettext("Elige la fecha de inicio para completar el periodo.");
   const END_DATE_AFTER_START_LABEL = gettext("La fecha final debe ser igual o posterior a la inicial.");
+  const START_SELECTED_LABEL = gettext("Inicio: %(date)s");
+  const COMPLETE_RANGE_LABEL = gettext("%(start)s - %(end)s");
+  const SELECT_DATE_LABEL = gettext("Seleccionar %(date)s");
   const MONTHS = [
     gettext("Enero"),
     gettext("Febrero"),
@@ -119,6 +123,16 @@
     return new Date(year, monthIndex + 1, 0).getDate();
   }
 
+  function isSameDate(firstDate, secondDate) {
+    return (
+      firstDate &&
+      secondDate &&
+      firstDate.getFullYear() === secondDate.getFullYear() &&
+      firstDate.getMonth() === secondDate.getMonth() &&
+      firstDate.getDate() === secondDate.getDate()
+    );
+  }
+
   function buildYearOptions(selectEl, centerYear) {
     if (!selectEl) {
       return;
@@ -149,6 +163,7 @@
 
   const startInput = document.getElementById("id_start_date");
   const endInput = document.getElementById("id_end_date");
+  const rangeCalendarRoot = document.querySelector("[data-range-calendar]");
   const annualCounterRoot = document.querySelector("[data-vacation-annual-counter]");
   const annualCounterValue = document.getElementById("annual-vacation-remaining-days");
   const annualDaysTotalRaw = annualCounterRoot
@@ -163,183 +178,7 @@
   const selectedRangeSummary = document.getElementById("selected-range-summary");
   const submitButton = document.getElementById("submit-request-button");
 
-  function getCalendarBounds(state) {
-    const globalMinimum = state.minDate;
-    const startDate = parseIsoDate(startInput ? startInput.value : "");
-    const endDate = parseIsoDate(endInput ? endInput.value : "");
-
-    let lowerBound = globalMinimum;
-    let upperBound = null;
-
-    if (state.role === "start") {
-      if (endDate) {
-        upperBound = endDate;
-      }
-    } else if (state.role === "end") {
-      if (startDate && (!lowerBound || startDate > lowerBound)) {
-        lowerBound = startDate;
-      }
-    }
-
-    return {
-      lowerBound,
-      upperBound,
-    };
-  }
-
-  function initializeCalendar(root) {
-    const inputId = root.dataset.inputId;
-    const inputEl = document.getElementById(inputId);
-    const monthSelect = root.querySelector("[data-calendar-month]");
-    const yearSelect = root.querySelector("[data-calendar-year]");
-    const prevButton = root.querySelector("[data-calendar-prev]");
-    const nextButton = root.querySelector("[data-calendar-next]");
-    const daysContainer = root.querySelector("[data-calendar-days]");
-    const selectionText = root.querySelector("[data-calendar-selection]");
-
-    if (!inputEl || !monthSelect || !yearSelect || !prevButton || !nextButton || !daysContainer) {
-      return null;
-    }
-
-    monthSelect.innerHTML = "";
-    MONTHS.forEach(function (monthName, index) {
-      const option = document.createElement("option");
-      option.value = String(index);
-      option.textContent = monthName;
-      monthSelect.appendChild(option);
-    });
-
-    const role = root.dataset.calendarRole || "start";
-    const minDate = parseIsoDate(root.dataset.minDate || "");
-    const selectedDate = parseIsoDate(inputEl.value);
-    const baseDate = selectedDate || minDate || new Date();
-    const state = {
-      role: role,
-      minDate: minDate,
-      inputEl: inputEl,
-      monthSelect: monthSelect,
-      yearSelect: yearSelect,
-      prevButton: prevButton,
-      nextButton: nextButton,
-      daysContainer: daysContainer,
-      selectionText: selectionText,
-      selectedDate: selectedDate,
-      viewDate: new Date(baseDate.getFullYear(), baseDate.getMonth(), 1),
-      render: null,
-    };
-
-    function renderDays() {
-      const year = state.viewDate.getFullYear();
-      const monthIndex = state.viewDate.getMonth();
-      const firstDay = new Date(year, monthIndex, 1);
-      const leadingEmpty = getMondayFirstIndex(firstDay);
-      const totalDays = getTotalDaysInMonth(year, monthIndex);
-      const totalCells = Math.ceil((leadingEmpty + totalDays) / 7) * 7;
-      const bounds = getCalendarBounds(state);
-
-      state.daysContainer.innerHTML = "";
-
-      for (let index = 0; index < totalCells; index += 1) {
-        if (index < leadingEmpty || index >= leadingEmpty + totalDays) {
-          const emptyCell = document.createElement("span");
-          emptyCell.className = "vac-calendar__day--empty";
-          state.daysContainer.appendChild(emptyCell);
-          continue;
-        }
-
-        const dayNumber = index - leadingEmpty + 1;
-        const cellDate = new Date(year, monthIndex, dayNumber);
-        const button = document.createElement("button");
-        const isToday =
-          formatIsoDate(cellDate) === formatIsoDate(new Date());
-        const isSelected =
-          state.selectedDate && formatIsoDate(state.selectedDate) === formatIsoDate(cellDate);
-        const isDisabled =
-          (bounds.lowerBound && cellDate < bounds.lowerBound) ||
-          (bounds.upperBound && cellDate > bounds.upperBound);
-
-        button.type = "button";
-        button.className = "vac-calendar__day";
-        if (isToday) {
-          button.classList.add("vac-calendar__day--today");
-        }
-        if (isSelected) {
-          button.classList.add("vac-calendar__day--selected");
-        }
-        if (isDisabled) {
-          button.classList.add("vac-calendar__day--disabled");
-          button.disabled = true;
-          button.setAttribute("aria-disabled", "true");
-        } else {
-          button.setAttribute("aria-disabled", "false");
-        }
-        button.setAttribute("aria-pressed", isSelected ? "true" : "false");
-        button.title = formatDisplayDate(cellDate);
-
-        button.textContent = String(dayNumber);
-        button.addEventListener("click", function () {
-          state.selectedDate = cellDate;
-          state.inputEl.value = formatIsoDate(cellDate);
-          render();
-          document.dispatchEvent(new CustomEvent("vacation-request:dates-changed"));
-        });
-
-        state.daysContainer.appendChild(button);
-      }
-    }
-
-    function render() {
-      state.selectedDate = parseIsoDate(state.inputEl.value);
-      buildYearOptions(state.yearSelect, state.viewDate.getFullYear());
-      state.monthSelect.value = String(state.viewDate.getMonth());
-      state.yearSelect.value = String(state.viewDate.getFullYear());
-
-      if (state.selectionText) {
-        state.selectionText.textContent = state.selectedDate
-          ? formatBadgeDate(state.selectedDate)
-          : UNSELECTED_LABEL;
-      }
-
-      renderDays();
-    }
-
-    state.render = render;
-    state.setViewDate = function (nextViewDate) {
-      state.viewDate = new Date(
-        nextViewDate.getFullYear(),
-        nextViewDate.getMonth(),
-        1
-      );
-      render();
-    };
-
-    state.prevButton.addEventListener("click", function () {
-      state.viewDate = new Date(state.viewDate.getFullYear(), state.viewDate.getMonth() - 1, 1);
-      render();
-    });
-
-    state.nextButton.addEventListener("click", function () {
-      state.viewDate = new Date(state.viewDate.getFullYear(), state.viewDate.getMonth() + 1, 1);
-      render();
-    });
-
-    state.monthSelect.addEventListener("change", function () {
-      state.viewDate = new Date(state.viewDate.getFullYear(), Number(state.monthSelect.value), 1);
-      render();
-    });
-
-    state.yearSelect.addEventListener("change", function () {
-      state.viewDate = new Date(Number(state.yearSelect.value), state.viewDate.getMonth(), 1);
-      render();
-    });
-
-    render();
-    return state;
-  }
-
-  const calendarRoots = Array.from(document.querySelectorAll("[data-calendar]"));
-  const calendars = calendarRoots.map(initializeCalendar).filter(Boolean);
-  if (!calendars.length) {
+  if (!startInput || !endInput || !rangeCalendarRoot) {
     return;
   }
 
@@ -353,28 +192,6 @@
     }
 
     return value.toFixed(2);
-  }
-
-  function rerenderCalendarsAndSummary() {
-    const startCalendar = calendars.find(function (calendar) {
-      return calendar.role === "start";
-    });
-    const endCalendar = calendars.find(function (calendar) {
-      return calendar.role === "end";
-    });
-
-    if (startCalendar && startCalendar.selectedDate && endCalendar && !endCalendar.selectedDate) {
-      endCalendar.setViewDate(startCalendar.selectedDate);
-    }
-
-    if (endCalendar && endCalendar.selectedDate && startCalendar && !startCalendar.selectedDate) {
-      startCalendar.setViewDate(endCalendar.selectedDate);
-    }
-
-    calendars.forEach(function (calendar) {
-      calendar.render();
-    });
-    updateSummary();
   }
 
   function updateAnnualDaysCounter(selectedDays) {
@@ -391,8 +208,8 @@
   }
 
   function updateSummary() {
-    const startDate = parseIsoDate(startInput ? startInput.value : "");
-    const endDate = parseIsoDate(endInput ? endInput.value : "");
+    const startDate = parseIsoDate(startInput.value);
+    const endDate = parseIsoDate(endInput.value);
 
     if (
       !selectedDaysCounter ||
@@ -470,10 +287,284 @@
       return;
     }
 
-    selectedRangeSummary.textContent = `${formatDisplayDate(startDate)} - ${formatDisplayDate(endDate)}`;
+    selectedRangeSummary.textContent = interpolate(
+      COMPLETE_RANGE_LABEL,
+      {
+        start: formatDisplayDate(startDate),
+        end: formatDisplayDate(endDate),
+      },
+      true
+    );
     submitButton.disabled = false;
   }
 
-  document.addEventListener("vacation-request:dates-changed", rerenderCalendarsAndSummary);
-  rerenderCalendarsAndSummary();
+  function initializeRangeCalendar(root) {
+    const monthSelect = root.querySelector("[data-calendar-month]");
+    const yearSelect = root.querySelector("[data-calendar-year]");
+    const prevButton = root.querySelector("[data-calendar-prev]");
+    const nextButton = root.querySelector("[data-calendar-next]");
+    const daysContainer = root.querySelector("[data-calendar-days]");
+    const selectionText = root.querySelector("[data-calendar-selection]");
+    const rangeStartDisplay = root.querySelector("[data-range-start-display]");
+    const rangeEndDisplay = root.querySelector("[data-range-end-display]");
+
+    if (!monthSelect || !yearSelect || !prevButton || !nextButton || !daysContainer) {
+      return null;
+    }
+
+    monthSelect.innerHTML = "";
+    MONTHS.forEach(function (monthName, index) {
+      const option = document.createElement("option");
+      option.value = String(index);
+      option.textContent = monthName;
+      monthSelect.appendChild(option);
+    });
+
+    const minDate = parseIsoDate(root.dataset.minDate || "");
+    const initialStartDate = parseIsoDate(startInput.value);
+    const initialEndDate = parseIsoDate(endInput.value);
+    const baseDate = initialStartDate || initialEndDate || minDate || new Date();
+    const state = {
+      minDate: minDate,
+      hoverDate: null,
+      viewDate: new Date(baseDate.getFullYear(), baseDate.getMonth(), 1),
+      render: null,
+    };
+
+    function getCurrentRange() {
+      const startDate = parseIsoDate(startInput.value);
+      const endDate = parseIsoDate(endInput.value);
+
+      if (startDate && endDate && endDate >= startDate) {
+        return {
+          startDate: startDate,
+          endDate: endDate,
+          isPreview: false,
+        };
+      }
+
+      if (startDate && !endDate && state.hoverDate && state.hoverDate >= startDate) {
+        return {
+          startDate: startDate,
+          endDate: state.hoverDate,
+          isPreview: true,
+        };
+      }
+
+      return {
+        startDate: startDate,
+        endDate: null,
+        isPreview: false,
+      };
+    }
+
+    function shouldSelectEndNext() {
+      return Boolean(parseIsoDate(startInput.value) && !parseIsoDate(endInput.value));
+    }
+
+    function updateSelectionLabels() {
+      const startDate = parseIsoDate(startInput.value);
+      const endDate = parseIsoDate(endInput.value);
+
+      if (rangeStartDisplay) {
+        rangeStartDisplay.textContent = startDate
+          ? formatBadgeDate(startDate)
+          : UNSELECTED_LABEL;
+      }
+
+      if (rangeEndDisplay) {
+        rangeEndDisplay.textContent = endDate
+          ? formatBadgeDate(endDate)
+          : UNSELECTED_LABEL;
+      }
+
+      if (!selectionText) {
+        return;
+      }
+
+      if (startDate && endDate && endDate >= startDate) {
+        selectionText.textContent = interpolate(
+          COMPLETE_RANGE_LABEL,
+          {
+            start: formatBadgeDate(startDate),
+            end: formatBadgeDate(endDate),
+          },
+          true
+        );
+        return;
+      }
+
+      if (startDate) {
+        selectionText.textContent = interpolate(
+          START_SELECTED_LABEL,
+          { date: formatBadgeDate(startDate) },
+          true
+        );
+        return;
+      }
+
+      selectionText.textContent = UNSELECTED_LABEL;
+    }
+
+    function selectDate(cellDate) {
+      const startDate = parseIsoDate(startInput.value);
+      const endDate = parseIsoDate(endInput.value);
+
+      if (!startDate || endDate) {
+        startInput.value = formatIsoDate(cellDate);
+        endInput.value = "";
+      } else if (cellDate < startDate) {
+        startInput.value = formatIsoDate(cellDate);
+        endInput.value = "";
+      } else {
+        endInput.value = formatIsoDate(cellDate);
+      }
+
+      state.hoverDate = null;
+      render();
+      updateSummary();
+    }
+
+    function renderDays() {
+      const year = state.viewDate.getFullYear();
+      const monthIndex = state.viewDate.getMonth();
+      const firstDay = new Date(year, monthIndex, 1);
+      const leadingEmpty = getMondayFirstIndex(firstDay);
+      const totalDays = getTotalDaysInMonth(year, monthIndex);
+      const totalCells = Math.ceil((leadingEmpty + totalDays) / 7) * 7;
+      const range = getCurrentRange();
+      const startTimestamp = range.startDate ? getUtcDayTimestamp(range.startDate) : null;
+      const endTimestamp = range.endDate ? getUtcDayTimestamp(range.endDate) : null;
+
+      daysContainer.innerHTML = "";
+
+      for (let index = 0; index < totalCells; index += 1) {
+        if (index < leadingEmpty || index >= leadingEmpty + totalDays) {
+          const emptyCell = document.createElement("span");
+          emptyCell.className = "vac-calendar__day--empty";
+          daysContainer.appendChild(emptyCell);
+          continue;
+        }
+
+        const dayNumber = index - leadingEmpty + 1;
+        const cellDate = new Date(year, monthIndex, dayNumber);
+        const cellTimestamp = getUtcDayTimestamp(cellDate);
+        const button = document.createElement("button");
+        const isToday = isSameDate(cellDate, new Date());
+        const isStart = isSameDate(cellDate, range.startDate);
+        const isEnd = isSameDate(cellDate, range.endDate);
+        const isInRange =
+          startTimestamp !== null &&
+          endTimestamp !== null &&
+          cellTimestamp > startTimestamp &&
+          cellTimestamp < endTimestamp;
+        const isDisabled = state.minDate && cellDate < state.minDate;
+
+        button.type = "button";
+        button.className = "vac-calendar__day";
+        if (isToday) {
+          button.classList.add("vac-calendar__day--today");
+        }
+        if (isInRange) {
+          button.classList.add("vac-calendar__day--in-range");
+        }
+        if (range.isPreview && (isInRange || isEnd)) {
+          button.classList.add("vac-calendar__day--preview");
+        }
+        if (isStart) {
+          button.classList.add(
+            "vac-calendar__day--selected",
+            "vac-calendar__day--range-start"
+          );
+        }
+        if (isEnd) {
+          button.classList.add(
+            "vac-calendar__day--selected",
+            "vac-calendar__day--range-end"
+          );
+        }
+        if (isDisabled) {
+          button.classList.add("vac-calendar__day--disabled");
+          button.disabled = true;
+          button.setAttribute("aria-disabled", "true");
+        } else {
+          button.setAttribute("aria-disabled", "false");
+          button.addEventListener("mouseenter", function () {
+            if (
+              shouldSelectEndNext() &&
+              cellDate >= parseIsoDate(startInput.value) &&
+              !isSameDate(state.hoverDate, cellDate)
+            ) {
+              state.hoverDate = cellDate;
+              render();
+            }
+          });
+          button.addEventListener("click", function () {
+            selectDate(cellDate);
+          });
+        }
+
+        button.setAttribute("aria-pressed", isStart || isEnd ? "true" : "false");
+        button.setAttribute(
+          "aria-label",
+          interpolate(SELECT_DATE_LABEL, { date: formatDisplayDate(cellDate) }, true)
+        );
+        button.title = formatDisplayDate(cellDate);
+        button.textContent = String(dayNumber);
+        daysContainer.appendChild(button);
+      }
+    }
+
+    function render() {
+      buildYearOptions(yearSelect, state.viewDate.getFullYear());
+      monthSelect.value = String(state.viewDate.getMonth());
+      yearSelect.value = String(state.viewDate.getFullYear());
+      root.classList.toggle("is-selecting-end", shouldSelectEndNext());
+      updateSelectionLabels();
+      renderDays();
+    }
+
+    state.render = render;
+
+    prevButton.addEventListener("click", function () {
+      state.viewDate = new Date(state.viewDate.getFullYear(), state.viewDate.getMonth() - 1, 1);
+      state.hoverDate = null;
+      render();
+    });
+
+    nextButton.addEventListener("click", function () {
+      state.viewDate = new Date(state.viewDate.getFullYear(), state.viewDate.getMonth() + 1, 1);
+      state.hoverDate = null;
+      render();
+    });
+
+    monthSelect.addEventListener("change", function () {
+      state.viewDate = new Date(state.viewDate.getFullYear(), Number(monthSelect.value), 1);
+      state.hoverDate = null;
+      render();
+    });
+
+    yearSelect.addEventListener("change", function () {
+      state.viewDate = new Date(Number(yearSelect.value), state.viewDate.getMonth(), 1);
+      state.hoverDate = null;
+      render();
+    });
+
+    daysContainer.addEventListener("mouseleave", function () {
+      if (state.hoverDate) {
+        state.hoverDate = null;
+        render();
+      }
+    });
+
+    render();
+    return state;
+  }
+
+  const rangeCalendar = initializeRangeCalendar(rangeCalendarRoot);
+  if (!rangeCalendar) {
+    return;
+  }
+
+  updateSummary();
 })();

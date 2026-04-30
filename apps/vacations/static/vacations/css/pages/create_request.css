@@ -222,6 +222,10 @@
   background: linear-gradient(180deg, #8be1d0 0%, #59c6b8 100%);
 }
 
+.vac-calendar--range {
+  background: linear-gradient(180deg, #8edaf3 0%, #62c7ec 100%);
+}
+
 .vac-calendar__header {
   display: flex;
   align-items: flex-start;
@@ -272,6 +276,39 @@
   text-align: center;
   box-shadow: 0 8px 16px rgba(15, 95, 136, 0.12);
   white-space: nowrap;
+}
+
+.vac-calendar__range-status {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.vac-calendar__range-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  padding: 12px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.vac-calendar__range-card span {
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.vac-calendar__range-card strong {
+  overflow-wrap: anywhere;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1.25;
 }
 
 .vac-calendar__note {
@@ -414,6 +451,20 @@
   background: #ffffff;
   color: #0d7a6d;
   box-shadow: 0 8px 18px rgba(13, 122, 109, 0.18);
+}
+
+.vac-calendar--range .vac-calendar__day--selected {
+  background: #ffffff;
+  color: #0f5f88;
+  box-shadow: 0 8px 18px rgba(15, 95, 136, 0.18);
+}
+
+.vac-calendar__day--in-range {
+  background: rgba(255, 255, 255, 0.32);
+}
+
+.vac-calendar__day--preview {
+  border-style: dashed;
 }
 
 .vac-calendar__day--disabled {
@@ -966,8 +1017,16 @@
   --vac-calendar-accent: #1ba58f;
 }
 
+.dash-content.vac-request-content .vac-calendar--range {
+  --vac-calendar-accent: #1b9de2;
+  max-width: 860px;
+  width: 100%;
+  margin: 0 auto;
+}
+
 .dash-content.vac-request-content .vac-calendar--start,
-.dash-content.vac-request-content .vac-calendar--end {
+.dash-content.vac-request-content .vac-calendar--end,
+.dash-content.vac-request-content .vac-calendar--range {
   border-top-color: var(--vac-calendar-accent);
 }
 
@@ -993,6 +1052,24 @@
   background: #f8fafc;
   color: #334155;
   box-shadow: none;
+}
+
+.dash-content.vac-request-content .vac-calendar__range-status {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.dash-content.vac-request-content .vac-calendar__range-card {
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: #f8fafc;
+}
+
+.dash-content.vac-request-content .vac-calendar__range-card span {
+  color: #64748b;
+}
+
+.dash-content.vac-request-content .vac-calendar__range-card strong {
+  color: #0f172a;
 }
 
 .dash-content.vac-request-content .vac-calendar__note {
@@ -1065,6 +1142,29 @@
   background: linear-gradient(180deg, #2bc7af 0%, #1ba58f 100%);
   color: #ffffff;
   box-shadow: 0 10px 18px rgba(27, 165, 143, 0.22);
+}
+
+.dash-content.vac-request-content .vac-calendar--range .vac-calendar__day--selected {
+  background: linear-gradient(180deg, #33aef0 0%, #1b9de2 100%);
+  color: #ffffff;
+  box-shadow: 0 10px 18px rgba(27, 157, 226, 0.22);
+}
+
+.dash-content.vac-request-content .vac-calendar__day--in-range {
+  border-color: #bae6fd;
+  background: #e0f2fe;
+  color: #075985;
+}
+
+.dash-content.vac-request-content .vac-calendar__day--preview {
+  border-style: dashed;
+  background: #eff8ff;
+}
+
+.dash-content.vac-request-content .vac-calendar__day--range-start,
+.dash-content.vac-request-content .vac-calendar__day--range-end {
+  position: relative;
+  z-index: 1;
 }
 
 .dash-content.vac-request-content .vac-calendar__day--disabled {
@@ -1448,6 +1548,10 @@
     padding: 16px 14px 14px;
   }
 
+  .dash-content.vac-request-content .vac-calendar__range-status {
+    grid-template-columns: 1fr;
+  }
+
   .dash-content.vac-request-content .vac-request-notes-panel,
   .dash-content.vac-request-content .vac-request-summary-panel {
     padding: 18px 16px 18px;
@@ -1455,6 +1559,75 @@
 
   .dash-content.vac-request-content .vac-request-guide {
     padding: 20px 18px 18px;
+  }
+}
+
+@media (max-width: 576px) {
+  .dash-content.vac-request-content .vac-calendar__toolbar {
+    grid-template-columns: 38px minmax(0, 1fr) 38px;
+    gap: 8px;
+  }
+
+  .dash-content.vac-request-content .vac-calendar__selectors {
+    grid-template-columns: minmax(0, 1fr) minmax(70px, 82px);
+    gap: 8px;
+  }
+
+  .dash-content.vac-request-content .vac-calendar__arrow {
+    width: 38px;
+    height: 38px;
+  }
+
+  .dash-content.vac-request-content .vac-calendar__days,
+  .dash-content.vac-request-content .vac-calendar__weekdays {
+    gap: 5px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .dash-content.vac-request-content .vac-calendar__day,
+  .dash-content.vac-request-content .vac-calendar__day--empty {
+    min-height: 36px;
+  }
+}
+
+@media (max-width: 420px) {
+  .dash-content.vac-request-content .vac-request-calendar-panel {
+    padding: 14px 12px 12px;
+  }
+
+  .dash-content.vac-request-content .vac-calendar {
+    padding: 14px 10px 12px;
+  }
+
+  .dash-content.vac-request-content .vac-calendar__toolbar {
+    grid-template-columns: 34px minmax(0, 1fr) 34px;
+  }
+
+  .dash-content.vac-request-content .vac-calendar__selectors {
+    grid-template-columns: minmax(0, 1fr) 68px;
+  }
+
+  .dash-content.vac-request-content .vac-calendar__select {
+    min-height: 36px;
+    padding-inline: 4px;
+    font-size: 12px;
+  }
+
+  .dash-content.vac-request-content .vac-calendar__arrow {
+    width: 34px;
+    height: 36px;
+  }
+
+  .dash-content.vac-request-content .vac-calendar__days,
+  .dash-content.vac-request-content .vac-calendar__weekdays {
+    gap: 4px;
+  }
+
+  .dash-content.vac-request-content .vac-calendar__day,
+  .dash-content.vac-request-content .vac-calendar__day--empty {
+    min-height: 32px;
+    font-size: 12px;
   }
 }
 
@@ -1472,6 +1645,7 @@
 .dash-content.vac-request-content .vac-request-guide__badge,
 .dash-content.vac-request-content .vac-request-summary-panel__item,
 .dash-content.vac-request-content .vac-calendar__selected,
+.dash-content.vac-request-content .vac-calendar__range-card,
 .dash-content.vac-request-content .vac-calendar__note,
 .dash-content.vac-request-content .vac-calendar__toolbar,
 .dash-content.vac-request-content .vac-calendar__select,
