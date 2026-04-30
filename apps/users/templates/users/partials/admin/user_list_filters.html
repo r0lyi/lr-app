@@ -1,6 +1,7 @@
 {% load i18n %}
 {% translate "Filtrar" as filter_label %}
 {% translate "Limpiar filtros" as reset_filters_label %}
+{% translate "Actualizar" as refresh_label %}
 
 <form method="get" class="admin-users-filters" novalidate>
   <div class="admin-users-filters__grid">
@@ -24,7 +25,8 @@
   </div>
 
   <div class="admin-users-filters__actions">
-    {% include "components/ui/button_principal.html" with label=filter_label type="submit" size="md" class_name="admin-users-filters__submit" %}
+    {% include "components/ui/button_principal.html" with label=filter_label type="submit" size="md" left_icon_name="filter" class_name="admin-users-filters__submit" %}
     {% include "components/ui/button_secondari.html" with label=reset_filters_label href=request.path size="md" class_name="admin-users-filters__reset" %}
+    {% include "components/ui/button_secondari.html" with label=refresh_label href=request.get_full_path size="md" left_icon_name="refresh" class_name="admin-users-filters__refresh ui-btn--refresh-action" %}
   </div>
 </form>

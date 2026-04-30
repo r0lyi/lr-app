@@ -1,10 +1,15 @@
 {% load i18n %}
+{% translate "Actualizar" as refresh_label %}
 
 <section
   class="vac-request-balance-card"
   data-vacation-annual-counter
   data-annual-days-total="{{ annual_vacation_remaining_days_count|floatformat:"2u" }}"
 >
+  <div class="vac-request-balance-card__actions">
+    {% include "components/ui/button_secondari.html" with label=refresh_label href=request.path size="md" left_icon_name="refresh" class_name="vac-request-balance-card__refresh ui-btn--refresh-action" %}
+  </div>
+
   <div class="vac-request-balance-card__copy">
     <p class="vac-request-balance-card__eyebrow">{% translate "Tu saldo disponible" %}</p>
     <h1 class="vac-request-balance-card__title">

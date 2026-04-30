@@ -211,6 +211,10 @@ msgstr ""
 msgid "Limpiar"
 msgstr ""
 
+#: apps/vacations/templates/vacations/partials/create_request/top.html:2
+msgid "Actualizar"
+msgstr ""
+
 #: apps/audit/templates/audit/partials/audit_log/table.html:2
 msgid "Sin detalle disponible."
 msgstr ""
@@ -685,12 +689,6 @@ msgstr ""
 msgid "Historial de solicitudes"
 msgstr ""
 
-#: apps/employees/templates/employees/partials/dashboard/home/content.html:18
-msgid ""
-"Revisa tus solicitudes registradas y utiliza los filtros para acotar por "
-"fechas o por estado."
-msgstr ""
-
 #: apps/employees/templates/employees/partials/dashboard/home/delete_modal.html:2
 msgid "No, mantener"
 msgstr ""
@@ -869,7 +867,7 @@ msgid "Ej. Juan"
 msgstr ""
 
 #: apps/employees/templates/employees/partials/onboarding/form.html:5
-msgid "Ej. García"
+msgid "Ej. García Perez"
 msgstr ""
 
 #: apps/employees/templates/employees/partials/onboarding/form.html:7

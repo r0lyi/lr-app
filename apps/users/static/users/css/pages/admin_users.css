@@ -220,16 +220,22 @@
 }
 
 .admin-users-filters__actions {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(120px, 1fr));
   justify-content: flex-end;
   gap: 12px;
-  flex-wrap: wrap;
+  width: min(100%, 520px);
+  margin-left: auto;
   min-width: 0;
 }
 
 .admin-users-filters__submit,
-.admin-users-filters__reset {
-  min-width: 150px;
+.admin-users-filters__reset,
+.admin-users-filters__refresh {
+  width: 100%;
+  min-width: 0;
+  text-align: center;
+  white-space: normal;
 }
 
 .admin-users-table {
@@ -551,12 +557,15 @@
   }
 
   .admin-users-filters__actions {
-    justify-content: stretch;
+    grid-template-columns: 1fr;
+    width: 100%;
+    margin-left: 0;
     gap: 10px;
   }
 
   .admin-users-filters__submit,
-  .admin-users-filters__reset {
+  .admin-users-filters__reset,
+  .admin-users-filters__refresh {
     width: 100%;
     min-width: 0;
     min-height: 50px;
@@ -925,7 +934,8 @@
   }
 
   .admin-users-filters__submit,
-  .admin-users-filters__reset {
+  .admin-users-filters__reset,
+  .admin-users-filters__refresh {
     min-height: 46px;
   }
 
