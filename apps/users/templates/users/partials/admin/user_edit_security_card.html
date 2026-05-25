@@ -1,0 +1,46 @@
+{% load i18n %}
+{% translate "Actualizar contraseña" as update_password_label %}
+
+<article class="admin-user-edit-card">
+  <div class="admin-user-edit-card__heading">
+    <div>
+      <h2 class="admin-user-edit-card__title">{% translate "Seguridad" %}</h2>
+      <p class="admin-user-edit-card__description">
+        {% translate "Permite definir una nueva contrasena para cualquier cuenta sin abandonar la gestión administrativa." %}
+      </p>
+    </div>
+    <span class="admin-user-edit-card__badge">
+      {% translate "Acción sensible" %}
+    </span>
+  </div>
+
+  {% if can_manage_user_password %}
+    <form method="post" class="admin-user-edit-form admin-user-edit-form--stacked">
+      {% csrf_token %}
+      <input type="hidden" name="admin_action" value="password_change">
+
+      {% if password_change_form.non_field_errors %}
+        <div class="admin-user-edit-form__errors">
+          {% for error in password_change_form.non_field_errors %}
+            <p>{{ error }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <div class="admin-user-edit-form__fields">
+        {% include "components/ui/password_input.html" with label=password_change_form.new_password1.label name=password_change_form.new_password1.html_name id=password_change_form.new_password1.id_for_label autocomplete="new-password" error=password_change_form.new_password1.errors.0 wrapper_class="admin-user-edit-form__field" %}
+        {% include "components/ui/password_input.html" with label=password_change_form.new_password2.label name=password_change_form.new_password2.html_name id=password_change_form.new_password2.id_for_label autocomplete="new-password" error=password_change_form.new_password2.errors.0 wrapper_class="admin-user-edit-form__field" %}
+      </div>
+
+      <p class="admin-user-edit-card__note">
+        {% translate "Si la cuenta tenía un enlace de activación pendiente, dejará de ser válido en cuanto guardes la nueva contraseña." %}
+      </p>
+
+      {% include "components/ui/button_principal.html" with label=update_password_label type="submit" size="md" class_name="admin-user-edit-form__submit" left_icon_name="shield" %}
+    </form>
+  {% else %}
+    <p class="admin-user-edit-card__note">
+      {% translate "La seguridad de esta cuenta se gestiona desde Django admin." %}
+    </p>
+  {% endif %}
+</article>

@@ -1,0 +1,45 @@
+{% load i18n %}
+{% translate "Eliminar usuario" as delete_user_label %}
+
+<article class="admin-user-edit-card admin-user-edit-card--danger">
+  <div class="admin-user-edit-card__heading admin-user-edit-card__heading--danger">
+    <div>
+      <h2 class="admin-user-edit-card__title">{% translate "Eliminar cuenta" %}</h2>
+      <p class="admin-user-edit-card__description">
+        {% translate "Borra la cuenta y limpia en cascada la ficha de empleado, solicitudes, notificaciones, exportaciones y trazas ligadas a esa persona." %}
+      </p>
+    </div>
+    <span class="admin-user-edit-card__badge admin-user-edit-card__badge--danger">
+      {% translate "Irreversible" %}
+    </span>
+  </div>
+
+  {% if can_delete_managed_user %}
+    <form method="post" class="admin-user-edit-form admin-user-edit-form--stacked">
+      {% csrf_token %}
+      <input type="hidden" name="admin_action" value="delete_user">
+
+      {% if delete_user_form.non_field_errors %}
+        <div class="admin-user-edit-form__errors admin-user-edit-form__errors--danger">
+          {% for error in delete_user_form.non_field_errors %}
+            <p>{{ error }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <p class="admin-user-edit-card__note admin-user-edit-card__note--danger">
+        {% blocktranslate with email=managed_user.user.email %}
+          Para confirmar la eliminación, escribe exactamente {{ email }}.
+        {% endblocktranslate %}
+      </p>
+
+      {% include "components/ui/text_input.html" with label=delete_user_form.confirmation_email.label name=delete_user_form.confirmation_email.html_name id=delete_user_form.confirmation_email.id_for_label type="email" autocomplete="off" value=delete_user_form.confirmation_email.value placeholder=managed_user.user.email error=delete_user_form.confirmation_email.errors.0 wrapper_class="admin-user-edit-form__field" %}
+
+      {% include "components/ui/button.html" with label=delete_user_label type="submit" size="md" variant="danger" class_name="admin-user-edit-form__submit" left_icon_name="trash" %}
+    </form>
+  {% else %}
+    <p class="admin-user-edit-card__note admin-user-edit-card__note--danger">
+      {% translate "No puedes eliminar esta cuenta desde este panel." %}
+    </p>
+  {% endif %}
+</article>

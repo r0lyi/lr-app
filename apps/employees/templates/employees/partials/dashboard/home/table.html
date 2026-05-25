@@ -4,31 +4,32 @@
 
 <div class="data-table-wrapper employee-history-table">
   <table class="data-table">
+    <caption class="employee-history-table__caption">{% translate "Historial de solicitudes" %}</caption>
     <thead>
       <tr>
-        <th>{% translate "Nro" %}</th>
-        <th>{% translate "Fecha solicitud" %}</th>
-        <th>{% translate "Rango de fechas" %}</th>
-        <th>{% translate "Total días" %}</th>
-        <th>{% translate "Estado" %}</th>
-        <th>{% translate "Acciones" %}</th>
+        <th scope="col" class="employee-history-table__col employee-history-table__col--number">{% translate "Nro" %}</th>
+        <th scope="col" class="employee-history-table__col employee-history-table__col--created">{% translate "Fecha solicitud" %}</th>
+        <th scope="col" class="employee-history-table__col employee-history-table__col--range">{% translate "Rango de fechas" %}</th>
+        <th scope="col" class="employee-history-table__col employee-history-table__col--days">{% translate "Total días" %}</th>
+        <th scope="col" class="employee-history-table__col employee-history-table__col--status">{% translate "Estado" %}</th>
+        <th scope="col" class="employee-history-table__col employee-history-table__col--actions">{% translate "Acciones" %}</th>
       </tr>
     </thead>
     <tbody>
       {% for request_item in employee_requests %}
         <tr>
-          <td data-label="{% translate 'Nro' %}">{{ page_obj.start_index|add:forloop.counter0 }}</td>
-          <td data-label="{% translate 'Fecha solicitud' %}">{{ request_item.created_at|date:"d-m-Y" }}</td>
-          <td data-label="{% translate 'Rango de fechas' %}">
+          <td class="employee-history-table__cell employee-history-table__cell--number" data-label="{% translate 'Nro' %}">{{ page_obj.start_index|add:forloop.counter0 }}</td>
+          <td class="employee-history-table__cell employee-history-table__cell--created" data-label="{% translate 'Fecha solicitud' %}">{{ request_item.created_at|date:"d-m-Y" }}</td>
+          <td class="employee-history-table__cell employee-history-table__cell--range" data-label="{% translate 'Rango de fechas' %}">
             {{ request_item.start_date|date:"d-m-Y" }} - {{ request_item.end_date|date:"d-m-Y" }}
           </td>
-          <td data-label="{% translate 'Total días' %}">{{ request_item.requested_days|floatformat:"2u" }}</td>
-          <td data-label="{% translate 'Estado' %}">
+          <td class="employee-history-table__cell employee-history-table__cell--days" data-label="{% translate 'Total días' %}">{{ request_item.requested_days|floatformat:"2u" }}</td>
+          <td class="employee-history-table__cell employee-history-table__cell--status" data-label="{% translate 'Estado' %}">
             <span class="employee-history-table__status employee-history-table__status--{{ request_item.status.name }}">
               {{ request_item.status }}
             </span>
           </td>
-          <td data-label="{% translate 'Acciones' %}">
+          <td class="employee-history-table__cell employee-history-table__cell--actions{% if request_item.status.name != "pending" %} employee-history-table__cell--actions-disabled{% endif %}" data-label="{% translate 'Acciones' %}">
             {% if request_item.status.name == "pending" %}
               <button
                 class="employee-history-table__delete"
@@ -54,7 +55,7 @@
           </td>
         </tr>
       {% empty %}
-        <tr>
+        <tr class="employee-history-table__empty-row">
           <td class="employee-history-table__empty" colspan="6">{% translate "No hay solicitudes registradas con estos filtros." %}</td>
         </tr>
       {% endfor %}
@@ -62,4 +63,4 @@
   </table>
 </div>
 
-{% include "components/ui/table_footer.html" with total_count=filtered_employee_requests_count item_label_plural=requests_item_label aria_label=requests_pagination_label %}
+{% include "components/ui/table_footer.html" with total_count=filtered_employee_requests_count item_label_plural=requests_item_label aria_label=requests_pagination_label class_name="employee-history-table-footer" %}

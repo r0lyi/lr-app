@@ -976,3 +976,404 @@
     gap: 6px;
   }
 }
+
+/* Responsive polish for the employee requests history */
+.employee-home-page {
+  min-width: 0;
+}
+
+.employee-home-hero__title,
+.employee-history-card__title,
+.employee-home-summary-card__value {
+  letter-spacing: 0;
+}
+
+.employee-history-card {
+  min-width: 0;
+  border-radius: 8px;
+}
+
+.employee-history-card__header {
+  align-items: start;
+}
+
+.employee-history-card__copy {
+  min-width: 0;
+}
+
+.employee-history-card__filters {
+  min-width: 0;
+}
+
+.employee-filters-form {
+  grid-template-columns: repeat(3, minmax(128px, 1fr)) auto auto;
+}
+
+.employee-filters-form .filter-input-wrap {
+  min-width: 0;
+}
+
+.employee-filters-form .ui-input,
+.employee-filters-form .ui-select {
+  min-width: 0;
+}
+
+.employee-history-table {
+  border-radius: 8px;
+}
+
+.employee-history-table__caption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.employee-history-table .data-table {
+  min-width: 760px;
+  table-layout: fixed;
+}
+
+.employee-history-table .data-table th,
+.employee-history-table .data-table td {
+  overflow-wrap: anywhere;
+}
+
+.employee-history-table .data-table th:nth-child(1),
+.employee-history-table .data-table td:nth-child(1) {
+  width: 64px;
+}
+
+.employee-history-table .data-table th:nth-child(2),
+.employee-history-table .data-table td:nth-child(2) {
+  width: 150px;
+}
+
+.employee-history-table .data-table th:nth-child(3),
+.employee-history-table .data-table td:nth-child(3) {
+  width: 230px;
+}
+
+.employee-history-table .data-table th:nth-child(4),
+.employee-history-table .data-table td:nth-child(4) {
+  width: 116px;
+}
+
+.employee-history-table .data-table th:nth-child(5),
+.employee-history-table .data-table td:nth-child(5) {
+  width: 140px;
+}
+
+.employee-history-table .data-table th:nth-child(6),
+.employee-history-table .data-table td:nth-child(6) {
+  width: 104px;
+}
+
+.employee-history-table .data-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.employee-history-table__cell--range {
+  color: #334155;
+  font-weight: 700;
+}
+
+.employee-history-table__cell--created {
+  color: #64748b;
+  font-weight: 700;
+}
+
+.employee-history-table__cell--actions {
+  white-space: nowrap;
+}
+
+.employee-history-table__delete {
+  border-radius: 8px;
+}
+
+.employee-history-table-footer {
+  padding-top: 2px;
+}
+
+@media (max-width: 1180px) {
+  .employee-history-card__header {
+    grid-template-columns: 1fr;
+  }
+
+  .employee-filters-form {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .employee-filters-form__actions {
+    grid-column: 1 / -1;
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 920px) {
+  .employee-home-hero {
+    align-items: flex-start;
+  }
+
+  .employee-home-hero__title {
+    max-width: 18ch;
+    font-size: clamp(1.85rem, 5vw, 2.5rem);
+    line-height: 1.12;
+  }
+
+  .employee-history-card {
+    padding: 22px;
+  }
+
+  .employee-filters-form {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .employee-filters-form__actions {
+    justify-content: flex-start;
+  }
+
+  .employee-history-table .data-table {
+    min-width: 720px;
+  }
+}
+
+@media (max-width: 760px) {
+  .employee-home-page {
+    gap: 20px;
+  }
+
+  .employee-home-hero__title {
+    max-width: none;
+  }
+
+  .employee-history-card {
+    gap: 18px;
+    padding: 18px;
+  }
+
+  .employee-history-card__header {
+    gap: 16px;
+    padding-bottom: 18px;
+  }
+
+  .employee-history-card__title {
+    font-size: 1.45rem;
+    line-height: 1.18;
+  }
+
+  .employee-history-card__description {
+    max-width: none;
+  }
+
+  .employee-filters-form {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .employee-history-table {
+    overflow: visible;
+  }
+
+  .employee-history-table .data-table {
+    min-width: 0;
+    table-layout: auto;
+  }
+
+  .employee-history-table .data-table tbody {
+    gap: 14px;
+  }
+
+  .employee-history-table .data-table tr {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 12px 16px;
+    padding: 16px;
+    border-radius: 8px;
+    border-color: #dbe5ef;
+    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.07);
+  }
+
+  .employee-history-table .data-table td {
+    display: flex;
+    min-width: 0;
+    padding: 0;
+    border-bottom: none;
+  }
+
+  .employee-history-table .data-table td::before {
+    margin-bottom: 4px;
+    font-size: 11px;
+    line-height: 1.2;
+    letter-spacing: 0;
+  }
+
+  .employee-history-table__cell--number {
+    display: none !important;
+  }
+
+  .employee-history-table__cell--range {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #0f172a;
+    font-size: 16px;
+    font-weight: 900;
+    line-height: 1.35;
+  }
+
+  .employee-history-table__cell--status {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    align-items: flex-start !important;
+    justify-content: flex-end !important;
+  }
+
+  .employee-history-table__cell--status::before,
+  .employee-history-table__cell--actions::before {
+    content: none !important;
+  }
+
+  .employee-history-table__cell--created,
+  .employee-history-table__cell--days {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 2px;
+    color: #475569;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .employee-history-table__cell--created {
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+  }
+
+  .employee-history-table__cell--days {
+    grid-column: 1 / 2;
+    grid-row: 3 / 4;
+    color: #0f84bf;
+  }
+
+  .employee-history-table__cell--actions {
+    grid-column: 2 / 3;
+    grid-row: 2 / 4;
+    align-items: end !important;
+    justify-content: flex-end !important;
+  }
+
+  .employee-history-table__status {
+    min-width: 0;
+    min-height: 30px;
+    padding-inline: 10px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .employee-history-table__delete {
+    width: 40px;
+    height: 40px;
+  }
+
+  .employee-history-table__empty-row {
+    display: block !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .employee-history-table__empty {
+    display: block !important;
+    padding: 22px 16px !important;
+    border: 1px dashed #dbe5ef !important;
+    border-radius: 8px;
+    background: #fbfdff !important;
+  }
+
+  .employee-history-table__empty::before {
+    content: none !important;
+  }
+
+  .employee-history-table-footer {
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .employee-history-table-footer .ui-pagination {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 540px) {
+  .employee-history-card {
+    padding: 16px 12px 18px;
+  }
+
+  .employee-history-card__description {
+    line-height: 1.55;
+  }
+
+  .employee-filters-form .ui-input,
+  .employee-filters-form .ui-select,
+  .employee-filters-form .filter-actions .ui-btn {
+    min-height: 48px;
+    font-size: 15px;
+  }
+
+  .employee-history-table .data-table tbody {
+    gap: 12px;
+  }
+
+  .employee-history-table .data-table tr {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+    padding: 14px;
+  }
+
+  .employee-history-table__cell--range,
+  .employee-history-table__cell--status,
+  .employee-history-table__cell--created,
+  .employee-history-table__cell--days,
+  .employee-history-table__cell--actions {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+
+  .employee-history-table__cell--status,
+  .employee-history-table__cell--actions {
+    justify-content: flex-start !important;
+  }
+
+  .employee-history-table__cell--actions {
+    padding-top: 4px !important;
+  }
+
+  .employee-history-table__cell--actions-disabled {
+    display: none !important;
+  }
+
+  .employee-history-table__delete {
+    width: 42px;
+    height: 42px;
+  }
+
+  .employee-history-table__delete--disabled {
+    display: none;
+  }
+
+  .employee-history-table-footer .ui-pagination {
+    gap: 6px;
+  }
+
+  .employee-history-table-footer .ui-pagination__page,
+  .employee-history-table-footer .ui-pagination__control {
+    min-width: 34px;
+    height: 34px;
+    padding-inline: 8px;
+  }
+}

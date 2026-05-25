@@ -1,0 +1,52 @@
+{% load i18n %}
+
+<article class="admin-user-edit-card">
+  <div class="admin-user-edit-card__heading">
+    <div>
+      <h2 class="admin-user-edit-card__title">{% translate "Ficha de empleado" %}</h2>
+      <p class="admin-user-edit-card__description">
+        {% translate "Muestra los datos internos ligados a la persona para que no tengas que salir del modal." %}
+      </p>
+    </div>
+    <span class="admin-user-edit-card__badge">
+      {% if managed_user.has_employee_profile %}{% translate "Completa" %}{% else %}{% translate "Pendiente" %}{% endif %}
+    </span>
+  </div>
+
+  {% if managed_user.has_employee_profile %}
+    <div class="admin-user-edit-details">
+      <article class="admin-user-edit-details__item">
+        <span class="admin-user-edit-details__label">{% translate "Nombre" %}</span>
+        <strong class="admin-user-edit-details__value">{{ managed_user.employee_first_name|default:"-" }}</strong>
+      </article>
+      <article class="admin-user-edit-details__item">
+        <span class="admin-user-edit-details__label">{% translate "Apellidos" %}</span>
+        <strong class="admin-user-edit-details__value">{{ managed_user.employee_last_name|default:"-" }}</strong>
+      </article>
+      <article class="admin-user-edit-details__item">
+        <span class="admin-user-edit-details__label">{% translate "Teléfono" %}</span>
+        <strong class="admin-user-edit-details__value">{{ managed_user.employee_phone|default:"-" }}</strong>
+      </article>
+      <article class="admin-user-edit-details__item">
+        <span class="admin-user-edit-details__label">{% translate "Departamento" %}</span>
+        <strong class="admin-user-edit-details__value">{{ managed_user.employee_department_name|default:"-" }}</strong>
+      </article>
+      <article class="admin-user-edit-details__item">
+        <span class="admin-user-edit-details__label">{% translate "Fecha de alta" %}</span>
+        <strong class="admin-user-edit-details__value">{{ managed_user.employee_hire_date|date:"d-m-Y" }}</strong>
+      </article>
+      <article class="admin-user-edit-details__item">
+        <span class="admin-user-edit-details__label">{% translate "Vacaciones" %}</span>
+        <strong class="admin-user-edit-details__value">
+          {% blocktranslate with available=managed_user.employee_available_days taken=managed_user.employee_taken_days %}
+            Disponibles: {{ available }} | Usadas: {{ taken }}
+          {% endblocktranslate %}
+        </strong>
+      </article>
+    </div>
+  {% else %}
+    <p class="admin-user-edit-card__note">
+      {% translate "Este usuario aun no tiene ficha interna asociada." %}
+    </p>
+  {% endif %}
+</article>
