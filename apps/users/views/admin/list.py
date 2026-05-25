@@ -14,6 +14,12 @@ from apps.users.selectors import get_admin_dashboard_summary, get_admin_user_lis
 from apps.users.services.admin.management import create_admin_user
 
 
+def _current_public_base_url(request):
+    """Usa el mismo host del panel para construir enlaces de activacion coherentes."""
+
+    return request.build_absolute_uri("/").rstrip("/")
+
+
 def _merge_validation_errors(form, exc):
     """Traspasa errores de validacion al formulario del modal."""
 
@@ -69,6 +75,7 @@ def admin_user_list_view(request):
                     acting_user=request.user,
                     email=create_user_form.cleaned_data["email"],
                     dni=create_user_form.cleaned_data["dni"],
+                    activation_url_base=_current_public_base_url(request),
                 )
             except ValidationError as exc:
                 _merge_validation_errors(create_user_form, exc)

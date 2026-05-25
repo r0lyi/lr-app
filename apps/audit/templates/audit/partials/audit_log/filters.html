@@ -1,5 +1,7 @@
 {% load i18n %}
 {% translate "Filtrar" as filter_label %}
+{% translate "Limpiar" as reset_label %}
+{% translate "Actualizar" as refresh_label %}
 
 <form method="get" class="audit-log-filters" novalidate>
   {% if audit_log_filter_form.non_field_errors %}
@@ -36,8 +38,8 @@
 
   <div class="audit-log-filters__actions">
     {% include "components/ui/button_principal.html" with label=filter_label type="submit" size="md" left_icon_name="filter" class_name="audit-log-filters__submit" %}
-    <a href="{% url 'audit:activity-log' %}" class="ui-btn ui-btn--secondary ui-btn--md audit-log-filters__reset">
-      {% translate "Limpiar" %}
-    </a>
+    {% url 'audit:activity-log' as audit_log_reset_url %}
+    {% include "components/ui/button_secondari.html" with label=reset_label href=audit_log_reset_url size="md" class_name="audit-log-filters__reset" %}
+    {% include "components/ui/button_secondari.html" with label=refresh_label href=request.get_full_path size="md" left_icon_name="refresh" class_name="audit-log-filters__refresh ui-btn--refresh-action" %}
   </div>
 </form>

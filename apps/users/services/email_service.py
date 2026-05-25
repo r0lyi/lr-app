@@ -47,11 +47,20 @@ def _build_logo_attachment():
     }
 
 
-def build_activation_email_message(token):
+def _build_activation_url(token, activation_url_base=None):
+    """Resuelve la URL absoluta del formulario de creacion de contraseña."""
+
+    base_url = (activation_url_base or settings.FRONTEND_URL).rstrip("/")
+    return f"{base_url}/auth/set-password/{token}/"
+
+
+def build_activation_email_message(token, activation_url_base=None):
     """Construye el payload HTML y texto plano del email de activacion."""
 
-    frontend_url = settings.FRONTEND_URL.rstrip("/")
-    activation_url = f"{frontend_url}/auth/set-password/{token}/"
+    activation_url = _build_activation_url(
+        token,
+        activation_url_base=activation_url_base,
+    )
     logo_url = f"cid:{INLINE_LOGO_CID}"
     context = {
         "app_name": _("Sistema de Gestion de Vacaciones"),
@@ -190,10 +199,18 @@ def send_email_message(*, to, subject, html, text="", attachments=None):
     return sent
 
 
-def send_activation_email(email: str, token: str) -> None:
+def send_activation_email(
+    email: str,
+    token: str,
+    *,
+    activation_url_base: str | None = None,
+) -> None:
     """Construye y envia el correo de activacion o recuperacion."""
 
-    payload = build_activation_email_message(token)
+    payload = build_activation_email_message(
+        token,
+        activation_url_base=activation_url_base,
+    )
     attachments = []
     logo_attachment = _build_logo_attachment()
     if logo_attachment:

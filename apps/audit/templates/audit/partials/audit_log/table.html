@@ -1,25 +1,31 @@
 {% load i18n %}
 {% translate "Sin detalle disponible." as no_detail_label %}
+{% translate "Historial de actividad" as audit_table_label %}
+{% translate "Fecha" as audit_date_label %}
+{% translate "Tipo de cambio" as audit_action_label %}
+{% translate "Realizado por" as audit_user_label %}
+{% translate "Qué sucedió" as audit_description_label %}
+{% translate "Acciones" as audit_actions_label %}
 {% translate "actividades" as audit_item_label %}
 {% translate "Paginación del historial de actividad" as audit_pagination_label %}
 
-<div class="audit-log-table">
+<div class="audit-log-table" role="region" aria-label="{{ audit_table_label }}" tabindex="0">
   {% if audit_logs %}
     <table class="data-table">
       <thead>
         <tr>
-          <th>{% translate "Fecha" %}</th>
-          <th>{% translate "Tipo de cambio" %}</th>
-          <th>{% translate "Realizado por" %}</th>
-          <th>{% translate "Qué sucedió" %}</th>
-          <th>{% translate "Acciones" %}</th>
+          <th>{{ audit_date_label }}</th>
+          <th>{{ audit_action_label }}</th>
+          <th>{{ audit_user_label }}</th>
+          <th>{{ audit_description_label }}</th>
+          <th>{{ audit_actions_label }}</th>
         </tr>
       </thead>
       <tbody>
         {% for audit_item in audit_logs %}
           <tr>
-            <td data-label="{% translate 'Fecha' %}">{{ audit_item.created_at|date:"d-m-Y H:i" }}</td>
-            <td data-label="{% translate 'Tipo de cambio' %}">
+            <td data-label="{{ audit_date_label }}">{{ audit_item.created_at|date:"d-m-Y H:i" }}</td>
+            <td data-label="{{ audit_action_label }}">
               <span class="
                 audit-log-table__badge
                 {% if audit_item.action == 'user_access_state_changed' or audit_item.action == 'user_account_activated' %}
@@ -35,9 +41,9 @@
                 {{ audit_item.action_label }}
               </span>
             </td>
-            <td data-label="{% translate 'Realizado por' %}">{{ audit_item.user.email }}</td>
-            <td data-label="{% translate 'Qué sucedió' %}">{{ audit_item.description|default:no_detail_label }}</td>
-            <td data-label="{% translate 'Acciones' %}">
+            <td data-label="{{ audit_user_label }}">{{ audit_item.user.email }}</td>
+            <td data-label="{{ audit_description_label }}">{{ audit_item.description|default:no_detail_label }}</td>
+            <td data-label="{{ audit_actions_label }}">
               <div class="audit-log-table__actions">
                 {% if audit_item.resource_type == audit_resource_type_user %}
                   <a
@@ -75,4 +81,4 @@
   {% endif %}
 </div>
 
-{% include "components/ui/table_footer.html" with total_count=audit_logs_count item_label_plural=audit_item_label aria_label=audit_pagination_label %}
+{% include "components/ui/table_footer.html" with total_count=audit_logs_count item_label_plural=audit_item_label aria_label=audit_pagination_label class_name="audit-log-card__footer" %}

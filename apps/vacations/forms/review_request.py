@@ -28,6 +28,7 @@ class VacationRequestReviewForm(forms.Form):
     start_date = forms.DateField(
         label=_("Fecha inicio"),
         widget=forms.DateInput(
+            format="%Y-%m-%d",
             attrs={
                 "class": "ui-input ui-input--date ui-input--has-right-icon",
                 "type": "date",
@@ -37,6 +38,7 @@ class VacationRequestReviewForm(forms.Form):
     end_date = forms.DateField(
         label=_("Fecha final"),
         widget=forms.DateInput(
+            format="%Y-%m-%d",
             attrs={
                 "class": "ui-input ui-input--date ui-input--has-right-icon",
                 "type": "date",

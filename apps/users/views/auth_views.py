@@ -18,7 +18,11 @@ from apps.core.utils.rate_limits import (
     reset_rate_limit,
 )
 from apps.users.forms import RequestActivationForm, SetPasswordForm, LoginForm
-from apps.users.services.auth_service import request_activation, validate_token, set_password
+from apps.users.services.auth_service import (
+    request_activation,
+    resolve_token,
+    set_password,
+)
 
 
 def _activation_notice_message():
@@ -27,6 +31,12 @@ def _activation_notice_message():
     return _(
         "Si el DNI corresponde a una cuenta, te hemos enviado un correo con las instrucciones para crear o recuperar tu contraseña. Revisa también la carpeta de spam."
     )
+
+
+def _current_public_base_url(request):
+    """Usa el host real de la peticion para construir enlaces publicos coherentes."""
+
+    return request.build_absolute_uri("/").rstrip("/")
 
 
 @anonymous_required
@@ -56,7 +66,10 @@ def request_activation_view(request):
                 identifier=form.cleaned_data["dni"],
                 window_seconds=settings.ACTIVATION_RATE_LIMIT_WINDOW,
             )
-            request_activation(form.cleaned_data["dni"])
+            request_activation(
+                form.cleaned_data["dni"],
+                activation_url_base=_current_public_base_url(request),
+            )
             activation_notice = _activation_notice_message()
 
             if request.headers.get("HX-Request"):
@@ -101,10 +114,14 @@ def request_activation_view(request):
 def set_password_view(request, token):
     """Valida el token y permite fijar la contraseña inicial o recuperada."""
 
-    user = validate_token(token)
+    user, token_status = resolve_token(token)
 
     if not user:
-        return render(request, "users/pages/invalid_token.html")
+        return render(
+            request,
+            "users/pages/invalid_token.html",
+            {"token_status": token_status},
+        )
 
     form = SetPasswordForm(request.POST or None)
 

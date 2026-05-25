@@ -56,6 +56,10 @@
                 {% blocktranslate with hours=expires_in_hours %}Este enlace caduca en {{ hours }} horas.{% endblocktranslate %}
               </p>
 
+              <p style="margin:0 0 14px 0; font-size:15px; line-height:1.6; color:#5f6b7a; font-family:'Rubik', Arial, Helvetica, sans-serif;">
+                {% translate "Si solicita otro enlace mas tarde, solo funcionara el ultimo correo enviado." %}
+              </p>
+
               <p style="margin:0 0 8px 0; font-size:15px; line-height:1.6; color:#5f6b7a; font-family:'Rubik', Arial, Helvetica, sans-serif;">
                 {% translate "Si el botón no funciona, copie y pegue este enlace en su navegador:" %}
               </p>

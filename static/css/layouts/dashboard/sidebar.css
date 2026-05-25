@@ -1,12 +1,16 @@
 .dash-sidebar {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  bottom: 0;
   align-self: start;
   display: flex;
   flex-direction: column;
+  width: var(--dash-sidebar-width);
   height: 100vh;
   height: 100dvh;
   min-height: 100vh;
+  z-index: 40;
   padding: 24px 0 20px;
   background: var(--bg);
   color: #334155;

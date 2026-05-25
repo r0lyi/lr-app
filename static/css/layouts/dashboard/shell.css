@@ -1,12 +1,19 @@
 .dash {
+  --dash-sidebar-width: 250px;
+  width: 100%;
+  max-width: 100%;
   min-height: 100vh;
   display: grid;
-  grid-template-columns: 250px minmax(0, 1fr);
+  grid-template-columns: var(--dash-sidebar-width) minmax(0, 1fr);
   align-items: start;
+  overflow-x: hidden;
   background: var(--bg);
 }
 
 .dash-main {
+  grid-column: 2;
+  min-width: 0;
+  max-width: 100%;
   min-height: 100vh;
   --dash-main-inline-start: 20px;
   --dash-main-inline-end: 20px;
@@ -15,11 +22,14 @@
   flex-direction: column;
   gap: 18px;
   position: relative;
+  overflow-x: hidden;
   background: var(--bg);
 }
 
 .dash-content {
   width: min(1180px, 100%);
+  min-width: 0;
+  max-width: 100%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -31,6 +41,8 @@
 }
 
 .dash-card {
+  min-width: 0;
+  max-width: 100%;
   padding: 24px 26px;
   border-radius: 20px;
   background: #ffffff;

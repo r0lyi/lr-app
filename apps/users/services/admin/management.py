@@ -174,7 +174,7 @@ def change_user_department(*, acting_user, target_user, new_department):
     return target_user
 
 
-def create_admin_user(*, acting_user, email, dni):
+def create_admin_user(*, acting_user, email, dni, activation_url_base=None):
     """Crea una cuenta pendiente de activacion con DNI y correo electronico.
 
     El usuario queda inactivo y recibe automaticamente un enlace de activacion
@@ -197,7 +197,10 @@ def create_admin_user(*, acting_user, email, dni):
             email=normalized_email,
             dni=normalized_dni,
         )
-        sent, _ = request_activation(user.dni)
+        sent, _ = request_activation(
+            user.dni,
+            activation_url_base=activation_url_base,
+        )
         if not sent:
             raise ValidationError(
                 _("No se pudo generar el enlace de activacion para el nuevo usuario.")
@@ -211,3 +214,34 @@ def create_admin_user(*, acting_user, email, dni):
         )
 
     return user
+
+
+def delete_users_with_related_data(users):
+    """Elimina usuarios desde admin junto con relaciones no declaradas como FK.
+
+    La mayoria de relaciones caen por cascada normal de Django. Los logs donde
+    el usuario aparece como recurso afectado usan ``resource_type/resource_id``,
+    asi que hay que limpiarlos explicitamente antes de borrar la cuenta.
+    """
+
+    user_ids = list(users.values_list("pk", flat=True))
+    if not user_ids:
+        return (0, {})
+
+    from apps.audit.models import AuditLog
+    from apps.audit.services import AUDIT_RESOURCE_TYPE_USER
+
+    with transaction.atomic():
+        AuditLog.objects.filter(
+            resource_type=AUDIT_RESOURCE_TYPE_USER,
+            resource_id__in=user_ids,
+        ).delete()
+        return users.delete()
+
+
+def delete_user_with_related_data(user):
+    """Elimina un usuario individual aplicando la misma cascada administrativa."""
+
+    return delete_users_with_related_data(
+        User.objects.filter(pk=user.pk),
+    )

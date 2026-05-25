@@ -1,6 +1,9 @@
 {% load i18n %}
 {% translate "Escribe una nota opcional para RRHH si necesitas dar contexto a la solicitud." as employee_comment_placeholder %}
 {% translate "Enviar solicitud" as submit_request_label %}
+{% translate "Inicio" as range_start_label %}
+{% translate "Fin" as range_end_label %}
+{% translate "Sin seleccionar" as unselected_date_label %}
 
 <section class="vac-request-panel">
   <div class="vac-request-panel__header">
@@ -35,109 +38,80 @@
     {% endif %}
 
     <div class="vac-request-calendar-panel">
-      <div class="vac-request-calendars">
-        <section
-          class="vac-calendar vac-calendar--start"
-          data-calendar
-          data-calendar-role="start"
-          data-input-id="{{ form.start_date.id_for_label }}"
-          data-min-date="{{ min_request_start_date|date:'Y-m-d' }}"
-        >
-          <div class="vac-calendar__header">
-            <div class="vac-calendar__header-copy">
-              <p class="vac-calendar__eyebrow">{% translate "Inicio" %}</p>
-              <h3 class="vac-calendar__title">{% translate "Fecha de inicio" %}</h3>
-            </div>
-            <span class="vac-calendar__selected" data-calendar-selection aria-live="polite">{% translate "Sin seleccionar" %}</span>
-          </div>
-
-          <p class="vac-calendar__note">
-            {% blocktranslate with date=min_request_start_date|date:"d/m/Y" %}Disponible desde {{ date }}.{% endblocktranslate %}
-          </p>
-
-          <div class="vac-calendar__toolbar">
-            <button class="vac-calendar__arrow" type="button" data-calendar-prev aria-label="{% translate 'Mes anterior' %}">
-              <span aria-hidden="true">&#8249;</span>
-            </button>
-
-            <div class="vac-calendar__selectors">
-              <select class="vac-calendar__select" data-calendar-month aria-label="{% translate 'Mes' %}"></select>
-              <select class="vac-calendar__select" data-calendar-year aria-label="{% translate 'Ano' %}"></select>
-            </div>
-
-            <button class="vac-calendar__arrow" type="button" data-calendar-next aria-label="{% translate 'Mes siguiente' %}">
-              <span aria-hidden="true">&#8250;</span>
-            </button>
-          </div>
-
-          <div class="vac-calendar__weekdays" aria-hidden="true">
-            <span>{% translate "L" %}</span>
-            <span>{% translate "M" %}</span>
-            <span>{% translate "X" %}</span>
-            <span>{% translate "J" %}</span>
-            <span>{% translate "V" %}</span>
-            <span>{% translate "S" %}</span>
-            <span>{% translate "D" %}</span>
-          </div>
-
-          <div class="vac-calendar__days" data-calendar-days></div>
-
-          {% if form.start_date.errors %}
-            <p class="vac-calendar__error">{{ form.start_date.errors|join:', ' }}</p>
-          {% endif %}
-        </section>
-
-        <section
-          class="vac-calendar vac-calendar--end"
-          data-calendar
-          data-calendar-role="end"
-          data-input-id="{{ form.end_date.id_for_label }}"
-          data-min-date="{{ min_request_start_date|date:'Y-m-d' }}"
-        >
-          <div class="vac-calendar__header">
-            <div class="vac-calendar__header-copy">
-              <p class="vac-calendar__eyebrow">{% translate "Fin" %}</p>
-              <h3 class="vac-calendar__title">{% translate "Fecha de fin" %}</h3>
-            </div>
-            <span class="vac-calendar__selected" data-calendar-selection aria-live="polite">{% translate "Sin seleccionar" %}</span>
-          </div>
-
-          <p class="vac-calendar__note">
-            {% translate "El calendario de fin nunca permitirá una fecha anterior al inicio." %}
-          </p>
-
-          <div class="vac-calendar__toolbar">
-            <button class="vac-calendar__arrow" type="button" data-calendar-prev aria-label="{% translate 'Mes anterior' %}">
-              <span aria-hidden="true">&#8249;</span>
-            </button>
-
-            <div class="vac-calendar__selectors">
-              <select class="vac-calendar__select" data-calendar-month aria-label="{% translate 'Mes' %}"></select>
-              <select class="vac-calendar__select" data-calendar-year aria-label="{% translate 'Ano' %}"></select>
-            </div>
-
-            <button class="vac-calendar__arrow" type="button" data-calendar-next aria-label="{% translate 'Mes siguiente' %}">
-              <span aria-hidden="true">&#8250;</span>
-            </button>
-          </div>
-
-          <div class="vac-calendar__weekdays" aria-hidden="true">
-            <span>{% translate "L" %}</span>
-            <span>{% translate "M" %}</span>
-            <span>{% translate "X" %}</span>
-            <span>{% translate "J" %}</span>
-            <span>{% translate "V" %}</span>
-            <span>{% translate "S" %}</span>
-            <span>{% translate "D" %}</span>
-          </div>
-
-          <div class="vac-calendar__days" data-calendar-days></div>
-
-          {% if form.end_date.errors %}
-            <p class="vac-calendar__error">{{ form.end_date.errors|join:', ' }}</p>
-          {% endif %}
-        </section>
+      <div class="vac-request-calendar-panel__header">
+        <div>
+          <p class="vac-request-calendar-panel__eyebrow">{% translate "Calendario" %}</p>
+          <h2 class="vac-request-calendar-panel__title">{% translate "Elige un rango de fechas" %}</h2>
+        </div>
+        <p class="vac-request-calendar-panel__hint">
+          {% translate "Selecciona primero el inicio y después el fin. El rango quedará marcado en el calendario." %}
+        </p>
       </div>
+
+      <section
+        class="vac-calendar vac-calendar--range"
+        data-range-calendar
+        data-start-input-id="{{ form.start_date.id_for_label }}"
+        data-end-input-id="{{ form.end_date.id_for_label }}"
+        data-min-date="{{ min_request_start_date|date:'Y-m-d' }}"
+      >
+        <div class="vac-calendar__header">
+          <div class="vac-calendar__header-copy">
+            <p class="vac-calendar__eyebrow">{% translate "Periodo" %}</p>
+            <h3 class="vac-calendar__title">{% translate "Selecciona inicio y fin" %}</h3>
+          </div>
+          <span class="vac-calendar__selected" data-calendar-selection aria-live="polite">{{ unselected_date_label }}</span>
+        </div>
+
+        <div class="vac-calendar__range-status" aria-live="polite">
+          <div class="vac-calendar__range-card">
+            <span>{{ range_start_label }}</span>
+            <strong data-range-start-display>{{ unselected_date_label }}</strong>
+          </div>
+          <div class="vac-calendar__range-card">
+            <span>{{ range_end_label }}</span>
+            <strong data-range-end-display>{{ unselected_date_label }}</strong>
+          </div>
+        </div>
+
+        <p class="vac-calendar__note">
+          {% blocktranslate with date=min_request_start_date|date:"d/m/Y" %}Disponible desde {{ date }}. Si eliges una fecha anterior al inicio, se reiniciará el rango.{% endblocktranslate %}
+        </p>
+
+        <div class="vac-calendar__toolbar">
+          <button class="vac-calendar__arrow" type="button" data-calendar-prev aria-label="{% translate 'Mes anterior' %}">
+            <span aria-hidden="true">&#8249;</span>
+          </button>
+
+          <div class="vac-calendar__selectors">
+            <select class="vac-calendar__select" data-calendar-month aria-label="{% translate 'Mes' %}"></select>
+            <select class="vac-calendar__select" data-calendar-year aria-label="{% translate 'Ano' %}"></select>
+          </div>
+
+          <button class="vac-calendar__arrow" type="button" data-calendar-next aria-label="{% translate 'Mes siguiente' %}">
+            <span aria-hidden="true">&#8250;</span>
+          </button>
+        </div>
+
+        <div class="vac-calendar__weekdays" aria-hidden="true">
+          <span>{% translate "L" %}</span>
+          <span>{% translate "M" %}</span>
+          <span>{% translate "X" %}</span>
+          <span>{% translate "J" %}</span>
+          <span>{% translate "V" %}</span>
+          <span>{% translate "S" %}</span>
+          <span>{% translate "D" %}</span>
+        </div>
+
+        <div class="vac-calendar__days" data-calendar-days></div>
+
+        {% if form.start_date.errors %}
+          <p class="vac-calendar__error">{{ form.start_date.errors|join:', ' }}</p>
+        {% endif %}
+        {% if form.end_date.errors %}
+          <p class="vac-calendar__error">{{ form.end_date.errors|join:', ' }}</p>
+        {% endif %}
+      </section>
     </div>
 
     <div class="vac-request-bottom-grid">

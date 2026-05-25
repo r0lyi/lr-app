@@ -42,5 +42,5 @@
     {% endif %}
   </div>
 
-  {% include "components/ui/filter_actions.html" with reset_url=request.path class_name="rrhh-filters-form__actions" %}
+  {% include "components/ui/filter_actions.html" with reset_url=request.path refresh_url=request.get_full_path class_name="rrhh-filters-form__actions" %}
 </form>
