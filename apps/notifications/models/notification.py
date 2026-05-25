@@ -58,7 +58,7 @@ class Notification(CreatedAtModel):
     previous_status_name = models.CharField(max_length=50, blank=True, null=True)
     message = models.TextField()
     is_read = models.BooleanField(default=False)
-    sent_at = models.DateTimeField(auto_now_add = True)
+    sent_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         db_table = "notifications"

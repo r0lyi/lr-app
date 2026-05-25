@@ -1,10 +1,4 @@
 {% load i18n %}
-{% translate "Nro" as request_number_label %}
-{% translate "Fecha solicitud" as request_date_label %}
-{% translate "Rango de fechas" as request_range_label %}
-{% translate "Total días" as request_days_label %}
-{% translate "Estado" as request_status_label %}
-{% translate "Acciones" as request_actions_label %}
 {% translate "solicitudes" as requests_item_label %}
 {% translate "Paginación de solicitudes del empleado" as requests_pagination_label %}
 
@@ -13,26 +7,16 @@
     <caption class="employee-history-table__caption">{% translate "Historial de solicitudes" %}</caption>
     <thead>
       <tr>
-<<<<<<< HEAD
         <th scope="col" class="employee-history-table__col employee-history-table__col--number">{% translate "Nro" %}</th>
         <th scope="col" class="employee-history-table__col employee-history-table__col--created">{% translate "Fecha solicitud" %}</th>
         <th scope="col" class="employee-history-table__col employee-history-table__col--range">{% translate "Rango de fechas" %}</th>
         <th scope="col" class="employee-history-table__col employee-history-table__col--days">{% translate "Total días" %}</th>
         <th scope="col" class="employee-history-table__col employee-history-table__col--status">{% translate "Estado" %}</th>
         <th scope="col" class="employee-history-table__col employee-history-table__col--actions">{% translate "Acciones" %}</th>
-=======
-        <th>{{ request_number_label }}</th>
-        <th>{{ request_date_label }}</th>
-        <th>{{ request_range_label }}</th>
-        <th>{{ request_days_label }}</th>
-        <th>{{ request_status_label }}</th>
-        <th>{{ request_actions_label }}</th>
->>>>>>> e8231ebbd1e9acc997650e4ee3bcb576ce97e65e
       </tr>
     </thead>
     <tbody>
       {% for request_item in employee_requests %}
-<<<<<<< HEAD
         <tr>
           <td class="employee-history-table__cell employee-history-table__cell--number" data-label="{% translate 'Nro' %}">{{ page_obj.start_index|add:forloop.counter0 }}</td>
           <td class="employee-history-table__cell employee-history-table__cell--created" data-label="{% translate 'Fecha solicitud' %}">{{ request_item.created_at|date:"d-m-Y" }}</td>
@@ -41,33 +25,11 @@
           </td>
           <td class="employee-history-table__cell employee-history-table__cell--days" data-label="{% translate 'Total días' %}">{{ request_item.requested_days|floatformat:"2u" }}</td>
           <td class="employee-history-table__cell employee-history-table__cell--status" data-label="{% translate 'Estado' %}">
-=======
-        <tr class="employee-history-table__row">
-          <td class="employee-history-table__number" data-label="{{ request_number_label }}">
-            {{ page_obj.start_index|add:forloop.counter0 }}
-          </td>
-          <td class="employee-history-table__date" data-label="{{ request_date_label }}">
-            {{ request_item.created_at|date:"d-m-Y" }}
-          </td>
-          <td class="employee-history-table__range" data-label="{{ request_range_label }}">
-            <span class="employee-history-table__range-value">
-              <span>{{ request_item.start_date|date:"d-m-Y" }}</span>
-              <span class="employee-history-table__range-separator" aria-hidden="true">-</span>
-              <span>{{ request_item.end_date|date:"d-m-Y" }}</span>
-            </span>
-          </td>
-          <td class="employee-history-table__days" data-label="{{ request_days_label }}">{{ request_item.requested_days|floatformat:"2u" }}</td>
-          <td class="employee-history-table__state" data-label="{{ request_status_label }}">
->>>>>>> e8231ebbd1e9acc997650e4ee3bcb576ce97e65e
             <span class="employee-history-table__status employee-history-table__status--{{ request_item.status.name }}">
               {{ request_item.status }}
             </span>
           </td>
-<<<<<<< HEAD
           <td class="employee-history-table__cell employee-history-table__cell--actions{% if request_item.status.name != "pending" %} employee-history-table__cell--actions-disabled{% endif %}" data-label="{% translate 'Acciones' %}">
-=======
-          <td class="employee-history-table__actions" data-label="{{ request_actions_label }}">
->>>>>>> e8231ebbd1e9acc997650e4ee3bcb576ce97e65e
             {% if request_item.status.name == "pending" %}
               <button
                 class="employee-history-table__delete"
@@ -101,8 +63,4 @@
   </table>
 </div>
 
-<<<<<<< HEAD
 {% include "components/ui/table_footer.html" with total_count=filtered_employee_requests_count item_label_plural=requests_item_label aria_label=requests_pagination_label class_name="employee-history-table-footer" %}
-=======
-{% include "components/ui/table_footer.html" with total_count=filtered_employee_requests_count item_label_plural=requests_item_label aria_label=requests_pagination_label class_name="employee-history-card__footer" %}
->>>>>>> e8231ebbd1e9acc997650e4ee3bcb576ce97e65e
