@@ -106,6 +106,7 @@
 }
 
 .admin-home-broadcast-card,
+.admin-home-api-card,
 .admin-home-promo-card,
 .admin-home-tip-card {
   border-radius: 18px;
@@ -260,6 +261,103 @@
   gap: 18px;
 }
 
+.admin-home-api-card {
+  padding: 22px;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.admin-home-api-card__header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.admin-home-api-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  color: #2563eb;
+  background: #eff6ff;
+  flex-shrink: 0;
+}
+
+.admin-home-api-card__icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.admin-home-api-card__title {
+  margin-bottom: 6px;
+  color: #111827;
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.admin-home-api-card__text {
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.admin-home-api-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.admin-home-api-card__result {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-home-api-card__label {
+  color: #475569;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.admin-home-api-card__token {
+  width: 100%;
+  min-height: 96px;
+  resize: vertical;
+  padding: 10px 12px;
+  border: 1px solid #dbe3ef;
+  border-radius: 12px;
+  color: #334155;
+  background: #f8fafc;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.admin-home-api-card__feedback {
+  min-height: 20px;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.admin-home-api-card__feedback[data-state="success"] {
+  color: #047857;
+}
+
+.admin-home-api-card__feedback[data-state="error"] {
+  color: #dc2626;
+}
+
+.admin-home-api-card__feedback[data-state="loading"] {
+  color: #2563eb;
+}
+
 .admin-home-promo-card {
   position: relative;
   min-height: 248px;
@@ -380,6 +478,10 @@
   }
 
   .admin-home-tip-card {
+    padding: 18px;
+  }
+
+  .admin-home-api-card {
     padding: 18px;
   }
 }

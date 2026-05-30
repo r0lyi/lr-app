@@ -35,7 +35,8 @@
 
 .dash-brand img {
   display: block;
-  width: 144px;
+  width: 156px;
+  max-width: 100%;
   height: auto;
 }
 

@@ -1,6 +1,7 @@
 """Punto de ensamblado de settings compartidos del proyecto."""
 
 from .components.apps import INSTALLED_APPS
+from .components.api import REST_FRAMEWORK, SIMPLE_JWT
 from .components.auth import AUTHENTICATION_BACKENDS, AUTH_PASSWORD_VALIDATORS
 from .components.auth import AUTH_USER_MODEL
 from .components.cache import (

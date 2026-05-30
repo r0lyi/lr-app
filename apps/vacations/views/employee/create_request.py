@@ -10,6 +10,7 @@ from django.utils.translation import gettext as _
 
 from apps.core.presentation.dashboard import build_dashboard_base_context
 from apps.core.utils.decorators import role_required
+from apps.core.utils.form_errors import get_first_form_error
 from apps.employees.selectors import get_employee_profile_for_user
 from apps.employees.services.employee_dashboard import (
     calculate_annual_vacation_days_for_year,
@@ -55,12 +56,15 @@ def create_vacation_request_view(request):
             except ValidationError as exc:
                 for error_message in exc.messages:
                     form.add_error(None, error_message)
+                messages.error(request, get_first_form_error(form))
             else:
                 messages.success(
                     request,
                     _("Tu solicitud de vacaciones se ha registrado correctamente."),
                 )
                 return redirect("vacations:create-request")
+        else:
+            messages.error(request, get_first_form_error(form))
     else:
         form = VacationRequestForm()
 

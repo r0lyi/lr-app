@@ -2,6 +2,7 @@
 
 from datetime import date
 
+from django.contrib import messages
 from django.urls import reverse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
@@ -9,6 +10,7 @@ from django.utils.translation import gettext_lazy as _
 from apps.core.presentation.dashboard import build_dashboard_base_context
 from apps.core.presentation.pagination import paginate_dashboard_list
 from apps.core.utils.decorators import role_required
+from apps.core.utils.form_errors import get_first_form_error
 from apps.users.selectors import get_primary_role
 from apps.vacations.forms import RrhhVacationRequestFilterForm
 from apps.vacations.selectors import get_filtered_rrhh_vacation_requests
@@ -52,6 +54,8 @@ def _render_requests_management_view(request, *, role_name, active_section):
             if filter_form.is_valid()
             else {"status": default_status_name}
         )
+        if filter_form.errors:
+            messages.error(request, get_first_form_error(filter_form))
     else:
         filter_form = RrhhVacationRequestFilterForm(
             initial={"status": default_status_name}

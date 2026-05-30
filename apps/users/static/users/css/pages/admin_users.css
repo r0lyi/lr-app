@@ -167,6 +167,19 @@
   min-width: 0;
 }
 
+.admin-users-filters__errors {
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: #fff1f2;
+  color: #be123c;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.admin-users-filters__errors .ui-field__feedback {
+  margin: 0;
+}
+
 .admin-users-filters__grid {
   display: grid;
   grid-template-columns: minmax(0, 1.7fr) repeat(2, minmax(0, 1fr));

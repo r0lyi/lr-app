@@ -12,6 +12,7 @@ from apps.audit.models import ExportHistory
 from apps.core.presentation.dashboard import build_dashboard_base_context
 from apps.core.presentation.pagination import paginate_dashboard_list
 from apps.core.utils.decorators import role_required
+from apps.core.utils.form_errors import get_first_form_error
 from apps.users.selectors import get_primary_role
 from apps.vacations.services import (
     RRHH_EXPORT_COLUMNS,
@@ -29,6 +30,8 @@ def export_history_view(request):
         filters = (
             filter_form.cleaned_data if filter_form.is_valid() else {}
         )
+        if filter_form.errors:
+            messages.error(request, get_first_form_error(filter_form))
     else:
         filter_form = ExportHistoryFilterForm()
         filters = {}

@@ -29,6 +29,8 @@ def root_redirect(request):
 urlpatterns = [
     path('i18n/', include('django.conf.urls.i18n')),
     path("", root_redirect, name="root"),
+    path("api/auth/", include("apps.users.api.urls", namespace="api-auth")),
+    path("api/", include("apps.api.urls", namespace="api")),
     path('admin/', admin.site.urls),
     path('auth/', include('apps.users.urls', namespace='auth')),
     path('audit/', include('apps.audit.urls', namespace='audit')),

@@ -278,7 +278,7 @@
 }
 
 .error-visual__logo {
-  width: clamp(150px, 20vw, 230px);
+  width: clamp(190px, 24vw, 300px);
   height: auto;
 }
 

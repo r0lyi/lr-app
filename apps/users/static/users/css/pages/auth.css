@@ -56,7 +56,7 @@
 
 .auth-brand-logo {
   display: block;
-  width: 190px;
+  width: 240px;
   height: auto;
   margin-bottom: 24px;
 }
@@ -193,7 +193,7 @@
   }
 
   .auth-brand-logo {
-    width: 182px;
+    width: 224px;
   }
 }
 
@@ -223,7 +223,7 @@
   }
 
   .auth-side-left .auth-brand-logo {
-    width: 176px;
+    width: 218px;
     margin-left: auto;
     margin-right: 0;
     padding: 10px 14px;
@@ -290,7 +290,7 @@
   }
 
   .auth-brand-logo {
-    width: 140px;
+    width: 178px;
     margin-bottom: 16px;
   }
 
@@ -335,7 +335,7 @@
   }
 
   .auth-brand-logo {
-    width: 124px;
+    width: 156px;
   }
 
   .auth-side-body {

@@ -1,10 +1,13 @@
 """Vista del panel basico de empleado dentro del dashboard principal."""
 
+from django.contrib import messages
 from django.shortcuts import redirect, render
+from django.utils.translation import gettext as _
 
 from apps.core.presentation.pagination import paginate_dashboard_list
 from apps.core.presentation.dashboard import build_dashboard_base_context
 from apps.core.utils.decorators import role_required
+from apps.core.utils.form_errors import get_first_form_error
 from apps.employees.selectors.employee_dashboard import get_employee_profile_for_user
 from apps.employees.services.employee_dashboard import build_employee_dashboard_summary
 from apps.vacations.forms import EmployeeVacationRequestFilterForm
@@ -28,6 +31,14 @@ def employee_home_view(request):
 
     filter_form = EmployeeVacationRequestFilterForm(request.GET or None)
     request_filters = filter_form.cleaned_data if filter_form.is_valid() else {}
+    if request.GET and filter_form.errors:
+        messages.error(
+            request,
+            get_first_form_error(
+                filter_form,
+                _("Revisa los filtros de solicitudes e inténtalo de nuevo."),
+            ),
+        )
     dashboard_summary = build_employee_dashboard_summary(
         employee_profile,
         request_filters=request_filters,

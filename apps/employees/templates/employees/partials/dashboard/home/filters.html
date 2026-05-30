@@ -1,23 +1,40 @@
 {% load i18n %}
 
 <form method="get" class="filters-row employee-filters-form">
+  {% if filter_form.non_field_errors %}
+    <div class="employee-filters-form__errors" role="alert">
+      {% for error in filter_form.non_field_errors %}
+        <p class="ui-field__feedback ui-field__feedback--error">{{ error }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+
   <div class="filter-group">
     <label class="filter-label" for="{{ filter_form.start_date.id_for_label }}">{% translate "Desde" %}</label>
     <div class="filter-input-wrap">
       {{ filter_form.start_date }}
     </div>
+    {% if filter_form.start_date.errors %}
+      <p class="ui-field__feedback ui-field__feedback--error">{{ filter_form.start_date.errors.0 }}</p>
+    {% endif %}
   </div>
   <div class="filter-group">
     <label class="filter-label" for="{{ filter_form.end_date.id_for_label }}">{% translate "Hasta" %}</label>
     <div class="filter-input-wrap">
       {{ filter_form.end_date }}
     </div>
+    {% if filter_form.end_date.errors %}
+      <p class="ui-field__feedback ui-field__feedback--error">{{ filter_form.end_date.errors.0 }}</p>
+    {% endif %}
   </div>
   <div class="filter-group">
     <label class="filter-label" for="{{ filter_form.status.id_for_label }}">{% translate "Estado" %}</label>
     <div class="filter-input-wrap">
       {{ filter_form.status }}
     </div>
+    {% if filter_form.status.errors %}
+      <p class="ui-field__feedback ui-field__feedback--error">{{ filter_form.status.errors.0 }}</p>
+    {% endif %}
   </div>
   {% include "components/ui/filter_actions.html" with reset_url=filter_reset_url refresh_url=request.get_full_path class_name="employee-filters-form__actions" %}
 </form>

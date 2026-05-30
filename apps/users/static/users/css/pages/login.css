@@ -78,8 +78,8 @@
   z-index: 2;
   display: block;
   width: auto;
-  max-width: min(62%, 212px);
-  max-height: 116px;
+  max-width: min(68%, 280px);
+  max-height: 148px;
   height: auto;
   filter: drop-shadow(0 10px 22px rgba(3, 7, 18, 0.26));
 }
@@ -171,6 +171,17 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+.auth-login .login-panel__errors {
+  padding: 12px 14px;
+  border: 1px solid rgba(220, 38, 38, 0.16);
+  border-radius: 12px;
+  background: #fff1f2;
+}
+
+.auth-login .login-panel__errors .ui-field__feedback {
+  margin: 0;
 }
 
 .auth-login .ui-field {
@@ -284,8 +295,8 @@
   }
 
   .auth-login .login-hero__logo {
-    max-width: min(48vw, 182px);
-    max-height: 98px;
+    max-width: min(56vw, 232px);
+    max-height: 124px;
     margin-left: auto;
     padding: 10px 14px;
     border: 1px solid rgba(244, 249, 255, 0.5);
@@ -402,8 +413,8 @@
   }
 
   .auth-login .login-hero__logo {
-    max-width: min(46vw, 144px);
-    max-height: 74px;
+    max-width: min(54vw, 180px);
+    max-height: 96px;
     padding: 9px 12px;
     border-radius: 16px;
   }

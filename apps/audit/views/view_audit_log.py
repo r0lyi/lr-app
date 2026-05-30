@@ -1,5 +1,6 @@
 """Vistas para consultar la actividad registrada en auditoria."""
 
+from django.contrib import messages
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 
@@ -12,6 +13,7 @@ from apps.audit.services import (
 from apps.core.presentation.dashboard import build_dashboard_base_context
 from apps.core.presentation.pagination import paginate_dashboard_list
 from apps.core.utils.decorators import role_required
+from apps.core.utils.form_errors import get_first_form_error
 
 
 @role_required("admin")
@@ -25,6 +27,8 @@ def audit_log_view(request):
 
     filter_form = AuditLogFilterForm(request.GET or None)
     filter_data = filter_form.cleaned_data if filter_form.is_valid() else None
+    if request.GET and filter_form.errors:
+        messages.error(request, get_first_form_error(filter_form))
     audit_logs = get_audit_logs(filters=filter_data)
     audit_logs_page = paginate_dashboard_list(request, audit_logs)
     summary = get_audit_log_summary(filters=filter_data)
