@@ -4,6 +4,14 @@
 {% translate "Actualizar" as refresh_label %}
 
 <form method="get" class="admin-users-filters" novalidate>
+  {% if filter_form.non_field_errors %}
+    <div class="admin-users-filters__errors" role="alert">
+      {% for error in filter_form.non_field_errors %}
+        <p class="ui-field__feedback ui-field__feedback--error">{{ error }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+
   <div class="admin-users-filters__grid">
     <div class="admin-users-filters__field admin-users-filters__field--search">
       <label class="admin-users-filters__label" for="{{ filter_form.search.id_for_label }}">{% translate "Buscar usuario" %}</label>
@@ -13,14 +21,23 @@
         </span>
         {{ filter_form.search }}
       </div>
+      {% if filter_form.search.errors %}
+        <p class="ui-field__feedback ui-field__feedback--error">{{ filter_form.search.errors.0 }}</p>
+      {% endif %}
     </div>
     <div class="admin-users-filters__field">
       <label class="admin-users-filters__label" for="{{ filter_form.primary_role.id_for_label }}">{% translate "Rol" %}</label>
       {{ filter_form.primary_role }}
+      {% if filter_form.primary_role.errors %}
+        <p class="ui-field__feedback ui-field__feedback--error">{{ filter_form.primary_role.errors.0 }}</p>
+      {% endif %}
     </div>
     <div class="admin-users-filters__field">
       <label class="admin-users-filters__label" for="{{ filter_form.access_state.id_for_label }}">{% translate "Acceso" %}</label>
       {{ filter_form.access_state }}
+      {% if filter_form.access_state.errors %}
+        <p class="ui-field__feedback ui-field__feedback--error">{{ filter_form.access_state.errors.0 }}</p>
+      {% endif %}
     </div>
   </div>
 

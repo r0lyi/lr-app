@@ -9,6 +9,7 @@ from django.utils.translation import gettext as _
 from apps.core.presentation.dashboard import build_dashboard_base_context
 from apps.core.presentation.pagination import paginate_dashboard_list
 from apps.core.utils.decorators import role_required
+from apps.core.utils.form_errors import get_first_form_error
 from apps.users.forms import AdminUserCreateForm, AdminUserFilterForm
 from apps.users.selectors import get_admin_dashboard_summary, get_admin_user_list
 from apps.users.services.admin.management import create_admin_user
@@ -40,6 +41,8 @@ def _build_admin_users_context(request, *, create_user_form=None):
 
     filter_form = AdminUserFilterForm(request.GET or None)
     filter_data = filter_form.cleaned_data if filter_form.is_valid() else None
+    if request.GET and filter_form.errors:
+        messages.error(request, get_first_form_error(filter_form))
     managed_users = get_admin_user_list(filters=filter_data)
     managed_users_page = paginate_dashboard_list(request, managed_users)
     return build_dashboard_base_context(
@@ -79,6 +82,7 @@ def admin_user_list_view(request):
                 )
             except ValidationError as exc:
                 _merge_validation_errors(create_user_form, exc)
+                messages.error(request, get_first_form_error(create_user_form))
             except IntegrityError:
                 create_user_form.add_error(
                     None,
@@ -86,6 +90,7 @@ def admin_user_list_view(request):
                         "No se ha podido crear el usuario. Revisa los datos e inténtalo de nuevo."
                     ),
                 )
+                messages.error(request, get_first_form_error(create_user_form))
             else:
                 messages.success(
                     request,
@@ -95,6 +100,8 @@ def admin_user_list_view(request):
                     % {"email": user.email},
                 )
                 return redirect(request.get_full_path())
+        else:
+            messages.error(request, get_first_form_error(create_user_form))
 
     context = _build_admin_users_context(request, create_user_form=create_user_form)
     return render(request, "users/pages/admin/user_list.html", context)

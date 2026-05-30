@@ -34,7 +34,7 @@ def _build_logo_attachment():
     """Carga el logo inline usado en los correos HTML si existe en disco."""
 
     logo_path = (
-        Path(settings.BASE_DIR) / "static" / "images" / "brand" / "logo500x200.png"
+        Path(settings.BASE_DIR) / "static" / "images" / "brand" / "logo500x200.svg"
     )
     if not logo_path.exists():
         return None
@@ -42,7 +42,7 @@ def _build_logo_attachment():
     return {
         "filename": logo_path.name,
         "content": logo_path.read_bytes(),
-        "content_type": "image/png",
+        "content_type": "image/svg+xml",
         "content_id": INLINE_LOGO_CID,
     }
 

@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext as _
 
+from apps.core.utils.form_errors import get_first_form_error
 from apps.employees.forms import EmployeeOnboardingForm
 from apps.employees.models import Employee
 
@@ -73,6 +74,7 @@ def onboarding_view(request):
             )
             # El dispatcher del dashboard decide el destino final una vez existe la ficha.
             return redirect("dashboard:home")
+        messages.error(request, get_first_form_error(form))
     else:
         form = EmployeeOnboardingForm(initial=initial, user=user)
 

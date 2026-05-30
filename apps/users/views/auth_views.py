@@ -9,6 +9,7 @@ from django.utils.translation import gettext as _
 
 from apps.core.utils.client_ip import _client_ip
 from apps.core.utils.decorators import anonymous_required
+from apps.core.utils.form_errors import get_first_form_error
 from apps.core.utils.responses_toast import toast_response as _toast_response
 from apps.core.utils.responses_toast import rate_limit_response as _rate_limit_response
 
@@ -89,7 +90,10 @@ def request_activation_view(request):
             messages.success(request, activation_notice)
             form = RequestActivationForm()
         else:
-            validation_message = _("Debes introducir tu DNI.")
+            validation_message = get_first_form_error(
+                form,
+                _("Debes introducir tu DNI."),
+            )
             if request.headers.get("HX-Request"):
                 return _toast_response(
                     request=request,
@@ -135,9 +139,7 @@ def set_password_view(request, token):
         if form_error:
             messages.error(request, form_error[0])
         else:
-            messages.error(
-                request, _("Completa los campos obligatorios del formulario.")
-            )
+            messages.error(request, get_first_form_error(form))
 
     return render(
         request,

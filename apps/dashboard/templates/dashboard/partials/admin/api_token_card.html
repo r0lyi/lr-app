@@ -1,0 +1,53 @@
+{% load i18n %}
+
+<section
+  class="admin-home-api-card"
+  data-api-token-card
+  data-token-url="{% url 'api-auth:session-token' %}"
+>
+  <header class="admin-home-api-card__header">
+    <span class="admin-home-api-card__icon" aria-hidden="true">
+      {% include "components/ui/icon.html" with name="lock" %}
+    </span>
+    <div>
+      <h3 class="admin-home-api-card__title">{% translate "Acceso API" %}</h3>
+      <p class="admin-home-api-card__text">
+        {% translate "Genera un JWT temporal para consultar los endpoints protegidos con tu usuario actual." %}
+      </p>
+    </div>
+  </header>
+
+  <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" data-api-token-csrf>
+
+  <div class="admin-home-api-card__actions">
+    {% translate "Generar token" as generate_token_label %}
+    {% include "components/ui/button_principal.html" with label=generate_token_label type="button" size="sm" class_name="admin-home-api-card__generate" left_icon_name="lock" %}
+    {% translate "Copiar access" as copy_access_label %}
+    {% include "components/ui/button_secondari.html" with label=copy_access_label type="button" size="sm" class_name="admin-home-api-card__copy" disabled=True %}
+  </div>
+
+  <div class="admin-home-api-card__result" hidden>
+    <label class="admin-home-api-card__label" for="admin-api-access-token">
+      {% translate "Access token" %}
+    </label>
+    <textarea
+      id="admin-api-access-token"
+      class="admin-home-api-card__token"
+      rows="5"
+      readonly
+      data-api-token-access
+    ></textarea>
+    <label class="admin-home-api-card__label" for="admin-api-refresh-token">
+      {% translate "Refresh token" %}
+    </label>
+    <textarea
+      id="admin-api-refresh-token"
+      class="admin-home-api-card__token"
+      rows="4"
+      readonly
+      data-api-token-refresh
+    ></textarea>
+  </div>
+
+  <p class="admin-home-api-card__feedback" data-api-token-feedback aria-live="polite"></p>
+</section>

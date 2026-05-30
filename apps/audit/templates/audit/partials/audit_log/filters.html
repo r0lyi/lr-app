@@ -21,18 +21,30 @@
         </span>
         {{ audit_log_filter_form.search }}
       </div>
+      {% if audit_log_filter_form.search.errors %}
+        <p class="ui-field__feedback ui-field__feedback--error">{{ audit_log_filter_form.search.errors.0 }}</p>
+      {% endif %}
     </div>
     <div class="audit-log-filters__field">
       <label class="audit-log-filters__label" for="{{ audit_log_filter_form.action.id_for_label }}">{% translate "Tipo de cambio" %}</label>
       {{ audit_log_filter_form.action }}
+      {% if audit_log_filter_form.action.errors %}
+        <p class="ui-field__feedback ui-field__feedback--error">{{ audit_log_filter_form.action.errors.0 }}</p>
+      {% endif %}
     </div>
     <div class="audit-log-filters__field">
       <label class="audit-log-filters__label" for="{{ audit_log_filter_form.start_date.id_for_label }}">{% translate "Fecha inicio" %}</label>
       {{ audit_log_filter_form.start_date }}
+      {% if audit_log_filter_form.start_date.errors %}
+        <p class="ui-field__feedback ui-field__feedback--error">{{ audit_log_filter_form.start_date.errors.0 }}</p>
+      {% endif %}
     </div>
     <div class="audit-log-filters__field">
       <label class="audit-log-filters__label" for="{{ audit_log_filter_form.end_date.id_for_label }}">{% translate "Fecha final" %}</label>
       {{ audit_log_filter_form.end_date }}
+      {% if audit_log_filter_form.end_date.errors %}
+        <p class="ui-field__feedback ui-field__feedback--error">{{ audit_log_filter_form.end_date.errors.0 }}</p>
+      {% endif %}
     </div>
   </div>
 

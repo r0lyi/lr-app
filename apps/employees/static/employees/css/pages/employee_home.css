@@ -244,6 +244,17 @@
   align-items: end;
 }
 
+.employee-filters-form__errors {
+  grid-column: 1 / -1;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #fff1f2;
+}
+
+.employee-filters-form__errors .ui-field__feedback {
+  margin: 0;
+}
+
 .employee-filters-form .filter-group {
   display: flex;
   flex-direction: column;

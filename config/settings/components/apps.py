@@ -10,7 +10,13 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
+THIRD_PARTY_APPS = [
+    "rest_framework",
+    "rest_framework_simplejwt",
+]
+
 LOCAL_APPS = [
+    "apps.api",
     "apps.users",
     "apps.employees",
     "apps.vacations",
@@ -20,4 +26,4 @@ LOCAL_APPS = [
     "apps.core",
 ]
 
-INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

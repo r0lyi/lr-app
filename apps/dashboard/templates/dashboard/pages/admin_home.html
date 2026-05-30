@@ -12,6 +12,11 @@
   <link rel="stylesheet" href="{% static 'dashboard/css/pages/admin_home.css' %}">
 {% endblock %}
 
+{% block extra_js %}
+  {{ block.super }}
+  <script src="{% static 'dashboard/js/pages/admin_home.js' %}"></script>
+{% endblock %}
+
 {% block dashboard_content %}
   {% include "dashboard/partials/admin/home_content.html" %}
 {% endblock %}

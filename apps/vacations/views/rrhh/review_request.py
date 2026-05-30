@@ -8,6 +8,7 @@ from django.utils.translation import gettext as _
 
 from apps.core.presentation.dashboard import build_dashboard_base_context
 from apps.core.utils.decorators import role_required
+from apps.core.utils.form_errors import get_first_form_error
 from apps.users.selectors import has_role
 from apps.users.selectors import get_primary_role
 from apps.vacations.forms import VacationRequestReviewForm
@@ -54,12 +55,15 @@ def review_vacation_request_view(request, request_id):
                 )
             except ValidationError as exc:
                 form.add_error(None, exc.message)
+                messages.error(request, get_first_form_error(form))
             else:
                 messages.success(
                     request,
                     _("La solicitud se ha actualizado correctamente desde RRHH."),
                 )
                 return redirect(return_url_name)
+        else:
+            messages.error(request, get_first_form_error(form))
     else:
         form = VacationRequestReviewForm(
             initial={

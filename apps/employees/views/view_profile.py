@@ -8,6 +8,7 @@ from django.shortcuts import redirect, render
 from django.utils.translation import gettext as _
 
 from apps.core.presentation.dashboard import build_dashboard_base_context
+from apps.core.utils.form_errors import get_first_form_error
 from apps.employees.forms import EmployeeProfileUpdateForm
 from apps.employees.selectors import get_employee_profile_for_user
 from apps.employees.services.employee_dashboard import build_employee_dashboard_summary
@@ -86,6 +87,7 @@ def employee_profile_view(request):
                     _("Tus datos de empleado se han actualizado correctamente."),
                 )
                 return redirect("employees:profile")
+            messages.error(request, get_first_form_error(employee_form))
         else:
             # El cambio de contrasena usa su propio formulario y mantiene la
             # sesion abierta si el cambio se completa correctamente.
@@ -104,6 +106,7 @@ def employee_profile_view(request):
                     _("Tu contrasena se ha actualizado correctamente."),
                 )
                 return redirect("employees:profile")
+            messages.error(request, get_first_form_error(password_form))
 
     profile_summary_context = (
         build_employee_dashboard_summary(employee_profile)

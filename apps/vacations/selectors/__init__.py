@@ -7,6 +7,7 @@ from .request_queries import (
     get_reserved_annual_vacation_days_for_year,
     get_vacation_status_by_name,
 )
+from .api_metrics import get_vacation_request_kpis
 from .rrhh_requests import (
     get_filtered_rrhh_vacation_requests,
     get_rrhh_vacation_requests,
@@ -20,4 +21,5 @@ __all__ = [
     "get_filtered_rrhh_vacation_requests",
     "get_vacation_status_by_name",
     "get_rrhh_vacation_requests",
+    "get_vacation_request_kpis",
 ]

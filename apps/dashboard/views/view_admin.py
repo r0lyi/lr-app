@@ -7,6 +7,7 @@ from django.utils.translation import gettext_lazy
 
 from apps.core.presentation.dashboard import build_dashboard_base_context
 from apps.core.utils.decorators import role_required
+from apps.core.utils.form_errors import get_first_form_error
 from apps.notifications.forms import AdminBroadcastNotificationForm
 from apps.notifications.selectors import get_admin_broadcast_notification_recipients
 from apps.notifications.services import create_admin_broadcast_notifications
@@ -38,6 +39,7 @@ def admin_home_view(request):
                 % {"count": len(notifications)},
             )
             return redirect("dashboard:admin-home")
+        messages.error(request, get_first_form_error(broadcast_form))
 
     recipients_count = get_admin_broadcast_notification_recipients().count()
     summary_cards = [
